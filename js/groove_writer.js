@@ -3058,42 +3058,8 @@ function GrooveWriter() {
 		var uiKick = "";
 		var i;
 
-		window.alert("repeatMeasureButtonClick \n" + measureNum);
-
-		// get the encoded notes out of the UI.
-		var topIndex = class_notes_per_measure * class_number_of_measures;
-		window.alert("repeatMeasureButtonClick topIndex \n" + topIndex);
-
-		// loop 1 : 0 to measureNum - 1 *  class_notes_per_measure
-		// loop 2 : measureNum - 1 * class_notes_per_measure to measureNum - 1 * class_notes_per_measure + class_notes_per_measure - 1
-		// loop 3 : measureNum - 1 * class_notes_per_measure to measureNum - 1 * class_notes_per_measure + class_notes_per_measure - 1
-		// loop 4 : measureNum * class_notes_per_measure to topIndex
-
-		// Test 1 - 1
-		// loop 1 : 0 to 0 * 8 : 0 to 0 
-		// loop 2 : 0 * 8  to 0 * 8 + 7 : 0 to 7
-		// loop 3 : 0 * 8  to 0 * 8 + 7 : 0 to 7
-		// loop 4 : 1 * 8 to 15 : 8 to 15
-
-		// Test 1 - 2
-		// loop 1 : 0 to 1 * 8 : 0 to 8
-		// loop 2 : 1 * 8  to 1 * 8 + 7 : 8 to 15
-		// loop 3 : 0 * 8  to 0 * 8 + 7 : 8 to 15
-		// loop 4 : 2 * 8 to 31 : 16 to 31
-
-
-		var loop1Start = 0
-		var loop1End = (measureNum - 1) * class_notes_per_measure
-		var loop2Start = (measureNum - 1) * class_notes_per_measure 
-		var loop2End = loop2Start + class_notes_per_measure
-		var loop3Start = measureNum * class_notes_per_measure
-		var loop3End = topIndex
-
-		window.alert("repeatMeasureButtonClick loop1  \n" + loop1Start + " to " + loop1End);
-		window.alert("repeatMeasureButtonClick loop2  \n" + loop2Start + " to " + loop2End);
-		window.alert("repeatMeasureButtonClick loop3  \n" + loop3Start + " to " + loop3End);
-
 		// get the encoded notes out of the UI from before measure we are going to repeat
+		var loop1End = (measureNum - 1) * class_notes_per_measure
 		for (i = 0; i < loop1End; i++) {
 			uiStickings += get_sticking_state(i, "URL");
 			uiHH += get_hh_state(i, "URL");
@@ -3104,6 +3070,9 @@ function GrooveWriter() {
 		}
 
 		// get the encoded notes out of the UI for measure to be repeated and cycle through twice
+		var loop2Start = (measureNum - 1) * class_notes_per_measure 
+		var loop2End = loop2Start + class_notes_per_measure
+		
 		for (i = loop2Start; i < loop2End; i++) {
 			uiStickings += get_sticking_state(i, "URL");
 			uiHH += get_hh_state(i, "URL");
@@ -3122,6 +3091,8 @@ function GrooveWriter() {
 		}
 		
 		// get the encoded notes out of the UI for measures after measure to be repeated
+		var loop3Start = measureNum * class_notes_per_measure
+		var loop3End = class_notes_per_measure * class_number_of_measures;
 		for (i = loop3Start; i < loop3End; i++) {
 			uiStickings += get_sticking_state(i, "URL");
 			uiHH += get_hh_state(i, "URL");
