@@ -3044,6 +3044,109 @@ function GrooveWriter() {
 		updateSheetMusic();
 	};
 
+	
+
+	// add a measure to the page
+	// currently always at the end of the measures
+	// copy the notes from the last measure to the new measure
+	root.repeatMeasureButtonClick = function (measureNum) {
+		var uiStickings = "";
+		var uiHH = "";
+		var uiTom1 = "";
+		var uiTom4 = "";
+		var uiSnare = "";
+		var uiKick = "";
+		var i;
+
+		window.alert("repeatMeasureButtonClick \n" + measureNum);
+
+		// get the encoded notes out of the UI.
+		var topIndex = class_notes_per_measure * class_number_of_measures;
+		window.alert("repeatMeasureButtonClick topIndex \n" + topIndex);
+
+		// loop 1 : 0 to measureNum - 1 *  class_notes_per_measure
+		// loop 2 : measureNum - 1 * class_notes_per_measure to measureNum - 1 * class_notes_per_measure + class_notes_per_measure - 1
+		// loop 3 : measureNum - 1 * class_notes_per_measure to measureNum - 1 * class_notes_per_measure + class_notes_per_measure - 1
+		// loop 4 : measureNum * class_notes_per_measure to topIndex
+
+		// Test 1 - 1
+		// loop 1 : 0 to 0 * 8 : 0 to 0 
+		// loop 2 : 0 * 8  to 0 * 8 + 7 : 0 to 7
+		// loop 3 : 0 * 8  to 0 * 8 + 7 : 0 to 7
+		// loop 4 : 1 * 8 to 15 : 8 to 15
+
+		// Test 1 - 2
+		// loop 1 : 0 to 1 * 8 : 0 to 8
+		// loop 2 : 1 * 8  to 1 * 8 + 7 : 8 to 15
+		// loop 3 : 0 * 8  to 0 * 8 + 7 : 8 to 15
+		// loop 4 : 2 * 8 to 31 : 16 to 31
+
+
+		var loop1Start = 0
+		var loop1End = (measureNum - 1) * class_notes_per_measure
+		var loop2Start = (measureNum - 1) * class_notes_per_measure 
+		var loop2End = loop2Start + class_notes_per_measure
+		var loop3Start = measureNum * class_notes_per_measure
+		var loop3End = topIndex
+
+		window.alert("repeatMeasureButtonClick loop1  \n" + loop1Start + " to " + loop1End);
+		window.alert("repeatMeasureButtonClick loop2  \n" + loop2Start + " to " + loop2End);
+		window.alert("repeatMeasureButtonClick loop3  \n" + loop3Start + " to " + loop3End);
+
+		// get the encoded notes out of the UI from before measure we are going to repeat
+		for (i = 0; i < loop1End; i++) {
+			uiStickings += get_sticking_state(i, "URL");
+			uiHH += get_hh_state(i, "URL");
+			uiTom1 += get_tom_state(i, 1, "URL");
+			uiTom4 += get_tom_state(i, 4, "URL");
+			uiSnare += get_snare_state(i, "URL");
+			uiKick += get_kick_state(i, "URL");
+		}
+
+		// get the encoded notes out of the UI for measure to be repeated and cycle through twice
+		for (i = loop2Start; i < loop2End; i++) {
+			uiStickings += get_sticking_state(i, "URL");
+			uiHH += get_hh_state(i, "URL");
+			uiTom1 += get_tom_state(i, 1, "URL");
+			uiTom4 += get_tom_state(i, 4, "URL");
+			uiSnare += get_snare_state(i, "URL");
+			uiKick += get_kick_state(i, "URL");
+		}
+		for (i = loop2Start; i < loop2End; i++) {
+			uiStickings += get_sticking_state(i, "URL");
+			uiHH += get_hh_state(i, "URL");
+			uiTom1 += get_tom_state(i, 1, "URL");
+			uiTom4 += get_tom_state(i, 4, "URL");
+			uiSnare += get_snare_state(i, "URL");
+			uiKick += get_kick_state(i, "URL");
+		}
+		
+		// get the encoded notes out of the UI for measures after measure to be repeated
+		for (i = loop3Start; i < loop3End; i++) {
+			uiStickings += get_sticking_state(i, "URL");
+			uiHH += get_hh_state(i, "URL");
+			uiTom1 += get_tom_state(i, 1, "URL");
+			uiTom4 += get_tom_state(i, 4, "URL");
+			uiSnare += get_snare_state(i, "URL");
+			uiKick += get_kick_state(i, "URL");
+		}
+
+		class_number_of_measures++;
+
+		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
+
+		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+
+		// reference the button and scroll it into view
+		var add_measure_button = document.getElementById("addMeasureButton");
+		if(add_measure_button)
+			add_measure_button.scrollIntoView({block: "start", behavior: "smooth"});
+
+		updateSheetMusic();
+		
+	};
+
+
 	// add a measure to the page
 	// currently always at the end of the measures
 	// copy the notes from the last measure to the new measure
@@ -3097,9 +3200,8 @@ function GrooveWriter() {
 						"There are also many notation features that would be useful for score writing that are not part of Groove Scribe");
 	};
 
-	// add a measure to the page
-	// currently always at the end of the measures
-	// copy the notes from the last measure to the new measure
+	// add a measure to the front of the score
+	// copy the notes from the first measure to the new measure
 	root.addMeasurePrevButtonClick = function (event) {
 		var uiStickings = "";
 		var uiHH = "";
@@ -3109,7 +3211,7 @@ function GrooveWriter() {
 		var uiKick = "";
 		var i;
 
-		// run the the last measure twice to default in some notes
+		// run the first measure twice to default in some notes
 		for (i =0; i < class_notes_per_measure; i++) {
 			uiStickings += get_sticking_state(i, "URL");
 			uiHH += get_hh_state(i, "URL");
@@ -3136,11 +3238,6 @@ function GrooveWriter() {
 		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
 
 		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
-
-		// reference the button and scroll it into view
-		var add_measure_button = document.getElementById("addMeasureButton");
-		if(add_measure_button)
-			add_measure_button.scrollIntoView({block: "start", behavior: "smooth"});
 
 		updateSheetMusic();
 
@@ -4541,6 +4638,7 @@ function GrooveWriter() {
 							</div>\
 						</span>\n');
 
+		newHTML += '<span title="Repeat Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.repeatMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-rotate-left"></i></span>&nbsp;';
 		if (class_number_of_measures > 1)
 			newHTML += '<span title="Remove Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.closeMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-times-circle"></i></span>';
 		else
