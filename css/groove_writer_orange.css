@@ -735,6 +735,15 @@
 		padding-top: 2px;
 		margin-top: 73px;
 	}
+	#addMeasureButtonStart {
+		vertical-align: top;
+		display: inline-block;
+		color: var(--highlight-color-on-white);
+		cursor: pointer;
+		font-size: 40px;
+		padding-top: 2px;
+		margin-top: 73px;
+	}
 
 	.closeMeasureButton {
 		vertical-align: top;
@@ -743,7 +752,7 @@
 		cursor: pointer;
 		color: var(--highlight-color-on-white);
 	}
-	.closeMeasureButton:hover, #addMeasureButton:hover {
+	.closeMeasureButton:hover, #addMeasureButton:hover, #addMeasureButtonStart:hover {
 		color: #000;
 	}
 	#permutationAnchor {

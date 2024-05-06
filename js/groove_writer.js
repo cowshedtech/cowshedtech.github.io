@@ -3097,6 +3097,59 @@ function GrooveWriter() {
 						"There are also many notation features that would be useful for score writing that are not part of Groove Scribe");
 	};
 
+	// add a measure to the page
+	// currently always at the end of the measures
+	// copy the notes from the last measure to the new measure
+	root.addMeasurePrevButtonClick = function (event) {
+		var uiStickings = "";
+		var uiHH = "";
+		var uiTom1 = "";
+		var uiTom4 = "";
+		var uiSnare = "";
+		var uiKick = "";
+		var i;
+
+		// run the the last measure twice to default in some notes
+		for (i =0; i < class_notes_per_measure; i++) {
+			uiStickings += get_sticking_state(i, "URL");
+			uiHH += get_hh_state(i, "URL");
+			uiTom1 += get_tom_state(i, 1, "URL");
+			uiTom4 += get_tom_state(i, 4, "URL");
+			uiSnare += get_snare_state(i, "URL");
+			uiKick += get_kick_state(i, "URL");
+		}
+
+		// get the encoded notes out of the UI.
+		var topIndex = class_notes_per_measure * class_number_of_measures;
+		for (i = 0; i < topIndex; i++) {
+
+			uiStickings += get_sticking_state(i, "URL");
+			uiHH += get_hh_state(i, "URL");
+			uiTom1 += get_tom_state(i, 1, "URL");
+			uiTom4 += get_tom_state(i, 4, "URL");
+			uiSnare += get_snare_state(i, "URL");
+			uiKick += get_kick_state(i, "URL");
+		}
+
+		class_number_of_measures++;
+
+		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
+
+		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+
+		// reference the button and scroll it into view
+		var add_measure_button = document.getElementById("addMeasureButton");
+		if(add_measure_button)
+			add_measure_button.scrollIntoView({block: "start", behavior: "smooth"});
+
+		updateSheetMusic();
+
+		if(class_number_of_measures === 5)
+			window.alert("Please be aware that the Groove Scribe is not designed to write an entire musical score.\n" +
+						"You can create as many measures as you want, but your browser may slow down as more measures are added.\n" +
+						"There are also many notation features that would be useful for score writing that are not part of Groove Scribe");
+	};
+
 	function showHideCSS_ClassDisplay(className, force, showElseHide, showState) {
 		var myElements = document.querySelectorAll(className);
 		var newStateIsOn = true;
@@ -4297,6 +4350,9 @@ function GrooveWriter() {
 								</div>\
 							</div>\n');
 
+		if (baseindex == 1) // add new measure button
+			newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="myGrooveWriter.addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
+
 		newHTML += ('\
 							<span class="notes-row-container">\
 								<div class="line-labels">\
@@ -4492,7 +4548,8 @@ function GrooveWriter() {
 
 
 		if (baseindex == class_number_of_measures) // add new measure button
-			newHTML += '<span id="addMeasureButton" title="Add measure" onClick="myGrooveWriter.addMeasureButtonClick(event)"><i class="fa fa-plus"></i></span>';
+			newHTML += '<span id="addMeasureButton" title="Add measure" onClick="myGrooveWriter.addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
+			
 
 		newHTML += ('</div>');
 

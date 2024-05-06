@@ -517,6 +517,15 @@
 		padding-top: 2px;
 		margin-top: 73px;
 	}
+	#addMeasureButtonStart {
+		vertical-align: top;
+		display: inline-block;
+		color: #2484C0;
+		cursor: pointer;
+		font-size: 40px;
+		padding-top: 2px;
+		margin-top: 73px;
+	}
 
 	.closeMeasureButton {
 		vertical-align: top;
