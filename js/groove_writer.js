@@ -2744,7 +2744,15 @@ function GrooveWriter() {
 
 	// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
 	root.updateCurrentURL = function () {
+		// Update temporary link out to GS
+		var newURLGS = get_GSURLForPage();
+		var linkGroveScribe = document.getElementById("linkGroveScribe");
+		if (linkGroveScribe)
+			linkGroveScribe.href = newURLGS;
+		// Update temporary link out to GS
+		
 		var newURL = get_FullURLForPage();
+	
 		var newTitle = false;
 
 		root.AddFullURLToUndoStack(newURL);
@@ -3161,7 +3169,7 @@ function GrooveWriter() {
 		// reference the button and scroll it into view
 		var add_measure_button = document.getElementById("addMeasureButton");
 		if(add_measure_button)
-			add_measure_button.scrollIntoView({block: "start", behavior: "smooth"});
+			add_measure_button.scrollIntoView({block: "start", behavior: "smooth"});			
 
 		updateSheetMusic();
 
@@ -3905,6 +3913,14 @@ function GrooveWriter() {
 	function get_FullURLForPage(url_destination) {
 		var myGrooveData = root.grooveDataFromClickableUI()
 		return root.myGrooveUtils.getUrlStringFromGrooveData(myGrooveData, url_destination)
+	}
+
+	// get a really long URL that encodes all of the notes and the rest of the state of the page.
+	// this will allow us to bookmark or reference a groove and handle undo/redo.
+	//
+	function get_GSURLForPage(url_destination) {
+		var myGrooveData = root.grooveDataFromClickableUI()
+		return root.myGrooveUtils.getGSUrlStringFromGrooveData(myGrooveData, url_destination)
 	}
 
 	root.show_MetronomeAutoSpeedupConfiguration = function () {
