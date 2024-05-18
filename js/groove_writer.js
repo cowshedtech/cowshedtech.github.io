@@ -3171,7 +3171,7 @@ function GrooveWriter() {
 						"There are also many notation features that would be useful for score writing that are not part of Groove Scribe");
 	};
 
-	// add a measure to the front of the score
+	// add an empty measure to the front of the score
 	// copy the notes from the first measure to the new measure
 	root.addMeasurePrevButtonClick = function (event) {
 		var uiStickings = "";
@@ -3182,14 +3182,14 @@ function GrooveWriter() {
 		var uiKick = "";
 		var i;
 
-		// run the first measure twice to default in some notes
+		// Introduce an empty measure at the start
 		for (i =0; i < class_notes_per_measure; i++) {
-			uiStickings += get_sticking_state(i, "URL");
-			uiHH += get_hh_state(i, "URL");
-			uiTom1 += get_tom_state(i, 1, "URL");
-			uiTom4 += get_tom_state(i, 4, "URL");
-			uiSnare += get_snare_state(i, "URL");
-			uiKick += get_kick_state(i, "URL");
+			uiStickings += "-";
+			uiHH += "-";
+			uiTom1 += "-";
+			uiTom4 += "-";
+			uiSnare += "-";
+			uiKick += "-";
 		}
 
 		// get the encoded notes out of the UI.
