@@ -3142,14 +3142,14 @@ function GrooveWriter() {
 			uiKick += get_kick_state(i, "URL");
 		}
 
-		// run the the last measure twice to default in some notes
+		// add last empty measure
 		for (i = topIndex - class_notes_per_measure; i < topIndex; i++) {
-			uiStickings += get_sticking_state(i, "URL");
-			uiHH += get_hh_state(i, "URL");
-			uiTom1 += get_tom_state(i, 1, "URL");
-			uiTom4 += get_tom_state(i, 4, "URL");
-			uiSnare += get_snare_state(i, "URL");
-			uiKick += get_kick_state(i, "URL");
+			uiStickings += "-";
+			uiHH += "-";
+			uiTom1 += "-";
+			uiTom4 += "-";
+			uiSnare += "-";
+			uiKick += "-";
 		}
 
 		class_number_of_measures++;
@@ -4617,7 +4617,7 @@ function GrooveWriter() {
 
 
 		if (baseindex == class_number_of_measures) // add new measure button
-			newHTML += '<span id="addMeasureButton" title="Add measure" onClick="myGrooveWriter.addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
+			newHTML += '<span id="addMeasureButton" title="Add measure" onClick="myGrooveWriter.addMeasureButtonClick(event)"><i class="fa fa-plus"></i></span>';
 			
 
 		newHTML += ('</div>');
