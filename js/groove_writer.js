@@ -2746,9 +2746,9 @@ function GrooveWriter() {
 	root.updateCurrentURL = function () {
 		// Update temporary link out to GS
 		var newURLGS = get_GSURLForPage();
-		var linkGroveScribe = document.getElementById("linkGroveScribe");
-		if (linkGroveScribe)
-			linkGroveScribe.href = newURLGS;
+		var linkGrooveScribe = document.getElementById("linkGrooveScribe");
+		if (linkGrooveScribe)
+			linkGrooveScribe.href = newURLGS;
 		// Update temporary link out to GS
 		
 		var newURL = get_FullURLForPage();
