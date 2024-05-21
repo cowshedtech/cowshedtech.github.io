@@ -4398,7 +4398,12 @@ function GrooveWriter() {
 	// baseIndex is the index for the css labels "staff-container1, staff-container2"
 	// indexStartForNotes is the index for the note ids.
 	root.HTMLforStaffContainer = function (baseindex, indexStartForNotes) {
-		var newHTML = ('\
+		var newHTML = ('');
+		
+		if (baseindex == 1) // add new measure button
+			newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="myGrooveWriter.addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
+		
+		newHTML += ('\
 						<div class="staff-container" id="staff-container' + baseindex + '">\
 							<div class="stickings-row-container">\
 								<div class="line-labels">\
@@ -4434,8 +4439,8 @@ function GrooveWriter() {
 								</div>\
 							</div>\n');
 
-		if (baseindex == 1) // add new measure button
-			newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="myGrooveWriter.addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
+		// if (baseindex == 1) // add new measure button
+		// 	newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="myGrooveWriter.addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
 
 		newHTML += ('\
 							<span class="notes-row-container">\
@@ -4630,14 +4635,11 @@ function GrooveWriter() {
 			newHTML += '<span title="Remove Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.closeMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-times-circle"></i></span>';
 		else
 			newHTML += '<span class="closeMeasureButton"><i class="fa">&nbsp;&nbsp;&nbsp;</i></span>';
-
-
+			
+		newHTML += ('</div>');
 		if (baseindex == class_number_of_measures) // add new measure button
 			newHTML += '<span id="addMeasureButton" title="Add measure" onClick="myGrooveWriter.addMeasureButtonClick(event)"><i class="fa fa-plus"></i></span>';
-			
-
-		newHTML += ('</div>');
-
+		
 		return newHTML;
 	}; // end function HTMLforStaffContainer
 
