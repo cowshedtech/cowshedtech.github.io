@@ -81,6 +81,15 @@
 				document.write('<link rel="stylesheet" type="text/css" href="css/groove_debug.css">');
 			}
 		</script>
+		
+		<script type="importmap">
+			{
+				"imports": {
+				"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+				}
+			}
+		</script>
+	
 
     </head>
     <body>
@@ -156,87 +165,17 @@
 					</div>
 				</div>
 			</div>
-			<div class="nonPrintable">
+			<!-- <div class="nonPrintable">
 
 				<p class="warnings">Warnings:</p>
 				<div class="warnings" id="diverr">
 				</div>
 
-				<div id="sheetMusicTextFields" class="fullWidthEle grooveDB_hidden edit-block">
-					<span class="sheetMusicTextField"><b>Title:</b> <input class="sheetMusicInputField" id="tuneTitle" onchange="myGrooveWriter.refresh_ABC();" type="text"></span>
-					<span class="sheetMusicTextField"><b>Author:</b> <input class="sheetMusicInputField" id="tuneAuthor" onchange="myGrooveWriter.refresh_ABC();"  type="text"></span>
-					<span class="sheetMusicTextField"><b>Comment:</b> <input class="sheetMusicInputField" id="tuneComments" onchange="myGrooveWriter.refresh_ABC();"  type="text"></span>
-					<span id='KeyButton'><input type="checkbox" class="hiddenCheckbox" id="showLegend" onclick="myGrooveWriter.refresh_ABC();"><label id="LegendLabel" for="showLegend"><i class="fa fa-key"></i></label></span>
-				</div>
+				<div id="vue-app"></div>
+				
+			</div> -->
+			<div id="vue-app"></div>	
 
-				<div id="musicalInput" class="fullWidthEle edit-block">
-					<div id="measureContainer">
-						<script type="text/javascript">
-              var genHTML = "";
-              var cur_measure;
-              for (cur_measure = 1; cur_measure <= myGrooveWriter.numberOfMeasures(); cur_measure++) {
-                genHTML += myGrooveWriter.HTMLforStaffContainer(cur_measure, (cur_measure - 1) * myGrooveWriter.notesPerMeasure());
-              }
-              document.write(genHTML);
-              //console.log(genHTML);
-						</script>
-					</div>
-				</div>
-
-
-				<div id="bottomButtonRow" class="fullWidthEle">
-					<span class="pageBottomButton edit-block" id="clearAllNotesButton" onclick="event.preventDefault(); myGrooveWriter.clearAllNotes();"><span class="bottomButtonIcon"><i class="fa fa-trash fa-2x"></i></span><span class="bottomButtonLabel">CLEAR ALL</span></span>
-					<span class="pageBottomButton edit-block" id="showHideTomsButton" onclick="event.preventDefault(); myGrooveWriter.showHideToms(false, false);"><span class="bottomButtonIcon"><i id="icon-tom1" class="fa fa-circle"></i><i id="icon-tom2" class="fa fa-circle-o"></i><i id="icon-tom3" class="fa fa-circle-o"></i></span><span class="bottomButtonLabel">TOMS</span></span>
-					<span class=" grooveDB_hidden pageBottomButton" id="stickingsButton" onclick="myGrooveWriter.stickingsAnchorClick();"><span class="bottomButtonLabel">STICKINGS</span></span>
-					<span class=" grooveDB_hidden pageBottomButton" id="downloadButton" onclick="myGrooveWriter.DownloadAnchorClick();"><span class="bottomButtonIcon"><i class="fa fa-download fa-2x"></i></span><span class="bottomButtonLabel">DOWNLOAD</span></span>
-					<span class=" grooveDB_hidden pageBottomButton" id="printButton" onclick="myGrooveWriter.printMusic();"><span class="bottomButtonIcon"><i class="fa fa-print fa-2x"></i></span><span class="bottomButtonLabel">PRINT</span></span>
-					<span class=" grooveDB_hidden pageBottomButton" id="shareSaveButton" onclick="event.preventDefault(); myGrooveWriter.show_FullURLPopup();"><span class="bottomButtonIcon"><i class="fa fa-share fa-2x"></i></span><span class="bottomButtonLabel">SHARE</span></span>
-				</div>
-
-				<div id="midiTextOutput">
-				</div>
-
-				<span id="hiddenDescription">
-					GrooveScribe allows drummers to easily create grooves, listen, share, print sheet music, and more.
-					Use the GrooveScribe to create new grooves, figure out the groove to your favorite song,
-					or write down the groove to your latest tune.
-				</span>
-
-				<!-- GrooveDB output area -->
-				<div id="GrooveDB_MetaData" class="grooveDB_show" style="display:none;">
-					<div id="grooveDBInstructions">
-					This is the text that should be added to the GrooveDB for this groove.  <br>
-					<b>Copy and paste it into the GrooveDB edit window </b>
-					</div>
-					<div>
-					<textarea id="GrooveDB_source" class="fullWidthEle"></textarea>
-					</div>
-				</div>
-
-				<div id="debugDisplayArea">
-					<span id="undoStack"></span>
-					<span id="redoStack"></span>
-					<span id="URLSearchData"></span>
-					<!-- ABC notation -->
-					<A href="" id="showHideABC" onclick="event.preventDefault(); myGrooveWriter.ShowHideABCResults();">Show/Hide ABC Notation</a>
-
-					<div id="ABC_Results">
-						ABC Notation is used for rendering the music.  You can see what is being generated below.
-						You can even edit it.  <br>
-						NOTE: whenever the page is modified, the ABC Notation below will be overwritten automatically. <br>
-						For more information about ABC Notation go here: <a href="http://abcnotation.com/">http://abcnotation.com/</a>
-						<p></p>
-						<textarea id="ABCsource" rows="10" cols="72" ></textarea>
-						<br>
-						<button type="button" onclick="myGrooveWriter.displayNewSVG();">Re-render the music</button>
-						<button type="button" onclick="myGrooveWriter.saveABCtoFile();">Save ABC to file</button>
-					</div>
-					<span id="debugOutput"></span>
-				</div>
-
-				<div id="totalPlayTime">
-				</div>
-			</div>
 		</div>
 
 
@@ -498,6 +437,12 @@
 
 
 	</div>
+
+	<script type="module">
+		import { createApp } from 'vue'
+		import Main from './vue/main.js'	  
+		createApp(Main).mount('#vue-app')
+	  </script>
 
     </body>
 </html>
