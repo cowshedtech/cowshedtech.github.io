@@ -1251,7 +1251,7 @@ function GrooveWriter() {
 				document.getElementById("PermutationOptions").innerHTML = root.HTMLforPermutationOptions();
 				addOrRemoveKeywordFromClassById("PermutationOptions", "displayed", false);
 				break;
-		}
+		}	
 
 		updateSheetMusic();
 	};
@@ -1283,12 +1283,12 @@ function GrooveWriter() {
 
 		switch (help_type) {
 			case "help":
-				win = window.open("./gscribe_help.html", '_blank');
+				win = window.open("./content/gscribe_help.html", '_blank');
 				win.focus();
 				break;
 
 			case "about":
-				win = window.open("./gscribe_about.html", '_blank');
+				win = window.open("./content/gscribe_about.html", '_blank');
 				win.focus();
 				break;
 

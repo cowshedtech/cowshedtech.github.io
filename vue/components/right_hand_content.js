@@ -18,7 +18,6 @@ export default {
   },
   template: `  
     <div id="RightHandContent">
-      <span>hello</span>
       <PermutationOptions></PermutationOptions>
       <SheetMusic></SheetMusic>
 
