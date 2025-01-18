@@ -22,6 +22,7 @@ import Download from './context_menus/download.js'
 import TimeSignature from './context_menus/time_signature.js'
 import Share from './context_menus/share.js'
 import MetronomeSpeed from './context_menus/metronome_speed.js'
+import Grooves from './context_menus/grooves.js'
 
 export default {
   data() {
@@ -48,6 +49,7 @@ export default {
         { name: 'Download' },
         { name: 'TimeSignature' },
         { name: 'Share' },
+        { name: 'Grooves' },
         { name: 'MetronomeSpeed' }
       ]
     }
@@ -55,7 +57,7 @@ export default {
   components: {
     Sticking, HighHat, Tom1, Tom4, Snare, Kick,
     StickingsLabel, HighHatLabel, Tom1Label, Tom4Label, SnareLabel, KickLabel, PermutationLabel,
-    Help, Stickings, Download, TimeSignature, Share, MetronomeSpeed
+    Help, Stickings, Download, TimeSignature, Share, MetronomeSpeed, Grooves
   },
   template: `
     <div class="context-menus">
