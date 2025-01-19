@@ -20,6 +20,6 @@ export default {
     </div>			
     <RightHandContent></RightHandContent>		
     <MetronomeMenu></MetronomeMenu>
-	  <ContextMenus></ContextMenus>	        
+	  <ContextMenus></ContextMenus>       
 	`
   }
