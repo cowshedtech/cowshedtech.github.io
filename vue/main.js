@@ -1,7 +1,7 @@
 import RightHandContent from './components/right_hand_content.js'
-import LeftNavigation from './components/left_navigation.js'
-import TopNavigation from './components/top_navigation.js'
-import ContextMenus from './components/context_menus.js'
+import LeftNavigation from './components/navigation/left_navigation.js'
+import TopNavigation from './components/navigation/top_navigation.js'
+import ContextMenus from './components/context_menus/context_menus.js'
 import MetronomeMenu from './components/metronome_menu.js'
 import MidiPlayer from './components/midi_player.js'
 

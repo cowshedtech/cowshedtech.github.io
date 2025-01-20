@@ -1,4 +1,4 @@
-import Item from './tom1_item.js'
+import Item from './tom_item.js'
 
 export default {
 	data() {

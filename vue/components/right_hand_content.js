@@ -1,4 +1,4 @@
-import BottomNavigation from './bottom_navigation.js'
+import BottomNavigation from './navigation/bottom_navigation.js'
 import HiddenDiscription from './hidden_description.js'
 import GrooveDBMetaData from './groovedb_metadata.js'
 import GrooveDBDisplay from './grovedb_display.js'
