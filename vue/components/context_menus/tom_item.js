@@ -8,9 +8,6 @@ export default {
 	mounted() { },
 	methods: {
 		handleClick() { 
-			console.log(`click`);
-			console.log(this.drum);
-			console.log(this.newState);
 			myGrooveWriter.notePopupClick(this.drum, this.newState);
 		}
 	 },

@@ -4,8 +4,8 @@ export default {
 	data() {
 		return {
 			modes: [
-			{ newState: 'off', label: 'off' },
-			{ newState: 'normal', label: 'on'  },		  
+			{ newState: 'off', label: 'Off' },
+			{ newState: 'normal', label: 'On'  },		  
 			]
 		}
 	},
@@ -26,6 +26,3 @@ export default {
 		</div>
 `
 }
-
-
-{/* <ul id="tom1ContextMenu" class="list"> */}
