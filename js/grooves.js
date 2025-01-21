@@ -70,9 +70,9 @@ if (typeof(grooves) === "undefined")
 
 	root.getGroovesAsHTML = function () {
 		var HTML = "";
-
+		
 		HTML = root.arrayAsHTMLList(root.FullArray);
-
+		
 		return HTML;
 	};
 

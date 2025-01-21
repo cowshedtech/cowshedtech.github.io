@@ -4,25 +4,24 @@ export default {
 	data() {
 		return {
 			modes: [
-			{ newState: 'off', label: 'Off' },
-			{ newState: 'normal', label: 'On'  },		  
+				{ newState: 'off', label: 'Off' },
+				{ newState: 'normal', label: 'On' }
 			]
 		}
 	},
-	props: {
-		drum: String,
-		elementId: String
-	 },
-	mounted() {},
-	methods: { },
-	components: {
-		Item
-	},
-  	template: `
+	props: ['drum', 'elementId'],
+	components: { Item },
+	template: `
 		<div class="noteContextMenu">
 			<ul :id="elementId" class="list">
-				<Item :drum="drum" :newState="mode.newState" :label="mode.label" v-for="mode in this.modes"></Item>			
-			</ul>			
+				<Item
+					v-for="mode in modes"
+					:key="mode.newState"
+					:drum="drum"
+					:new-state="mode.newState"
+					:label="mode.label"
+				/>
+			</ul>
 		</div>
-`
+	`
 }

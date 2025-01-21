@@ -1,14 +1,20 @@
 export default {
   data() {
-    return { }
+    return {
+      menuWidth: '200px'
+    }
   },
-  props: { },
+  methods: {
+    downloadSVG() { myGrooveWriter.SVGSaveAs() },
+    downloadPNG() { myGrooveWriter.PNGSaveAs() },
+    downloadMIDI() { myGrooveWriter.MIDISaveAs() }
+  },
   template: `
 	<div class="noteContextMenu">
-		<ul id="downloadContextMenu" class="list" style="width: 200px;">
-			<li onclick='myGrooveWriter.SVGSaveAs();'><b>Download SVG Images</b></li>
-			<li onclick='myGrooveWriter.PNGSaveAs();'><b>Download PNG Images</b></li>
-			<li onclick='myGrooveWriter.MIDISaveAs();'><b>Download MIDI file</b></li>
+		<ul id="downloadContextMenu" class="list" :style="{ width: menuWidth }">
+			<li @click="downloadSVG"><b>Download SVG Images</b></li>
+			<li @click="downloadPNG"><b>Download PNG Images</b></li>
+			<li @click="downloadMIDI"><b>Download MIDI file</b></li>
 		</ul>
 	</div>	
 `

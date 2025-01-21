@@ -10,7 +10,6 @@ import PermutationLabel from './permutation_label.js'
 // Instruments
 import Sticking from './sticking.js'
 import HighHat from './high_hat.js'
-// import Tom1 from './tom1.js'
 import Tom from './tom.js'
 import Snare from './snare.js'
 import Kick from './kick.js'

@@ -1,13 +1,24 @@
 export default {
   data() {
-    return { }
+    return {
+      groovesAsHTML: ''
+    }
   },
-  props: { },
+  
+  props: {},
+  
+  created() {
+    try {
+      this.groovesAsHTML = grooves.getGroovesAsHTML();
+    } catch (error) {
+      console.error('Failed to load grooves:', error);
+      this.groovesAsHTML = '<span class="error">Failed to load grooves</span>';
+    }
+  },
+  
   template: `
-	<div id="grooveListWrapper">
-    <script>
-			document.write(grooves.getGroovesAsHTML());
-		</script>
-	</div>
-`
+    <div id="grooveListWrapper">
+      <span v-html="groovesAsHTML" />
+    </div>
+  `
 }
