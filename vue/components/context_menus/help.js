@@ -1,15 +1,30 @@
 export default {
+  emits: ['menu-action'],
   data() {
-    return { }
+    return {
+      menuItems: [
+        { action: 'undo', label: 'Undo (Ctrl-Z)' },
+        { action: 'redo', label: 'Redo (Ctrl-Y)' },
+        { action: 'help', label: 'Help' },
+        { action: 'about', label: 'About' }
+      ]
+    }
   },
-  props: { },
+  methods: {
+    handleMenuClick(action) {
+    	myGrooveWriter.helpMenuPopupClick(action);
+    }
+  },
   template: `
 	<div class="noteContextMenu">
 		<ul id="helpContextMenu" class="list">
-			<li onclick='myGrooveWriter.helpMenuPopupClick("undo");'>Undo (Ctrl-Z)</li>
-			<li onclick='myGrooveWriter.helpMenuPopupClick("redo");'>Redo (Ctrl-Y)</li>
-			<li onclick='myGrooveWriter.helpMenuPopupClick("help");'>Help</li>
-			<li onclick='myGrooveWriter.helpMenuPopupClick("about");'>About</li>
+			<li
+				v-for="item in menuItems"
+				:key="item.action"
+				@click="handleMenuClick(item.action)"
+			>
+				{{ item.label }}
+			</li>
 		</ul>
 	</div>
 `

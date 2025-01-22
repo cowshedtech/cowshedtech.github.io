@@ -1,18 +1,19 @@
 // Labels
-import StickingsLabel from './sticking_label.js'
-import HighHatLabel from './highhat_label.js'
-import Tom1Label from './tom1_label.js'
-import Tom4Label from './tom4_label.js'
-import SnareLabel from './snare_label.js'
-import KickLabel from './kick_label.js'
+import StickingsLabel from './instruments/sticking_label.js'
+import HighHatLabel from './instruments/highhat_label.js'
+import Tom1Label from './instruments/tom1_label.js'
+import Tom4Label from './instruments/tom4_label.js'
+import SnareLabel from './instruments/snare_label.js'
+import KickLabel from './instruments/kick_label.js'
 import PermutationLabel from './permutation_label.js'
 
 // Instruments
-import Sticking from './sticking.js'
-import HighHat from './high_hat.js'
-import Tom from './tom.js'
-import Snare from './snare.js'
-import Kick from './kick.js'
+import Sticking from './instruments/sticking.js'
+import HighHat from './instruments/high_hat.js'
+import Tom1 from './instruments/tom1.js'
+import Tom4 from './instruments/tom4.js'
+import Snare from './instruments/snare.js'
+import Kick from './instruments/kick.js'
 
 // Controls
 import Help from './help.js'
@@ -30,8 +31,8 @@ export default {
         // Instruments
         { name: 'Sticking' },
         { name: 'HighHat' },
-        { name: 'Tom', instrument: 'tom1', elementId: 'tom1ContextMenu' },
-        { name: 'Tom', instrument: 'tom4', elementId: 'tom4ContextMenu' },
+        { name: 'Tom1'},
+        { name: 'Tom4'},
         { name: 'Snare' },
         { name: 'Kick' },
         // Labels
@@ -54,7 +55,7 @@ export default {
     }
   },
   components: {
-    Sticking, HighHat, Tom, Snare, Kick,
+    Sticking, HighHat, Tom1, Tom4, Snare, Kick,
     StickingsLabel, HighHatLabel, Tom1Label, Tom4Label, SnareLabel, KickLabel, PermutationLabel,
     Help, Stickings, Download, TimeSignature, Share, MetronomeSpeed, Grooves
   },
