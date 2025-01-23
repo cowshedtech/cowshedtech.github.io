@@ -100,9 +100,9 @@ if (typeof(GrooveDisplay) === "undefined") {
 		root.loadjscssfile("../MIDI.js/inc/Base64.js", "js");
 		root.loadjscssfile("../MIDI.js/inc/base64binary.js", "js");
 		//	<!-- jsmidgen -->
-		root.loadjscssfile("./jsmidgen.js", "js");
+		root.loadjscssfile("./thirdparty/jsmidgen.js", "js");
 		//	<!-- script to render ABC to an SVG image -->
-		root.loadjscssfile("./abc2svg-1.js", "js");
+		root.loadjscssfile("./thirdparty/abc2svg-1.js", "js");
 
 		//	<!--   our custom JS  -->
 		root.loadjscssfile("./groove_utils.js", "js");
