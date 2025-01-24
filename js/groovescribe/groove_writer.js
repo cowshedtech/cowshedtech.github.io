@@ -99,57 +99,7 @@ function GrooveWriter() {
 		return false;
 	}
 
-	function addOrRemoveKeywordFromClass(tag_class, keyword, addElseRemove) {
-		var return_val = true;
-
-		if (tag_class) {
-
-			if (tag_class.className != undefined) {
-				if (addElseRemove) {
-					if (tag_class.className.indexOf(keyword) < 0) {
-						tag_class.className += " " + keyword;
-					}
-				} else {
-					tag_class.className = tag_class.className.replace(" " + keyword, "");
-				}
-			} else {
-				console.log("Warning in addOrRemoveKeywordFromClassName: null className for tag id: " + tag_class.id);
-				console.trace();
-				return_val = false;
-			}
-		} else {
-			console.log("Warning in addOrRemoveKeywordFromClassName: null tag_class passed in");
-			return_val = false;
-		}
-
-		return return_val;
-	}
-
-	function addOrRemoveKeywordFromClassById(tagId, keyword, addElseRemove) {
-		var tag_class = document.getElementById(tagId);
-
-		if (!addOrRemoveKeywordFromClass(tag_class, keyword, addElseRemove))
-			console.log("Warning in addOrRemoveKeywordFromClassById bad ID: " + tagId);
-	}
-
-	function selectButton(element) {
-		// highlight the new div by adding selected css class
-		addOrRemoveKeywordFromClass(element, "buttonSelected", true);
-	}
-
-	function unselectButton(element) {
-		// remove selected class if it exists
-		addOrRemoveKeywordFromClass(element, "buttonSelected", false);
-	}
-
-	function is_snare_on(id) {
-		var state = get_snare_state(id, "ABC");
-
-		if (state !== false)
-			return true;
-
-		return false;
-	}
+	
 
 	function play_single_note_for_note_setting(note_val) {
 		if (MIDI.WebAudio) {
@@ -159,68 +109,7 @@ function GrooveWriter() {
 		}
 	}
 
-	// returns the ABC notation for the snare state
-	// false = off
-	//
-	//  c == Snare Normal</li>
-	//  !accent!c == Snare Accent</li>
-	//  _c == Ghost Note    shows an x with a circle around it.   Needs improvement
-	//  ^c == xstick   shows an x
-	function get_snare_state(id, returnType) {
-
-		if (returnType != "ABC" && returnType != "URL") {
-			console.log("bad returnType in get_snare_state()");
-			returnType = "ABC";
-		}
-
-		if (document.getElementById("snare_flam" + id).style.color == constant_note_on_color_rgb) {
-			if (returnType == "ABC")
-				return constant_ABC_SN_Flam; // snare flam
-			else if (returnType == "URL")
-				return "f"; // snare flam
-		}
-		if (document.getElementById("snare_drag" + id).style.color == constant_note_on_color_rgb) {
-			if (returnType == "ABC")
-				return constant_ABC_SN_Drag; // snare drag
-			else if (returnType == "URL")
-				return "d"; // snare drag
-		}
-		if (document.getElementById("snare_ghost" + id).style.color == constant_note_on_color_rgb) {
-			if (returnType == "ABC")
-				return constant_ABC_SN_Ghost; // ghost note
-			else if (returnType == "URL")
-				return "g"; // ghost note
-		}
-		if (document.getElementById("snare_accent" + id).style.color == constant_snare_accent_on_color_rgb) {
-			if (returnType == "ABC")
-				return constant_ABC_SN_Accent; // snare accent
-			else if (returnType == "URL")
-				return "O"; // snare accent
-		}
-		if (document.getElementById("snare_circle" + id).style.backgroundColor == constant_note_on_color_rgb) {
-			if (returnType == "ABC")
-				return constant_ABC_SN_Normal; // snare normal
-			else if (returnType == "URL")
-				return "o"; // snare normal
-		}
-		if (document.getElementById("snare_xstick" + id).style.color == constant_note_on_color_rgb) {
-			if (returnType == "ABC")
-				return constant_ABC_SN_XStick; // snare Xstick
-			else if (returnType == "URL")
-				return "x"; // snare xstick
-		}
-		if (document.getElementById("snare_buzz" + id).style.color == constant_note_on_color_rgb) {
-			if (returnType == "ABC")
-				return constant_ABC_SN_Buzz; // snare Buzz
-			else if (returnType == "URL")
-				return "b"; // snare Buzz
-		}
-
-		if (returnType == "ABC")
-			return false; // off (rest)
-		else if (returnType == "URL")
-			return "-"; // off (rest)
-	}
+	
 
 	function is_tom_on(id, tom_num) {
 		var state = get_tom_state(id, tom_num, "ABC");
@@ -392,67 +281,7 @@ function GrooveWriter() {
 		}
 	}
 
-	function set_snare_state(id, mode, make_sound) {
-
-		// hide everything optional
-		document.getElementById("snare_circle" + id).style.backgroundColor = constant_note_hidden_color_rgb;
-		document.getElementById("snare_circle" + id).style.borderColor = constant_note_hidden_color_rgb;
-		document.getElementById("snare_ghost" + id).style.color = constant_note_hidden_color_rgb;
-		document.getElementById("snare_accent" + id).style.color = constant_note_hidden_color_rgb;
-		document.getElementById("snare_xstick" + id).style.color = constant_note_hidden_color_rgb;
-		document.getElementById("snare_buzz" + id).style.color = constant_note_hidden_color_rgb;
-		document.getElementById("snare_flam" + id).style.color = constant_note_hidden_color_rgb;
-		document.getElementById("snare_drag" + id).style.color = constant_note_hidden_color_rgb;
-
-		// turn stuff on conditionally
-		switch (mode) {
-			case "off":
-				document.getElementById("snare_circle" + id).style.backgroundColor = constant_note_off_color_hex;
-				document.getElementById("snare_circle" + id).style.borderColor = constant_note_border_color_hex;
-				break;
-			case "normal":
-				document.getElementById("snare_circle" + id).style.backgroundColor = constant_note_on_color_hex;
-				document.getElementById("snare_circle" + id).style.borderColor = constant_note_border_color_hex;
-				if (make_sound)
-					play_single_note_for_note_setting(constant_OUR_MIDI_SNARE_NORMAL);
-				break;
-			case "flam":
-				document.getElementById("snare_flam" + id).style.color = constant_note_on_color_hex;
-				if (make_sound)
-					play_single_note_for_note_setting(constant_OUR_MIDI_SNARE_FLAM);
-				break;
-			case "drag":
-				document.getElementById("snare_drag" + id).style.color = constant_note_on_color_hex;
-				if (make_sound)
-					play_single_note_for_note_setting(constant_OUR_MIDI_SNARE_DRAG);
-				break;
-			case "ghost":
-				document.getElementById("snare_ghost" + id).style.color = constant_note_on_color_hex;
-				if (make_sound)
-					play_single_note_for_note_setting(constant_OUR_MIDI_SNARE_GHOST);
-				break;
-			case "accent":
-				document.getElementById("snare_circle" + id).style.backgroundColor = constant_note_on_color_hex;
-				document.getElementById("snare_circle" + id).style.borderColor = constant_note_border_color_hex;
-				document.getElementById("snare_accent" + id).style.color = constant_snare_accent_on_color_hex;
-				if (make_sound)
-					play_single_note_for_note_setting(constant_OUR_MIDI_SNARE_ACCENT);
-				break;
-			case "xstick":
-				document.getElementById("snare_xstick" + id).style.color = constant_note_on_color_hex;
-				if (make_sound)
-					play_single_note_for_note_setting(constant_OUR_MIDI_SNARE_XSTICK);
-				break;
-			case "buzz":
-				document.getElementById("snare_buzz" + id).style.color = constant_note_on_color_hex;
-				if (make_sound)
-					play_single_note_for_note_setting(constant_OUR_MIDI_SNARE_BUZZ);
-				break;
-			default:
-				console.log("bad switch in set_snare_state");
-				break;
-		}
-	}
+	
 
 	function is_hh_on(id) {
 		var state = get_hh_state(id, "ABC");

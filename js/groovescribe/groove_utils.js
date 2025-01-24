@@ -2346,10 +2346,10 @@ function GrooveUtils() {
 	};
 
 	root.getMidiSoundFontLocation = function () {
-		return root.getGrooveUtilsBaseLocation() + "soundfont/";
+		return root.getGrooveUtilsBaseLocation() + "../soundfont/";
 	};
 	root.getMidiImageLocation = function () {
-		return root.getGrooveUtilsBaseLocation() + "images/";
+		return root.getGrooveUtilsBaseLocation() + "../images/";
 	};
 
 	root.midiEventCallbackClass = function (classRoot) {
