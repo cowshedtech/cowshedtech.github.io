@@ -1,6 +1,8 @@
 // Javascript for the Groove Scribe HTML application
-
-// local constants
+// Groove Scribe is for drummers and helps create sheet music with an easy to use WYSIWYG groove editor.
+//
+// Functions for handling high hats
+//
 
 
 var constant_note_on_color_hex = "#000000"; // black
@@ -8,16 +10,6 @@ var constant_note_on_color_rgb = 'rgb(0, 0, 0)'; // black
 var constant_hihat_note_off_color_hex = "#CCC";
 var constant_hihat_note_off_color_rgb = 'rgb(204, 204, 204)'; // grey
 var constant_note_hidden_color_rgb = "transparent";
-
-//
-// TODO move to generic location
-//
-function play_single_note_for_note_setting(note_val) {
-    const midiSystem = MIDI.WebAudio || MIDI.AudioTag;
-    if (midiSystem) {
-        midiSystem.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
-    }
-}
 
 function is_hh_on(id) {
     return get_hh_state(id, "ABC") !== false;

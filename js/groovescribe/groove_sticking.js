@@ -106,3 +106,13 @@ function sticking_rotate_state(id) {
 
     set_sticking_state(id, new_state, true);
 }
+
+function isStickingsVisible() {
+    var myElements = document.querySelectorAll(".stickings-container");
+    for (var i = 0; i < myElements.length; i++) {
+        if (myElements[i].style.display == "block")
+            return true;
+    }
+
+    return false;
+}

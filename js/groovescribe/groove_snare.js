@@ -21,16 +21,6 @@ function is_snare_on(id) {
 }
 
 //
-// TODO move to generic location
-//
-function play_single_note_for_note_setting(note_val) {
-    const midiSystem = MIDI.WebAudio || MIDI.AudioTag;
-    if (midiSystem) {
-        midiSystem.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
-    }
-}
-
-//
 //
 //
 function get_snare_state(id, returnType) {

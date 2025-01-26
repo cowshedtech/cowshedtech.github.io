@@ -19,17 +19,6 @@ var constant_sticking_left_off_color_rgb = "rgb(204, 204, 204)";
 var constant_snare_accent_on_color_hex = "#FFF";
 var constant_snare_accent_on_color_rgb = "rgb(255, 255, 255)";
 
-//
-// TODO move to generic location
-//
-function play_single_note_for_note_setting(note_val) {
-    const midiSystem = MIDI.WebAudio || MIDI.AudioTag;
-    if (midiSystem) {
-        midiSystem.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
-    }
-}
-
-
 function is_tom_on(id, tom_num) {
     var state = get_tom_state(id, tom_num, "ABC");
 

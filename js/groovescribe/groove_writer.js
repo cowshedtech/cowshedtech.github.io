@@ -83,42 +83,27 @@ function GrooveWriter() {
 
 	// functions below
 
+	//
+	//
+	//
 	root.numberOfMeasures = function () {
 		return class_number_of_measures;
 	};
 
+	//
+	//
+	//
 	root.notesPerMeasure = function () {
 		return class_notes_per_measure;
 	};
 
+	//
+	//
 	// is the division a triplet groove?   12, 24, or 48 notes
 	function usingTriplets() {
-		if (root.myGrooveUtils.isTripletDivision(class_time_division))
-			return true;
-
+		if (root.myGrooveUtils.isTripletDivision(class_time_division)) return true;
 		return false;
 	}
-
-	
-
-	function play_single_note_for_note_setting(note_val) {
-		if (MIDI.WebAudio) {
-			MIDI.WebAudio.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
-		} else if (MIDI.AudioTag) {
-			MIDI.AudioTag.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
-		}
-	}
-
-	
-
-	
-
-
-	
-
-	
-
-	
 
 	// highlight the note, this is used to play along with the midi track
 	// only one note for each instrument can be highlighted at a time
@@ -267,19 +252,15 @@ function GrooveWriter() {
 
 	}
 
-	function getTagPosition(tag) {
-		var xVal = 0,
-				yVal = 0;
-		while (tag) {
-			xVal += (tag.offsetLeft - tag.scrollLeft + tag.clientLeft);
-			yVal += (tag.offsetTop - tag.scrollTop + tag.clientTop);
-			tag = tag.offsetParent;
-		}
-		return {
-			x: xVal,
-			y: yVal
-		};
-	}
+	
+
+	
+
+	
+
+	
+
+	
 
 	// called every time the tempo changes, which can be a lot of times due to the range slider
 	// update the main URL with the tempo, but only do it every third of a second at the most
@@ -2607,52 +2588,7 @@ function GrooveWriter() {
 		// 				"There are also many notation features that would be useful for score writing that are not part of Groove Scribe");
 	};
 
-	function showHideCSS_ClassDisplay(className, force, showElseHide, showState) {
-		var myElements = document.querySelectorAll(className);
-		var newStateIsOn = true;
-
-		for (var i = 0; i < myElements.length; i++) {
-			var element = myElements[i];
-
-			if (force) {
-				newStateIsOn = showElseHide;
-			} else {
-				// no-force means to swap on each call
-				if (element.style.display == showState)
-					newStateIsOn = false;
-				else
-					newStateIsOn = true;
-			}
-
-			if (newStateIsOn)
-				element.style.display = showState;
-			else
-				element.style.display = "none";
-		}
-
-		return newStateIsOn;
-	}
-
-	function showHideCSS_ClassVisibility(className, force, showElseHide) {
-		var myElements = document.querySelectorAll(className);
-		for (var i = 0; i < myElements.length; i++) {
-			var stickings = myElements[i];
-
-			if (force) {
-				if (showElseHide)
-					stickings.style.visibility = "visible";
-				else
-					stickings.style.visibility = "hidden";
-			} else {
-				// no-force means to swap on each call
-				if (stickings.style.visibility == "visible")
-					stickings.style.visibility = "hidden";
-				else
-					stickings.style.visibility = "visible";
-
-			}
-		}
-	}
+	
 
 	// clear all the notes on all measures
 	root.clearAllNotes = function () {
@@ -2690,16 +2626,6 @@ function GrooveWriter() {
 
 		return false; // don't follow the link
 	};
-
-	function isStickingsVisible() {
-		var myElements = document.querySelectorAll(".stickings-container");
-		for (var i = 0; i < myElements.length; i++) {
-			if (myElements[i].style.display == "block")
-				return true;
-		}
-
-		return false;
-	}
 
 	root.stickingsShowHide = function (force, showElseHide, dontRefreshScreen) {
 
