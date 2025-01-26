@@ -178,75 +178,7 @@ function GrooveUtils() {
 
 	root.myGrooveData = root.grooveDataNew();
 
-	root.getQueryVariableFromString = function (variable, def_value, my_string) {
-		var query = my_string.substring(1);
-		var vars = query.split("&");
-		for (var i = 0; i < vars.length; i++) {
-			var pair = vars[i].split("=");
-			if (pair[0].toLowerCase() == variable.toLowerCase()) {
-				return pair[1];
-			}
-		}
-		return (def_value);
-	};
-
-	// Get the "?query" values from the page URL
-	root.getQueryVariableFromURL = function (variable, def_value) {
-		return (root.getQueryVariableFromString(variable, def_value, window.location.search));
-	};
-
-	root.getBrowserInfo = function () {
-		var browser = navigator.appName;
-		var b_version = navigator.appVersion;
-		var version = parseFloat(b_version);
-		var useragent = navigator.userAgent;
-		switch (browser) {
-		case 'Microsoft Internet Explorer':
-			browser = "MSIE";
-			version = useragent.substr(useragent.lastIndexOf('MSIE') + 5, 3);
-			break;
-		case 'Netscape':
-			if (useragent.lastIndexOf('Edge/') > 0) {
-				browser = "Edge";
-				version = useragent.substr(useragent.lastIndexOf('Edge/') + 5, 4);
-			} else if (useragent.lastIndexOf('Chrome/') > 0) {
-				browser = "Chrome";
-				version = useragent.substr(useragent.lastIndexOf('Chrome/') + 7, 4);
-			} else if (useragent.lastIndexOf('Firefox/') > 0) {
-				browser = "Firefox";
-				version = useragent.substr(useragent.lastIndexOf('Firefox/') + 8, 5);
-			} else if (useragent.lastIndexOf('Safari/') > 0) {
-				browser = "Safari";
-				version = useragent.substr(useragent.lastIndexOf('Safari/') + 7, 6);
-			} else if (useragent.lastIndexOf('Trident/') > 0) {
-				browser = "MSIE";
-				version = useragent.substr(useragent.lastIndexOf('rv:') + 3, 4);
-			} else {
-				console.log("undefined browser");
-			}
-			break;
-		case 'Opera':
-			version = useragent.substr(useragent.lastIndexOf('Version/') + 8, 5);
-			break;
-		}
-		var platform = "windows";
-		if (useragent.lastIndexOf('iPhone') > 0) {
-			platform = "iOS";
-		} else if (useragent.lastIndexOf('iPad') > 0) {
-			platform = "iOS";
-		} else if (useragent.lastIndexOf('Android') > 0) {
-			platform = "android";
-		} else if (useragent.lastIndexOf('Macintosh') > 0) {
-			platform = "mac";
-		}
-
-		return {
-			"browser" : browser,
-			"version" : version,
-			"platform" : platform,
-			"uastring" : useragent
-		};
-	};
+	
 
 	// is the browser a touch device.   Usually this means no right click
 	root.is_touch_device = function () {
@@ -935,24 +867,24 @@ function GrooveUtils() {
 		var myGrooveData = new root.grooveDataNew();
 		var i;
 
-		myGrooveData.debugMode = parseInt(root.getQueryVariableFromString("Debug", root.debugMode, encodedURLData), 10);
+		myGrooveData.debugMode = parseInt(getQueryVariableFromString("Debug", root.debugMode, encodedURLData), 10);
 
-		var timeSigArray = root.parseTimeSigString(root.getQueryVariableFromString("TimeSig", "4/4", encodedURLData));
+		var timeSigArray = root.parseTimeSigString(getQueryVariableFromString("TimeSig", "4/4", encodedURLData));
 		myGrooveData.numBeats = timeSigArray[0];
 		myGrooveData.noteValue = timeSigArray[1];
 
-		myGrooveData.timeDivision = parseInt(root.getQueryVariableFromString("Div", 16, encodedURLData), 10);
+		myGrooveData.timeDivision = parseInt(getQueryVariableFromString("Div", 16, encodedURLData), 10);
 		myGrooveData.notesPerMeasure = root.calc_notes_per_measure(myGrooveData.timeDivision, myGrooveData.numBeats, myGrooveData.noteValue);
 
-		myGrooveData.metronomeFrequency = parseInt(root.getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10);
+		myGrooveData.metronomeFrequency = parseInt(getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10);
 
-		myGrooveData.numberOfMeasures = parseInt(root.getQueryVariableFromString("measures", 1, encodedURLData), 10);
+		myGrooveData.numberOfMeasures = parseInt(getQueryVariableFromString("measures", 1, encodedURLData), 10);
 		if (myGrooveData.numberOfMeasures < 1 || isNaN(myGrooveData.numberOfMeasures))
 			myGrooveData.numberOfMeasures = 1;
 		else if (myGrooveData.numberOfMeasures > constant_MAX_MEASURES)
 			myGrooveData.numberOfMeasures = constant_MAX_MEASURES;
 
-		Stickings_string = root.getQueryVariableFromString("Stickings", false, encodedURLData);
+		Stickings_string = getQueryVariableFromString("Stickings", false, encodedURLData);
 		if (!Stickings_string) {
 			Stickings_string = root.GetDefaultStickingsGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
 			myGrooveData.showStickings = false;
@@ -960,22 +892,22 @@ function GrooveUtils() {
 			myGrooveData.showStickings = true;
 		}
 
-		HH_string = root.getQueryVariableFromString("H", false, encodedURLData);
+		HH_string = getQueryVariableFromString("H", false, encodedURLData);
 		if (!HH_string) {
-			root.getQueryVariableFromString("HH", false, encodedURLData);
+			getQueryVariableFromString("HH", false, encodedURLData);
 			if (!HH_string) {
 				HH_string = root.GetDefaultHHGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
 			}
 		}
 
-		Snare_string = root.getQueryVariableFromString("S", false, encodedURLData);
+		Snare_string = getQueryVariableFromString("S", false, encodedURLData);
 		if (!Snare_string) {
 			Snare_string = root.GetDefaultSnareGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
 		}
 
-		Kick_string = root.getQueryVariableFromString("K", false, encodedURLData);
+		Kick_string = getQueryVariableFromString("K", false, encodedURLData);
 		if (!Kick_string) {
-			root.getQueryVariableFromString("B", false, encodedURLData);
+			getQueryVariableFromString("B", false, encodedURLData);
 			if (!Kick_string) {
 				Kick_string = root.GetDefaultKickGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
 			}
@@ -984,7 +916,7 @@ function GrooveUtils() {
 		// Get the Toms
 		for(i=0; i < 4; i++) {
 			// toms are named T1, T2, T3, T4
-			var Tom_string = root.getQueryVariableFromString("T" + (i+1), false, encodedURLData);
+			var Tom_string = getQueryVariableFromString("T" + (i+1), false, encodedURLData);
 			if (!Tom_string) {
 				Tom_string = root.GetDefaultTomGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
 			} else {
@@ -1000,23 +932,23 @@ function GrooveUtils() {
 		myGrooveData.snare_array = root.noteArraysFromURLData("S", Snare_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
 		myGrooveData.kick_array = root.noteArraysFromURLData("K", Kick_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
 
-		myGrooveData.title = root.getQueryVariableFromString("title", "", encodedURLData);
+		myGrooveData.title = getQueryVariableFromString("title", "", encodedURLData);
 		myGrooveData.title = decodeURIComponent(myGrooveData.title);
 		myGrooveData.title = myGrooveData.title.replace(/\+/g, " ");
 
-		myGrooveData.author = root.getQueryVariableFromString("author", "", encodedURLData);
+		myGrooveData.author = getQueryVariableFromString("author", "", encodedURLData);
 		myGrooveData.author = decodeURIComponent(myGrooveData.author);
 		myGrooveData.author = myGrooveData.author.replace(/\+/g, " ");
 
-		myGrooveData.comments = root.getQueryVariableFromString("comments", "", encodedURLData);
+		myGrooveData.comments = getQueryVariableFromString("comments", "", encodedURLData);
 		myGrooveData.comments = decodeURIComponent(myGrooveData.comments);
 		myGrooveData.comments = myGrooveData.comments.replace(/\+/g, " ");
 
-		myGrooveData.tempo = parseInt(root.getQueryVariableFromString("tempo", constant_DEFAULT_TEMPO, encodedURLData), 10);
+		myGrooveData.tempo = parseInt(getQueryVariableFromString("tempo", constant_DEFAULT_TEMPO, encodedURLData), 10);
 		if (isNaN(myGrooveData.tempo) || myGrooveData.tempo < 20 || myGrooveData.tempo > 400)
 			myGrooveData.tempo = constant_DEFAULT_TEMPO;
 
-		myGrooveData.swingPercent = parseInt(root.getQueryVariableFromString("swing", 0, encodedURLData), 10);
+		myGrooveData.swingPercent = parseInt(getQueryVariableFromString("swing", 0, encodedURLData), 10);
 		if (isNaN(myGrooveData.swingPercent) || myGrooveData.swingPercent < 0 || myGrooveData.swingPercent > 100)
 			myGrooveData.swingPercent = 0;
 
@@ -3441,7 +3373,7 @@ function GrooveUtils() {
 		if (html_element)
 			html_element.innerHTML = root.HTMLForMidiPlayer(expandable);
 
-		var browserInfo = root.getBrowserInfo();
+		var browserInfo = getBrowserInfo();
 		var isIE10 = false;
 		if(browserInfo.browser == "MSIE" && browserInfo.version < 12)
 			isIE10 = true;

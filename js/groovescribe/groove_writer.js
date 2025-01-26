@@ -42,7 +42,7 @@ function GrooveWriter() {
 
 	// public class vars
 	var class_number_of_measures = 1;
-	var class_time_division = parseInt(root.myGrooveUtils.getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
+	var class_time_division = parseInt(getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
 	var class_num_beats_per_measure = 4;     // TimeSigTop
 	var class_note_value_per_measure = 4;     // TimeSigBottom
 	var class_notes_per_measure = root.myGrooveUtils.calc_notes_per_measure(class_time_division, class_num_beats_per_measure, class_note_value_per_measure);
@@ -51,8 +51,8 @@ function GrooveWriter() {
 	var class_metronome_count_in_is_playing = false;
 
 	// set debugMode immediately so we can use it in index.html
-	root.myGrooveUtils.debugMode = parseInt(root.myGrooveUtils.getQueryVariableFromURL("Debug", "0"), 10);
-	root.myGrooveUtils.grooveDBAuthoring = parseInt(root.myGrooveUtils.getQueryVariableFromURL("GDB_Author", "0"), 10);
+	root.myGrooveUtils.debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
+	root.myGrooveUtils.grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
 
 	// private vars in the scope of the class
 	var class_app_title = "Groove Scribe";
@@ -2772,7 +2772,7 @@ function GrooveWriter() {
 		root.setTimeSigLabel();
 
 		// if Mode != "view" put into edit mode  (we default to view mode to prevent screen flicker)
-		if("view" != root.myGrooveUtils.getQueryVariableFromURL("Mode", "edit"))
+		if("view" != getQueryVariableFromURL("Mode", "edit"))
 			root.swapViewEditMode(true);
 
 		// set the background and text color of the current subdivision
@@ -2822,7 +2822,7 @@ function GrooveWriter() {
 
 		window.onresize = root.refresh_ABC;
 
-		root.browserInfo = root.myGrooveUtils.getBrowserInfo();
+		root.browserInfo = getBrowserInfo();
 		if (root.browserInfo.browser == "MSIE" && root.browserInfo.version < 10) {
 			window.alert("This browser has been detected as: " + root.browserInfo.browser + " ver: " + root.browserInfo.version + ".\n" + 'This version of IE is unsupported.   Please use Chrome or Firefox instead');
 		} else if (root.browserInfo.browser == "Safari" && root.browserInfo.platform == "windows" && root.browserInfo.version < 535) {
