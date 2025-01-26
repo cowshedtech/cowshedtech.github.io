@@ -180,11 +180,6 @@ function GrooveUtils() {
 
 	
 
-	// is the browser a touch device.   Usually this means no right click
-	root.is_touch_device = function () {
-		return (('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
-	};
-
 	// the notes per measure is calculated from the note division and the time signature
 	// in 4/4 time the division is the division (as well as any time signature x/x)
 	// in 4/8 the num notes is half as many, etc
@@ -347,25 +342,7 @@ function GrooveUtils() {
 		return root.GetEmptyGroove(notes_per_measure, numMeasures);
 	};
 
-	// build a string that looks like this
-    // "|x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-|";
-	root.GetDefaultHHGroove = function (notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
-		var retString = "";
-		var oneMeasureString = "|";
-		var i;
-
-		for(i = 0; i < notes_per_measure; i++) {
-			if(notes_per_measure == 48)
-				oneMeasureString += "-";
-			else
-				oneMeasureString += "x";
-		}
-		for (i = 0; i < numMeasures; i++)
-			retString += oneMeasureString;
-		retString += "|";
-
-		return retString;
-	};
+	
 
 	root.GetDefaultTom1Groove = function (notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
 
@@ -377,52 +354,8 @@ function GrooveUtils() {
 		return root.GetEmptyGroove(notes_per_measure, numMeasures);
 	};
 
-	// build a string that looks like this
-    // |--------O---------------O-------|
-	root.GetDefaultSnareGroove = function (notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
-		var retString = "";
-		var oneMeasureString = "|";
-		var i;
-		var notes_per_grouping = (notes_per_measure / timeSigTop);
-
-		for(i = 0; i < notes_per_measure; i++) {
-			// if the note falls on the beginning of a group
-			// and the group is odd
-			if(i % notes_per_grouping === 0 && (i / notes_per_grouping) % 2 !== 0)
-				oneMeasureString += "O";
-			else
-				oneMeasureString += "-";
-		}
-		for (i = 0; i < numMeasures; i++)
-				retString += oneMeasureString;
-			retString += "|";
-
-		return retString;
-
-	};
-
-	// build a string that looks like this
-    // |o---------------o---------------|
-	root.GetDefaultKickGroove = function (notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
-		var retString = "";
-		var oneMeasureString = "|";
-		var i;
-		var notes_per_grouping = (notes_per_measure / timeSigTop);
-
-		for(i = 0; i < notes_per_measure; i++) {
-			// if the note falls on the beginning of a group
-			// and the group is even
-			if(i % notes_per_grouping === 0 && (i / notes_per_grouping) % 2 === 0)
-				oneMeasureString += "o";
-			else
-				oneMeasureString += "-";
-		}
-		for (i = 0; i < numMeasures; i++)
-				retString += oneMeasureString;
-			retString += "|";
-
-		return retString;
-	};
+	
+	
 
 	root.GetDefaultTomGroove = function (notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
 
@@ -896,20 +829,20 @@ function GrooveUtils() {
 		if (!HH_string) {
 			getQueryVariableFromString("HH", false, encodedURLData);
 			if (!HH_string) {
-				HH_string = root.GetDefaultHHGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
+				HH_string = GetDefaultHHGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
 			}
 		}
 
 		Snare_string = getQueryVariableFromString("S", false, encodedURLData);
 		if (!Snare_string) {
-			Snare_string = root.GetDefaultSnareGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
+			Snare_string = GetDefaultSnareGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
 		}
 
 		Kick_string = getQueryVariableFromString("K", false, encodedURLData);
 		if (!Kick_string) {
 			getQueryVariableFromString("B", false, encodedURLData);
 			if (!Kick_string) {
-				Kick_string = root.GetDefaultKickGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
+				Kick_string = GetDefaultKickGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
 			}
 		}
 
@@ -3345,12 +3278,12 @@ function GrooveUtils() {
 			'			<div class="tempoRow">' +
 			'				<span class="tempoLabel">BPM</span>' +
 			'				<input type="text" for="tempo" class="tempoTextField" pattern="\\d+" id="tempoTextField' + root.grooveUtilsUniqueIndex + '" value="80"></input>' +
-			'				<input type=range min=30 max=300 value=90 class="tempoInput' + (root.is_touch_device() ? ' touch' : '') + '" id="tempoInput' + root.grooveUtilsUniqueIndex + '" list="tempoSettings">' +
+			'				<input type=range min=30 max=300 value=90 class="tempoInput' + (is_touch_device() ? ' touch' : '') + '" id="tempoInput' + root.grooveUtilsUniqueIndex + '" list="tempoSettings">' +
 			'			</div>' +
 			'			<div class="swingRow">' +
 			'				<span class="swingLabel">SWING</span>' +
 			'				<span for="swingAmount" class="swingOutput" id="swingOutput' + root.grooveUtilsUniqueIndex + '">0% swing</span>' +
-			'				<input type=range min=0 max=50 value=0 class="swingInput' + (root.is_touch_device() ? ' touch' : '') + '" id="swingInput' + root.grooveUtilsUniqueIndex + '" list="swingSettings" step=5 >' +
+			'				<input type=range min=0 max=50 value=0 class="swingInput' + (is_touch_device() ? ' touch' : '') + '" id="swingInput' + root.grooveUtilsUniqueIndex + '" list="swingSettings" step=5 >' +
 			'			</div>' +
 			'       </span>';
 

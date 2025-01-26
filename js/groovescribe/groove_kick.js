@@ -104,3 +104,27 @@ function set_kick_state(id, mode, make_sound) {
             break;
     }
 }
+
+
+// build a string that looks like this
+// |o---------------o---------------|
+function GetDefaultKickGroove(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
+    var retString = "";
+    var oneMeasureString = "|";
+    var i;
+    var notes_per_grouping = (notes_per_measure / timeSigTop);
+
+    for(i = 0; i < notes_per_measure; i++) {
+        // if the note falls on the beginning of a group
+        // and the group is even
+        if(i % notes_per_grouping === 0 && (i / notes_per_grouping) % 2 === 0)
+            oneMeasureString += "o";
+        else
+            oneMeasureString += "-";
+    }
+    for (i = 0; i < numMeasures; i++)
+            retString += oneMeasureString;
+        retString += "|";
+
+    return retString;
+};

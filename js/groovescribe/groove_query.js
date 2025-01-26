@@ -84,3 +84,9 @@ function getBrowserInfo() {
         uastring: useragent
     };
 }
+
+
+// is the browser a touch device.   Usually this means no right click
+function is_touch_device() {
+    return (('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+};

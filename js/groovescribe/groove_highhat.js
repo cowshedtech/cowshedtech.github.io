@@ -138,3 +138,24 @@ function set_hh_state(id, mode, make_sound) {
             break;
     }
 }
+
+
+// build a string that looks like this
+// "|x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-|";
+function GetDefaultHHGroove(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
+    var retString = "";
+    var oneMeasureString = "|";
+    var i;
+
+    for(i = 0; i < notes_per_measure; i++) {
+        if(notes_per_measure == 48)
+            oneMeasureString += "-";
+        else
+            oneMeasureString += "x";
+    }
+    for (i = 0; i < numMeasures; i++)
+        retString += oneMeasureString;
+    retString += "|";
+
+    return retString;
+};
