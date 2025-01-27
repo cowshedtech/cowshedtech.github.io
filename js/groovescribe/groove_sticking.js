@@ -116,3 +116,7 @@ function isStickingsVisible() {
 
     return false;
 }
+
+function GetDefaultStickingsGroove(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
+    return GetEmptyGroove(notes_per_measure, numMeasures);
+};

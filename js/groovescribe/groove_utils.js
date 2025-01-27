@@ -62,10 +62,10 @@ function GrooveUtils() {
 	root.grooveUtilsUniqueIndex = global_num_GrooveUtilsCreated;
 
 	// metronome options
-	root.metronomeSolo = false;
-	root.metronomeOffsetClickStart = "1";
-  // start with last in the rotation so the next rotation brings it to '1'
-	root.metronomeOffsetClickStartRotation = 0;
+	// root.metronomeSolo = false;
+	// root.metronomeOffsetClickStart = "1";
+	// start with last in the rotation so the next rotation brings it to '1'
+	// root.metronomeOffsetClickStartRotation = 0;
 
 	root.isLegendVisable = false;
 
@@ -109,256 +109,8 @@ function GrooveUtils() {
 	root.myGrooveData = root.grooveDataNew();
 
 	
-	// every document click passes through here.
-	// close a popup if one is up and we click off of it.
-	root.documentOnClickHanderCloseContextMenu = function (event) {
-		if (root.visible_context_menu) {
-			root.hideContextMenu(root.visible_context_menu);
-		}
-	};
-
-	root.showContextMenu = function (contextMenu) {
-
-		// if there is another context menu open, close it
-		if (root.visible_context_menu) {
-			root.hideContextMenu(root.visible_context_menu);
-		}
-
-		contextMenu.style.display = "block";
-		root.visible_context_menu = contextMenu;
-
-		// Check for screen visibility of the bottom of the menu
-		if(contextMenu.offsetTop + contextMenu.clientHeight > document.documentElement.clientHeight) {
-			// the menu has gone off the bottom of the screen
-			contextMenu.style.top = document.documentElement.clientHeight - contextMenu.clientHeight + 'px';
-		}
-
-		// use a timeout to setup the onClick handler.
-		// otherwise the click that opened the menu will close it
-		// right away.  :(
-		setTimeout(function () {
-			document.onclick = root.documentOnClickHanderCloseContextMenu;
-			document.body.style.cursor = "pointer"; // make document.onclick work on iPad
-
-		}, 100);
-	};
-
-	root.hideContextMenu = function (contextMenu) {
-		document.onclick = false;
-		document.body.style.cursor = "auto"; // make document.onclick work on iPad
-
-
-		if (contextMenu) {
-			contextMenu.style.display = "none";
-		}
-		root.visible_context_menu = false;
-	};
-
-	// // figure it out from the division  Division is number of notes per measure 4, 6, 8, 12, 16, 24, 32, etc...
-	// // Triplets only support 4/4 and 2/4 time signatures for now
-	// root.isTripletDivision = function (division) {
-	// 	if(division % 12 === 0)  // we only support 12 & 24 & 48  1/8th, 1/16, & 1/32 note triplets
-	// 		return true;
-
-	// 	return false;
-	// };
-
-	// // figure out if it is triplets from the number of notes (implied division)
-	// root.isTripletDivisionFromNotesPerMeasure = function (notesPerMeasure, timeSigTop, timeSigBottom) {
-	// 	var division = (notesPerMeasure/timeSigTop) * timeSigBottom;
-
-	// 	return root.isTripletDivision(division);
-
-	// };
-
-
-	root.getMetronomeSolo = function () {
-		return root.metronomeSolo;
-	};
-
-	root.setMetronomeSolo = function (trueElseFalse) {
-		root.metronomeSolo = trueElseFalse;
-	};
-
-	root.getMetronomeOffsetClickStart = function () {
-		return root.metronomeOffsetClickStart;
-	};
-
-  root.getMetronomeOffsetClickStartIsRotating = function () {
-    return root.metronomeOffsetClickStart == 'ROTATE';
-  };
-
-	root.setMetronomeOffsetClickStart = function (value) {
-		root.metronomeOffsetClickStart = value;
-	};
-
-	// if the Metronome offset click start is set to rotate this
-	// will advance the position of the rotation and return TRUE
-	// returns FALSE if rotation is OFF
-  root.advanceMetronomeOptionsOffsetClickStartRotation = function (isTriplets) {
-  	if(root.getMetronomeOffsetClickStartIsRotating()) {
-      root.metronomeOffsetClickStartRotation++;
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  root.getMetronomeOptionsOffsetClickStartRotation = function (isTriplets) {
-    if(root.getMetronomeOffsetClickStartIsRotating()) {
-			// constrain the rotation
-      if(isTriplets && root.metronomeOffsetClickStartRotation > 2)
-				root.metronomeOffsetClickStartRotation = 0;
-      else if(root.metronomeOffsetClickStartRotation > 3)
-        root.metronomeOffsetClickStartRotation = 0;
-
-      switch(root.metronomeOffsetClickStartRotation) {
-        case 0:
-          return '1';
-        case 1:
-          if (isTriplets)
-            return 'TI';
-          else
-            return 'E';
-        case 2:
-          if (isTriplets)
-            return 'TA';
-          else
-            return 'AND';
-        case 3:
-          return 'A';
-      }
-		} else {
-			return root.metronomeOffsetClickStart
-		}
-	};
-
-  root.resetMetronomeOptionsOffsetClickStartRotation = function (value) {
-  	// start with last in the rotation so the next rotation brings it to '1'
-    return root.metronomeOffsetClickStartRotation = 0;
-	};
-
-	// build a string that looks like this
-	//  |----------------|----------------|
-	root.GetEmptyGroove = function (notes_per_measure, numMeasures) {
-		var retString = "";
-		var oneMeasureString = "|";
-		var i;
-
-		for(i = 0; i < notes_per_measure; i++) {
-			oneMeasureString += "-";
-		}
-		for (i = 0; i < numMeasures; i++)
-				retString += oneMeasureString;
-			retString += "|";
-
-		return retString;
-	};
-
-	root.GetDefaultStickingsGroove = function (notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
-
-		return root.GetEmptyGroove(notes_per_measure, numMeasures);
-	};
 
 	
-
-	root.GetDefaultTom1Groove = function (notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
-
-		return root.GetEmptyGroove(notes_per_measure, numMeasures);
-	};
-
-	root.GetDefaultTom4Groove = function (notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
-
-		return root.GetEmptyGroove(notes_per_measure, numMeasures);
-	};
-
-	
-	
-
-	root.GetDefaultTomGroove = function (notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
-
-		return root.GetEmptyGroove(notes_per_measure, numMeasures);
-	};
-
-	
-
-	
-
-	// takes two drum tab lines and merges them.    "-" are blanks so they will get overwritten in a merge.
-	// if there are two non "-" positions to merge, the dominateLine takes priority.
-	//
-	//  Example    |----o-------o---|   (dominate)
-	//           + |x-------x---x---|   (subordinate)
-	//             |x---o---x---o---|   (result)
-	//
-	// this is useful to take an accent tab and an "others" tab and creating one tab out of it.
-	root.mergeDrumTabLines = function (dominateLine, subordinateLine) {
-		var maxLength = (dominateLine.length > subordinateLine.length ? dominateLine.length : subordinateLine.length);
-		var newLine = "";
-
-		for (var i = 0; i < maxLength; i++) {
-			var newChar = "-";
-			if (dominateLine.charAt(i) !== "")
-				newChar = dominateLine.charAt(i);
-
-			if (newChar == "-" && subordinateLine.charAt(i) !== "")
-				newChar = subordinateLine.charAt(i);
-
-			newLine += newChar;
-		}
-
-		return newLine;
-	};
-
-	// takes a string of notes encoded in a serialized string and convert it to an array that represents the notes
-	// uses drum tab format adapted from wikipedia: http://en.wikipedia.org/wiki/Drum_tablature
-	//
-	//  Note that "|" and " " will be skipped so that standard drum tabs can be applied
-	//  Example:
-	//     H=|x---x---x---x---|x---x---x---x---|x---x---x---x---|
-	// or  H=x-x-x-x-x-x-x-x-x-x-x-x-
-	//     S=|----o-------o---|----o-------o---|----o-------o---|
-	// or  S=--o---o---o---o---o---o-
-	//     B=|o-------o-------|o-------o-o-----|o-----o-o-------|
-	// or  B=o---o---o----oo-o--oo---|
-	//
-	// Returns array that contains notesPerMeasure * numberOfMeasures entries.
-	root.noteArraysFromURLData = function (drumType, noteString, notesPerMeasure, numberOfMeasures) {
-		var retArray = [];
-
-		// decode the %7C url encoding types
-		noteString = decodeURIComponent(noteString);
-
-		var retArraySize = notesPerMeasure * numberOfMeasures;
-
-		// ignore "|" by removing them
-		//var notes = noteString.replace(/\|/g, '');
-		// ignore "|" & ")" & "(" & "[" & "]" & "!" & ":" by removing them
-		var notes = noteString.replace(/\:|\!|\)|\(|\[|\]|\|/g, '');
-
-		var noteStringScaler = 1;
-		var displayScaler = 1;
-		if (notes.length > retArraySize && notes.length / retArraySize >= 2) {
-			// if we encounter a 16th note groove for an 8th note board, let's scale it	down
-			noteStringScaler = Math.ceil(notes.length / retArraySize);
-		} else if (notes.length < retArraySize && retArraySize / notes.length >= 2) {
-			// if we encounter a 8th note groove for an 16th note board, let's scale it up
-			displayScaler = Math.ceil(retArraySize / notes.length);
-		}
-
-		// initialize an array that can carry all the measures in one array
-		for (var i = 0; i < retArraySize; i++) {
-			retArray[i] = false;
-		}
-
-		var retArrayIndex = 0;
-		for (var j = 0; j < notes.length && retArrayIndex < retArraySize; j += noteStringScaler, retArrayIndex += displayScaler) {
-			retArray[retArrayIndex] = tablatureToABCNotationPerNote(drumType, notes[j]);
-		}
-
-		return retArray;
-	};
-
 	root.getGrooveDataFromUrlString = function (encodedURLData) {
 		var Stickings_string;
 		var HH_string;
@@ -387,7 +139,7 @@ function GrooveUtils() {
 
 		Stickings_string = getQueryVariableFromString("Stickings", false, encodedURLData);
 		if (!Stickings_string) {
-			Stickings_string = root.GetDefaultStickingsGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
+			Stickings_string = GetDefaultStickingsGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
 			myGrooveData.showStickings = false;
 		} else {
 			myGrooveData.showStickings = true;
@@ -419,19 +171,19 @@ function GrooveUtils() {
 			// toms are named T1, T2, T3, T4
 			var Tom_string = getQueryVariableFromString("T" + (i+1), false, encodedURLData);
 			if (!Tom_string) {
-				Tom_string = root.GetDefaultTomGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
+				Tom_string = GetDefaultTomGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
 			} else {
 				myGrooveData.showToms = true;
 			}
 
 			/// the toms array index starts at zero (0) the first one is T1
-			myGrooveData.toms_array[i] = root.noteArraysFromURLData("T" + (i+1), Tom_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
+			myGrooveData.toms_array[i] = noteArraysFromURLData("T" + (i+1), Tom_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
 		}
 
-		myGrooveData.sticking_array = root.noteArraysFromURLData("Stickings", Stickings_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
-		myGrooveData.hh_array = root.noteArraysFromURLData("H", HH_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
-		myGrooveData.snare_array = root.noteArraysFromURLData("S", Snare_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
-		myGrooveData.kick_array = root.noteArraysFromURLData("K", Kick_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
+		myGrooveData.sticking_array = noteArraysFromURLData("Stickings", Stickings_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
+		myGrooveData.hh_array = noteArraysFromURLData("H", HH_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
+		myGrooveData.snare_array = noteArraysFromURLData("S", Snare_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
+		myGrooveData.kick_array = noteArraysFromURLData("K", Kick_string, myGrooveData.notesPerMeasure, myGrooveData.numberOfMeasures);
 
 		myGrooveData.title = getQueryVariableFromString("title", "", encodedURLData);
 		myGrooveData.title = decodeURIComponent(myGrooveData.title);
@@ -1688,7 +1440,7 @@ function GrooveUtils() {
 		}
 
     var isTriplets = isTripletDivisionFromNotesPerMeasure(num_notes, timeSigTop, timeSigBottom);
-    var offsetClickStartBeat = root.getMetronomeOptionsOffsetClickStartRotation(isTriplets);
+    var offsetClickStartBeat = getMetronomeOptionsOffsetClickStartRotation(isTriplets);
     var delay_for_next_note = 0;
 
 		for (var i = 0; i < num_notes; i++) {
@@ -2113,7 +1865,7 @@ function GrooveUtils() {
 			root.midiEventCallbacks.stopEvent(root.midiEventCallbacks.classRoot);
 			root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, "clear", -1);
 			root.clearHighlightNoteInABCSVG();
-			root.resetMetronomeOptionsOffsetClickStartRotation()
+			resetMetronomeOptionsOffsetClickStartRotation()
 		}
 	};
 
@@ -2242,7 +1994,7 @@ function GrooveUtils() {
 
 				// regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
 				// advanceMetronomeOptionsOffsetClickStartRotation will return false if not rotating
-				if (root.advanceMetronomeOptionsOffsetClickStartRotation() || root.midiEventCallbacks.doesMidiDataNeedRefresh(root.midiEventCallbacks.classRoot)) {
+				if (advanceMetronomeOptionsOffsetClickStartRotation() || root.midiEventCallbacks.doesMidiDataNeedRefresh(root.midiEventCallbacks.classRoot)) {
 					MIDI.Player.stop();
 					root.midiEventCallbacks.loadMidiDataEvent(root.midiEventCallbacks.classRoot, false);
 					MIDI.Player.start();

@@ -101,3 +101,17 @@ function set_tom1_state(id, mode, make_sound) {
 function set_tom4_state(id, mode, make_sound) {
     set_tom_state(id, 4, mode, make_sound);
 }
+
+
+
+function GetDefaultTom1Groove(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
+    return GetEmptyGroove(notes_per_measure, numMeasures);
+};
+
+function GetDefaultTom4Groove(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
+    return GetEmptyGroove(notes_per_measure, numMeasures);
+};
+
+function GetDefaultTomGroove(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
+    return GetEmptyGroove(notes_per_measure, numMeasures);
+};

@@ -588,3 +588,52 @@ function get_top_ABC_BoilerPlate(isPermutation, tuneTitle, tuneAuthor, tuneComme
 
 		return note_grouping;
 	}
+
+	// takes a string of notes encoded in a serialized string and convert it to an array that represents the notes
+	// uses drum tab format adapted from wikipedia: http://en.wikipedia.org/wiki/Drum_tablature
+	//
+	//  Note that "|" and " " will be skipped so that standard drum tabs can be applied
+	//  Example:
+	//     H=|x---x---x---x---|x---x---x---x---|x---x---x---x---|
+	// or  H=x-x-x-x-x-x-x-x-x-x-x-x-
+	//     S=|----o-------o---|----o-------o---|----o-------o---|
+	// or  S=--o---o---o---o---o---o-
+	//     B=|o-------o-------|o-------o-o-----|o-----o-o-------|
+	// or  B=o---o---o----oo-o--oo---|
+	//
+	// Returns array that contains notesPerMeasure * numberOfMeasures entries.
+	function noteArraysFromURLData(drumType, noteString, notesPerMeasure, numberOfMeasures) {
+		var retArray = [];
+
+		// decode the %7C url encoding types
+		noteString = decodeURIComponent(noteString);
+
+		var retArraySize = notesPerMeasure * numberOfMeasures;
+
+		// ignore "|" by removing them
+		//var notes = noteString.replace(/\|/g, '');
+		// ignore "|" & ")" & "(" & "[" & "]" & "!" & ":" by removing them
+		var notes = noteString.replace(/\:|\!|\)|\(|\[|\]|\|/g, '');
+
+		var noteStringScaler = 1;
+		var displayScaler = 1;
+		if (notes.length > retArraySize && notes.length / retArraySize >= 2) {
+			// if we encounter a 16th note groove for an 8th note board, let's scale it	down
+			noteStringScaler = Math.ceil(notes.length / retArraySize);
+		} else if (notes.length < retArraySize && retArraySize / notes.length >= 2) {
+			// if we encounter a 8th note groove for an 16th note board, let's scale it up
+			displayScaler = Math.ceil(retArraySize / notes.length);
+		}
+
+		// initialize an array that can carry all the measures in one array
+		for (var i = 0; i < retArraySize; i++) {
+			retArray[i] = false;
+		}
+
+		var retArrayIndex = 0;
+		for (var j = 0; j < notes.length && retArrayIndex < retArraySize; j += noteStringScaler, retArrayIndex += displayScaler) {
+			retArray[retArrayIndex] = tablatureToABCNotationPerNote(drumType, notes[j]);
+		}
+
+		return retArray;
+	};

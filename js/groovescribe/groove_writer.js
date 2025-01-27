@@ -297,7 +297,7 @@ function GrooveWriter() {
 				/* falls through */
 			default:
 				id = "metronomeOff";
-				if (root.myGrooveUtils.getMetronomeSolo()) {
+				if (getMetronomeSolo()) {
 					// turn off solo if we are turning off the metronome
 					root.metronomeOptionsMenuPopupClick("Solo");
 				}
@@ -344,7 +344,7 @@ function GrooveWriter() {
 				contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
 			}
 
-			root.myGrooveUtils.showContextMenu(contextMenu);
+			showContextMenu(contextMenu);
 		}
 	};
 
@@ -363,7 +363,7 @@ function GrooveWriter() {
 				contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
 				contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
 			}
-			root.myGrooveUtils.showContextMenu(contextMenu);
+			showContextMenu(contextMenu);
 		}
 	};
 
@@ -379,7 +379,7 @@ function GrooveWriter() {
 				contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
 				contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 283 + "px";
 			}
-			root.myGrooveUtils.showContextMenu(contextMenu);
+			showContextMenu(contextMenu);
 		}
 	};
 
@@ -395,7 +395,7 @@ function GrooveWriter() {
 				contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
 				contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
 			}
-			root.myGrooveUtils.showContextMenu(contextMenu);
+			showContextMenu(contextMenu);
 		}
 	};
 
@@ -414,7 +414,7 @@ function GrooveWriter() {
 					contextMenu.style.left = event.clientX - 150 + "px";
 				}
 			}
-			root.myGrooveUtils.showContextMenu(contextMenu);
+			showContextMenu(contextMenu);
 		}
 	};
 
@@ -433,7 +433,7 @@ function GrooveWriter() {
 					contextMenu.style.left = event.clientX - 150 + "px";
 				}
 			}
-			root.myGrooveUtils.showContextMenu(contextMenu);
+			showContextMenu(contextMenu);
 		}
 	};
 
@@ -442,7 +442,7 @@ function GrooveWriter() {
 
 		if (root.myGrooveUtils.getMetronomeSolo() ||
 				class_metronome_auto_speed_up_active ||
-				root.myGrooveUtils.getMetronomeOffsetClickStart() != "1") {
+				getMetronomeOffsetClickStart() != "1") {
 			// make menu look active
 			addOrRemoveKeywordFromClassById("metronomeOptionsAnchor", "selected", true)
 		} else {
@@ -455,14 +455,14 @@ function GrooveWriter() {
 
 		switch (option_type) {
 			case "Solo":
-				var current = root.myGrooveUtils.getMetronomeSolo();
+				var current = getMetronomeSolo();
 				if (!current) {
-					root.myGrooveUtils.setMetronomeSolo(true);
+					setMetronomeSolo(true);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", true);
 					if (root.getMetronomeFrequency() === 0)
 						root.setMetronomeFrequency(4);
 				} else {
-					root.myGrooveUtils.setMetronomeSolo(false);
+					setMetronomeSolo(false);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
 				}
 				root.myGrooveUtils.midiNoteHasChanged(); // if playing need to refresh
@@ -509,7 +509,7 @@ function GrooveWriter() {
 						contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
 						contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
 					}
-					root.myGrooveUtils.showContextMenu(contextMenu);
+					showContextMenu(contextMenu);
 				}
 				break;
 
@@ -527,7 +527,7 @@ function GrooveWriter() {
 
 	root.metronomeOptionsMenuOffsetClickPopupClick = function (option_type) {
 
-		root.myGrooveUtils.setMetronomeOffsetClickStart(option_type);
+		setMetronomeOffsetClickStart(option_type);
 
 		// clear other and select
 		var myElements = document.querySelectorAll(".metronomeOptionsOffsetClickContextMenuItem");
@@ -720,7 +720,7 @@ function GrooveWriter() {
 				contextMenu.style.top = event.clientY - 30 + "px";
 				contextMenu.style.left = event.clientX - 35 + "px";
 			}
-			root.myGrooveUtils.showContextMenu(contextMenu);
+			showContextMenu(contextMenu);
 		}
 
 		return false;
@@ -873,7 +873,7 @@ function GrooveWriter() {
 				contextMenu.style.top = event.clientY - 30 + "px";
 				contextMenu.style.left = event.clientX - 75 + "px";
 			}
-			root.myGrooveUtils.showContextMenu(contextMenu);
+			showContextMenu(contextMenu);
 		} else {
 			return true; //error
 		}
@@ -2796,7 +2796,7 @@ function GrooveWriter() {
 				if(class_metronome_count_in_is_playing) {
 					// we saved the state above so that we could reset the Offset click start, otherwise it starts on the 'e'
           class_metronome_count_in_is_playing = false;
-          root.myGrooveUtils.resetMetronomeOptionsOffsetClickStartRotation();
+          resetMetronomeOptionsOffsetClickStartRotation();
 				}
 				midiURL = createMidiUrlFromClickableUI("our_MIDI");
 				root.myGrooveUtils.midiResetNoteHasChanged();
@@ -3682,10 +3682,10 @@ function GrooveWriter() {
 		} else {
 			// changing from or changing to a triplet division
 			// triplets don't scale well, so use defaults when we change
-			uiStickings = root.myGrooveUtils.GetDefaultStickingsGroove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
+			uiStickings = GetDefaultStickingsGroove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
 			uiHH = GetDefaultHHGroove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
-			uiTom1 = root.myGrooveUtils.GetDefaultTom1Groove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
-			uiTom4 = root.myGrooveUtils.GetDefaultTom4Groove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
+			uiTom1 = GetDefaultTom1Groove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
+			uiTom4 = GetDefaultTom4Groove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
 			uiSnare = GetDefaultSnareGroove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
 			uiKick = GetDefaultKickGroove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
 
