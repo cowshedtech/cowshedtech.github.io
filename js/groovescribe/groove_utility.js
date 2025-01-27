@@ -47,29 +47,16 @@ function mergeDrumTabLines(dominateLine, subordinateLine) {
 };
 
 
-// function grooveDataNew() {
-// 	this.notesPerMeasure = 16;
-// 	this.timeDivision = 16;
-// 	this.numberOfMeasures = 1;
-// 	this.numBeats = 4;  // TimeSigTop: Top part of Time Signture 3/4, 4/4, 5/4, 6/8, etc...
-// 	this.noteValue = 4; // TimeSigBottom: Bottom part of Time Sig   4 = quarter notes, 8 = 8th notes, 16ths, etc..
-// 	this.sticking_array = class_empty_note_array.slice(0); // copy by value
-// 	this.hh_array = class_empty_note_array.slice(0);    // copy by value
-// 	this.snare_array = class_empty_note_array.slice(0); // copy by value
-// 	this.kick_array = class_empty_note_array.slice(0);  // copy by value
-// 	// toms_array contains 4 toms  T1, T2, T3, T4 index starting at zero
-// 	this.toms_array = [class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0)];
-// 	this.showToms = false;
-// 	this.showStickings = false;
-// 	this.title = "";
-// 	this.author = "";
-// 	this.comments = "";
-// 	this.showLegend = false;
-// 	this.swingPercent = 0;
-// 	this.tempo = constant_DEFAULT_TEMPO;
-// 	this.kickStemsUp = true;
-// 	this.metronomeFrequency = 0; // 0, 4, 8, 16
-// 	// this.debugMode = root.debugMode;
-// 	// this.grooveDBAuthoring = root.grooveDBAuthoring;
-// 	// this.viewMode = root.viewMode;
-// };
+// take an array of arrays and use a for loop to test to see
+// if all of the arrays are equal to the "test_value" for a given "test_index"
+// returns "true" if they are all equal.
+// returns "false" if any one of them fails
+function testArrayOfArraysForEquality(array_of_arrays, test_index, test_value) {
+
+	for(var i = 0; i < array_of_arrays.length; i++) {
+		if(array_of_arrays[i][test_index] !== undefined && array_of_arrays[i][test_index] !== test_value)
+			return false;
+	}
+
+	return true;
+}
