@@ -32,77 +32,7 @@ if (document.currentScript)
 	global_grooveUtilsScriptSrc = document.currentScript.src;
 var global_midiInitialized = false;
 
-// global constants
-var constant_MAX_MEASURES = 10;
-var constant_DEFAULT_TEMPO = 80;
-var constant_ABC_STICK_R = '"R"x';
-var constant_ABC_STICK_L = '"L"x';
-var constant_ABC_STICK_BOTH = '"R/L"x';
-var constant_ABC_STICK_COUNT = '"count"x';
-var constant_ABC_STICK_OFF = '""x';
-var constant_ABC_HH_Ride = "^A'";
-var constant_ABC_HH_Ride_Bell = "^B'";
-var constant_ABC_HH_Cow_Bell = "^D'";
-var constant_ABC_HH_Crash = "^c'";
-var constant_ABC_HH_Stacker = "^d'";
-var constant_ABC_HH_Metronome_Normal = "^e'";
-var constant_ABC_HH_Metronome_Accent = "^f'";
-var constant_ABC_HH_Open = "!open!^g";
-var constant_ABC_HH_Close = "!plus!^g";
-var constant_ABC_HH_Accent = "!accent!^g";
-var constant_ABC_HH_Normal = "^g";
-var constant_ABC_SN_Ghost = "!(.!!).!c";
-var constant_ABC_SN_Accent = "!accent!c";
-var constant_ABC_SN_Normal = "c";
-var constant_ABC_SN_XStick = "^c";
-var constant_ABC_SN_Buzz = "!///!c";
-var constant_ABC_SN_Flam = "!accent!{/c}c";
-var constant_ABC_SN_Drag = "{/cc}c";
-var constant_ABC_KI_SandK = "[F^d,]"; // kick & splash
-var constant_ABC_KI_Splash = "^d,"; // splash only
-var constant_ABC_KI_Normal = "F";
-var constant_ABC_T1_Normal = "e";
-var constant_ABC_T2_Normal = "d";
-var constant_ABC_T3_Normal = "B";
-var constant_ABC_T4_Normal = "A";
-var constant_NUMBER_OF_TOMS = 4;
-var constant_ABC_OFF = false;
 
-var constant_OUR_MIDI_VELOCITY_NORMAL = 85;
-var constant_OUR_MIDI_VELOCITY_ACCENT = 120;
-var constant_OUR_MIDI_VELOCITY_GHOST = 50;
-var constant_OUR_MIDI_METRONOME_1 = 76;
-var constant_OUR_MIDI_METRONOME_NORMAL = 77;
-var constant_OUR_MIDI_HIHAT_NORMAL = 42;
-var constant_OUR_MIDI_HIHAT_OPEN = 46;
-var constant_OUR_MIDI_HIHAT_ACCENT = 108;
-var constant_OUR_MIDI_HIHAT_CRASH = 49;
-var constant_OUR_MIDI_HIHAT_STACKER = 52;
-var constant_OUR_MIDI_HIHAT_METRONOME_NORMAL = 77;
-var constant_OUR_MIDI_HIHAT_METRONOME_ACCENT = 76;
-var constant_OUR_MIDI_HIHAT_RIDE = 51;
-var constant_OUR_MIDI_HIHAT_RIDE_BELL = 53;
-var constant_OUR_MIDI_HIHAT_COW_BELL = 105;
-var constant_OUR_MIDI_HIHAT_FOOT = 44;
-var constant_OUR_MIDI_SNARE_NORMAL = 38;
-var constant_OUR_MIDI_SNARE_ACCENT = 22;
-var constant_OUR_MIDI_SNARE_GHOST = 21;
-var constant_OUR_MIDI_SNARE_XSTICK = 37;
-var constant_OUR_MIDI_SNARE_BUZZ = 104;
-var constant_OUR_MIDI_SNARE_FLAM = 107;
-var constant_OUR_MIDI_SNARE_DRAG = 103;
-var constant_OUR_MIDI_KICK_NORMAL = 35;
-var constant_OUR_MIDI_TOM1_NORMAL = 48;
-var constant_OUR_MIDI_TOM2_NORMAL = 47;
-var constant_OUR_MIDI_TOM3_NORMAL = 45;
-var constant_OUR_MIDI_TOM4_NORMAL = 43;
-
-// make these global so that they are shared among all the GrooveUtils classes invoked
-var global_current_midi_start_time = 0;
-var global_last_midi_update_time = 0;
-var global_total_midi_play_time_msecs = 0;
-var global_total_midi_notes = 0;
-var global_total_midi_repeats = 0;
 
 // GrooveUtils class.   The only one in this file.
 function GrooveUtils() {
@@ -362,291 +292,9 @@ function GrooveUtils() {
 		return root.GetEmptyGroove(notes_per_measure, numMeasures);
 	};
 
-	// takes a character from tablature form and converts it to our ABC Notation form.
-	// uses drum tab format adapted from wikipedia: http://en.wikipedia.org/wiki/Drum_tablature
-	//
-	//  Sticking support:
-	//		R: right
-	//    L: left
-	//
-	//  HiHat support:
-	//		x: normal
-	//		X: accent
-	//		o: open
-	//		+: close
-	//		c: crash
-	//		r: ride
-	//		b: ride bell
-	//		m: (more) cow bell
-	//    s: stacker
-	//    n: metroNome normal
-	//    N: metroNome accent
-	//		-: off
-	//
-	//   Snare support:
-	//		o: normal
-	//		O: accent
-	//		g: ghost
-	//		x: cross stick
-	//		f: flam
-	//		-: off
-	//
-	//   Kick support:
-	//		o: normal
-	//		x: hi hat splash with foot
-	//		X: kick & hi hat splash with foot simultaneously
-	//
-	//  Kick can be notated either with a "K" or a "B"
-	//
-	//  Note that "|" and " " will be skipped so that standard drum tabs can be applied
-	//  Example:
-	//     H=|x---x---x---x---|x---x---x---x---|x---x---x---x---|
-	// or  H=x-x-x-x-x-x-x-x-x-x-x-x-
-	//     S=|----o-------o---|----o-------o---|----o-------o---|
-	// or  S=--o---o---o---o---o---o-
-	//     B=|o-------o-------|o-------o-o-----|o-----o-o-------|
-	// or  K=o---o---o----oo-o--oo---|
-	// or  T1=|o---o---o---o|
-	// or  T2=|o---o---o---o|
-	// or  T3=|o---o---o---o|
-	// or  T4=|o---o---o---o|
-	function tablatureToABCNotationPerNote(drumType, tablatureChar) {
+	
 
-		switch (tablatureChar) {
-		case "b":
-		case "B":
-			if (drumType == "Stickings")
-				return constant_ABC_STICK_BOTH;
-			else if (drumType == "H")
-				return constant_ABC_HH_Ride_Bell;
-			else if (drumType == "S")
-				return constant_ABC_SN_Buzz;
-			break;
-		case "c":
-			if (drumType == "Stickings")
-				return constant_ABC_STICK_COUNT;
-			else if (drumType == "H")
-				return constant_ABC_HH_Crash;
-			break;
-		case "d":
-			if (drumType == "S")
-				return constant_ABC_SN_Drag;
-			break;
-		case "f":
-			if (drumType == "S")
-				return constant_ABC_SN_Flam;
-			break;
-		case "g":
-			if (drumType == "S")
-				return constant_ABC_SN_Ghost;
-			break;
-		case "l":
-		case "L":
-			if (drumType == "Stickings")
-				return constant_ABC_STICK_L;
-			break;
-		case "m":  // (more) cow bell
-			if (drumType == "H")
-				return constant_ABC_HH_Cow_Bell;
-			break;
-		case "n":  // (more) cow bell
-			if (drumType == "H")
-				return constant_ABC_HH_Metronome_Normal;
-			break;
-		case "N":  // (more) cow bell
-			if (drumType == "H")
-				return constant_ABC_HH_Metronome_Accent;
-			break;
-		case "O":
-			if (drumType == "S")
-				return constant_ABC_SN_Accent;
-			break;
-		case "o":
-			switch (drumType) {
-			case "H":
-				return constant_ABC_HH_Open;
-				//break;
-			case "S":
-				return constant_ABC_SN_Normal;
-				//break;
-			case "K":
-			case "B":
-				return constant_ABC_KI_Normal;
-				//break;
-			case "T1":
-				return constant_ABC_T1_Normal;
-				//break;
-			case "T2":
-				return constant_ABC_T2_Normal;
-				//break;
-			case "T3":
-				return constant_ABC_T3_Normal;
-				//break;
-			case "T4":
-				return constant_ABC_T4_Normal;
-				//break;
-			default:
-				break;
-			}
-			break;
-		case "r":
-		case "R":
-			switch (drumType) {
-			case "H":
-				return constant_ABC_HH_Ride;
-				//break;
-			case "Stickings":
-				return constant_ABC_STICK_R;
-				//break;
-			default:
-				break;
-			}
-			break;
-		case "s":
-			if (drumType == "H")
-				return constant_ABC_HH_Stacker;
-			break;
-		case "x":
-			switch (drumType) {
-			case "S":
-				return constant_ABC_SN_XStick;
-				//break;
-			case "K":
-			case "B":
-				return constant_ABC_KI_Splash;
-				//break;
-			case "H":
-				return constant_ABC_HH_Normal;
-				//break;
-			case "T1":
-				return constant_ABC_T1_Normal;
-				//break;
-			case "T4":
-				return constant_ABC_T4_Normal;
-				//break;
-			default:
-				break;
-			}
-			break;
-		case "X":
-			switch (drumType) {
-			case "K":
-				return constant_ABC_KI_SandK;
-				//break;
-			case "H":
-				return constant_ABC_HH_Accent;
-				//break;
-			default:
-				break;
-			}
-			break;
-		case "+":
-			if (drumType == "H") {
-				return constant_ABC_HH_Close;
-			}
-			break;
-		case "-":
-			return false;
-			//break;
-		default:
-			break;
-		}
-
-		console.log("Bad tablature note found in tablatureToABCNotationPerNote.  Tab: " + tablatureChar + " for drum type: " + drumType);
-		return false;
-	}
-
-	// same as above, but reversed
-	function abcNotationToTablaturePerNote(drumType, abcChar) {
-		var tabChar = "-";
-
-		switch (abcChar) {
-		case constant_ABC_STICK_R:
-			tabChar = "R";
-			break;
-		case constant_ABC_STICK_L:
-			tabChar = "L";
-			break;
-		case constant_ABC_STICK_BOTH:
-			tabChar = "B";
-			break;
-		case constant_ABC_STICK_OFF:
-			tabChar = "-";
-			break;
-		case constant_ABC_STICK_COUNT:
-			tabChar = "c";
-			break;
-		case constant_ABC_HH_Ride:
-			tabChar = "r";
-			break;
-		case constant_ABC_HH_Ride_Bell:
-			tabChar = "b";
-			break;
-		case constant_ABC_HH_Cow_Bell:
-			tabChar = "m";
-			break;
-		case constant_ABC_HH_Crash:
-			tabChar = "c";
-			break;
-		case constant_ABC_HH_Stacker:
-			tabChar = "s";
-			break;
-    case constant_ABC_HH_Metronome_Normal:
-        tabChar = "n";
-        break;
-    case constant_ABC_HH_Metronome_Accent:
-        tabChar = "N";
-        break;
-    case constant_ABC_HH_Open:
-			tabChar = "o";
-			break;
-		case constant_ABC_HH_Close:
-			tabChar = "+";
-			break;
-		case constant_ABC_SN_Accent:
-			tabChar = "O";
-			break;
-		case constant_ABC_SN_Buzz:
-			tabChar = "b";
-			break;
-		case constant_ABC_HH_Normal:
-		case constant_ABC_SN_XStick:
-			tabChar = "x";
-			break;
-		case constant_ABC_SN_Ghost:
-			tabChar = "g";
-			break;
-		case constant_ABC_SN_Normal:
-		case constant_ABC_KI_Normal:
-		case constant_ABC_T1_Normal:
-		case constant_ABC_T2_Normal:
-		case constant_ABC_T3_Normal:
-		case constant_ABC_T4_Normal:
-			tabChar = "o";
-			break;
-		case constant_ABC_SN_Flam:
-			tabChar = "f";
-			break;
-		case constant_ABC_SN_Drag:
-			tabChar = "d";
-			break;
-		case constant_ABC_HH_Accent:
-		case constant_ABC_KI_SandK:
-			tabChar = "X";
-			break;
-		case constant_ABC_KI_Splash:
-			tabChar = "x";
-			break;
-		case constant_ABC_OFF:
-			tabChar = "-";
-			break;
-		default:
-			console.log("bad case in abcNotationToTablaturePerNote: " + abcChar);
-			break;
-		}
-
-		return tabChar;
-	}
+	
 
 	// takes two drum tab lines and merges them.    "-" are blanks so they will get overwritten in a merge.
 	// if there are two non "-" positions to merge, the dominateLine takes priority.
@@ -723,74 +371,6 @@ function GrooveUtils() {
 		return retArray;
 	};
 
-	// take an array of notes in ABC format and convert it into a drum tab String
-	// drumType - H, S, K, or Stickings
-	// noteArray - pass in an ABC array of notes
-	// getAccents - true to get accent notes.  (false to ignore accents)
-	// getOthers - true to get non-accent notes.  (false to ignore non-accents)
-	// maxLength - set smaller than noteArray length to get fewer notes
-	// separatorDistance - set to greater than zero integer to add "|" between measures
-	root.tabLineFromAbcNoteArray = function (drumType, noteArray, getAccents, getOthers, maxLength, separatorDistance) {
-		var returnTabLine = "";
-
-		if (maxLength > noteArray.length)
-			maxLength = noteArray.length;
-
-		for (var i = 0; i < maxLength; i++) {
-			var newTabChar = abcNotationToTablaturePerNote(drumType, noteArray[i]);
-
-			if (drumType == "H" && newTabChar == "X") {
-				if (getAccents)
-					returnTabLine += newTabChar;
-				else
-					returnTabLine += "-";
-			} else if ((drumType == "K" || drumType == "S") && (newTabChar == "o" || newTabChar == "O")) {
-				if (getAccents)
-					returnTabLine += newTabChar;
-				else
-					returnTabLine += "-";
-			} else if (drumType == "K" && newTabChar == "X") {
-				if (getAccents && getOthers)
-					returnTabLine += "X"; // kick & splash
-				else if (getAccents)
-					returnTabLine += "o"; // just kick
-				else
-					returnTabLine += "x"; // just splash
-			} else {
-				// all the "others"
-				if (getOthers)
-					returnTabLine += newTabChar;
-				else
-					returnTabLine += "-";
-			}
-
-			if ((separatorDistance > 0) && ((i+1) % separatorDistance) === 0)
-				returnTabLine += "|";
-		}
-
-		return returnTabLine;
-	};
-
-	// parse a string like "4/4", "5/4" or "2/4"
-	root.parseTimeSigString = function(timeSigString) {
-		var split_arr = timeSigString.split("/");
-
-		if(split_arr.length != 2)
-			return [4, 4];
-
-		var timeSigTop = parseInt(split_arr[0], 10);
-		var timeSigBottom = parseInt(split_arr[1], 10);
-
-		if(timeSigTop < 1 || timeSigTop > 32)
-			timeSigTop = 4;
-
-		// only valid if 2,4,8, or 16
-		if(timeSigBottom != 2 && timeSigBottom != 4 && timeSigBottom != 8 && timeSigBottom != 16)
-			timeSigBottom = 4;
-
-		return [timeSigTop, timeSigBottom];
-	};
-
 	root.getGrooveDataFromUrlString = function (encodedURLData) {
 		var Stickings_string;
 		var HH_string;
@@ -802,7 +382,7 @@ function GrooveUtils() {
 
 		myGrooveData.debugMode = parseInt(getQueryVariableFromString("Debug", root.debugMode, encodedURLData), 10);
 
-		var timeSigArray = root.parseTimeSigString(getQueryVariableFromString("TimeSig", "4/4", encodedURLData));
+		var timeSigArray = parseTimeSigString(getQueryVariableFromString("TimeSig", "4/4", encodedURLData));
 		myGrooveData.numBeats = timeSigArray[0];
 		myGrooveData.noteValue = timeSigArray[1];
 
@@ -951,22 +531,22 @@ function GrooveUtils() {
 
 		// notes
 		var total_notes = myGrooveData.notesPerMeasure * myGrooveData.numberOfMeasures;
-		var HH = "&H=|" +    root.tabLineFromAbcNoteArray('H',  myGrooveData.hh_array, true, true, total_notes, myGrooveData.notesPerMeasure);
-		var Snare = "&S=|" + root.tabLineFromAbcNoteArray('S',  myGrooveData.snare_array, true, true, total_notes, myGrooveData.notesPerMeasure);
-		var Kick = "&K=|" +  root.tabLineFromAbcNoteArray('K',  myGrooveData.kick_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+		var HH = "&H=|" +    tabLineFromAbcNoteArray('H',  myGrooveData.hh_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+		var Snare = "&S=|" + tabLineFromAbcNoteArray('S',  myGrooveData.snare_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+		var Kick = "&K=|" +  tabLineFromAbcNoteArray('K',  myGrooveData.kick_array, true, true, total_notes, myGrooveData.notesPerMeasure);
 
 		fullURL += HH + Snare + Kick;
 
 		// only add if we need them.  // they are long and ugly. :)
 		if (myGrooveData.showToms) {
-			var Tom1 = "&T1=|" + root.tabLineFromAbcNoteArray('T1', myGrooveData.toms_array[0], true, true, total_notes, myGrooveData.notesPerMeasure);
-			var Tom4 = "&T4=|" + root.tabLineFromAbcNoteArray('T4', myGrooveData.toms_array[3], true, true, total_notes, myGrooveData.notesPerMeasure);
+			var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', myGrooveData.toms_array[0], true, true, total_notes, myGrooveData.notesPerMeasure);
+			var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', myGrooveData.toms_array[3], true, true, total_notes, myGrooveData.notesPerMeasure);
 			fullURL += Tom1 + Tom4;
 		}
 
 		// only add if we need them.  // they are long and ugly. :)
 		if (myGrooveData.showStickings) {
-			var Stickings = "&Stickings=|" + root.tabLineFromAbcNoteArray('stickings', myGrooveData.sticking_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+			var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', myGrooveData.sticking_array, true, true, total_notes, myGrooveData.notesPerMeasure);
 			fullURL += Stickings;
 		}
 
@@ -1036,22 +616,22 @@ function GrooveUtils() {
 
 		// notes
 		var total_notes = myGrooveData.notesPerMeasure * myGrooveData.numberOfMeasures;
-		var HH = "&H=|" +    root.tabLineFromAbcNoteArray('H',  myGrooveData.hh_array, true, true, total_notes, myGrooveData.notesPerMeasure);
-		var Snare = "&S=|" + root.tabLineFromAbcNoteArray('S',  myGrooveData.snare_array, true, true, total_notes, myGrooveData.notesPerMeasure);
-		var Kick = "&K=|" +  root.tabLineFromAbcNoteArray('K',  myGrooveData.kick_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+		var HH = "&H=|" +    tabLineFromAbcNoteArray('H',  myGrooveData.hh_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+		var Snare = "&S=|" + tabLineFromAbcNoteArray('S',  myGrooveData.snare_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+		var Kick = "&K=|" +  tabLineFromAbcNoteArray('K',  myGrooveData.kick_array, true, true, total_notes, myGrooveData.notesPerMeasure);
 
 		fullURL += HH + Snare + Kick;
 
 		// only add if we need them.  // they are long and ugly. :)
 		if (myGrooveData.showToms) {
-			var Tom1 = "&T1=|" + root.tabLineFromAbcNoteArray('T1', myGrooveData.toms_array[0], true, true, total_notes, myGrooveData.notesPerMeasure);
-			var Tom4 = "&T4=|" + root.tabLineFromAbcNoteArray('T4', myGrooveData.toms_array[3], true, true, total_notes, myGrooveData.notesPerMeasure);
+			var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', myGrooveData.toms_array[0], true, true, total_notes, myGrooveData.notesPerMeasure);
+			var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', myGrooveData.toms_array[3], true, true, total_notes, myGrooveData.notesPerMeasure);
 			fullURL += Tom1 + Tom4;
 		}
 
 		// only add if we need them.  // they are long and ugly. :)
 		if (myGrooveData.showStickings) {
-			var Stickings = "&Stickings=|" + root.tabLineFromAbcNoteArray('stickings', myGrooveData.sticking_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+			var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', myGrooveData.sticking_array, true, true, total_notes, myGrooveData.notesPerMeasure);
 			fullURL += Stickings;
 		}
 
@@ -1096,126 +676,9 @@ function GrooveUtils() {
 		};
 	}
 
-	// the top stuff in the ABC that doesn't depend on the notes
-	root.get_top_ABC_BoilerPlate = function (isPermutation, tuneTitle, tuneAuthor, tuneComments, showLegend, isTriplets, kick_stems_up, timeSigTop, timeSigBottom, renderWidth) {
+	
 
-		// boiler plate
-		var fullABC = '%abc\n%%fullsvg _' + root.grooveUtilsUniqueIndex + '\nX:6\n';
-
-		fullABC += "M:" + timeSigTop + "/" + timeSigBottom + "\n";
-
-		// always add a Title even if it's blank
-		fullABC += "T: " + tuneTitle + "\n";
-
-		if (tuneAuthor !== "") {
-			fullABC += "C: " + tuneAuthor + "\n";
-			fullABC += "%%musicspace 20px\n"; // add some more space
-		}
-
-		if (renderWidth < 400)
-			renderWidth = 400; // min-width
-		if (renderWidth > 3000)
-			renderWidth = 3000; // max-width
-		// the width of the music is always 25% bigger than what we pass in.   Go figure.
-		renderWidth = Math.floor(renderWidth * 0.75);
-
-		fullABC += "L:1/" + (32) + "\n"; // 4/4 = 32,  6/8 = 64
-
-		if (isPermutation)
-			fullABC += "%%stretchlast 0\n";
-		else
-			fullABC += "%%stretchlast 1\n";
-
-		fullABC += '%%flatbeams 1\n' +
-		'%%ornament up\n' +
-		'%%pagewidth ' + renderWidth + 'px\n' +
-		'%%leftmargin 0cm\n' +
-		'%%rightmargin 0cm\n' +
-		'%%topspace 10px\n' +
-		'%%titlefont calibri 20\n' +
-		'%%partsfont calibri 16\n' +
-		'%%gchordfont calibri 16\n' +
-		'%%annotationfont calibri 16\n' +
-		'%%infofont calibri 16\n' +
-		'%%textfont calibri 16\n' +
-		'%%deco (. 0 a 5 1 1 "@-8,-3("\n' +
-		'%%deco ). 0 a 5 1 1 "@4,-3)"\n' +
-		'%%beginsvg\n' +
-		' <defs>\n' +
-		' <path id="Xhead" d="m-3,-3 l6,6 m0,-6 l-6,6" class="stroke" style="stroke-width:1.2"/>\n' +
-		' <path id="Trihead" d="m-3,2 l 6,0 l-3,-6 l-3,6 l6,0" class="stroke" style="stroke-width:1.2"/>\n' +
-		' </defs>\n' +
-		'%%endsvg\n' +
-		'%%map drum ^g heads=Xhead print=g       % Hi-Hat\n' +
-		'%%map drum ^c\' heads=Xhead print=c\'   % Crash\n' +
-		'%%map drum ^d\' heads=Xhead print=d\'   % Stacker\n' +
-		'%%map drum ^e\' heads=Xhead print=e\'   % Metronome click\n' +
-		'%%map drum ^f\' heads=Xhead print=f\'   % Metronome beep\n' +
-		'%%map drum ^A\' heads=Xhead print=A\'   % Ride\n' +
-		'%%map drum ^B\' heads=Trihead print=A\' % Ride Bell\n' +
-		'%%map drum ^D\' heads=Trihead print=g   % Cow Bell\n' +
-		'%%map drum ^c heads=Xhead print=c  % Cross Stick\n' +
-		'%%map drum ^d, heads=Xhead print=d,  % Foot Splash\n';
-
-		//if(kick_stems_up)
-		//fullABC += "%%staves (Stickings Hands)\n";
-		//else
-		fullABC += "%%staves (Stickings Hands Feet)\n";
-
-		// print comments below the legend if there is one, otherwise in the header section
-		if (tuneComments !== "") {
-			fullABC += "P: " + tuneComments + "\n";
-			fullABC += "%%musicspace 20px\n"; // add some more space
-		}
-
-		// the K ends the header;
-		fullABC += "K:C clef=perc\n";
-
-		if (showLegend) {
-			fullABC += 'V:Stickings\n' +
-			'x8 x8 x8 x8 x8 x8 x8 x8 ||\n' +
-			'V:Hands stem=up \n' +
-			'%%voicemap drum\n' +
-			'"^Hi-Hat"^g4 "^Open"!open!^g4 ' +
-			'"^Crash"^c\'4 "^Stacker"^d\'4 "^Ride"^A\'4 "^Ride Bell"^B\'4 x2 "^Tom"e4 "^Tom"A4 "^Snare"c4 "^Buzz"!///!c4 "^Cross"^c4 "^Ghost  "!(.!!).!c4 "^Flam"{/c}c4  x10 ||\n' +
-			'V:Feet stem=down \n' +
-			'%%voicemap drum\n' +
-			'x52 "^Kick"F4 "^HH foot"^d,4 x4 ||\n' +
-			'T:\n';
-		}
-
-		// tempo setting
-		//fullABC += "Q: 1/4=" + getTempo() + "\n";
-
-		return fullABC;
-	};
-
-	// looks for modifiers like !accent! or !plus! and moves them outside of the group abc array.
-	// Most modifiers (but not all) will not render correctly if they are inside the abc group.
-	// returns a string that should be added to the abc_notation if found.
-	function moveAccentsOrOtherModifiersOutsideOfGroup(abcNoteStrings, modifier_to_look_for) {
-
-		var found_modifier = false;
-		var rindex = abcNoteStrings.notes1.lastIndexOf(modifier_to_look_for);
-		if (rindex > -1) {
-			found_modifier = true;
-			abcNoteStrings.notes1 = abcNoteStrings.notes1.replace(modifier_to_look_for, "");
-		}
-		rindex = abcNoteStrings.notes2.lastIndexOf(modifier_to_look_for);
-		if (rindex > -1) {
-			found_modifier = true;
-			abcNoteStrings.notes2 = abcNoteStrings.notes2.replace(modifier_to_look_for, "");
-		}
-		rindex = abcNoteStrings.notes3.lastIndexOf(modifier_to_look_for);
-		if (rindex > -1) {
-			found_modifier = true;
-			abcNoteStrings.notes3 = abcNoteStrings.notes3.replace(modifier_to_look_for, "");
-		}
-		if (found_modifier)
-			return modifier_to_look_for;
-
-		return ""; // didn't find it so return nothing
-	}
+	
 
 	// take an array of arrays and use a for loop to test to see
 	// if all of the arrays are equal to the "test_value" for a given "test_index"
@@ -1229,96 +692,6 @@ function GrooveUtils() {
 		}
 
 		return true;
-	}
-
-	// note1_array:   an array containing "false" or a note character in ABC to designate that is is on
-	// note2_array:   an array containing "false" or a note character in ABC to designate that is is on
-	// end_of_group:  when to stop looking ahead in the array.  (since we group notes in to beats)
-	function getABCforNote(note_array_of_arrays, start_index, end_of_group, scaler) {
-
-		var ABC_String = "";
-		var abcNoteStrings = {
-			notes1 : "",
-			notes2 : "",
-			notes3 : ""
-		};
-		var num_notes_on = 0;
-		var nextCount;
-
-		for(var which_array=0; which_array < note_array_of_arrays.length; which_array++) {
-
-			if(note_array_of_arrays[which_array][start_index] !== undefined && note_array_of_arrays[which_array][start_index] !== false) {
-				// look ahead and see when the next note is
-				// the length of this note is dependant on when the next note lands
-				// for every empty space we increment nextCount, and then make the note that long
-				nextCount = 1;
-				for (var indexA = start_index + 1; indexA < (start_index + end_of_group); indexA++) {
-					if(!testArrayOfArraysForEquality(note_array_of_arrays, indexA, false)) {
-						break;
-					} else {
-						nextCount++;
-					}
-				}
-
-				abcNoteStrings.notes1 += note_array_of_arrays[which_array][start_index] + (scaler * nextCount);
-				num_notes_on++;
-			}
-		}
-
-		if (num_notes_on > 1) {
-			// if multiple are on, we need to combine them with []
-			// horrible hack.  Turns out ABC will render the accents wrong unless the are outside the brackets []
-			// look for any accents that are delimited by "!"  (eg !accent!  or !plus!)
-			// move the accents to the front
-			ABC_String += moveAccentsOrOtherModifiersOutsideOfGroup(abcNoteStrings, "!accent!");
-			// in case there are two accents (on both snare and hi-hat) we remove the second one
-			moveAccentsOrOtherModifiersOutsideOfGroup(abcNoteStrings, "!accent!");
-			ABC_String += moveAccentsOrOtherModifiersOutsideOfGroup(abcNoteStrings, "!plus!");
-			ABC_String += moveAccentsOrOtherModifiersOutsideOfGroup(abcNoteStrings, "!open!");
-			ABC_String += moveAccentsOrOtherModifiersOutsideOfGroup(abcNoteStrings, "!///!");
-
-			// Look for '[' and ']'.   They are added on to the the kick and splash and could be added to other notes
-			// in the future.   They imply that the notes are on the same beat.   Since we are already putting multiple
-			// notes on the same beat (see code below this line that adds '[' & ']'), we need to remove them or the
-			// resulting ABC will be invalid
-			moveAccentsOrOtherModifiersOutsideOfGroup(abcNoteStrings, "[");
-			moveAccentsOrOtherModifiersOutsideOfGroup(abcNoteStrings, "]");
-
-			// this is the flam notation, it can't be in a sub grouping
-			ABC_String += moveAccentsOrOtherModifiersOutsideOfGroup(abcNoteStrings, "{/c}");
-			// this is the drag notation, it can't be in a sub grouping
-			ABC_String += moveAccentsOrOtherModifiersOutsideOfGroup(abcNoteStrings, "{/cc}");
-
-			ABC_String += "[" + abcNoteStrings.notes1 + abcNoteStrings.notes2 + abcNoteStrings.notes3 + "]"; // [^gc]
-		} else {
-			ABC_String += abcNoteStrings.notes1 + abcNoteStrings.notes2 + abcNoteStrings.notes3; // note this could be a noOp if all strings are blank
-		}
-
-		return ABC_String;
-	}
-
-	// calculate the rest ABC string
-	function getABCforRest(note_array_of_arrays, start_index, end_of_group, scaler, use_hidden_rest) {
-		var ABC_String = "";
-
-		// count the # of rest
-		if (testArrayOfArraysForEquality(note_array_of_arrays, start_index, false)) {
-			var restCount = 1;
-			for (var indexB = start_index + 1; indexB < (start_index + end_of_group); indexB++) {
-				if(!testArrayOfArraysForEquality(note_array_of_arrays, indexB, false))
-					break;
-				else
-					restCount++;
-			}
-
-			// now output a rest for the duration of the rest count
-			if (use_hidden_rest)
-				ABC_String += "x" + (scaler * restCount);
-			else
-				ABC_String += "z" + (scaler * restCount);
-		}
-
-		return ABC_String;
 	}
 
 	// the note grouping size is how groups of notes within a measure group
@@ -1354,31 +727,7 @@ function GrooveUtils() {
 		return note_grouping;
 	};
 
-	// when we generate ABC we use a default larger note array and transpose it
-	// For 8th note triplets that means we need to use a larger grouping to make it
-	// scale correctly
-	// The base array is now 32 notes long to support 32nd notes
-	// since we would normally group by 4 we need to group by 8 since we are scaling it
-	function abc_gen_note_grouping_size(usingTriplets, timeSigTop, timeSigBottom) {
-		var note_grouping;
-
-		if (usingTriplets) {
-				note_grouping = 12;
-
-		} else if(timeSigTop == 3) {
-			// 3/4, 3/8, 3/16
-			note_grouping =  8 * (4/timeSigBottom)
-		} else if(timeSigTop % 6 == 0 && timeSigBottom % 8 == 0) {
-			// 3/4, 6/8, 9/8, 12/8
-			note_grouping = 12 * (8/timeSigBottom);
-		} else {
-			//note_grouping = 8 * (4/timeSigBottom);
-			note_grouping = 8;
-		}
-
-		return note_grouping;
-	}
-
+	
 	root.notesPerMeasureInFullSizeArray = function (is_triplet_division, timeSigTop, timeSigBottom) {
 		// a full measure will be defined as 8 * timeSigTop.   (4 = 32, 5 = 40, 6 = 48, etc.)
 		// that implies 32nd notes in quarter note beats
@@ -1998,7 +1347,7 @@ function GrooveUtils() {
 
 		var is_triplet_division = root.isTripletDivisionFromNotesPerMeasure(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
 
-		var fullABC = root.get_top_ABC_BoilerPlate(false,
+		var fullABC = get_top_ABC_BoilerPlate(false,
 				myGrooveData.title,
 				myGrooveData.author,
 				myGrooveData.comments,
@@ -2007,7 +1356,9 @@ function GrooveUtils() {
 				myGrooveData.kickStemsUp,
 				myGrooveData.numBeats,
 				myGrooveData.noteValue,
-				renderWidth);
+				renderWidth,
+				root.get_top_ABC_BoilerPlate
+			);
 
 		fullABC += root.create_ABC_from_snare_HH_kick_arrays(FullNoteStickingArray,
 			FullNoteHHArray,
@@ -2117,16 +1468,7 @@ function GrooveUtils() {
 		};
 	};
 
-	root.isElementOnScreen = function(element){
-		var rect = element.getBoundingClientRect();
-
-		return (
-			rect.top >= 80 &&
-			rect.left >= 0 &&
-			rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
-			rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
-		);
-	};
+	
 
 	root.abcNoteNumCurrentlyHighlighted = -1;
 	root.clearHighlightNoteInABCSVG = function () {
@@ -2138,7 +1480,7 @@ function GrooveUtils() {
 				var class_name = myElements[i].getAttribute("class");
 				myElements[i].setAttribute("class", class_name.replace(new RegExp(' highlighted', 'g'), ""));
 				if(root.debugMode && i === 0) {
-					if(!root.isElementOnScreen(myElements[i])) {
+					if(!isElementOnScreen(myElements[i])) {
 						if(root.abcNoteNumCurrentlyHighlighted === 0)
 							myElements[i].scrollIntoView({block: "start", behavior: "smooth"});   // autoscroll if necessary
 						else
@@ -3221,44 +2563,9 @@ function GrooveUtils() {
 
 	};
 
-	function addInlineMetronomeSVG() {
-		return  '<svg class="midiMetronomeImage" version="1.1" width="30" height="30"' +
-				'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" ' +
-				'xml:space="preserve"><path d="M86.945,10.635c-0.863-0.494-1.964-0.19-2.455,0.673l-8.31,14.591l-2.891-1.745l-1.769,9.447l0.205,0.123' +
-				'l-1.303,2.286L63.111,6.819c-0.25-1-1.299-1.819-2.33-1.819H37.608c-1.031,0-2.082,0.818-2.334,1.818L13.454,93.182' +
-				'c-0.253,1,0.385,1.818,1.416,1.818h68.459c1.031,0,1.67-0.818,1.42-1.818L71.69,41.061l3.117-5.475l0.152,0.092l7.559-5.951' +
-				'l-3.257-1.966l8.355-14.67C88.11,12.226,87.81,11.127,86.945,10.635z M71.58,70.625H54.855l12.946-22.737l5.197,20.789' +
-				'C73.25,69.678,72.61,70.625,71.58,70.625z M50.714,70.625H26.57c-1.031,0-1.669-0.994-1.416-1.994L39.59,11.5' +
-				'c0.253-1,1.303-1.812,2.334-1.812h14.431c1.032,0,2.081,0.725,2.331,1.725l7.854,31.421L50.714,70.625z"></path></svg>'
-	}
+	
 
-	function addInLineGScribeLogoLoneGSVG() {
-		return '<?xml version="1.0"?><svg width="20" heigth="30" viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">' +
-				' <g>' +
-				'  <title>Layer 1</title>' +
-				'  <g id="svg_15">' +
-				'   <path fill="#000000" d="m27.467991,47.742001c-12.28299,0 -22.276001,-9.997009 -22.276001,-22.284c0,-12.27402 9.99402,-22.272 ' +
-				'22.276001,-22.272c12.278019,0 22.269009,9.99799 22.269009,22.272c-0.001011,12.286991 -9.992001,22.284 -22.269009,22.284zm0,-37.078001c-8.159,0 ' +
-				'-14.794981,6.644011 -14.794981,14.79801c0,8.162979 6.63599,14.791981 14.794981,14.791981c8.157009,0 14.803009,-6.629002 14.803009,-14.791981c0,-8.153999 ' +
-				'-6.646,-14.79801 -14.803009,-14.79801z" id="svg_16"/>' +
-				'   <path fill="#F7941E" d="m27.467991,33.90799c-4.665991,0 -8.445011,-3.786989 -8.445011,-8.446009c0,-4.653992 3.77902,-8.440981 8.445011,-8.440981c4.64999,0 ' +
-				'8.444,3.786989 8.444,8.440981c0.001007,4.659029 -3.792999,8.446009 -8.444,8.446009z" id="svg_17"/>' +
-				'   <g id="svg_18">' +
-				'	<path fill="#000000" d="m28.13699,85.571991c-5.79599,0 -24.746,-1.138 -24.746,-15.771004c0,-0.921997 0.125,-1.834976 0.39099,-2.791977l0.09399,-0.292999l9.21902,0l-0.151,0.517967c-0.198,0.701019 ' +
-				'-0.311,1.417999 -0.311,2.137024c0,6.332001 7.898991,8.583977 15.29199,8.583977c3.610991,0 15.394989,-0.626007 15.394989,-8.687988c0,-4.349014 -3.515987,-6.41901 -11.064968,-6.52301c-6.87302,0 ' +
-				'-11.539001,-0.159 -15.027012,-0.983002c-3.431,-0.807007 -4.132019,-1.12698 -6.926999,-2.752987c-3.63602,-2.385014 -5.39401,-5.328003 -5.39401,-8.99802c0,-3.687992 1.854,-6.860981 ' +
-				'5.668,-9.716003c0.72501,-0.502987 1.51801,-0.750977 2.37802,-0.750977c1.92099,0 3.824981,1.311977 4.16199,2.865997c0.22501,1.028992 0.48801,0.685001 -0.84,1.881992c-0.85501,0.766968 -3.64001,2.702 ' +
-				'-3.64001,5.167988c0,5.662041 10.78802,5.662041 17.235021,5.662041c16.113977,0 22.693998,4.063999 22.693998,14.03598c-0.00198,14.282013 -15.29599,16.415009 ' +
-				'-24.427,16.415009l-0.00001,0.000031l0,-0.000031l0,0l0,-0.000008z" id="svg_19"/>' +
-				'   </g>' +
-				'   <g id="svg_20">' +
-				'	<path fill="#000000" d="m46.504002,15.08499c-0.225983,0 -0.423,-0.101009 -4.70599,-2.934999c-2.208023,-1.46399 -4.708023,-3.121 -5.758003,-3.72501l-1.31601,-0.75101l20.405003,0l0,5.715l-8.224003,1.370999c-0.006989,0.01501 ' +
-				'-0.006989,0.03802 -0.01498,0.05801l-0.104,0.263l-0.282009,0.004l-0.000019,0.00001l0.000011,0z" id="svg_21"/>' +
-				'   </g>' +
-				'  </g>' +
-				' </g>' +
-				'</svg>';
-	}
+	
 
 	root.HTMLForMidiPlayer = function (expandable) {
 		var newHTML = '' +

@@ -119,3 +119,15 @@ function showHideCSS_ClassVisibility(className, force, showElseHide) {
         }
     });
 }
+
+
+function isElementOnScreen(element){
+    var rect = element.getBoundingClientRect();
+
+    return (
+        rect.top >= 80 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+    );
+};
