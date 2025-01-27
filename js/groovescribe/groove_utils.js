@@ -109,18 +109,6 @@ function GrooveUtils() {
 	root.myGrooveData = root.grooveDataNew();
 
 	
-
-	// the notes per measure is calculated from the note division and the time signature
-	// in 4/4 time the division is the division (as well as any time signature x/x)
-	// in 4/8 the num notes is half as many, etc
-	root.calc_notes_per_measure = function(division, time_sig_top, time_sig_bottom) {
-
-		var numNotes = (division/time_sig_bottom) * time_sig_top;
-
-		return numNotes;
-	};
-
-
 	// every document click passes through here.
 	// close a popup if one is up and we click off of it.
 	root.documentOnClickHanderCloseContextMenu = function (event) {
@@ -166,22 +154,22 @@ function GrooveUtils() {
 		root.visible_context_menu = false;
 	};
 
-	// figure it out from the division  Division is number of notes per measure 4, 6, 8, 12, 16, 24, 32, etc...
-	// Triplets only support 4/4 and 2/4 time signatures for now
-	root.isTripletDivision = function (division) {
-		if(division % 12 === 0)  // we only support 12 & 24 & 48  1/8th, 1/16, & 1/32 note triplets
-			return true;
+	// // figure it out from the division  Division is number of notes per measure 4, 6, 8, 12, 16, 24, 32, etc...
+	// // Triplets only support 4/4 and 2/4 time signatures for now
+	// root.isTripletDivision = function (division) {
+	// 	if(division % 12 === 0)  // we only support 12 & 24 & 48  1/8th, 1/16, & 1/32 note triplets
+	// 		return true;
 
-		return false;
-	};
+	// 	return false;
+	// };
 
-	// figure out if it is triplets from the number of notes (implied division)
-	root.isTripletDivisionFromNotesPerMeasure = function (notesPerMeasure, timeSigTop, timeSigBottom) {
-		var division = (notesPerMeasure/timeSigTop) * timeSigBottom;
+	// // figure out if it is triplets from the number of notes (implied division)
+	// root.isTripletDivisionFromNotesPerMeasure = function (notesPerMeasure, timeSigTop, timeSigBottom) {
+	// 	var division = (notesPerMeasure/timeSigTop) * timeSigBottom;
 
-		return root.isTripletDivision(division);
+	// 	return root.isTripletDivision(division);
 
-	};
+	// };
 
 
 	root.getMetronomeSolo = function () {
@@ -387,7 +375,7 @@ function GrooveUtils() {
 		myGrooveData.noteValue = timeSigArray[1];
 
 		myGrooveData.timeDivision = parseInt(getQueryVariableFromString("Div", 16, encodedURLData), 10);
-		myGrooveData.notesPerMeasure = root.calc_notes_per_measure(myGrooveData.timeDivision, myGrooveData.numBeats, myGrooveData.noteValue);
+		myGrooveData.notesPerMeasure = calc_notes_per_measure(myGrooveData.timeDivision, myGrooveData.numBeats, myGrooveData.noteValue);
 
 		myGrooveData.metronomeFrequency = parseInt(getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10);
 
@@ -701,7 +689,7 @@ function GrooveUtils() {
 	// see abc_gen_note_grouping_size for the sheet music layout grouping size
 	root.noteGroupingSize = function (notes_per_measure, timeSigTop, timeSigBottom) {
 		var note_grouping;
-		var usingTriplets = root.isTripletDivisionFromNotesPerMeasure(notes_per_measure, timeSigTop, timeSigBottom);
+		var usingTriplets = isTripletDivisionFromNotesPerMeasure(notes_per_measure, timeSigTop, timeSigBottom);
 
 		if(usingTriplets) {
 			// triplets  ( we only support 2/4 here )
@@ -747,7 +735,7 @@ function GrooveUtils() {
 			console.log("Error in getNoteScaler, out of range: " + timeSigTop);
 			scaler = 1;
 		} else {
-			if (root.isTripletDivisionFromNotesPerMeasure(notes_per_measure, timeSigTop, timeSigBottom))
+			if (isTripletDivisionFromNotesPerMeasure(notes_per_measure, timeSigTop, timeSigBottom))
 				scaler = Math.ceil(root.notesPerMeasureInFullSizeArray(true, timeSigTop, timeSigBottom) / notes_per_measure);
 			else
 				scaler = Math.ceil(root.notesPerMeasureInFullSizeArray(false, timeSigTop, timeSigBottom) / notes_per_measure);
@@ -762,7 +750,7 @@ function GrooveUtils() {
 	root.scaleNoteArrayToFullSize = function(note_array, num_measures, notes_per_measure, timeSigTop, timeSigBottom) {
 		var scaler = root.getNoteScaler(notes_per_measure, timeSigTop, timeSigBottom); // fill proportionally
 		var retArray = [];
-		var isTriplets = root.isTripletDivisionFromNotesPerMeasure(notes_per_measure, timeSigTop, timeSigBottom);
+		var isTriplets = isTripletDivisionFromNotesPerMeasure(notes_per_measure, timeSigTop, timeSigBottom);
 		var i;
 
 		if (scaler == 1)
@@ -1252,10 +1240,10 @@ function GrooveUtils() {
 	root.convert_sticking_counts_to_actual_counts = function(sticking_array, time_division, timeSigTop, timeSigBottom) {
 
 		var cur_div_of_array = 32;
-		if(root.isTripletDivision(time_division))
+		if(isTripletDivision(time_division))
 			cur_div_of_array = 48;
 
-		var actual_notes_per_measure_in_this_array = root.calc_notes_per_measure(cur_div_of_array, timeSigTop, timeSigBottom);
+		var actual_notes_per_measure_in_this_array = calc_notes_per_measure(cur_div_of_array, timeSigTop, timeSigBottom);
 
 		// Time division is 4, 8, 16, 32, 12, 24, or 48
 		var notes_per_measure_in_time_division = ((time_division / 4) * timeSigTop) * (4/timeSigBottom);
@@ -1299,7 +1287,7 @@ function GrooveUtils() {
 			numberOfMeasuresPerLine = 1;
 		}
 
-		if(root.isTripletDivisionFromNotesPerMeasure(notes_per_measure, timeSigTop, timeSigBottom)) {
+		if(isTripletDivisionFromNotesPerMeasure(notes_per_measure, timeSigTop, timeSigBottom)) {
 			return snare_HH_kick_ABC_for_triplets(sticking_array,
 																						HH_array,
 																						snare_array,
@@ -1345,7 +1333,7 @@ function GrooveUtils() {
 			FullNoteTomsArray[i] = root.scaleNoteArrayToFullSize(myGrooveData.toms_array[i], myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
 		}
 
-		var is_triplet_division = root.isTripletDivisionFromNotesPerMeasure(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+		var is_triplet_division = isTripletDivisionFromNotesPerMeasure(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
 
 		var fullABC = get_top_ABC_BoilerPlate(false,
 				myGrooveData.title,
@@ -1699,7 +1687,7 @@ function GrooveUtils() {
 			midiTrack.addNoteOff(midi_channel, 60, 1); // add a blank note for spacing
 		}
 
-    var isTriplets = root.isTripletDivisionFromNotesPerMeasure(num_notes, timeSigTop, timeSigBottom);
+    var isTriplets = isTripletDivisionFromNotesPerMeasure(num_notes, timeSigTop, timeSigBottom);
     var offsetClickStartBeat = root.getMetronomeOptionsOffsetClickStartRotation(isTriplets);
     var delay_for_next_note = 0;
 
@@ -2428,7 +2416,7 @@ function GrooveUtils() {
 
 	root.doesDivisionSupportSwing = function (division) {
 
-		if (root.isTripletDivision(division) || division == 4)
+		if (isTripletDivision(division) || division == 4)
 			return false;
 
 		return true;

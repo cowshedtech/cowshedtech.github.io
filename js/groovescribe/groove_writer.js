@@ -45,7 +45,7 @@ function GrooveWriter() {
 	var class_time_division = parseInt(getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
 	var class_num_beats_per_measure = 4;     // TimeSigTop
 	var class_note_value_per_measure = 4;     // TimeSigBottom
-	var class_notes_per_measure = root.myGrooveUtils.calc_notes_per_measure(class_time_division, class_num_beats_per_measure, class_note_value_per_measure);
+	var class_notes_per_measure = calc_notes_per_measure(class_time_division, class_num_beats_per_measure, class_note_value_per_measure);
 	var class_metronome_auto_speed_up_active = false;
 	var class_metronome_count_in_active = false;
 	var class_metronome_count_in_is_playing = false;
@@ -101,7 +101,7 @@ function GrooveWriter() {
 	//
 	// is the division a triplet groove?   12, 24, or 48 notes
 	function usingTriplets() {
-		if (root.myGrooveUtils.isTripletDivision(class_time_division)) return true;
+		if (isTripletDivision(class_time_division)) return true;
 		return false;
 	}
 
@@ -210,7 +210,7 @@ function GrooveWriter() {
 		if (class_permutation_type != "none")
 			percent_complete = (percent_complete * get_numberOfActivePermutationSections()) % 1.0;
 
-		var note_id_in_32 = Math.floor(percent_complete * root.myGrooveUtils.calc_notes_per_measure((usingTriplets() ? 48 : 32), class_num_beats_per_measure, class_note_value_per_measure) * class_number_of_measures);
+		var note_id_in_32 = Math.floor(percent_complete * calc_notes_per_measure((usingTriplets() ? 48 : 32), class_num_beats_per_measure, class_note_value_per_measure) * class_number_of_measures);
 		var real_note_id = (note_id_in_32 / root.myGrooveUtils.getNoteScaler(class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure));
 
 		//hilight_individual_note(instrument, id);
@@ -1999,7 +1999,7 @@ function GrooveWriter() {
 
 		var myGrooveData = root.grooveDataFromClickableUI();
 
-		var notesPerMeasureInTab = root.myGrooveUtils.calc_notes_per_measure((usingTriplets() ? 48 : 32), class_num_beats_per_measure, class_note_value_per_measure);
+		var notesPerMeasureInTab = calc_notes_per_measure((usingTriplets() ? 48 : 32), class_num_beats_per_measure, class_note_value_per_measure);
 		var maxNotesInTab = myGrooveData.numberOfMeasures * notesPerMeasureInTab;
 
 		// scale up all the arrays to 48 or 32 notes so that they look normalized
@@ -3307,7 +3307,7 @@ function GrooveWriter() {
 
 			class_num_beats_per_measure = newTimeSigTop;
 			class_note_value_per_measure = newTimeSigBottom;
-			var new_notes_per_measure = root.myGrooveUtils.calc_notes_per_measure(class_time_division, class_num_beats_per_measure, class_note_value_per_measure);
+			var new_notes_per_measure = calc_notes_per_measure(class_time_division, class_num_beats_per_measure, class_note_value_per_measure);
 			// If new_notes_per_measure is greater it will cause the changeDivision code to error
 			// as it tries to read the notes from the UI.   Setting it lower will allow the code to truncate
 			// the groove properly to something smaller rather than interpolating the groove into something weird
@@ -3569,7 +3569,7 @@ function GrooveWriter() {
 		var wasTomsVisable = isTomsVisible();
 
 		class_time_division = newDivision;
-		class_notes_per_measure = root.myGrooveUtils.calc_notes_per_measure(class_time_division, class_num_beats_per_measure, class_note_value_per_measure);
+		class_notes_per_measure = calc_notes_per_measure(class_time_division, class_num_beats_per_measure, class_note_value_per_measure);
 
 		var newHTML = "";
 		for (var cur_measure = 1; cur_measure <= class_number_of_measures; cur_measure++) {
@@ -3649,8 +3649,8 @@ function GrooveWriter() {
 			alert("The MIXED subdivision allows you to create a combination of triplets and non-triplet notes in one measure.  Set every 3rd note for 16ths and every 6th note for 8th notes")
 		}
 
-		var isNewDivisionTriplets = root.myGrooveUtils.isTripletDivision(newDivision);
-		var new_notes_per_measure = root.myGrooveUtils.calc_notes_per_measure((isNewDivisionTriplets ? 48 : 32), class_num_beats_per_measure, class_note_value_per_measure);
+		var isNewDivisionTriplets = isTripletDivision(newDivision);
+		var new_notes_per_measure = calc_notes_per_measure((isNewDivisionTriplets ? 48 : 32), class_num_beats_per_measure, class_note_value_per_measure);
 
 		// check for incompatible odd time signature division   9/8 and 1/4notes for instance or 9/16 and 1/8notes
 		if( (newDivision * class_num_beats_per_measure / class_note_value_per_measure) % 1 != 0 ) {
