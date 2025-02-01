@@ -1002,3 +1002,117 @@ function snare_HH_kick_ABC_for_quads(sticking_array,
 
 	return ABC_String;
 }
+
+
+// create ABC notation from a GrooveData class
+// returns a string of ABC Notation data
+
+function createABCFromGrooveData(myGrooveData, renderWidth) {
+
+	var FullNoteStickingArray = scaleNoteArrayToFullSize(myGrooveData.sticking_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+	var FullNoteHHArray = scaleNoteArrayToFullSize(myGrooveData.hh_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+	var FullNoteSnareArray = scaleNoteArrayToFullSize(myGrooveData.snare_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+	var FullNoteKickArray = scaleNoteArrayToFullSize(myGrooveData.kick_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+	var FullNoteTomsArray = [];
+
+	for(var i = 0; i < constant_NUMBER_OF_TOMS; i++) {
+		FullNoteTomsArray[i] = scaleNoteArrayToFullSize(myGrooveData.toms_array[i], myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+	}
+
+	var is_triplet_division = isTripletDivisionFromNotesPerMeasure(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+
+	var fullABC = get_top_ABC_BoilerPlate(false,
+			myGrooveData.title,
+			myGrooveData.author,
+			myGrooveData.comments,
+			myGrooveData.showLegend,
+			is_triplet_division,
+			myGrooveData.kickStemsUp,
+			myGrooveData.numBeats,
+			myGrooveData.noteValue,
+			renderWidth,
+			root.get_top_ABC_BoilerPlate
+		);
+
+	fullABC += create_ABC_from_snare_HH_kick_arrays(FullNoteStickingArray,
+		FullNoteHHArray,
+		FullNoteSnareArray,
+		FullNoteKickArray,
+		FullNoteTomsArray,
+		"|\n",
+		FullNoteHHArray.length,
+		myGrooveData.timeDivision,
+		notesPerMeasureInFullSizeArray(is_triplet_division, myGrooveData.numBeats, myGrooveData.noteValue), // notes_per_measure, We scaled up to 48/32 above
+		myGrooveData.kickStemsUp,
+		myGrooveData.numBeats,
+		myGrooveData.noteValue);
+
+	root.note_mapping_array = root.create_note_mapping_array_for_highlighting(FullNoteHHArray,
+			FullNoteSnareArray,
+			FullNoteKickArray,
+			FullNoteTomsArray,
+			FullNoteHHArray.length);
+
+	// console.log(fullABC);
+	return fullABC;
+};
+
+
+
+// create ABC from note arrays
+// The Arrays passed in must be 32 or 48 notes long
+// notes_per_measure denotes the number of notes that _should_ be in the measure even though the arrays are always scaled up and large (48 or 32)
+function create_ABC_from_snare_HH_kick_arrays(sticking_array,
+	HH_array,
+	snare_array,
+	kick_array,
+	toms_array,
+	post_voice_abc,
+	num_notes,
+	time_division,
+	notes_per_measure,
+	kick_stems_up,
+	timeSigTop,
+	timeSigBottom) {
+
+	// convert sticking count symbol to the actual count
+	// do this right before ABC output so it can't every get encoded into something that gets saved.
+	convert_sticking_counts_to_actual_counts(sticking_array, time_division, timeSigTop, timeSigBottom);
+
+	var numberOfMeasuresPerLine = 2;   // Default
+
+	if (notes_per_measure >= 32) {
+		// Only put one measure per line for 32nd notes and above because of width issues
+		numberOfMeasuresPerLine = 1;
+	}
+
+	if (isTripletDivisionFromNotesPerMeasure(notes_per_measure, timeSigTop, timeSigBottom)) {
+		return snare_HH_kick_ABC_for_triplets(sticking_array,
+			HH_array,
+			snare_array,
+			kick_array,
+			toms_array,
+			post_voice_abc,
+			num_notes,
+			time_division,
+			notes_per_measure,
+			kick_stems_up,
+			timeSigTop,
+			timeSigBottom,
+			numberOfMeasuresPerLine);
+	} else {
+		return snare_HH_kick_ABC_for_quads(sticking_array,
+			HH_array,
+			snare_array,
+			kick_array,
+			toms_array,
+			post_voice_abc,
+			num_notes,
+			time_division,
+			notes_per_measure,
+			kick_stems_up,
+			timeSigTop,
+			timeSigBottom,
+			numberOfMeasuresPerLine);
+	}
+}

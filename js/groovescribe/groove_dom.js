@@ -31,7 +31,7 @@ function addOrRemoveKeywordFromClass(tag_class, keyword, addElseRemove) {
             .join(' ');
     }
 
-    return true;    
+    return true;
 }
 
 
@@ -40,12 +40,12 @@ function addOrRemoveKeywordFromClass(tag_class, keyword, addElseRemove) {
 //
 function addOrRemoveKeywordFromClassById(tagId, keyword, addElseRemove) {
     const element = document.getElementById(tagId);
-    
+
     if (!element) {
         console.warn(`Element with ID "${tagId}" not found`);
         return false;
     }
-    
+
     return addOrRemoveKeywordFromClass(element, keyword, addElseRemove);
 }
 
@@ -61,7 +61,7 @@ function selectButton(element) {
 //
 //
 // remove selected class if it exists
-function unselectButton(element) {    
+function unselectButton(element) {
     addOrRemoveKeywordFromClass(element, "buttonSelected", false);
 }
 
@@ -92,15 +92,15 @@ function getTagPosition(tag) {
 //
 function showHideCSS_ClassDisplay(className, force, showElseHide, showState) {
     const elements = document.querySelectorAll(className);
-    
+
     if (!elements.length) return false;
-    
+
     const newState = force ? showElseHide : elements[0].style.display !== showState;
-    
+
     elements.forEach(element => {
         element.style.display = newState ? showState : 'none';
     });
-    
+
     return newState;
 }
 
@@ -110,7 +110,7 @@ function showHideCSS_ClassDisplay(className, force, showElseHide, showState) {
 //
 function showHideCSS_ClassVisibility(className, force, showElseHide) {
     const elements = document.querySelectorAll(className);
-    
+
     elements.forEach(element => {
         if (force) {
             element.style.visibility = showElseHide ? "visible" : "hidden";
@@ -120,8 +120,10 @@ function showHideCSS_ClassVisibility(className, force, showElseHide) {
     });
 }
 
-
-function isElementOnScreen(element){
+//
+//
+//
+function isElementOnScreen(element) {
     var rect = element.getBoundingClientRect();
 
     return (

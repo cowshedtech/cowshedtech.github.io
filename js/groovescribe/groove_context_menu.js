@@ -1,5 +1,8 @@
 // Javascript for the Groove Scribe HTML application
 
+//
+//
+//
 var visible_context_menu = false; // a single context menu can be visible at a time.
 
 
@@ -26,14 +29,12 @@ function showContextMenu(contextMenu) {
     visible_context_menu = contextMenu;
 
     // Check for screen visibility of the bottom of the menu
-    if(contextMenu.offsetTop + contextMenu.clientHeight > document.documentElement.clientHeight) {
+    if (contextMenu.offsetTop + contextMenu.clientHeight > document.documentElement.clientHeight) {
         // the menu has gone off the bottom of the screen
         contextMenu.style.top = document.documentElement.clientHeight - contextMenu.clientHeight + 'px';
     }
 
-    // use a timeout to setup the onClick handler.
-    // otherwise the click that opened the menu will close it
-    // right away.  :(
+    // use a timeout to setup the onClick handler otherwise the click that opened the menu will close it right away.  :(
     setTimeout(function () {
         document.onclick = documentOnClickHanderCloseContextMenu;
         document.body.style.cursor = "pointer"; // make document.onclick work on iPad

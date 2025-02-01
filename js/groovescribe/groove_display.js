@@ -175,7 +175,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 			var svgTarget = document.getElementById(svgTargetId);
 			var renderWidth = svgTarget.offsetWidth - 100;
 
-			var abcNotation = myGrooveUtils.createABCFromGrooveData(myGrooveData, renderWidth);
+			var abcNotation = createABCFromGrooveData(myGrooveData, renderWidth);
 			var svgReturn = myGrooveUtils.renderABCtoSVG(abcNotation);
 			//console.log(abcNotation);
 
@@ -226,7 +226,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 				// var renderWidth = svgTarget.offsetWidth;
 				var renderWidth = 600;
 
-				var abcNotation = myGrooveUtils.createABCFromGrooveData(GrooveData, renderWidth);
+				var abcNotation = createABCFromGrooveData(GrooveData, renderWidth);
 				// console.log(abcNotation);
 				var svgReturn = myGrooveUtils.renderABCtoSVG(abcNotation);
 
