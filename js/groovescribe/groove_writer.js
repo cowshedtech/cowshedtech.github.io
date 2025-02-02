@@ -2789,14 +2789,14 @@ function GrooveWriter() {
 
 			if (playStarting && class_metronome_count_in_active) {
 
-				midiURL = root.myGrooveUtils.MIDI_build_midi_url_count_in_track(class_num_beats_per_measure, class_note_value_per_measure);
+				midiURL = MIDI_build_midi_url_count_in_track(class_num_beats_per_measure, class_note_value_per_measure, root.myGrooveUtils.getTempo());
 				root.myGrooveUtils.midiNoteHasChanged(); // this track is temporary
-        class_metronome_count_in_is_playing = true;
+				class_metronome_count_in_is_playing = true;
 			} else {
-				if(class_metronome_count_in_is_playing) {
+				if (class_metronome_count_in_is_playing) {
 					// we saved the state above so that we could reset the Offset click start, otherwise it starts on the 'e'
-          class_metronome_count_in_is_playing = false;
-          resetMetronomeOptionsOffsetClickStartRotation();
+					class_metronome_count_in_is_playing = false;
+					resetMetronomeOptionsOffsetClickStartRotation();
 				}
 				midiURL = createMidiUrlFromClickableUI("our_MIDI");
 				root.myGrooveUtils.midiResetNoteHasChanged();
