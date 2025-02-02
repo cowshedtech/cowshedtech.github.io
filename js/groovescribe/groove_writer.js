@@ -440,7 +440,7 @@ function GrooveWriter() {
 	// figure out if the metronome options menu should be selected and change the UI
 	root.metronomeOptionsMenuSetSelectedState = function () {
 
-		if (root.myGrooveUtils.getMetronomeSolo() ||
+		if (getMetronomeSolo() ||
 				class_metronome_auto_speed_up_active ||
 				getMetronomeOffsetClickStart() != "1") {
 			// make menu look active
@@ -484,12 +484,10 @@ function GrooveWriter() {
 				if (class_metronome_count_in_active) {
 					// just turn it off if it is on, don't show the configurator
 					class_metronome_count_in_active = false;
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", false);
-					root.myGrooveUtils.setMetronomeCountIn(false);
+					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", false);					
 				} else {
 					class_metronome_count_in_active = true;
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", true);
-					root.myGrooveUtils.setMetronomeCountIn(true);
+					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", true);					
 				}
 				break;
 
