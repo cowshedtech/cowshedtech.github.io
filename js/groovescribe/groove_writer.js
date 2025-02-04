@@ -105,18 +105,6 @@ function GrooveWriter() {
 		return false;
 	}
 
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
 	// called every time the tempo changes, which can be a lot of times due to the range slider
 	// update the main URL with the tempo, but only do it every third of a second at the most
 	var global_tempoChangeCallbackTimeout = null;
@@ -483,15 +471,7 @@ function GrooveWriter() {
 		root.myGrooveUtils.midiNoteHasChanged();
 	}
 
-	function isInstrumentMuted(instrument, measure) {
-		// find unmuteHHButton1  or unmuteSnareButton2
-		var buttonName = "unmute" + instrument + "Button" + measure
-		var button = document.getElementById(buttonName);
-		if (button && button.style.display == "inline-block")
-			return true;
-		else
-			return false;
-	}
+	
 
 	root.helpMenuPopupClick = function (help_type) {
 		var win;
