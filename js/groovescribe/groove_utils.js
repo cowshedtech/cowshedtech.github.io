@@ -104,6 +104,7 @@ function GrooveUtils() {
 		this.debugMode = root.debugMode;
 		this.grooveDBAuthoring = root.grooveDBAuthoring;
 		this.viewMode = root.viewMode;
+		this.repeatedMeasures = new Map();
 	};
 
 	root.myGrooveData = root.grooveDataNew();
@@ -137,6 +138,14 @@ function GrooveUtils() {
 		else if (myGrooveData.numberOfMeasures > constant_MAX_MEASURES)
 			myGrooveData.numberOfMeasures = constant_MAX_MEASURES;
 
+		let repeatedMeasures = getQueryVariableFromString("rMeasures", 1, encodedURLData);
+		if (repeatedMeasures && repeatedMeasures.length > 0) {
+			repeatedMeasures.split(",").forEach(element => {
+			let [key, value] = element.split('x');
+				myGrooveData.repeatedMeasures.set(Number(key), Number(value));
+			});
+		}
+		
 		Stickings_string = getQueryVariableFromString("Stickings", false, encodedURLData);
 		if (!Stickings_string) {
 			Stickings_string = GetDefaultStickingsGroove(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue, myGrooveData.numberOfMeasures);
@@ -264,6 +273,21 @@ function GrooveUtils() {
 		// # of measures
 		fullURL += "&Measures=" + myGrooveData.numberOfMeasures;
 
+		// if (myGrooveData.repeatedMeasures.size > 0) {
+		// 	let content = "";
+		// 	for (let measure of myGrooveData.repeatedMeasures.keys()) {
+		// 		if (content.length > 0) content += ","
+		// 		content += measure + 'x' + myGrooveData.repeatedMeasures.get(measure)
+		// 	}
+		// 	fullURL += "&rMeasures=" + content;
+		// }
+		if (myGrooveData.repeatedMeasures.size > 0) {
+			const content = Array.from(myGrooveData.repeatedMeasures.entries())
+				.map(([key, value]) => `${key}x${value}`)
+				.join(",");
+			fullURL += "&rMeasures=" + content;
+		}
+
 		// # metronome setting
 		if (myGrooveData.metronomeFrequency !== 0) {
 			fullURL += "&MetronomeFreq=" + myGrooveData.metronomeFrequency;
@@ -348,6 +372,21 @@ function GrooveUtils() {
 
 		// # of measures
 		fullURL += "&Measures=" + myGrooveData.numberOfMeasures;
+
+		// if (myGrooveData.repeatedMeasures.size > 0) {
+		// 	let content = "";
+		// 	for (let measure of myGrooveData.repeatedMeasures.keys()) {
+		// 		if (content.length > 0) content += ","
+		// 		content += measure + 'x' + myGrooveData.repeatedMeasures.get(measure)
+		// 	}
+		// 	fullURL += "&rMeasures=" + content;
+		// }
+		if (myGrooveData.repeatedMeasures.size > 0) {
+			const content = Array.from(myGrooveData.repeatedMeasures.entries())
+				.map(([key, value]) => `${key}x${value}`)
+				.join(",");
+			fullURL += "&rMeasures=" + content;
+		}
 
 		// # metronome setting
 		if (myGrooveData.metronomeFrequency !== 0) {

@@ -49,6 +49,7 @@ function GrooveWriter() {
 	var class_metronome_auto_speed_up_active = false;
 	var class_metronome_count_in_active = false;
 	var class_metronome_count_in_is_playing = false;
+	var class_repeated_measures  = new Map();
 
 	// set debugMode immediately so we can use it in index.html
 	root.myGrooveUtils.debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
@@ -1717,9 +1718,13 @@ function GrooveWriter() {
 				else
 					num_notes_for_swing = 16 * class_num_beats_per_measure / class_note_value_per_measure;
 
-				root.myGrooveUtils.MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure);
-
+				let repeat = class_repeated_measures.has(0) ? class_repeated_measures.get(0) : 1;
+				for (let i = 0; i < repeat; i++) {
+					root.myGrooveUtils.MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure);
+				}	
+				
 				for (i = 1; i < class_number_of_measures; i++) {
+
 					// reset arrays
 					Sticking_Array = get_empty_note_array_in_32nds();
 					HH_Array = get_empty_note_array_in_32nds();
@@ -1727,12 +1732,14 @@ function GrooveWriter() {
 					Kick_Array = get_empty_note_array_in_32nds();
 					Toms_Array = [get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds()];
 
-
 					// get another measure
 					get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, class_notes_per_measure * i);
 					muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, i);
 
-					root.myGrooveUtils.MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure);
+					let repeat = class_repeated_measures.has(i) ? class_repeated_measures.get(i) : 1;
+					for (let i = 0; i < repeat; i++) {
+						root.myGrooveUtils.MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure);
+					}					
 				}
 				break;
 		}
@@ -1769,6 +1776,7 @@ function GrooveWriter() {
 		myGrooveData.tempo = root.myGrooveUtils.getTempo();
 		myGrooveData.metronomeFrequency = root.getMetronomeFrequency();
 		myGrooveData.kickStemsUp = true;
+		myGrooveData.repeatedMeasures = class_repeated_measures;
 
 		for (var i = 0; i < class_number_of_measures; i++) {
 			var total_notes = class_notes_per_measure * class_number_of_measures;
@@ -2645,7 +2653,7 @@ function GrooveWriter() {
 				root.metronomeAutoSpeedUpTempoUpdate();
 			}
 
-			hilight_note(note_type, percent_complete, class_permutation_type, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures, class_notes_per_measure, usingTriplets());
+			hilight_note(note_type, percent_complete, class_permutation_type, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures, class_notes_per_measure, class_repeated_measures, usingTriplets());
 		};
 
 		root.myGrooveUtils.oneTimeInitializeMidi();
@@ -3331,6 +3339,7 @@ function GrooveWriter() {
 
 		class_num_beats_per_measure = myGrooveData.numBeats;     // TimeSigTop
 		class_note_value_per_measure = myGrooveData.noteValue;   // TimeSigBottom
+		class_repeated_measures = myGrooveData.repeatedMeasures;
 
 		if (myGrooveData.notesPerMeasure != class_notes_per_measure || class_number_of_measures != myGrooveData.numberOfMeasures) {
 			class_number_of_measures = myGrooveData.numberOfMeasures;
