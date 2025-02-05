@@ -2255,12 +2255,55 @@ function GrooveWriter() {
 		updateSheetMusic();
 	};
 
-	
 
 	// add a measure to the page
 	// currently always at the end of the measures
 	// copy the notes from the last measure to the new measure
 	root.repeatMeasureButtonClick = function (measureNum) {
+		// class_repeated_measures
+		console.log(`repeat [${measureNum}]`)
+		let count = class_repeated_measures.get(measureNum-1) || 1;
+		class_repeated_measures.set(measureNum-1, count + 1) 
+
+		var uiStickings = "";
+		var uiHH = "";
+		var uiTom1 = "";
+		var uiTom4 = "";
+		var uiSnare = "";
+		var uiKick = "";
+		var i;
+
+		// get the encoded notes out of the UI.
+		var topIndex = class_notes_per_measure * class_number_of_measures;
+		for (i = 0; i < topIndex; i++) {
+
+			uiStickings += get_sticking_state(i, "URL");
+			uiHH += get_hh_state(i, "URL");
+			uiTom1 += get_tom_state(i, 1, "URL");
+			uiTom4 += get_tom_state(i, 4, "URL");
+			uiSnare += get_snare_state(i, "URL");
+			uiKick += get_kick_state(i, "URL");
+		}
+
+		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
+
+		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+
+		// reference the button and scroll it into view
+		var add_measure_button = document.getElementById("addMeasureButton");
+		if(add_measure_button)
+			add_measure_button.scrollIntoView({block: "start", behavior: "smooth"});			
+
+		updateSheetMusic();
+
+		updateSheetMusic();
+	}
+
+
+	// add a measure to the page
+	// currently always at the end of the measures
+	// copy the notes from the last measure to the new measure
+	root.duplicateMeasureButtonClick = function (measureNum) {
 		var uiStickings = "";
 		var uiHH = "";
 		var uiTom1 = "";
@@ -3779,7 +3822,10 @@ function GrooveWriter() {
 							</div>\
 						</span>\n');
 
-		newHTML += '<span title="Repeat Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.repeatMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-rotate-left"></i></span>&nbsp;';
+		let repeat = class_repeated_measures.get(baseindex-1) || 1						
+
+		newHTML += '<span title="Duplicate Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.duplicateMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-rotate-left"></i></span>&nbsp;';
+		newHTML += '<span title="Repeat Measure" id="repeateMeasureButton' + baseindex + '" onClick="myGrooveWriter.repeatMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa">' + repeat + '</i></span>&nbsp;';
 		if (class_number_of_measures > 1)
 			newHTML += '<span title="Remove Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.closeMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-times-circle"></i></span>';
 		else
