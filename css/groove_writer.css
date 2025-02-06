@@ -528,8 +528,8 @@
 	}
 
 	.closeMeasureButton {
-		vertical-align: top;
-		display: inline-block;
+		/* vertical-align: top; */
+		/* display: inline-block; */
 		margin-top: 3px;
 		cursor: pointer;
 		color: #2484C0;

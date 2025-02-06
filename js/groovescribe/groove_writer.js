@@ -2246,6 +2246,10 @@ function GrooveWriter() {
 			}
 		}
 
+		//
+		// TODO Remove repeated measure value (and move up others)
+		//
+
 		class_number_of_measures--;
 
 		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
@@ -2259,7 +2263,7 @@ function GrooveWriter() {
 	// add a measure to the page
 	// currently always at the end of the measures
 	// copy the notes from the last measure to the new measure
-	root.repeatMeasureButtonClick = function (measureNum) {
+	root.repeatMeasureIncButtonClick = function (measureNum) {
 		// class_repeated_measures
 		console.log(`repeat [${measureNum}]`)
 		let count = class_repeated_measures.get(measureNum-1) || 1;
@@ -2295,6 +2299,45 @@ function GrooveWriter() {
 			add_measure_button.scrollIntoView({block: "start", behavior: "smooth"});			
 
 		updateSheetMusic();
+	}
+
+	// add a measure to the page
+	// currently always at the end of the measures
+	// copy the notes from the last measure to the new measure
+	root.repeatMeasureDecButtonClick = function (measureNum) {
+		// class_repeated_measures
+		console.log(`repeat [${measureNum}]`)
+		let count = class_repeated_measures.get(measureNum-1) || 1;
+		class_repeated_measures.set(measureNum-1, count - 1) 
+
+		var uiStickings = "";
+		var uiHH = "";
+		var uiTom1 = "";
+		var uiTom4 = "";
+		var uiSnare = "";
+		var uiKick = "";
+		var i;
+
+		// get the encoded notes out of the UI.
+		var topIndex = class_notes_per_measure * class_number_of_measures;
+		for (i = 0; i < topIndex; i++) {
+
+			uiStickings += get_sticking_state(i, "URL");
+			uiHH += get_hh_state(i, "URL");
+			uiTom1 += get_tom_state(i, 1, "URL");
+			uiTom4 += get_tom_state(i, 4, "URL");
+			uiSnare += get_snare_state(i, "URL");
+			uiKick += get_kick_state(i, "URL");
+		}
+
+		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
+
+		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+
+		// reference the button and scroll it into view
+		var add_measure_button = document.getElementById("addMeasureButton");
+		if(add_measure_button)
+			add_measure_button.scrollIntoView({block: "start", behavior: "smooth"});			
 
 		updateSheetMusic();
 	}
@@ -2357,6 +2400,10 @@ function GrooveWriter() {
 		}
 
 		class_number_of_measures++;
+
+		//
+		// TODO Updated repeated measure value (and move up others)
+		//
 
 		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
 
@@ -3824,17 +3871,26 @@ function GrooveWriter() {
 
 		let repeat = class_repeated_measures.get(baseindex-1) || 1						
 
-		newHTML += '<span title="Duplicate Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.duplicateMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-rotate-left"></i></span>&nbsp;';
-		newHTML += '<span title="Repeat Measure" id="repeateMeasureButton' + baseindex + '" onClick="myGrooveWriter.repeatMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa">' + repeat + '</i></span>&nbsp;';
+		//newHTML += '<span style="display: flex;flex-direction: row;">'
+		newHTML += '<div style="display: inline-block;vertical-align: top; margin-left: 15px; margin-right: 15px">'
+		
 		if (class_number_of_measures > 1)
-			newHTML += '<span title="Remove Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.closeMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-times-circle"></i></span>';
+			newHTML += '<div title="Remove Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.closeMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-times-circle"></i></div>';
 		else
-			newHTML += '<span class="closeMeasureButton"><i class="fa">&nbsp;&nbsp;&nbsp;</i></span>';
+			newHTML += '<div class="closeMeasureButton"><i class="fa"></i></div>';		
+
+		newHTML += '<div title="Repeat Measure" id="repeateMeasureIncButton' + baseindex + '" onClick="myGrooveWriter.repeatMeasureIncButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa">↑</i></div>';
+		newHTML += '<span style="color: var(--highlight-color-on-white);">' +repeat + '</span>'
+		newHTML += '<div title="Repeat Measure" id="repeateMeasureDecButton' + baseindex + '" onClick="myGrooveWriter.repeatMeasureDecButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa">↓</i></div>';		
+		newHTML += '<div title="Duplicate Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.duplicateMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-rotate-left"></i></div>';
 			
 		newHTML += ('</div>');
+		newHTML += '</div>'
 		if (baseindex == class_number_of_measures) // add new measure button
 			newHTML += '<span id="addMeasureButton" title="Add measure" onClick="myGrooveWriter.addMeasureButtonClick(event)"><i class="fa fa-plus"></i></span>';
 		
+		
+
 		return newHTML;
 	}; // end function HTMLforStaffContainer
 
