@@ -2472,6 +2472,69 @@ function GrooveWriter() {
 		// 				"There are also many notation features that would be useful for score writing that are not part of Groove Scribe");
 	};
 
+
+	//
+	//
+	root.addMeasureMiddleButtonClick = function (measureNum) {
+		var uiStickings = "";
+		var uiHH = "";
+		var uiTom1 = "";
+		var uiTom4 = "";
+		var uiSnare = "";
+		var uiKick = "";
+		var i;
+
+		// get the encoded notes out of the UI from before measure we are going to repeat
+		var loop1End = (measureNum) * class_notes_per_measure
+		for (i = 0; i < loop1End; i++) {
+			uiStickings += get_sticking_state(i, "URL");
+			uiHH += get_hh_state(i, "URL");
+			uiTom1 += get_tom_state(i, 1, "URL");
+			uiTom4 += get_tom_state(i, 4, "URL");
+			uiSnare += get_snare_state(i, "URL");
+			uiKick += get_kick_state(i, "URL");
+		}
+
+		// introduce our empty measure
+		for (i = 0; i < class_notes_per_measure; i++) {
+			uiStickings += "-";
+			uiHH += "-";
+			uiTom1 += "-";
+			uiTom4 += "-";
+			uiSnare += "-";
+			uiKick += "-";
+		}
+		
+		// get the encoded notes out of the UI for measures after measure to be repeated
+		var loop3Start = measureNum * class_notes_per_measure
+		var loop3End = class_notes_per_measure * class_number_of_measures;
+		for (i = loop3Start; i < loop3End; i++) {
+			uiStickings += get_sticking_state(i, "URL");
+			uiHH += get_hh_state(i, "URL");
+			uiTom1 += get_tom_state(i, 1, "URL");
+			uiTom4 += get_tom_state(i, 4, "URL");
+			uiSnare += get_snare_state(i, "URL");
+			uiKick += get_kick_state(i, "URL");
+		}
+
+		class_number_of_measures++;
+
+		//
+		// TODO Updated repeated measure value (and move up others)
+		//
+
+		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
+
+		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+
+		// reference the button and scroll it into view
+		var add_measure_button = document.getElementById("addMeasureButton");
+		if(add_measure_button)
+			add_measure_button.scrollIntoView({block: "start", behavior: "smooth"});
+
+		updateSheetMusic();
+	};
+
 	// add an empty measure to the front of the score
 	// copy the notes from the first measure to the new measure
 	root.addMeasurePrevButtonClick = function (event) {
@@ -3883,6 +3946,8 @@ function GrooveWriter() {
 		newHTML += '<span style="color: var(--highlight-color-on-white);">' +repeat + '</span>'
 		newHTML += '<div title="Repeat Measure" id="repeateMeasureDecButton' + baseindex + '" onClick="myGrooveWriter.repeatMeasureDecButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa">↓</i></div>';		
 		newHTML += '<div title="Duplicate Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.duplicateMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-rotate-left"></i></div>';
+		if (baseindex !== class_number_of_measures) // add new measure button
+			newHTML += '<div title="Add Measure" id="addMeasureMiddleButton' + baseindex + '" onClick="myGrooveWriter.addMeasureMiddleButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-plus"></i></div>';
 			
 		newHTML += ('</div>');
 		newHTML += '</div>'
