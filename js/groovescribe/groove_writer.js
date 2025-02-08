@@ -604,16 +604,16 @@ function GrooveWriter() {
 			} else if (instrument == "stickings") {
 				switch (action) {
 					case "all_right":
-						set_sticking_state(i, "right", i == startIndex);
+						set_sticking_state(i, "right", i == startIndex, class_notes_per_measure, class_time_division, class_note_value_per_measure);
 						break;
 					case "all_left":
-						set_sticking_state(i, "left", i == startIndex);
+						set_sticking_state(i, "left", i == startIndex, class_notes_per_measure, class_time_division, class_note_value_per_measure);
 						break;
 					case "alternate":
-						set_sticking_state(i, (i % 2 === 0 ? "right" : "left"), i == startIndex);
+						set_sticking_state(i, (i % 2 === 0 ? "right" : "left"), i == startIndex, class_notes_per_measure, class_time_division, class_note_value_per_measure);
 						break;
 					case "all_count":
-						set_sticking_state(i, "count", i == startIndex);
+						set_sticking_state(i, "count", i == startIndex, class_notes_per_measure, class_time_division, class_note_value_per_measure);
 						break;
 					default:
 						console.log("Bad sticking case in noteLabelPopupClick");
@@ -741,7 +741,7 @@ function GrooveWriter() {
 					set_kick_state(id, is_kick_on(id) ? "off" : "normal", true);
 					break;
 				case "sticking":
-					sticking_rotate_state(id);
+					sticking_rotate_state(id, class_notes_per_measure, class_time_division, class_note_value_per_measure);
 					break;
 				default:
 					console.log("Bad case in noteLeftClick: " + type);
@@ -758,7 +758,7 @@ function GrooveWriter() {
 
 		switch (type) {
 			case "sticking":
-				set_sticking_state(id, new_setting, true);
+				set_sticking_state(id, new_setting, true, class_notes_per_measure, class_time_division, class_note_value_per_measure);
 				break;
 			case "hh":
 				set_hh_state(id, new_setting, true);
@@ -2587,7 +2587,7 @@ function GrooveWriter() {
 	// clear all the notes on all measures
 	root.clearAllNotes = function () {
 		for (var i = 0; i < class_number_of_measures * class_notes_per_measure; i++) {
-			set_sticking_state(i, 'off');
+			set_sticking_state(i, 'off', class_notes_per_measure, class_time_division, class_note_value_per_measure);
 			set_hh_state(i, 'off');
 			set_tom1_state(i, 'off');
 			set_tom4_state(i, 'off');
@@ -2650,9 +2650,9 @@ function GrooveWriter() {
 		for (var i = 0; i < class_number_of_measures * class_notes_per_measure; i++) {
 			var cur_state = get_sticking_state(i, "URL");
 			if (cur_state === "R") {
-				set_sticking_state(i, "left", false);
+				set_sticking_state(i, "left", false, class_notes_per_measure, class_time_division, class_note_value_per_measure);
 			} else if (cur_state === "L") {
-				set_sticking_state(i, "right", false);
+				set_sticking_state(i, "right", false, class_notes_per_measure, class_time_division, class_note_value_per_measure);
 			}
 		}
 		updateSheetMusic();

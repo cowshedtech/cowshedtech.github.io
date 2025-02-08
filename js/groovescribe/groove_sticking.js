@@ -1,6 +1,6 @@
 // Javascript for the Groove Scribe HTML application
 
-function set_sticking_state(id, new_state, make_sound) {
+function set_sticking_state(id, new_state, make_sound, class_notes_per_measure, class_time_division, class_note_value_per_measure) {
 
     // turn both off
     document.getElementById("sticking_right" + id).style.color = constant_note_hidden_color_rgb;
@@ -24,7 +24,7 @@ function set_sticking_state(id, new_state, make_sound) {
             document.getElementById("sticking_both" + id).style.color = constant_sticking_both_on_color_rgb;
             break;
         case "count":
-            var count_state = root.myGrooveUtils.figure_out_sticking_count_for_index(id, class_notes_per_measure, class_time_division, class_note_value_per_measure);
+            var count_state = figure_out_sticking_count_for_index(id, class_notes_per_measure, class_time_division, class_note_value_per_measure);
 
             document.getElementById("sticking_count" + id).style.color = constant_sticking_count_on_color_rgb;
             document.getElementById("sticking_count" + id).innerHTML = "" + count_state;
@@ -85,7 +85,7 @@ function get_sticking_state(id, returnType) {
 }
 
 
-function sticking_rotate_state(id) {
+function sticking_rotate_state(id, class_notes_per_measure, class_time_division, class_note_value_per_measure) {
     var new_state = false;
     var sticking_state = get_sticking_state(id, "ABC");
 
@@ -104,7 +104,7 @@ function sticking_rotate_state(id) {
         new_state = "off";
     }
 
-    set_sticking_state(id, new_state, true);
+    set_sticking_state(id, new_state, true, class_notes_per_measure, class_time_division, class_note_value_per_measure);
 }
 
 function isStickingsVisible() {
