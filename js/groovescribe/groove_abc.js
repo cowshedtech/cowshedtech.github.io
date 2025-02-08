@@ -1047,7 +1047,7 @@ function createABCFromGrooveData(myGrooveData, renderWidth) {
 		myGrooveData.numBeats,
 		myGrooveData.noteValue);
 
-	root.note_mapping_array = root.create_note_mapping_array_for_highlighting(FullNoteHHArray,
+	root.note_mapping_array = create_note_mapping_array_for_highlighting(FullNoteHHArray,
 			FullNoteSnareArray,
 			FullNoteKickArray,
 			FullNoteTomsArray,

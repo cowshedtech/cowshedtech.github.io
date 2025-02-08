@@ -92,3 +92,28 @@ function clear_all_highlights(instrument) {
         class_cur_highlight_ids.all_notes = false;
     }
 }
+
+
+// create an array that can be used for note mapping
+// it is just an array of true/false that specifies weather a note can appear at that index
+function create_note_mapping_array_for_highlighting(HH_array, snare_array, kick_array, toms_array, num_notes) {
+    var mapping_array = new Array(num_notes).fill(false); // create large empty array and initialize to false
+
+    for (var i = 0; i < num_notes; i++) {
+        // Check if any of the main arrays have a true value
+        if ((HH_array && HH_array[i]) || 
+            (snare_array && snare_array[i]) || 
+            (kick_array && kick_array[i])) {
+            mapping_array[i] = true;
+        } else if (toms_array) { // Only check toms if necessary
+            for (var j = 0; j < constant_NUMBER_OF_TOMS; j++) {
+                if (toms_array[j][i]) { // Simplified check
+                    mapping_array[i] = true;
+                    break; // Exit loop early if a match is found
+                }
+            }
+        }
+    }
+
+    return mapping_array;
+};

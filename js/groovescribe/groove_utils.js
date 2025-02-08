@@ -455,31 +455,7 @@ function GrooveUtils() {
 		};
 	}
 
-	// create an array that can be used for note mapping
-	// it is just an array of true/false that specifies weather a note can appear at that index
-	root.create_note_mapping_array_for_highlighting = function (HH_array, snare_array, kick_array, toms_array, num_notes) {
-		var mapping_array = new Array(num_notes); // create large empty array
-
-		for (var i = 0; i < num_notes; i++) {
-			if ((HH_array && HH_array[i] !== false) ||
-				(snare_array && snare_array[i] !== false) ||
-				(kick_array && kick_array[i] !== false)) {
-				mapping_array[i] = true;
-			} else {
-				mapping_array[i] = false;
-
-				// check toms as well with for loop
-				if (toms_array) {
-					for (var j = 0; j < constant_NUMBER_OF_TOMS; j++) {
-						if (toms_array[j][i] !== undefined && toms_array[j][i] !== false)
-							mapping_array[i] = true;
-					}
-				}
-			}
-		}
-
-		return mapping_array;
-	};
+	
 
 	
 	// callback class for abc generator library
