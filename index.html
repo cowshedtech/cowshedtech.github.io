@@ -1,13 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #445046;
+            color: white;
+            padding: 1rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .hero {
+            height: calc(100vh - 7rem);
+            background: url('images/hero.jpg') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-text {
+            background-color: #445046;
+            font-size: 500%;
+            padding: 1rem;   
+        }
+
+        footer {
+            background-color: #445046;
+            color: white;
+            text-align: center;
+            padding: 1rem;            
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="/s/">Scribe</a></li>                
+            </ul>
+        </nav>
+    </header>
 
-  <h1>Template</h1>
-  
-  <p>This is a blank template for a web page.</p>
-  
+    <section class="hero">
+        <div>
+            <h1 class="hero-text">Welcome to Beat Nation!</h1>            
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 beatnation.io. All rights reserved.</p>
+    </footer>
 </body>
 </html>
