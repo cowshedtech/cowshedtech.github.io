@@ -740,7 +740,7 @@
 		display: inline-block;
 		color: var(--highlight-color-on-white);
 		cursor: pointer;
-		font-size: 40px;
+		/* font-size: 40px; */
 		padding-top: 2px;
 		margin-top: 73px;
 	}
