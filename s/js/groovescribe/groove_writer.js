@@ -3781,21 +3781,11 @@ function GrooveWriter() {
 		}
 		newHTML += ('<div class="end_note_space"></div>\n</div>\n');
 
-		// Hi-hats
 		newHTML += generateHiHatContainerHTML(indexStartForNotes, baseindex);
-
-		// Toms 1
 		newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, 1);
-
-		// Snare stuff
 		newHTML += generateSnareContainerHTML(indexStartForNotes, baseindex);
-
-		// Toms 4
 		newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, 4);
-
-		// Kick stuff
 		newHTML += generateKickContainerHTML(indexStartForNotes, baseindex);
-
 		newHTML += ('\
 								</div>\
 							</div>\
@@ -3965,6 +3955,8 @@ function GrooveWriter() {
 		return newHTML;
 	};
 
+	//
+	//
 	function generateMeasureButtons(baseindex, repeat) {
 		var buttonsHTML = '';
 
@@ -3985,6 +3977,9 @@ function GrooveWriter() {
 		return buttonsHTML;
 	}
 
+	//
+	//
+	//
 	function generateLineLabels(baseindex) {
 		return `
 			<div class="line-labels">
@@ -3997,6 +3992,9 @@ function GrooveWriter() {
 		`;
 	}
 
+	//
+	//
+	//
 	function generateHiHatContainerHTML(indexStartForNotes, baseindex) {
 		let html = [];
 		html.push('<div class="hi-hat-container">');
@@ -4019,7 +4017,7 @@ function GrooveWriter() {
 				</div>
 			`);
 
-			if ((i - indexStartForNotes - 1) % noteGroupingSize(class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
+			if ((i - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
 				html.push('<div class="space_between_note_groups"> </div>');
 			}
 		}
@@ -4030,27 +4028,35 @@ function GrooveWriter() {
 		return html.join(''); // Join the array into a single string
 	}
 
+	//
+	//
+	//
 	function generateTomContainerHTML(indexStartForNotes, baseindex, tomNumber) {
-		let newHTML = ('\
-			<div class="toms-container" id="tom' + tomNumber + '-container">\
-				<div class="opening_note_space"> </div>');
+		let newHTML = []; // Use an array to build the HTML
+		newHTML.push('<div class="toms-container" id="tom' + tomNumber + '-container">');
+		newHTML.push('<div class="opening_note_space"> </div>');
+
 		for (let i = indexStartForNotes; i < class_notes_per_measure + indexStartForNotes; i++) {
-			newHTML += ('\
-				<div id="tom' + tomNumber + '-' + i + '" class="tom" onClick="myGrooveWriter.noteLeftClick(event, \'tom' + tomNumber + '\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'tom' + tomNumber + '\', ' + i + ')" onmouseenter="myGrooveWriter.noteOnMouseEnter(event, \'tom' + tomNumber + '\', ' + i + ')">\
-					<div class="tom_circle note_part"  id="tom_circle' + tomNumber + '-' + i + '"></div>\
-				</div>\n\
-				');
+			newHTML.push(`
+				<div id="tom${tomNumber}-${i}" class="tom" onClick="myGrooveWriter.noteLeftClick(event, 'tom${tomNumber}', ${i})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, 'tom${tomNumber}', ${i})" onmouseenter="myGrooveWriter.noteOnMouseEnter(event, 'tom${tomNumber}', ${i})">
+					<div class="tom_circle note_part" id="tom_circle${tomNumber}-${i}"></div>
+				</div>
+			`);
 
 			if ((i - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
-				newHTML += ('<div class="space_between_note_groups"> </div> \n');
+				newHTML.push('<div class="space_between_note_groups"> </div>');
 			}
 		}
-		newHTML += '<span class="unmuteTom' + tomNumber + 'Button" id="unmutetom' + tomNumber + 'Button' + baseindex + '" onClick=\'myGrooveWriter.muteInstrument("tom' + tomNumber + '", ' + baseindex + ', false)\'><span class="fa-stack unmuteStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span>';
-		newHTML += ('<div class="end_note_space"></div>\n</div>\n');
 
-		return newHTML; // Return the generated HTML
+		newHTML.push(`<span class="unmuteTom${tomNumber}Button" id="unmutetom${tomNumber}Button${baseindex}" onClick='myGrooveWriter.muteInstrument("tom${tomNumber}", ${baseindex}, false)'><span class="fa-stack unmuteStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span>`);
+		newHTML.push('<div class="end_note_space"></div></div>');
+
+		return newHTML.join(''); // Join the array into a single string
 	}
 
+	//
+	//
+	//
 	function generateSnareContainerHTML(indexStartForNotes, baseindex) {
 		let newHTML = ('\
 			<div class="snare-container">\
@@ -4142,26 +4148,30 @@ function GrooveWriter() {
 		return newHTML; // Return the generated HTML
 	}
 
+	//
+	//
+	//
 	function generateKickContainerHTML(indexStartForNotes, baseindex) {
-		let newHTML = ('\
-			<div class="kick-container">\
-				<div class="opening_note_space"> </div> ');
+		let newHTML = []; // Use an array to build the HTML
+		newHTML.push('<div class="kick-container">');
+		newHTML.push('<div class="opening_note_space"> </div> ');
+
 		for (var j = indexStartForNotes; j < class_notes_per_measure + indexStartForNotes; j++) {
-			newHTML += ('\
-				<div id="kick' + j + '" class="kick" onClick="myGrooveWriter.noteLeftClick(event, \'kick\', ' + j + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'kick\', ' + j + ')" onmouseenter="myGrooveWriter.noteOnMouseEnter(event, \'kick\', ' + j + ')">\
-					<div class="kick_splash note_part" id="kick_splash' + j + '"><i class="fa fa-times"></i></div>\
-					<div class="kick_circle note_part" id="kick_circle' + j + '"></div>\
-				</div> \n\
-			');
+			newHTML.push(`
+				<div id="kick${j}" class="kick" onClick="myGrooveWriter.noteLeftClick(event, 'kick', ${j})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, 'kick', ${j})" onmouseenter="myGrooveWriter.noteOnMouseEnter(event, 'kick', ${j})">
+					<div class="kick_splash note_part" id="kick_splash${j}"><i class="fa fa-times"></i></div>
+					<div class="kick_circle note_part" id="kick_circle${j}"></div>
+				</div>
+			`);
 
 			if ((j - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure) === 0 && j < class_notes_per_measure + indexStartForNotes - 1) {
-				newHTML += ('<div class="space_between_note_groups"> </div> ');
+				newHTML.push('<div class="space_between_note_groups"> </div> ');
 			}
 		}
-		newHTML += '<span class="unmuteKickButton" id="unmutekickButton' + baseindex + '" onClick=\'myGrooveWriter.muteInstrument("kick", ' + baseindex + ', false)\'><span class="fa-stack unmuteStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span>';
-		newHTML += ('<div class="end_note_space"></div>\n</div>\n');
+		newHTML.push(`<span class="unmuteKickButton" id="unmutekickButton${baseindex}" onClick='myGrooveWriter.muteInstrument("kick", ${baseindex}, false)'><span class="fa-stack unmuteStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span>`);
+		newHTML.push('<div class="end_note_space"></div>\n</div>\n');
 
-		return newHTML; // Return the generated HTML
+		return newHTML.join(''); // Join the array into a single string
 	}
 	
 } // end of class
