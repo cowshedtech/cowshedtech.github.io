@@ -101,9 +101,7 @@ function create_note_mapping_array_for_highlighting(HH_array, snare_array, kick_
 
     for (var i = 0; i < num_notes; i++) {
         // Check if any of the main arrays have a true value
-        if ((HH_array && HH_array[i]) || 
-            (snare_array && snare_array[i]) || 
-            (kick_array && kick_array[i])) {
+        if ((HH_array && HH_array[i]) || (snare_array && snare_array[i]) || (kick_array && kick_array[i])) {
             mapping_array[i] = true;
         } else if (toms_array) { // Only check toms if necessary
             for (var j = 0; j < constant_NUMBER_OF_TOMS; j++) {

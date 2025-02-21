@@ -2110,6 +2110,8 @@ function GrooveWriter() {
 					}
 					fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, addon_abc, num_notes, class_time_division, num_notes, true, class_num_beats_per_measure, class_note_value_per_measure);
 					root.myGrooveUtils.note_mapping_array = root.myGrooveUtils.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, Snare_Array, Kick_Array, Toms_Array, num_notes));
+					root.myGrooveUtils.numberOfMeasures = class_number_of_measures
+					root.myGrooveUtils.repeatedMeasures = class_repeated_measures;
 				}
 
 				break;
@@ -2265,7 +2267,6 @@ function GrooveWriter() {
 	// copy the notes from the last measure to the new measure
 	root.repeatMeasureIncButtonClick = function (measureNum) {
 		// class_repeated_measures
-		console.log(`repeat [${measureNum}]`)
 		let count = class_repeated_measures.get(measureNum - 1) || 1;
 		class_repeated_measures.set(measureNum - 1, count + 1)
 
@@ -2306,7 +2307,6 @@ function GrooveWriter() {
 	// copy the notes from the last measure to the new measure
 	root.repeatMeasureDecButtonClick = function (measureNum) {
 		// class_repeated_measures
-		console.log(`repeat [${measureNum}]`)
 		let count = class_repeated_measures.get(measureNum - 1) || 1;
 		class_repeated_measures.set(measureNum - 1, count - 1)
 
@@ -3960,7 +3960,7 @@ function GrooveWriter() {
 	function generateMeasureButtons(baseindex, repeat) {
 		var buttonsHTML = '';
 
-		buttonsHTML += '<div style="display: inline-block;vertical-align: top; margin-left: 15px; margin-right: 15px">'
+		buttonsHTML += '<div style="display: inline-block;vertical-align: top; margin-top: 15px; margin-left: 15px; margin-right: 15px">'
 
 		if (class_number_of_measures > 1)
 			buttonsHTML += '<div title="Remove Measure" id="closeMeasureButton' + baseindex + '" onClick="myGrooveWriter.closeMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-times-circle"></i></div>';
