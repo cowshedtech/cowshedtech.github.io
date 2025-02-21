@@ -584,61 +584,40 @@ function GrooveUtils() {
 	root.highlightNoteInABCSVGFromPercentComplete = function (percentComplete, numberOfMeasures, repeatedMeasures) {
 
 		if (root.note_mapping_array !== null) {
-			// convert percentComplete to an index
-			var curNoteIndex = percentComplete * root.note_mapping_array.length;
-			// console.log(`note_mapping_array.length [${root.note_mapping_array.length}]`)
-
+			
+			// How many measures do we have when we include repeats
 			let additionalMeasures = 0;
 			for (let key of repeatedMeasures.keys()) {
 				additionalMeasures += repeatedMeasures.get(key) - 1;
 			}
 			let totalMeasures = numberOfMeasures + additionalMeasures;
-			// console.log(`totalMeasures [${totalMeasures}]`)
 			
-			console.log(`percentComplete [${percentComplete.toFixed(2)}]`)
-
+			// How far through are we when we consider repeats in the total
 			var curNoteIndexNew = percentComplete * 32 * totalMeasures;
-			console.log(`curNoteIndexNew [${curNoteIndexNew.toFixed(2)}]`)
-
+			
 			// Which measure are we currently on taking account of repeated measures
 			let cursor = 0;
 			let measure = 0;
 			for (let i = 0; i < numberOfMeasures; i++) {
 				let repeats = repeatedMeasures.get(i) || 1; 
-				let nextCursor = cursor + 32 * repeats - 1; // Calculate next cursor position once
+				let nextCursor = cursor + 32 * repeats - 1; 
 				if (curNoteIndexNew > cursor && curNoteIndexNew < nextCursor) {
 					measure = i;        
 					break;
 				}
 				cursor = nextCursor; // Update cursor to next position
 			}
-			console.log(`measure [${measure}]`)
-
-
-			let adjusted_note_id_in_32 = measure * 32 + curNoteIndexNew % 32;
-			console.log(`adjusted_note_id_in_32 [${adjusted_note_id_in_32}]`)
 			
+			// Figure out our adjusted note position taking account of repeated measures
+			let adjusted_note_id_in_32 = measure * 32 + curNoteIndexNew % 32;
+			
+			// Now figure out which actual note we are on in abc
 			var real_note_index = -1;
 			for (var i = 0; i < adjusted_note_id_in_32 && i < root.note_mapping_array.length; i++) {
 				if (root.note_mapping_array[i])
 					real_note_index++;
 			}	
-			console.log(`real_note_index [${real_note_index.toFixed(2)}]`)				
 			
-			// now count through the array with the possible notes to find the note number as
-			// it correlates to the ABC
-			// var real_note_index = -1;
-			// for (var i = 0; i < curNoteIndex && i < root.note_mapping_array.length; i++) {
-			// 	if (root.note_mapping_array[i])
-			// 		real_note_index++;
-			// }
-
-			// console.log(`curNoteIndex [${curNoteIndex.toFixed(2)}]`)
-			// console.log(`real_note_index [${real_note_index.toFixed(2)}]`)
-			console.log(`***`)
-
-			 
-
 			// now the real_note_index should map to the correct abc note, highlight italics
 			root.highlightNoteInABCSVGByIndex(real_note_index);
 		}
