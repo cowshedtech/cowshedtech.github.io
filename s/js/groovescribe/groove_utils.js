@@ -567,6 +567,7 @@ function GrooveUtils() {
 		}
 	};
 
+	
 	// set note to -1 to unhighlight all notes
 	root.highlightNoteInABCSVGByIndex = function (noteToHighlight) {
 
@@ -579,49 +580,58 @@ function GrooveUtils() {
 		}
 	};
 
+
+	// Helper function to calculate the real note index from the mapping array
+	function getRealNoteIndex(notePosition, noteMappingArray) {
+		var real_note_index = -1;
+		for (var i = 0; i < notePosition && i < noteMappingArray.length; i++) {
+			if (noteMappingArray[i]) real_note_index++;
+		}
+		return real_note_index;
+	};
+
+
+	function getCurrentMeasureWithRepeats(curNoteIndexNew, numberOfMeasures, repeatedMeasures) {
+		let cursor = 0;
+		let measure = 0;
+		for (let i = 0; i < numberOfMeasures; i++) {
+			let repeats = repeatedMeasures.get(i) || 1; 
+			let nextCursor = cursor + 32 * repeats - 1; 
+			if (curNoteIndexNew > cursor && curNoteIndexNew < nextCursor) {
+				measure = i;        
+				break;
+			}
+			cursor = nextCursor; // Update cursor to next position
+		}
+		return measure;
+	};
+
 	// cross index the percent complete with the myGrooveData note arrays to find the nth note
 	// Then highlight the note
 	root.highlightNoteInABCSVGFromPercentComplete = function (percentComplete, numberOfMeasures, repeatedMeasures) {
 
-		if (root.note_mapping_array !== null) {
+		if (root.note_mapping_array === null) return
 			
-			// How many measures do we have when we include repeats
-			let additionalMeasures = 0;
-			for (let key of repeatedMeasures.keys()) {
-				additionalMeasures += repeatedMeasures.get(key) - 1;
-			}
-			let totalMeasures = numberOfMeasures + additionalMeasures;
-			
-			// How far through are we when we consider repeats in the total
-			var curNoteIndexNew = percentComplete * 32 * totalMeasures;
-			
-			// Which measure are we currently on taking account of repeated measures
-			let cursor = 0;
-			let measure = 0;
-			for (let i = 0; i < numberOfMeasures; i++) {
-				let repeats = repeatedMeasures.get(i) || 1; 
-				let nextCursor = cursor + 32 * repeats - 1; 
-				if (curNoteIndexNew > cursor && curNoteIndexNew < nextCursor) {
-					measure = i;        
-					break;
-				}
-				cursor = nextCursor; // Update cursor to next position
-			}
-			
-			// Figure out our adjusted note position taking account of repeated measures
-			let adjusted_note_id_in_32 = measure * 32 + curNoteIndexNew % 32;
-			
-			// Now figure out which actual note we are on in abc
-			var real_note_index = -1;
-			for (var i = 0; i < adjusted_note_id_in_32 && i < root.note_mapping_array.length; i++) {
-				if (root.note_mapping_array[i])
-					real_note_index++;
-			}	
-			
-			// now the real_note_index should map to the correct abc note, highlight italics
-			root.highlightNoteInABCSVGByIndex(real_note_index);
-		}
+		// How many measures do we have when we include repeats
+		let totalMeasures = numberOfMeasures + Array.from(repeatedMeasures.values()).reduce((sum, repeats) => sum + (repeats - 1), 0);
+		
+		// How far through are we when we consider repeats in the total
+		var curNoteIndexNew = percentComplete * 32 * totalMeasures;
+		
+		// Which measure are we currently on taking account of repeated measures
+		let measure = getCurrentMeasureWithRepeats(curNoteIndexNew, numberOfMeasures, repeatedMeasures);
+		
+		// Figure out our adjusted note position taking account of repeated measures
+		let adjusted_note_id_in_32 = measure * 32 + curNoteIndexNew % 32;
+		
+		// Now figure out which actual note we are on in abc
+		var real_note_index = getRealNoteIndex(adjusted_note_id_in_32, root.note_mapping_array);
+		
+		// now the real_note_index should map to the correct abc note, highlight italics
+		root.highlightNoteInABCSVGByIndex(real_note_index);	
 	};
+
+	
 
 	// ******************************************************************************************************************
 	// ******************************************************************************************************************
