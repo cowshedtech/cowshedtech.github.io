@@ -2410,53 +2410,62 @@ function GrooveWriter() {
 	// currently always at the end of the measures
 	// copy the notes from the last measure to the new measure
 	root.addMeasureButtonClick = function (event) {
-		var uiStickings = "";
-		var uiHH = "";
-		var uiTom1 = "";
-		var uiTom4 = "";
-		var uiSnare = "";
-		var uiKick = "";
-		var i;
+		const notes = {
+			stickings: [],
+			hh: [],
+			tom1: [],
+			tom4: [],
+			snare: [],
+			kick: []
+		};
 
-		// get the encoded notes out of the UI.
-		var topIndex = class_notes_per_measure * class_number_of_measures;
-		for (i = 0; i < topIndex; i++) {
-
-			uiStickings += get_sticking_state(i, "URL");
-			uiHH += get_hh_state(i, "URL");
-			uiTom1 += get_tom_state(i, 1, "URL");
-			uiTom4 += get_tom_state(i, 4, "URL");
-			uiSnare += get_snare_state(i, "URL");
-			uiKick += get_kick_state(i, "URL");
+		// Get encoded notes from UI
+		const topIndex = class_notes_per_measure * class_number_of_measures;
+		for (let i = 0; i < topIndex; i++) {
+			notes.stickings.push(get_sticking_state(i, "URL"));
+			notes.hh.push(get_hh_state(i, "URL"));
+			notes.tom1.push(get_tom_state(i, 1, "URL"));
+			notes.tom4.push(get_tom_state(i, 4, "URL"));
+			notes.snare.push(get_snare_state(i, "URL"));
+			notes.kick.push(get_kick_state(i, "URL"));
 		}
 
-		// add last empty measure
-		for (i = topIndex - class_notes_per_measure; i < topIndex; i++) {
-			uiStickings += "-";
-			uiHH += "-";
-			uiTom1 += "-";
-			uiTom4 += "-";
-			uiSnare += "-";
-			uiKick += "-";
-		}
+		// Add empty measure
+		const emptyMeasure = Array(class_notes_per_measure).fill('-');
+		notes.stickings.push(...emptyMeasure);
+		notes.hh.push(...emptyMeasure);
+		notes.tom1.push(...emptyMeasure);
+		notes.tom4.push(...emptyMeasure);
+		notes.snare.push(...emptyMeasure);
+		notes.kick.push(...emptyMeasure);
 
 		class_number_of_measures++;
-
 		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
 
-		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+		// Convert arrays to strings
+		const noteStrings = {
+			stickings: notes.stickings.join(''),
+			hh: notes.hh.join(''),
+			tom1: notes.tom1.join(''),
+			tom4: notes.tom4.join(''),
+			snare: notes.snare.join(''),
+			kick: notes.kick.join('')
+		};
 
-		// reference the button and scroll it into view
-		var add_measure_button = document.getElementById("addMeasureButton");
-		if (add_measure_button)
-			add_measure_button.scrollIntoView({ block: "start", behavior: "smooth" });
+		changeDivisionWithNotes(class_time_division, 
+			noteStrings.stickings, 
+			noteStrings.hh, 
+			noteStrings.tom1, 
+			noteStrings.tom4, 
+			noteStrings.snare, 
+			noteStrings.kick
+		);
+
+		// Scroll to add measure button
+		const addMeasureButton = document.getElementById("addMeasureButton");
+		addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
 
 		updateSheetMusic();
-
-		// if(class_number_of_measures === 5)
-		// 	window.alert("Please be aware that the Groove Scribe is not designed to write an entire musical score.\n" +
-		// 				"You can create as many measures as you want, but your browser may slow down as more measures are added.\n" +
-		// 				"There are also many notation features that would be useful for score writing that are not part of Groove Scribe");
 	};
 
 
