@@ -115,3 +115,93 @@ function create_note_mapping_array_for_highlighting(HH_array, snare_array, kick_
 
     return mapping_array;
 };
+
+
+// Helper function to calculate the real note index from the mapping array
+function getRealNoteIndex(notePosition, noteMappingArray) {
+    var real_note_index = -1;
+    for (var i = 0; i < notePosition && i < noteMappingArray.length; i++) {
+        if (noteMappingArray[i]) real_note_index++;
+    }
+    return real_note_index;
+};
+
+
+//
+//
+//
+function getCurrentMeasureWithRepeats(curNoteIndexNew, numberOfMeasures, repeatedMeasures) {
+    let cursor = 0;
+    let measure = 0;
+    for (let i = 0; i < numberOfMeasures; i++) {
+        let repeats = repeatedMeasures.get(i) || 1; 
+        let nextCursor = cursor + 32 * repeats - 1; 
+        if (curNoteIndexNew > cursor && curNoteIndexNew < nextCursor) {
+            measure = i;        
+            break;
+        }
+        cursor = nextCursor; // Update cursor to next position
+    }
+    return measure;
+};
+
+var abcNoteNumCurrentlyHighlighted = -1;
+function clearHighlightNoteInABCSVG(grooveUtilsUniqueIndex) {
+    if (abcNoteNumCurrentlyHighlighted > -1) {
+        var myElements = document.querySelectorAll("#abcNoteNum_" + grooveUtilsUniqueIndex + "_" + abcNoteNumCurrentlyHighlighted);
+        for (var i = 0; i < myElements.length; i++) {
+            //note.className = note.className.replace(new RegExp(' highlighted', 'g'), "");
+            var class_name = myElements[i].getAttribute("class");
+            myElements[i].setAttribute("class", class_name.replace(new RegExp(' highlighted', 'g'), ""));
+
+            // TODO
+            // if (root.debugMode && i === 0) {
+            //     if (!isElementOnScreen(myElements[i])) {
+            //         if (abcNoteNumCurrentlyHighlighted === 0)
+            //             myElements[i].scrollIntoView({ block: "start", behavior: "smooth" });   // autoscroll if necessary
+            //         else
+            //             myElements[i].scrollIntoView({ block: "end", behavior: "smooth" });   // autoscroll if necessary
+            //     }
+            // }
+        }
+        abcNoteNumCurrentlyHighlighted = -1;
+    }
+};
+
+	
+// set note to -1 to unhighlight all notes
+function highlightNoteInABCSVGByIndex(grooveUtilsUniqueIndex, noteToHighlight) {
+
+    clearHighlightNoteInABCSVG(grooveUtilsUniqueIndex);
+
+    var myElements = document.querySelectorAll("#abcNoteNum_" + grooveUtilsUniqueIndex + "_" + noteToHighlight);
+    for (var i = 0; i < myElements.length; i++) {
+        myElements[i].setAttribute("class", myElements[i].getAttribute("class") + " highlighted");
+        abcNoteNumCurrentlyHighlighted = noteToHighlight;
+    }
+};
+
+// cross index the percent complete with the myGrooveData note arrays to find the nth note
+// Then highlight the note
+function highlightNoteInABCSVGFromPercentComplete(grooveUtilsUniqueIndex, note_mapping_array, percentComplete, numberOfMeasures, repeatedMeasures) {
+
+    if (note_mapping_array === null) return
+        
+    // How many measures do we have when we include repeats
+    let totalMeasures = numberOfMeasures + Array.from(repeatedMeasures.values()).reduce((sum, repeats) => sum + (repeats - 1), 0);
+    
+    // How far through are we when we consider repeats in the total
+    var curNoteIndexNew = percentComplete * 32 * totalMeasures;
+    
+    // Which measure are we currently on taking account of repeated measures
+    let measure = getCurrentMeasureWithRepeats(curNoteIndexNew, numberOfMeasures, repeatedMeasures);
+    
+    // Figure out our adjusted note position taking account of repeated measures
+    let adjusted_note_id_in_32 = measure * 32 + curNoteIndexNew % 32;
+    
+    // Now figure out which actual note we are on in abc
+    var real_note_index = getRealNoteIndex(adjusted_note_id_in_32, note_mapping_array);
+    
+    // now the real_note_index should map to the correct abc note, highlight italics
+    highlightNoteInABCSVGByIndex(grooveUtilsUniqueIndex, real_note_index);	
+};

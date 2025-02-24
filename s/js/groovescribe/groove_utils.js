@@ -545,91 +545,7 @@ function GrooveUtils() {
 
 
 
-	root.abcNoteNumCurrentlyHighlighted = -1;
-	root.clearHighlightNoteInABCSVG = function () {
-
-		if (root.abcNoteNumCurrentlyHighlighted > -1) {
-			var myElements = document.querySelectorAll("#abcNoteNum_" + root.grooveUtilsUniqueIndex + "_" + root.abcNoteNumCurrentlyHighlighted);
-			for (var i = 0; i < myElements.length; i++) {
-				//note.className = note.className.replace(new RegExp(' highlighted', 'g'), "");
-				var class_name = myElements[i].getAttribute("class");
-				myElements[i].setAttribute("class", class_name.replace(new RegExp(' highlighted', 'g'), ""));
-				if (root.debugMode && i === 0) {
-					if (!isElementOnScreen(myElements[i])) {
-						if (root.abcNoteNumCurrentlyHighlighted === 0)
-							myElements[i].scrollIntoView({ block: "start", behavior: "smooth" });   // autoscroll if necessary
-						else
-							myElements[i].scrollIntoView({ block: "end", behavior: "smooth" });   // autoscroll if necessary
-					}
-				}
-			}
-			root.abcNoteNumCurrentlyHighlighted = -1;
-		}
-	};
-
 	
-	// set note to -1 to unhighlight all notes
-	root.highlightNoteInABCSVGByIndex = function (noteToHighlight) {
-
-		root.clearHighlightNoteInABCSVG();
-
-		var myElements = document.querySelectorAll("#abcNoteNum_" + root.grooveUtilsUniqueIndex + "_" + noteToHighlight);
-		for (var i = 0; i < myElements.length; i++) {
-			myElements[i].setAttribute("class", myElements[i].getAttribute("class") + " highlighted");
-			root.abcNoteNumCurrentlyHighlighted = noteToHighlight;
-		}
-	};
-
-
-	// Helper function to calculate the real note index from the mapping array
-	function getRealNoteIndex(notePosition, noteMappingArray) {
-		var real_note_index = -1;
-		for (var i = 0; i < notePosition && i < noteMappingArray.length; i++) {
-			if (noteMappingArray[i]) real_note_index++;
-		}
-		return real_note_index;
-	};
-
-
-	function getCurrentMeasureWithRepeats(curNoteIndexNew, numberOfMeasures, repeatedMeasures) {
-		let cursor = 0;
-		let measure = 0;
-		for (let i = 0; i < numberOfMeasures; i++) {
-			let repeats = repeatedMeasures.get(i) || 1; 
-			let nextCursor = cursor + 32 * repeats - 1; 
-			if (curNoteIndexNew > cursor && curNoteIndexNew < nextCursor) {
-				measure = i;        
-				break;
-			}
-			cursor = nextCursor; // Update cursor to next position
-		}
-		return measure;
-	};
-
-	// cross index the percent complete with the myGrooveData note arrays to find the nth note
-	// Then highlight the note
-	root.highlightNoteInABCSVGFromPercentComplete = function (percentComplete, numberOfMeasures, repeatedMeasures) {
-
-		if (root.note_mapping_array === null) return
-			
-		// How many measures do we have when we include repeats
-		let totalMeasures = numberOfMeasures + Array.from(repeatedMeasures.values()).reduce((sum, repeats) => sum + (repeats - 1), 0);
-		
-		// How far through are we when we consider repeats in the total
-		var curNoteIndexNew = percentComplete * 32 * totalMeasures;
-		
-		// Which measure are we currently on taking account of repeated measures
-		let measure = getCurrentMeasureWithRepeats(curNoteIndexNew, numberOfMeasures, repeatedMeasures);
-		
-		// Figure out our adjusted note position taking account of repeated measures
-		let adjusted_note_id_in_32 = measure * 32 + curNoteIndexNew % 32;
-		
-		// Now figure out which actual note we are on in abc
-		var real_note_index = getRealNoteIndex(adjusted_note_id_in_32, root.note_mapping_array);
-		
-		// now the real_note_index should map to the correct abc note, highlight italics
-		root.highlightNoteInABCSVGByIndex(real_note_index);	
-	};
 
 	
 
@@ -1168,7 +1084,7 @@ function GrooveUtils() {
 			root.midiEventCallbacks.pauseEvent(root.midiEventCallbacks.classRoot);
 			MIDI.Player.pause();
 			root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, "clear", -1);
-			root.clearHighlightNoteInABCSVG();
+			clearHighlightNoteInABCSVG(root.grooveUtilsUniqueIndex);
 		}
 	};
 
@@ -1200,7 +1116,7 @@ function GrooveUtils() {
 			MIDI.Player.stop();
 			root.midiEventCallbacks.stopEvent(root.midiEventCallbacks.classRoot);
 			root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, "clear", -1);
-			root.clearHighlightNoteInABCSVG();
+			clearHighlightNoteInABCSVG(root.grooveUtilsUniqueIndex);
 			resetMetronomeOptionsOffsetClickStartRotation()
 		}
 	};
@@ -1374,7 +1290,7 @@ function GrooveUtils() {
 			if (note_type) {
 				global_total_midi_notes++;
 				root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, note_type, percentComplete);
-				root.highlightNoteInABCSVGFromPercentComplete(percentComplete, root.numberOfMeasures, root.repeatedMeasures);
+				highlightNoteInABCSVGFromPercentComplete(root.grooveUtilsUniqueIndex, root.note_mapping_array, percentComplete, root.numberOfMeasures, root.repeatedMeasures);
 				if (root.noteCallback) {
 					root.noteCallback(note_type);
 				}
