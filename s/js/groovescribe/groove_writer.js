@@ -2356,77 +2356,53 @@ function GrooveWriter() {
 	// currently always at the end of the measures
 	// copy the notes from the last measure to the new measure
 	root.duplicateMeasureButtonClick = function (measureNum) {
-		var uiStickings = "";
-		var uiHH = "";
-		var uiTom1 = "";
-		var uiTom4 = "";
-		var uiSnare = "";
-		var uiKick = "";
-		var i;
-
-		// get the encoded notes out of the UI from before measure we are going to repeat
-		var loop1End = (measureNum - 1) * class_notes_per_measure
-		for (i = 0; i < loop1End; i++) {
-			uiStickings += get_sticking_state(i, "URL");
-			uiHH += get_hh_state(i, "URL");
-			uiTom1 += get_tom_state(i, 1, "URL");
-			uiTom4 += get_tom_state(i, 4, "URL");
-			uiSnare += get_snare_state(i, "URL");
-			uiKick += get_kick_state(i, "URL");
+		// Helper function to collect notes for a given range
+		function collectNotes(start, end, target) {
+			for (let i = start; i < end; i++) {
+				target.stickings += get_sticking_state(i, "URL");
+				target.hh += get_hh_state(i, "URL");
+				target.tom1 += get_tom_state(i, 1, "URL");
+				target.tom4 += get_tom_state(i, 4, "URL");
+				target.snare += get_snare_state(i, "URL");
+				target.kick += get_kick_state(i, "URL");
+			}
 		}
 
-		// get the encoded notes out of the UI for measure to be repeated and cycle through twice
-		var loop2Start = (measureNum - 1) * class_notes_per_measure
-		var loop2End = loop2Start + class_notes_per_measure
+		const notes = {
+			stickings: "",
+			hh: "",
+			tom1: "",
+			tom4: "",
+			snare: "",
+			kick: ""
+		};
 
-		for (i = loop2Start; i < loop2End; i++) {
-			uiStickings += get_sticking_state(i, "URL");
-			uiHH += get_hh_state(i, "URL");
-			uiTom1 += get_tom_state(i, 1, "URL");
-			uiTom4 += get_tom_state(i, 4, "URL");
-			uiSnare += get_snare_state(i, "URL");
-			uiKick += get_kick_state(i, "URL");
-		}
-		for (i = loop2Start; i < loop2End; i++) {
-			uiStickings += get_sticking_state(i, "URL");
-			uiHH += get_hh_state(i, "URL");
-			uiTom1 += get_tom_state(i, 1, "URL");
-			uiTom4 += get_tom_state(i, 4, "URL");
-			uiSnare += get_snare_state(i, "URL");
-			uiKick += get_kick_state(i, "URL");
-		}
+		// Collect notes before the measure to be duplicated
+		collectNotes(0, (measureNum - 1) * class_notes_per_measure, notes);
 
-		// get the encoded notes out of the UI for measures after measure to be repeated
-		var loop3Start = measureNum * class_notes_per_measure
-		var loop3End = class_notes_per_measure * class_number_of_measures;
-		for (i = loop3Start; i < loop3End; i++) {
-			uiStickings += get_sticking_state(i, "URL");
-			uiHH += get_hh_state(i, "URL");
-			uiTom1 += get_tom_state(i, 1, "URL");
-			uiTom4 += get_tom_state(i, 4, "URL");
-			uiSnare += get_snare_state(i, "URL");
-			uiKick += get_kick_state(i, "URL");
-		}
+		// Collect notes for the measure to be duplicated (twice)
+		const measureStart = (measureNum - 1) * class_notes_per_measure;
+		const measureEnd = measureStart + class_notes_per_measure;
+		collectNotes(measureStart, measureEnd, notes);
+		collectNotes(measureStart, measureEnd, notes);
 
+		// Collect notes after the measure to be duplicated
+		collectNotes(measureNum * class_notes_per_measure, class_notes_per_measure * class_number_of_measures, notes);
+
+		// Update measure count and repeated measures
 		class_number_of_measures++;
-
-		// We need to move all the repeate measures after this measure up 1 
 		shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
+		class_repeated_measures.set(measureNum, class_repeated_measures.get(measureNum - 1) || 1);
 
-		let valueThisMeasure = class_repeated_measures.get(measureNum-1) || 1
-		class_repeated_measures.set(measureNum, valueThisMeasure)
-
+		// Update UI and sheet music
 		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
+		changeDivisionWithNotes(class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
 
-		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
-
-		// reference the button and scroll it into view
-		var add_measure_button = document.getElementById("addMeasureButton");
-		if (add_measure_button)
-			add_measure_button.scrollIntoView({ block: "start", behavior: "smooth" });
+		// Scroll to add measure button if it exists
+		const addMeasureButton = document.getElementById("addMeasureButton");
+		addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
 
 		updateSheetMusic();
-
 	};
 
 
