@@ -2222,6 +2222,21 @@ function GrooveWriter() {
 		return false; // don't follow the link
 	};
 
+
+	//
+	//
+	function shiftRepeatedMeasuresAfterIndex(measureIndex, direction) {
+		let repeatKeys = class_repeated_measures.keys();
+		const sortedRepeatKeys = [...repeatKeys].sort((a, b) => a - b);
+		for(let i = sortedRepeatKeys.length-1; i >= 0; i--) {
+			if (sortedRepeatKeys[i] > measureIndex) {
+				let value = class_repeated_measures.get(sortedRepeatKeys[i]);
+				class_repeated_measures.set(sortedRepeatKeys[i] + direction, value);
+				class_repeated_measures.delete(sortedRepeatKeys[i]);
+			}
+		}
+	}
+
 	// remove a measure from the page
 	// measureNum is indexed starting at 1, not 0
 	root.closeMeasureButtonClick = function (measureNum) {
@@ -2248,9 +2263,10 @@ function GrooveWriter() {
 			}
 		}
 
-		//
-		// TODO Remove repeated measure value (and move up others)
-		//
+		class_repeated_measures.delete(measureNum-1)
+
+		// We need to move all the repeate measures after this measure down 1 
+		shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
 
 		class_number_of_measures--;
 
@@ -2401,9 +2417,11 @@ function GrooveWriter() {
 
 		class_number_of_measures++;
 
-		//
-		// TODO Updated repeated measure value (and move up others)
-		//
+		// We need to move all the repeate measures after this measure up 1 
+		shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
+
+		let valueThisMeasure = class_repeated_measures.get(measureNum-1) || 1
+		class_repeated_measures.set(measureNum, valueThisMeasure)
 
 		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
 
@@ -2519,9 +2537,8 @@ function GrooveWriter() {
 
 		class_number_of_measures++;
 
-		//
-		// TODO Updated repeated measure value (and move up others)
-		//
+		// We need to move all the repeate measures after this measure up 1 
+		shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 
 		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
 
@@ -2534,6 +2551,9 @@ function GrooveWriter() {
 
 		updateSheetMusic();
 	};
+
+
+	
 
 	// add an empty measure to the front of the score
 	// copy the notes from the first measure to the new measure
@@ -2570,6 +2590,9 @@ function GrooveWriter() {
 
 		class_number_of_measures++;
 
+		// We need to move all the repeate measures after this measure up 1 
+		shiftRepeatedMeasuresAfterIndex(-1, 1);
+
 		root.expandAuthoringViewWhenNecessary(class_notes_per_measure, class_number_of_measures);
 
 		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
@@ -2586,6 +2609,7 @@ function GrooveWriter() {
 
 	// clear all the notes on all measures
 	root.clearAllNotes = function () {
+		class_repeated_measures.clear();
 		for (var i = 0; i < class_number_of_measures * class_notes_per_measure; i++) {
 			set_sticking_state(i, 'off', class_notes_per_measure, class_time_division, class_note_value_per_measure);
 			set_hh_state(i, 'off');
@@ -2595,7 +2619,18 @@ function GrooveWriter() {
 			set_kick_state(i, 'off');
 		}
 		updateSheetMusic();
+
+		var uiStickings = "";
+		var uiHH = "";
+		var uiTom1 = "";
+		var uiTom4 = "";
+		var uiSnare = "";
+		var uiKick = "";
+		var i;
+
+		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 	}
+
 
 	function isTomsVisible() {
 		var myElements = document.querySelectorAll(".toms-container");
