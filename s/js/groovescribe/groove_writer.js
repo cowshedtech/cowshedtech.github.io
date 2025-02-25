@@ -211,6 +211,22 @@ function GrooveWriter() {
 		}
 	};
 
+	// the user has clicked on the permutation menu
+	root.optionsAnchorClick = function (event) {
+
+		var contextMenu = document.getElementById("optionsContextMenu");
+		if (contextMenu) {
+			var anchorPoint = document.getElementById("optionsAnchor");
+
+			if (anchorPoint) {
+				var anchorPos = getTagPosition(anchorPoint);
+				contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
+				contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
+			}
+			showContextMenu(contextMenu);
+		}
+	};
+
 	// the user has clicked on the grooves menu
 	root.groovesAnchorClick = function (event) {
 
