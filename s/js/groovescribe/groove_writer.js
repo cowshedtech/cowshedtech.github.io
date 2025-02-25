@@ -328,6 +328,7 @@ function GrooveWriter() {
 		class_highlight_on = !class_highlight_on
 		root.myGrooveUtils.highlightOn = class_highlight_on
 		root.optionsMenuSetSelectedState();
+		root.updateCurrentURL();
 	};
 
 	root.metronomeOptionsMenuPopupClick = function (option_type) {
