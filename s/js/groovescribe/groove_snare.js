@@ -9,7 +9,8 @@ const COLORS = {
     noteOff: '#FFFFFF',
     noteBorder: '#999999',
     noteHidden: 'transparent',
-    snareAccent: '#FFFFFF'
+    snareAccent: '#FFFFFF',
+    snareAccentRGB: 'rgb(255, 255, 255)'
 };
 
 
@@ -35,36 +36,43 @@ function get_snare_state(id, returnType) {
         {
             id: "snare_flam",
             property: "color",
+            propertValue: COLORS.noteOn.rgb,
             values: { ABC: constant_ABC_SN_Flam, URL: "f" }
         },
         {
             id: "snare_drag",
             property: "color",
+            propertValue: COLORS.noteOn.rgb,
             values: { ABC: constant_ABC_SN_Drag, URL: "d" }
         },
         {
             id: "snare_ghost",
             property: "color",
+            propertValue: COLORS.noteOn.rgb,
             values: { ABC: constant_ABC_SN_Ghost, URL: "g" }
         },
         {
             id: "snare_accent",
             property: "color",
+            propertValue: COLORS.snareAccentRGB,
             values: { ABC: constant_ABC_SN_Accent, URL: "O" }
         },
         {
             id: "snare_circle",
             property: "backgroundColor",
+            propertValue: COLORS.noteOn.rgb,
             values: { ABC: constant_ABC_SN_Normal, URL: "o" }
         },
         {
             id: "snare_xstick",
             property: "color",
+            propertValue: COLORS.noteOn.rgb,
             values: { ABC: constant_ABC_SN_XStick, URL: "x" }
         },
         {
             id: "snare_buzz",
             property: "color",
+            propertValue: COLORS.noteOn.rgb,
             values: { ABC: constant_ABC_SN_Buzz, URL: "b" }
         }
     ];
@@ -72,7 +80,7 @@ function get_snare_state(id, returnType) {
     // Check each note type
     for (const note of noteTypes) {
         const element = document.getElementById(note.id + id);
-        if (element.style[note.property] === COLORS.noteOn.rgb) {
+        if (element.style[note.property] === note.propertValue) {
             return note.values[returnType];
         }
     }
