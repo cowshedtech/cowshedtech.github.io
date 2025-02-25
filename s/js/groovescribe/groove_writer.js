@@ -50,6 +50,7 @@ function GrooveWriter() {
 	var class_metronome_count_in_active = false;
 	var class_metronome_count_in_is_playing = false;
 	var class_repeated_measures = new Map();
+	var class_highlight_on = true;
 
 	// set debugMode immediately so we can use it in index.html
 	root.myGrooveUtils.debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
@@ -211,7 +212,7 @@ function GrooveWriter() {
 		}
 	};
 
-	// the user has clicked on the permutation menu
+	// the user has clicked on the options menu
 	root.optionsAnchorClick = function (event) {
 
 		var contextMenu = document.getElementById("optionsContextMenu");
@@ -223,6 +224,7 @@ function GrooveWriter() {
 				contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
 				contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
 			}
+			root.optionsMenuSetSelectedState()
 			showContextMenu(contextMenu);
 		}
 	};
@@ -309,6 +311,23 @@ function GrooveWriter() {
 			// inactive
 			addOrRemoveKeywordFromClassById("metronomeOptionsAnchor", "selected", false)
 		}
+	};
+
+	root.optionsMenuSetSelectedState = function () {
+
+		if (root.myGrooveUtils.highlightOn) {
+			addOrRemoveKeywordFromClassById("optionsContextMenuHighlight", "menuChecked", true);			
+		} else {
+			addOrRemoveKeywordFromClassById("optionsContextMenuHighlight", "menuChecked", false);
+		}
+	};
+
+	root.optionsHighlightPopupClick = function (option_type) {
+
+		console.log(option_type)
+		class_highlight_on = !class_highlight_on
+		root.myGrooveUtils.highlightOn = class_highlight_on
+		root.optionsMenuSetSelectedState();
 	};
 
 	root.metronomeOptionsMenuPopupClick = function (option_type) {
@@ -1793,6 +1812,7 @@ function GrooveWriter() {
 		myGrooveData.metronomeFrequency = root.getMetronomeFrequency();
 		myGrooveData.kickStemsUp = true;
 		myGrooveData.repeatedMeasures = class_repeated_measures;
+		myGrooveData.highlightOn = class_highlight_on;
 
 		for (var i = 0; i < class_number_of_measures; i++) {
 			var total_notes = class_notes_per_measure * class_number_of_measures;
@@ -2128,6 +2148,7 @@ function GrooveWriter() {
 					root.myGrooveUtils.note_mapping_array = root.myGrooveUtils.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, Snare_Array, Kick_Array, Toms_Array, num_notes));
 					root.myGrooveUtils.numberOfMeasures = class_number_of_measures
 					root.myGrooveUtils.repeatedMeasures = class_repeated_measures;
+					root.myGrooveUtils.highlightOn = class_highlight_on;
 				}
 
 				break;
@@ -2837,7 +2858,7 @@ function GrooveWriter() {
 				root.metronomeAutoSpeedUpTempoUpdate();
 			}
 
-			if (constant_HIGHLIGHT_ON) hilight_note(note_type, percent_complete, class_permutation_type, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures, class_notes_per_measure, class_repeated_measures, usingTriplets());
+			if (class_highlight_on) hilight_note(note_type, percent_complete, class_permutation_type, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures, class_notes_per_measure, class_repeated_measures, usingTriplets());
 		};
 
 		root.myGrooveUtils.oneTimeInitializeMidi();
@@ -3524,6 +3545,7 @@ function GrooveWriter() {
 		class_num_beats_per_measure = myGrooveData.numBeats;     // TimeSigTop
 		class_note_value_per_measure = myGrooveData.noteValue;   // TimeSigBottom
 		class_repeated_measures = myGrooveData.repeatedMeasures;
+		class_highlight_on = myGrooveData.highlightOn;
 
 		if (myGrooveData.notesPerMeasure != class_notes_per_measure || class_number_of_measures != myGrooveData.numberOfMeasures) {
 			class_number_of_measures = myGrooveData.numberOfMeasures;

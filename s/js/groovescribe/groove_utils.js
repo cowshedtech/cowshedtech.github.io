@@ -105,6 +105,7 @@ function GrooveUtils() {
 		this.grooveDBAuthoring = root.grooveDBAuthoring;
 		this.viewMode = root.viewMode;
 		this.repeatedMeasures = new Map();
+		this.highlightOn = true;
 	};
 
 	root.myGrooveData = root.grooveDataNew();
@@ -144,6 +145,15 @@ function GrooveUtils() {
 			let [key, value] = element.split('x');
 				myGrooveData.repeatedMeasures.set(Number(key), Number(value));
 			});
+		}
+
+		let highlight = getQueryVariableFromString("Highlight", "ON", encodedURLData);
+		if (highlight && highlight.length > 0) {
+			if (highlight.toUpperCase() == "OFF") {
+				myGrooveData.highlightOn = false
+			} else {
+				myGrooveData.highlightOn = true
+			}			
 		}
 		
 		Stickings_string = getQueryVariableFromString("Stickings", false, encodedURLData);
@@ -369,6 +379,9 @@ function GrooveUtils() {
 
 		if (myGrooveData.swingPercent > 0)
 			fullURL += "&Swing=" + myGrooveData.swingPercent;
+
+		if (!myGrooveData.highlightOn)
+			fullURL += "&Highlight=OFF";
 
 		// # of measures
 		fullURL += "&Measures=" + myGrooveData.numberOfMeasures;
@@ -1290,7 +1303,7 @@ function GrooveUtils() {
 			if (note_type) {
 				global_total_midi_notes++;
 				root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, note_type, percentComplete);
-				if (constant_HIGHLIGHT_ON) highlightNoteInABCSVGFromPercentComplete(root.grooveUtilsUniqueIndex, root.note_mapping_array, percentComplete, root.numberOfMeasures, root.repeatedMeasures);
+				if (root.highlightOn) highlightNoteInABCSVGFromPercentComplete(root.grooveUtilsUniqueIndex, root.note_mapping_array, percentComplete, root.numberOfMeasures, root.repeatedMeasures);
 				if (root.noteCallback) {
 					root.noteCallback(note_type);
 				}

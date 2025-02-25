@@ -6,7 +6,7 @@ export default {
   template: `
 	<div class="noteContextMenu">
 		<ul id="optionsContextMenu" class="list">
-			<li>Hello</li>			
+			<li class="metronomeOptionsContextMenuItem" id="optionsContextMenuHighlight" onclick='myGrooveWriter.optionsHighlightPopupClick("highlight");'><b>Highlighting</b></li>
 		</ul>
 	</div>
 `
