@@ -71,3 +71,6 @@ var global_last_midi_update_time = 0;
 var global_total_midi_play_time_msecs = 0;
 var global_total_midi_notes = 0;
 var global_total_midi_repeats = 0;
+
+//
+var constant_HIGHLIGHT_ON = false;

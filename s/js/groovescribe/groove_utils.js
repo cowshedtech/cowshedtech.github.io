@@ -1290,7 +1290,7 @@ function GrooveUtils() {
 			if (note_type) {
 				global_total_midi_notes++;
 				root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, note_type, percentComplete);
-				highlightNoteInABCSVGFromPercentComplete(root.grooveUtilsUniqueIndex, root.note_mapping_array, percentComplete, root.numberOfMeasures, root.repeatedMeasures);
+				if (constant_HIGHLIGHT_ON) highlightNoteInABCSVGFromPercentComplete(root.grooveUtilsUniqueIndex, root.note_mapping_array, percentComplete, root.numberOfMeasures, root.repeatedMeasures);
 				if (root.noteCallback) {
 					root.noteCallback(note_type);
 				}
