@@ -2596,6 +2596,8 @@ function GrooveWriter() {
 			set_snare_state(i, 'off');
 			set_kick_state(i, 'off');
 		}
+		class_number_of_measures = 1;
+
 		updateSheetMusic();
 
 		var uiStickings = "";
