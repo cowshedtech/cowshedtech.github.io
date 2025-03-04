@@ -14,7 +14,7 @@ export async function onRequest(context) {
     // const token = context.env.MIXPANEL_TOKEN;
     
     // // Get the HTML content
-    // let html = await response.text();
+    let html = await response.text();
     
     // // Insert our script into the head
     // const scriptToInject = `<script>window.MIXPANEL_TOKEN = "${token}";</script>`;
