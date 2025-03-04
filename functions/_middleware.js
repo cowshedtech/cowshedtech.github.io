@@ -10,15 +10,15 @@ export async function onRequest(context) {
       return response;
     }
   
-    // Get the environment variable
-    const token = context.env.MIXPANEL_TOKEN;
+    // // Get the environment variable
+    // const token = context.env.MIXPANEL_TOKEN;
     
-    // Get the HTML content
-    let html = await response.text();
+    // // Get the HTML content
+    // let html = await response.text();
     
-    // Insert our script into the head
-    const scriptToInject = `<script>window.MIXPANEL_TOKEN = "${token}";</script>`;
-    html = html.replace('</head>', scriptToInject + '</head>');
+    // // Insert our script into the head
+    // const scriptToInject = `<script>window.MIXPANEL_TOKEN = "${token}";</script>`;
+    // html = html.replace('</head>', scriptToInject + '</head>');
 
     console.log(`here2`)
     
