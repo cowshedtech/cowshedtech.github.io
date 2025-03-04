@@ -2,7 +2,7 @@ export async function onRequest(context) {
     // Get the original response
     const response = await context.next();
 
-    console.log(`here`)
+    console.log(`here1`)
     
     // Only process HTML documents
     const contentType = response.headers.get("content-type") || "";
