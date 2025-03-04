@@ -1,6 +1,8 @@
 export async function onRequest(context) {
     // Get the original response
     const response = await context.next();
+
+    console.log(`here`)
     
     // Only process HTML documents
     const contentType = response.headers.get("content-type") || "";
@@ -17,6 +19,8 @@ export async function onRequest(context) {
     // Insert our script into the head
     const scriptToInject = `<script>window.MIXPANEL_TOKEN = "${token}";</script>`;
     html = html.replace('</head>', scriptToInject + '</head>');
+
+    console.log(`here2`)
     
     // Return modified response
     return new Response(html, {
