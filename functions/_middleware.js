@@ -11,14 +11,16 @@ export async function onRequest(context) {
     }
   
     // // Get the environment variable
-    // const token = context.env.MIXPANEL_TOKEN;
+    const token = context.env.MIXPANEL_TOKEN;
+    console.error(`token [${token}]`)
     
     // // Get the HTML content
     let html = await response.text();
     
     // // Insert our script into the head
-    // const scriptToInject = `<script>window.MIXPANEL_TOKEN = "${token}";</script>`;
-    // html = html.replace('</head>', scriptToInject + '</head>');
+    const scriptToInject = `<script>window.MIXPANEL_TOKEN = "${token}";</script>`;
+    console.error(`scriptToInject [${scriptToInject}]`)
+    html = html.replace('</head>', scriptToInject + '</head>');
 
     console.error(`here2`)
     
