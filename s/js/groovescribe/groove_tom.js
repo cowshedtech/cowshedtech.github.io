@@ -115,3 +115,31 @@ function GetDefaultTom4Groove(notes_per_measure, timeSigTop, timeSigBottom, numM
 function GetDefaultTomGroove(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
     return GetEmptyGroove(notes_per_measure, numMeasures);
 };
+
+
+
+//
+//
+//
+function generateTomContainerHTML2(indexStartForNotes, baseindex, class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, indexStartForNotes, tomNumber) {
+    let newHTML = []; // Use an array to build the HTML
+    newHTML.push('<div class="toms-container" id="tom' + tomNumber + '-container">');
+    newHTML.push('<div class="opening_note_space"> </div>');
+
+    for (let i = indexStartForNotes; i < class_notes_per_measure + indexStartForNotes; i++) {
+        newHTML.push(`
+            <div id="tom${tomNumber}-${i}" class="tom" onClick="myGrooveWriter.noteLeftClick(event, 'tom${tomNumber}', ${i})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, 'tom${tomNumber}', ${i})" onmouseenter="myGrooveWriter.noteOnMouseEnter(event, 'tom${tomNumber}', ${i})">
+                <div class="tom_circle note_part" id="tom_circle${tomNumber}-${i}"></div>
+            </div>
+        `);
+
+        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
+            newHTML.push('<div class="space_between_note_groups"> </div>');
+        }
+    }
+
+    newHTML.push(`<span class="unmuteTom${tomNumber}Button" id="unmutetom${tomNumber}Button${baseindex}" onClick='myGrooveWriter.muteInstrument("tom${tomNumber}", ${baseindex}, false)'><span class="fa-stack unmuteStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span>`);
+    newHTML.push('<div class="end_note_space"></div></div>');
+
+    return newHTML.join(''); // Join the array into a single string
+}
