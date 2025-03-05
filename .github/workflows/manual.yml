@@ -1,9 +1,16 @@
 name: Manual deploy - preview
 
 on:
-  push:
-    branches:
-      - vue-port
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Choose an environment to deploy to: <preview|main>"
+        required: true
+        default: "preview"
+        type: choice
+        options:
+          - preview
+          - main
       
 jobs:
   deploy:
@@ -32,4 +39,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy . --project-name=beatnation --branch preview
+          command: pages deploy . --project-name=beatnation --branch ${{ github.event.inputs.environment }}
