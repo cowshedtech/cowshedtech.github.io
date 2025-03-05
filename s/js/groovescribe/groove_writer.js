@@ -327,6 +327,11 @@ function GrooveWriter() {
 		console.log(option_type)
 		class_highlight_on = !class_highlight_on
 		root.myGrooveUtils.highlightOn = class_highlight_on
+		
+		// Ensure current highlighting removed if highlighing now off
+		if (!class_highlight_on) clear_all_highlights(null);
+		if (!class_highlight_on) clearHighlightNoteInABCSVG(root.myGrooveUtils.grooveUtilsUniqueIndex);
+		
 		root.optionsMenuSetSelectedState();
 		root.updateCurrentURL();
 	};
