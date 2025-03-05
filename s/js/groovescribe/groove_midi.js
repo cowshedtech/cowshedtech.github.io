@@ -4,6 +4,11 @@
 // Functions related to MIDI
 //
 
+var global_grooveUtilsScriptSrc = "";
+if (document.currentScript)
+	global_grooveUtilsScriptSrc = document.currentScript.src;
+
+
 function play_single_note_for_note_setting(note_val) {
     if (MIDI.WebAudio) {
         MIDI.WebAudio.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
@@ -43,4 +48,33 @@ function MIDI_build_midi_url_count_in_track(timeSigTop, timeSigBottom, tempo) {
     var midi_url = "data:audio/midi;base64," + btoa(midiFile.toBytes());
 
     return midi_url;
+};
+
+
+var baseLocation = ""; // global
+function getGrooveUtilsBaseLocation() {
+
+    if (baseLocation.length > 0)
+        return baseLocation;
+
+    if (global_grooveUtilsScriptSrc !== "") {
+        var lastSlash = global_grooveUtilsScriptSrc.lastIndexOf("/");
+        // lets find the slash before it since we need to go up a directory
+        lastSlash = global_grooveUtilsScriptSrc.lastIndexOf("/", lastSlash - 1);
+        baseLocation = global_grooveUtilsScriptSrc.slice(0, lastSlash + 1);
+    }
+
+    if (baseLocation.length < 1) {
+        baseLocation = "https://b125c4f8bf7d89726feec9ab8202d31e0c8d14d8.googledrive.com/host/0B2wxVWzVoWGYfnB5b3VTekxyYUowVjZ5YVE3UllLaVk5dVd4TzF4Q2ZaUXVsazhNSTdRM1E/";
+    }
+
+    return baseLocation;
+};
+
+ function getMidiSoundFontLocation() {
+    return getGrooveUtilsBaseLocation() + "../soundfont/";
+};
+
+function getMidiImageLocation() {
+    return getGrooveUtilsBaseLocation() + "../images/";
 };
