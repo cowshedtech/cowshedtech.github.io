@@ -121,7 +121,7 @@ function GetDefaultTomGroove(notes_per_measure, timeSigTop, timeSigBottom, numMe
 //
 //
 //
-function generateTomContainerHTML2(indexStartForNotes, baseindex, class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, indexStartForNotes, tomNumber) {
+function generateTomContainerHTML(indexStartForNotes, baseindex, class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, indexStartForNotes, tomNumber) {
     let newHTML = []; // Use an array to build the HTML
     newHTML.push('<div class="toms-container" id="tom' + tomNumber + '-container">');
     newHTML.push('<div class="opening_note_space"> </div>');
