@@ -159,3 +159,39 @@ function GetDefaultHHGroove(notes_per_measure, timeSigTop, timeSigBottom, numMea
 
     return retString;
 };
+
+//
+//
+//
+function generateHiHatContainerHTML(indexStartForNotes, baseindex, class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, indexStartForNotes) {
+    let html = [];
+    html.push('<div class="hi-hat-container">');
+    html.push('<div class="opening_note_space"> </div>');
+
+    for (let i = indexStartForNotes; i < class_notes_per_measure + indexStartForNotes; i++) {
+        html.push(`
+            <div id="hi-hat${i}" class="hi-hat" onClick="myGrooveWriter.noteLeftClick(event, 'hh', ${i})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, 'hh', ${i})" onmouseenter="myGrooveWriter.noteOnMouseEnter(event, 'hh', ${i})">
+                <div class="hh_crash note_part" id="hh_crash${i}"><i class="fa fa-asterisk"></i></div>
+                <div class="hh_ride note_part" id="hh_ride${i}"><i class="fa fa-dot-circle-o"></i></div>
+                <div class="hh_ride_bell note_part" id="hh_ride_bell${i}"><i class="fa fa-bell-o"></i></div>
+                <div class="hh_cow_bell note_part" id="hh_cow_bell${i}"><i class="fa fa-plus-square-o"></i></div>
+                <div class="hh_stacker note_part" id="hh_stacker${i}"><i class="fa fa-bars"></i></div>
+                <div class="hh_metronome_normal note_part" id="hh_metronome_normal${i}"><i class="fa fa-neuter"></i></div>
+                <div class="hh_metronome_accent note_part" id="hh_metronome_accent${i}"><i class="fa fa-map-pin"></i></div>
+                <div class="hh_cross note_part" id="hh_cross${i}"><i class="fa fa-times"></i></div>
+                <div class="hh_open note_part" id="hh_open${i}"><i class="fa fa-circle-o"></i></div>
+                <div class="hh_close note_part" id="hh_close${i}"><i class="fa fa-plus"></i></div>
+                <div class="hh_accent note_part" id="hh_accent${i}"><i class="fa fa-angle-right"></i></div>
+            </div>
+        `);
+
+        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
+            html.push('<div class="space_between_note_groups"> </div>');
+        }
+    }
+
+    html.push(`<div class="unmuteHHButton" id="unmutehhButton${baseindex}" onClick='myGrooveWriter.muteInstrument("hh", ${baseindex}, false)'><span class="fa-stack unmuteHHStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span></div>`);
+    html.push('</div>'); // Close hi-hat container
+
+    return html.join(''); // Join the array into a single string
+}		

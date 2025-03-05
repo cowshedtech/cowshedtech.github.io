@@ -23,7 +23,10 @@ export default {
   setup() {
     const content = ref("")
     var genHTML = "";
-    genHTML += myGrooveWriter.HTMLforPermutationOptions();
+    
+    // TODO Need to revisit and ensure permutations working!!
+    
+    // genHTML += HTMLforPermutationOptions();
     content.value = genHTML
     return { content }    
   },
