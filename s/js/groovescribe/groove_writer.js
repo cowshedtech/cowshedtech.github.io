@@ -3754,38 +3754,7 @@ function GrooveWriter() {
 	};
 
 
-	function HTMLforStaffContainerSticking(baseindex, indexStartForNotes) {
-		var newHTML = [];
-
-		newHTML.push('<div class="stickings-row-container">');
-		newHTML.push('  <div class="line-labels">');
-		newHTML.push('     <div class="stickings-label" onClick="myGrooveWriter.noteLabelClick(event, \'stickings\', ' + baseindex + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, \'stickings\', ' + baseindex + ')">STICKINGS</div>');
-		newHTML.push('  </div>');
-		newHTML.push('  <div class="music-line-container">');
-		newHTML.push('     <div class="notes-container">');
-		newHTML.push('       <div class="stickings-container">');
-		newHTML.push('         <div class="opening_note_space"> </div>');
-
-		for (var i = indexStartForNotes; i < class_notes_per_measure + indexStartForNotes; i++) {
-			newHTML.push('       <div id="sticking' + i + '" class="sticking">');
-			newHTML.push('         <div class="sticking_right note_part" id="sticking_right' + i + '" onClick="myGrooveWriter.noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')" onmouseenter="myGrooveWriter.noteOnMouseEnter(event, \'sticking\')">R</div>');
-			newHTML.push('         <div class="sticking_left note_part" id="sticking_left' + i + '" onClick="myGrooveWriter.noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')">L</div>');
-			newHTML.push('         <div class="sticking_both note_part" id="sticking_both' + i + '" onClick="myGrooveWriter.noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')">R/L</div>');
-			newHTML.push('         <div class="sticking_count note_part" id="sticking_count' + i + '" onClick="myGrooveWriter.noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')">C</div>');
-			newHTML.push('       </div>');
-
-			// add space between notes, except on the last note
-			if ((i - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
-				newHTML.push(' <div class="space_between_note_groups"> </div>');
-			}
-		}
-		newHTML.push('       <div class="end_note_space"></div>');
-		newHTML.push('     </div>');
-		newHTML.push('   </div>');
-		newHTML.push('</div>');
-
-		return newHTML.join(''); // Join the array into a single string
-	}
+	
 
 	function generateLineLabels(baseindex) {
 		return `
@@ -3810,7 +3779,7 @@ function GrooveWriter() {
 			newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="myGrooveWriter.addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
 			
 		newHTML += ('<div class="staff-container" id="staff-container' + baseindex + '">')
-		newHTML += HTMLforStaffContainerSticking(baseindex, indexStartForNotes);
+		newHTML += generateStickingContainerHTML(baseindex, indexStartForNotes, class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure);
 
 		newHTML += ('  <span class="notes-row-container">')
 		newHTML += generateLineLabels(baseindex); // Call the new function where the line labels are needed
