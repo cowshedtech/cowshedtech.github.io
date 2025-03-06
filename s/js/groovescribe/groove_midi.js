@@ -4,6 +4,10 @@
 // Functions related to MIDI
 //
 
+// local constants
+var CONSTANT_Midi_play_time_zero = "0:00";
+
+
 var global_grooveUtilsScriptSrc = "";
 if (document.currentScript)
 	global_grooveUtilsScriptSrc = document.currentScript.src;
@@ -431,3 +435,102 @@ function getMidiImageLocation() {
         midiTrack.addNoteOff(0, 60, delay_for_next_note - 1); // add a blank note for spacing
 
 }; // end of function
+
+
+// pass in a tag ID.  (not a class)
+// HTML will be put within the tag replacing whatever else was there
+ function AddMidiPlayerToPage(grooveUtil, HTML_Id_to_attach_to, division, expandable) {
+    var html_element = document.getElementById(HTML_Id_to_attach_to);
+    if (html_element)
+        html_element.innerHTML = HTMLForMidiPlayer(grooveUtil, expandable);
+
+    var browserInfo = getBrowserInfo();
+    var isIE10 = false;
+    if (browserInfo.browser == "MSIE" && browserInfo.version < 12)
+        isIE10 = true;
+
+    // now attach the onclicks
+    html_element = document.getElementById("tempoInput" + grooveUtil.grooveUtilsUniqueIndex);
+    if (html_element) {
+        if (isIE10)
+            html_element.addEventListener("click", grooveUtil.tempoUpdateFromSlider, false);
+        else
+            html_element.addEventListener("input", grooveUtil.tempoUpdateFromSlider, false);
+    }
+
+    html_element = document.getElementById("tempoTextField" + grooveUtil.grooveUtilsUniqueIndex);
+    if (html_element) {
+        html_element.addEventListener("change", grooveUtil.tempoUpdateFromTextField, false);
+    }
+
+    html_element = document.getElementById("swingInput" + grooveUtil.grooveUtilsUniqueIndex);
+    if (html_element) {
+        if (isIE10)
+            html_element.addEventListener("click", grooveUtil.swingUpdateEvent, false);
+        else
+            html_element.addEventListener("input", grooveUtil.swingUpdateEvent, false);
+    }
+
+    html_element = document.getElementById("midiRepeatImage" + grooveUtil.grooveUtilsUniqueIndex);
+    if (html_element) {
+        html_element.addEventListener("click", grooveUtil.repeatMIDI_playback, false);
+    }
+
+    html_element = document.getElementById("midiExpandImage" + grooveUtil.grooveUtilsUniqueIndex);
+    if (html_element) {
+        html_element.addEventListener("click", grooveUtil.expandOrRetractMIDI_playback, false);
+    }
+
+    html_element = document.getElementById("midiGSLogo" + grooveUtil.grooveUtilsUniqueIndex);
+    if (html_element) {
+        html_element.addEventListener("click", grooveUtil.loadFullScreenGrooveScribe, false);
+    }
+
+    html_element = document.getElementById("midiMetronomeMenu" + grooveUtil.grooveUtilsUniqueIndex);
+    if (html_element) {
+        html_element.addEventListener("click", grooveUtil.metronomeMiniMenuClick, false);
+    }
+
+    // enable or disable swing
+    grooveUtil.swingEnabled(grooveUtil.doesDivisionSupportSwing(division));
+};
+
+
+function HTMLForMidiPlayer(grooveUtil, expandable) {
+    var newHTML = '' +
+        '<div id="playerControl' + grooveUtil.grooveUtilsUniqueIndex + '" class="playerControl">' +
+        '	<div class="playerControlsRow" id="playerControlsRow' + grooveUtil.grooveUtilsUniqueIndex + '">' +
+        '		<span title="Play/Pause" class="midiPlayImage" id="midiPlayImage' + grooveUtil.grooveUtilsUniqueIndex + '"></span>' +
+        '       <span class="MIDIPlayTime" id="MIDIPlayTime' + grooveUtil.grooveUtilsUniqueIndex + '">' + CONSTANT_Midi_play_time_zero + '</span>';
+
+    if (expandable)
+        newHTML += '' +
+            '       <span title="Metronome controls" class="midiMetronomeMenu" id="midiMetronomeMenu' + grooveUtil.grooveUtilsUniqueIndex + '">' +
+            addInlineMetronomeSVG() +
+            '       </span>'
+
+
+    newHTML += '<span class="tempoAndProgress" id="tempoAndProgress' + grooveUtil.grooveUtilsUniqueIndex + '">' +
+        '			<div class="tempoRow">' +
+        '				<span class="tempoLabel">BPM</span>' +
+        '				<input type="text" for="tempo" class="tempoTextField" pattern="\\d+" id="tempoTextField' + grooveUtil.grooveUtilsUniqueIndex + '" value="80"></input>' +
+        '				<input type=range min=30 max=300 value=90 class="tempoInput' + (is_touch_device() ? ' touch' : '') + '" id="tempoInput' + grooveUtil.grooveUtilsUniqueIndex + '" list="tempoSettings">' +
+        '			</div>' +
+        '			<div class="swingRow">' +
+        '				<span class="swingLabel">SWING</span>' +
+        '				<span for="swingAmount" class="swingOutput" id="swingOutput' + grooveUtil.grooveUtilsUniqueIndex + '">0% swing</span>' +
+        '				<input type=range min=0 max=50 value=0 class="swingInput' + (is_touch_device() ? ' touch' : '') + '" id="swingInput' + grooveUtil.grooveUtilsUniqueIndex + '" list="swingSettings" step=5 >' +
+        '			</div>' +
+        '       </span>';
+
+    if (expandable)
+        newHTML +=
+            '       <span title="Expand full screen in GrooveScribe" class="midiGSLogo" id="midiGSLogo' + grooveUtil.grooveUtilsUniqueIndex + '">' +
+            addInLineGScribeLogoLoneGSVG() +
+            '       </span>' +
+            '		<span title="Expand/Retract player" class="midiExpandImage" id="midiExpandImage' + grooveUtil.grooveUtilsUniqueIndex + '"></span>';
+
+    newHTML += '</div>';
+
+    return newHTML;
+};

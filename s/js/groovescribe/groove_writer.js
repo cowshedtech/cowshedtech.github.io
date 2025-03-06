@@ -2342,7 +2342,7 @@ function GrooveWriter() {
 		selectButton(document.getElementById("subdivision_" + class_notes_per_measure + "ths"));
 
 		// add html for the midi player
-		root.myGrooveUtils.AddMidiPlayerToPage("midiPlayer", class_time_division);
+		AddMidiPlayerToPage(root.myGrooveUtils, "midiPlayer", class_time_division);
 
 		// load the groove from the URL data if it was passed in.
 		set_Default_notes(window.location.search);
