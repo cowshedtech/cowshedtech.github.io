@@ -814,8 +814,53 @@ function ourMIDICallback(data) {
         if (icon)
             icon.className = "midiPlayImage Stopped";
         document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex).onclick = function (event) {
-            classRoot.startOrStopMIDI_playback();
+            startOrStopMIDI_playback(classRoot);
         }; // enable play button
         setupHotKeys(classRoot); // spacebar to play
     };
+};
+
+
+// play button or keypress
+function startMIDI_playback(root) {
+    if (MIDI.Player.playing) {
+        return;
+    } else if (root.isMIDIPaused && false === root.midiEventCallbacks.doesMidiDataNeedRefresh(root.midiEventCallbacks.classRoot)) {
+        global_current_midi_start_time = new Date();
+        global_last_midi_update_time = 0;
+        MIDI.Player.resume();
+    } else {
+        MIDI.Player.ctx.resume();
+        global_current_midi_start_time = new Date();
+        global_last_midi_update_time = 0;
+        root.midiEventCallbacks.loadMidiDataEvent(root.midiEventCallbacks.classRoot, true);
+        MIDI.Player.stop();
+        MIDI.Player.loop(root.shouldMIDIRepeat); // set the loop parameter
+        MIDI.Player.start();
+    }
+    root.midiEventCallbacks.playEvent(root.midiEventCallbacks.classRoot);
+    root.isMIDIPaused = false;
+};
+
+
+// stop button or keypress
+function stopMIDI_playback(root) {
+    if (MIDI.Player.playing || root.isMIDIPaused) {
+        root.isMIDIPaused = false;
+        MIDI.Player.stop();
+        root.midiEventCallbacks.stopEvent(root.midiEventCallbacks.classRoot);
+        root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, "clear", -1);
+        clearHighlightNoteInABCSVG(root.grooveUtilsUniqueIndex);
+        resetMetronomeOptionsOffsetClickStartRotation()
+    }
+};
+
+// modal play/stop button
+function startOrStopMIDI_playback(root) {
+
+    if (MIDI.Player.playing) {
+        stopMIDI_playback(root);
+    } else {
+        startMIDI_playback(root);
+    }
 };

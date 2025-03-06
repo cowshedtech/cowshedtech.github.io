@@ -20,7 +20,7 @@ function setupHotKeys(myGrooveUtils) {
         if (e.which == 32 && (e.target.type == "range" || (e.target.tagName.toUpperCase() != "INPUT" && e.target.tagName.toUpperCase() != "TEXTAREA"))) {
 
             // spacebar
-            myGrooveUtils.startOrStopMIDI_playback();
+            startOrStopMIDI_playback(myGrooveUtils);
             return false;
         }
         if (e.which == 179) {
@@ -29,7 +29,7 @@ function setupHotKeys(myGrooveUtils) {
         }
         if (e.which == 178) {
             // Stop button
-            myGrooveUtils.stopMIDI_playback();
+            stopMIDI_playback(myGrooveUtils);
         }
 
         return true;

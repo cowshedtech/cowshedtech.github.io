@@ -243,48 +243,11 @@ function GrooveUtils() {
 
 	
 
-	// play button or keypress
-	root.startMIDI_playback = function () {
-		if (MIDI.Player.playing) {
-			return;
-		} else if (root.isMIDIPaused && false === root.midiEventCallbacks.doesMidiDataNeedRefresh(root.midiEventCallbacks.classRoot)) {
-			global_current_midi_start_time = new Date();
-			global_last_midi_update_time = 0;
-			MIDI.Player.resume();
-		} else {
-			MIDI.Player.ctx.resume();
-			global_current_midi_start_time = new Date();
-			global_last_midi_update_time = 0;
-			root.midiEventCallbacks.loadMidiDataEvent(root.midiEventCallbacks.classRoot, true);
-			MIDI.Player.stop();
-			MIDI.Player.loop(root.shouldMIDIRepeat); // set the loop parameter
-			MIDI.Player.start();
-		}
-		root.midiEventCallbacks.playEvent(root.midiEventCallbacks.classRoot);
-		root.isMIDIPaused = false;
-	};
+	
 
-	// stop button or keypress
-	root.stopMIDI_playback = function () {
-		if (MIDI.Player.playing || root.isMIDIPaused) {
-			root.isMIDIPaused = false;
-			MIDI.Player.stop();
-			root.midiEventCallbacks.stopEvent(root.midiEventCallbacks.classRoot);
-			root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, "clear", -1);
-			clearHighlightNoteInABCSVG(root.grooveUtilsUniqueIndex);
-			resetMetronomeOptionsOffsetClickStartRotation()
-		}
-	};
+	
 
-	// modal play/stop button
-	root.startOrStopMIDI_playback = function () {
-
-		if (MIDI.Player.playing) {
-			root.stopMIDI_playback();
-		} else {
-			root.startMIDI_playback();
-		}
-	};
+	
 
 	// modal play/pause button
 	root.startOrPauseMIDI_playback = function () {
@@ -292,7 +255,7 @@ function GrooveUtils() {
 		if (MIDI.Player.playing) {
 			pauseMIDI_playback(root);
 		} else {
-			root.startMIDI_playback();
+			startMIDI_playback(root);
 		}
 	};
 
