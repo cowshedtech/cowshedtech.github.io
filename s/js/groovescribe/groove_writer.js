@@ -1189,51 +1189,7 @@ function GrooveWriter() {
 		return new_kick_array;
 	}
 
-	// merge 2 kick arrays
-	//  4 possible states
-	//  false   (off)
-	//  constant_ABC_KI_Normal
-	//  constant_ABC_KI_SandK
-	//  constant_ABC_KI_Splash
-	function merge_kick_arrays(primary_kick_array, secondary_kick_array) {
-		var new_kick_array = [];
-
-		for (var i in primary_kick_array) {
-
-			switch (primary_kick_array[i]) {
-				case false:
-					new_kick_array.push(secondary_kick_array[i]);
-					break;
-
-				case constant_ABC_KI_SandK:
-					new_kick_array.push(constant_ABC_KI_SandK);
-					break;
-
-				case constant_ABC_KI_Normal:
-					if (secondary_kick_array[i] == constant_ABC_KI_SandK ||
-						secondary_kick_array[i] == constant_ABC_KI_Splash)
-						new_kick_array.push(constant_ABC_KI_SandK);
-					else
-						new_kick_array.push(constant_ABC_KI_Normal);
-					break;
-
-				case constant_ABC_KI_Splash:
-					if (secondary_kick_array[i] == constant_ABC_KI_Normal ||
-						secondary_kick_array[i] == constant_ABC_KI_SandK)
-						new_kick_array.push(constant_ABC_KI_SandK);
-					else
-						new_kick_array.push(constant_ABC_KI_Splash);
-					break;
-
-				default:
-					console.log("bad case in merge_kick_arrays()");
-					new_kick_array.push(primary_kick_array[i]);
-					break;
-			}
-		}
-
-		return new_kick_array;
-	}
+	
 
 	function createMidiUrlFromClickableUI(MIDI_type) {
 		var Sticking_Array = get_empty_note_array_in_32nds();
@@ -2826,7 +2782,7 @@ function GrooveWriter() {
 	//
 	function get_FullURLForPage(url_destination) {
 		var myGrooveData = root.grooveDataFromClickableUI()
-		return root.myGrooveUtils.getUrlStringFromGrooveData(myGrooveData, url_destination)
+		return getUrlStringFromGrooveData(myGrooveData, url_destination)
 	}
 
 	// get a really long URL that encodes all of the notes and the rest of the state of the page.
@@ -3101,7 +3057,7 @@ function GrooveWriter() {
 		var Kick;
 		var stickings_set_from_URL = false;
 
-		var myGrooveData = root.myGrooveUtils.getGrooveDataFromUrlString(encodedURLData);
+		var myGrooveData = getGrooveDataFromUrlString(encodedURLData, root.myGrooveUtils, root.myGrooveUtils.debugMode);
 
 		class_num_beats_per_measure = myGrooveData.numBeats;     // TimeSigTop
 		class_note_value_per_measure = myGrooveData.noteValue;   // TimeSigBottom

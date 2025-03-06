@@ -217,7 +217,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 				'<div class="nonPrintable"><div id="' + midiPlayerTargetId + '"></div></div>\n';
 
 			// load the groove from the URL data if it was passed in.
-			var GrooveData = myGrooveUtils.getGrooveDataFromUrlString(GrooveDefinition);
+			var GrooveData = myGrooveUtils.getGrooveDataFromUrlString(GrooveDefinition, myGrooveUtils.root.grooveDataNew());
 			// console.log(GrooveData);
 
 			var layoutFunction = function() {
