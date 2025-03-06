@@ -657,7 +657,7 @@ function ourMIDICallback(data) {
     root.midiEventCallbacks.percentProgress(root.midiEventCallbacks.classRoot, percentComplete * 100);
 
     if (root.lastMidiTimeUpdate && root.lastMidiTimeUpdate < (data.now + 800)) {
-        root.updateMidiPlayTime();
+        updateMidiPlayTime();
         root.lastMidiTimeUpdate = data.now;
     }
 
@@ -863,4 +863,100 @@ function startOrStopMIDI_playback(root) {
     } else {
         startMIDI_playback(root);
     }
+};
+
+
+// modal play/pause button
+function startOrPauseMIDI_playback() {
+
+    if (MIDI.Player.playing) {
+        pauseMIDI_playback(root);
+    } else {
+        startMIDI_playback(root);
+    }
+};
+
+
+// TODO FIx this!!
+function repeatMIDI_playback() {
+    if (root.shouldMIDIRepeat === false) {
+        root.shouldMIDIRepeat = true;
+        MIDI.Player.loop(true);
+    } else {
+        root.shouldMIDIRepeat = false;
+        MIDI.Player.loop(false);
+    }
+    root.midiEventCallbacks.repeatChangeEvent(root.midiEventCallbacks.classRoot, root.shouldMIDIRepeat);
+
+};
+
+ function oneTimeInitializeMidi(root) {
+
+    if (global_midiInitialized) {
+        root.midiEventCallbacks.midiInitialized(root.midiEventCallbacks.classRoot);
+        return;
+    }
+
+    global_midiInitialized = true;
+    MIDI.loadPlugin({
+        soundfontUrl: getMidiSoundFontLocation(),
+        instruments: ["gunshot"],
+        callback: function () {
+            MIDI.programChange(9, 127); // use "Gunshot" instrument because I don't know how to create new ones
+            root.midiEventCallbacks.midiInitialized(root.midiEventCallbacks.classRoot);
+        }
+    });
+};
+
+
+function getMidiStartTime() {
+    return global_current_midi_start_time;
+};
+
+
+
+// calculate how long the midi has been playing total (since the last play/pause press
+// this is computationally expensive
+function getMidiPlayTime() {
+    var time_now = new Date();
+    var play_time_diff = new Date(time_now.getTime() - global_current_midi_start_time.getTime());
+
+    var TotalPlayTime = document.getElementById("totalPlayTime");
+    if (TotalPlayTime) {
+        if (global_last_midi_update_time === 0)
+            global_last_midi_update_time = global_current_midi_start_time;
+        var delta_time_diff = new Date(time_now - global_last_midi_update_time);
+        global_total_midi_play_time_msecs += delta_time_diff.getTime();
+        var totalTime = new Date(global_total_midi_play_time_msecs);
+        var time_string = "";
+        if (totalTime.getUTCHours() > 0)
+            time_string = totalTime.getUTCHours() + ":" + (totalTime.getUTCMinutes() < 10 ? "0" : "");
+        time_string += totalTime.getUTCMinutes() + ":" + (totalTime.getSeconds() < 10 ? "0" : "") + totalTime.getSeconds();
+        TotalPlayTime.innerHTML = 'Total Play Time: <span class="totalTimeNum">' + time_string + '</span> notes: <span class="totalTimeNum">' + global_total_midi_notes + '</span> repetitions: <span class="totalTimeNum">' + global_total_midi_repeats + '</span>';
+    }
+
+    global_last_midi_update_time = time_now;
+
+    return play_time_diff; // a time struct that represents the total time played so far since the last play button push
+};
+
+// update the midi play timer on the player.
+// Keeps track of how long we have been playing.
+function updateMidiPlayTime() {
+    var totalTime = getMidiPlayTime();
+    var time_string = totalTime.getUTCMinutes() + ":" + (totalTime.getSeconds() < 10 ? "0" : "") + totalTime.getSeconds();
+
+    var MidiPlayTime = document.getElementById("MIDIPlayTime" + root.grooveUtilsUniqueIndex);
+    if (MidiPlayTime)
+        MidiPlayTime.innerHTML = time_string;
+};
+
+
+// This is called so that the MIDI player will reload the groove
+// at repeat time.   If not set then the midi player just repeats what is already loaded.
+function midiNoteHasChanged(root) {
+    root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = true;
+};
+function midiResetNoteHasChanged(root) {
+    root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
 };

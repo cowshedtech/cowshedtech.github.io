@@ -139,7 +139,7 @@ function GrooveWriter() {
 
 		selectButton(document.getElementById(id));
 
-		root.myGrooveUtils.midiNoteHasChanged(); // pretty likely the case
+		midiNoteHasChanged(root.myGrooveUtils); // pretty likely the case
 	};
 
 	root.class_metronome_frequency = 0;
@@ -329,7 +329,7 @@ function GrooveWriter() {
 					setMetronomeSolo(false);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
 				}
-				root.myGrooveUtils.midiNoteHasChanged(); // if playing need to refresh
+				midiNoteHasChanged(root.myGrooveUtils);
 				break;
 
 			case "SpeedUp":
@@ -412,7 +412,7 @@ function GrooveWriter() {
 			addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuOffTheOne", "menuChecked", false);
 		}
 
-		root.myGrooveUtils.midiNoteHasChanged();
+		midiNoteHasChanged(root.myGrooveUtils);
 		root.metronomeOptionsMenuSetSelectedState();
 	};
 
@@ -489,7 +489,7 @@ function GrooveWriter() {
 		else
 			button.style.display = "none";
 
-		root.myGrooveUtils.midiNoteHasChanged();
+			midiNoteHasChanged(root.myGrooveUtils);
 	}
 
 
@@ -1690,7 +1690,7 @@ function GrooveWriter() {
 		document.getElementById("ABCsource").value = fullABC;
 		root.updateGrooveDBSource();
 
-		root.myGrooveUtils.midiNoteHasChanged(); // pretty likely the case
+		midiNoteHasChanged(root.myGrooveUtils);
 
 		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
 		root.updateCurrentURL();
@@ -1704,7 +1704,7 @@ function GrooveWriter() {
 			diverr = document.getElementById("diverr");
 
 		var abc_source = document.getElementById("ABCsource").value;
-		var svg_return = root.myGrooveUtils.renderABCtoSVG(abc_source);
+		var svg_return = renderABCtoSVG(root.myGrooveUtils, abc_source);
 
 		diverr.innerHTML = svg_return.error_html;
 		svgTarget.innerHTML = svg_return.svg;
@@ -1715,7 +1715,7 @@ function GrooveWriter() {
 	// Constant size at 2000x200
 	function downloadImages(imageType) {
 		var abc_source = generate_ABC(800);
-		var svg_obj = root.myGrooveUtils.renderABCtoSVG(abc_source);
+		var svg_obj = renderABCtoSVG(root.myGrooveUtils, abc_source);
 		var filename;
 		var tune_title = document.getElementById("tuneTitle").value;
 
@@ -2353,7 +2353,7 @@ function GrooveWriter() {
 			if (playStarting && class_metronome_count_in_active) {
 
 				midiURL = MIDI_build_midi_url_count_in_track(class_num_beats_per_measure, class_note_value_per_measure, root.myGrooveUtils.getTempo());
-				root.myGrooveUtils.midiNoteHasChanged(); // this track is temporary
+				midiNoteHasChanged(root.myGrooveUtils);
 				class_metronome_count_in_is_playing = true;
 			} else {
 				if (class_metronome_count_in_is_playing) {
@@ -2362,7 +2362,7 @@ function GrooveWriter() {
 					resetMetronomeOptionsOffsetClickStartRotation();
 				}
 				midiURL = createMidiUrlFromClickableUI("our_MIDI");
-				root.myGrooveUtils.midiResetNoteHasChanged();
+				midiResetNoteHasChanged(root.myGrooveUtils);
 			}
 			loadMIDIFromURL(root.myGrooveUtils, midiURL, root.myGrooveUtils.getTempo());
 			root.updateGrooveDBSource();
@@ -2371,14 +2371,14 @@ function GrooveWriter() {
 		root.myGrooveUtils.midiEventCallbacks.notePlaying = function (myroot, note_type, percent_complete) {
 			if (note_type == "complete" && class_metronome_auto_speed_up_active) {
 				// reload with new tempo
-				root.myGrooveUtils.midiNoteHasChanged();
+				midiNoteHasChanged(root.myGrooveUtils);
 				root.metronomeAutoSpeedUpTempoUpdate();
 			}
 
 			if (class_highlight_on) hilight_note(note_type, percent_complete, class_permutation_type, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures, class_notes_per_measure, class_repeated_measures, usingTriplets());
 		};
 
-		root.myGrooveUtils.oneTimeInitializeMidi();
+		oneTimeInitializeMidi(root.myGrooveUtils);
 
 		// enable or disable swing
 		root.myGrooveUtils.swingEnabled(root.myGrooveUtils.doesDivisionSupportSwing(class_notes_per_measure));
@@ -2431,7 +2431,7 @@ function GrooveWriter() {
 
 		var curTempo = root.myGrooveUtils.getTempo();
 
-		var midiStartTime = root.myGrooveUtils.getMidiStartTime();
+		var midiStartTime = getMidiStartTime();
 		if (class_our_midi_start_time != midiStartTime) {
 			class_our_midi_start_time = midiStartTime;
 			class_our_last_midi_tempo_increase_remainder = 0;

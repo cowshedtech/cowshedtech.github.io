@@ -119,90 +119,11 @@ function GrooveUtils() {
 	
 
 	
-	// callback class for abc generator library
-	function SVGLibCallback() {
-		// -- required methods
-		this.abc_svg_output = "";
-		this.abc_error_output = "";
-
-		// include a file (%%abc-include)
-		this.read_file = function (fn) {
-			return "";
-		};
-		// insert the errors
-		this.errmsg = function (msg, l, c) {
-			this.abc_error_output += msg + "<br/>\n";
-		};
-
-		// for possible playback or linkage
-		this.get_abcmodel = function (tsfirst, voice_tb, music_types) {
-
-			/*
-			console.log(tsfirst);
-			var next = tsfirst.next;
-
-			while(next) {
-			console.log(next);
-			next = next.next;
-			}
-			 */
-		};
-
-		// annotations
-		this.anno_start = function (type, start, stop, x, y, w, h) { };
-		this.svg_highlight_y = 0;
-		this.svg_highlight_h = 44;
-		this.anno_stop = function (type, start, stop, x, y, w, h) {
-
-			// create a rectangle
-			if (type == "bar") {
-				// use the bar as the default y & hack
-				this.svg_highlight_y = y + 5;
-				this.svg_highlight_h = h + 10;
-			}
-			if (type == "note" || type == "grace") {
-				y = this.svg_highlight_y;
-				h = this.svg_highlight_h;
-				root.abc_obj.out_svg('<rect style="fill: transparent;" class="abcr" id="abcNoteNum_' + root.grooveUtilsUniqueIndex + "_" + root.abcNoteNumIndex + '" x="');
-				root.abc_obj.out_sxsy(x, '" y="', y);
-				root.abc_obj.out_svg('" width="' + w.toFixed(2) + '" height="' + h.toFixed(2) + '"/>\n');
-
-				//console.log("Type:"+type+ "\t abcNoteNumIndex:"+root.abcNoteNumIndex+ "\t X:"+x+ "\t Y:"+y+ "\t W:"+w+ "\t H:"+h);
-
-				// don't increment on the grace note, since it is attached to the real note
-				if (type != "grace")
-					root.abcNoteNumIndex++;
-			}
-		};
-
-		// image output
-		this.img_out = function (str) {
-			this.abc_svg_output += str; // + '\n'
-		};
-
-		// -- optional attributes
-		this.page_format = true; // define the non-page-breakable blocks
-	}
-	var abcToSVGCallback = new SVGLibCallback(); // singleton
+	
+	this.abcToSVGCallback = new SVGLibCallback(this); // singleton
 
 
-	// converts incoming ABC notation source into an svg image.
-	// returns an object with two items.   "svg" and "error_html"
-	root.renderABCtoSVG = function (abc_source) {
-		root.abc_obj = new Abc(abcToSVGCallback);
-		if ((root.myGrooveData && root.myGrooveData.showLegend) || root.isLegendVisable)
-			root.abcNoteNumIndex = -15; // subtract out the legend notes for a proper index.
-		else
-			root.abcNoteNumIndex = 0;
-		abcToSVGCallback.abc_svg_output = ''; // clear
-		abcToSVGCallback.abc_error_output = ''; // clear
-
-		root.abc_obj.tosvg("SOURCE", abc_source);
-		return {
-			svg: abcToSVGCallback.abc_svg_output,
-			error_html: abcToSVGCallback.abc_error_output
-		};
-	};
+	
 
 
 
@@ -227,107 +148,15 @@ function GrooveUtils() {
 		root.myGrooveData = grooveData;
 	};
 
-	// This is called so that the MIDI player will reload the groove
-	// at repeat time.   If not set then the midi player just repeats what is already loaded.
-	root.midiNoteHasChanged = function () {
-		root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = true;
-	};
-	root.midiResetNoteHasChanged = function () {
-		root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
-	};
+	
 
 	
 	
 
 	this.midiEventCallbacks = new midiEventCallbackClass(root);
 
-	
 
 	
-
-	
-
-	
-
-	// modal play/pause button
-	root.startOrPauseMIDI_playback = function () {
-
-		if (MIDI.Player.playing) {
-			pauseMIDI_playback(root);
-		} else {
-			startMIDI_playback(root);
-		}
-	};
-
-	root.repeatMIDI_playback = function () {
-		if (root.shouldMIDIRepeat === false) {
-			root.shouldMIDIRepeat = true;
-			MIDI.Player.loop(true);
-		} else {
-			root.shouldMIDIRepeat = false;
-			MIDI.Player.loop(false);
-		}
-		root.midiEventCallbacks.repeatChangeEvent(root.midiEventCallbacks.classRoot, root.shouldMIDIRepeat);
-
-	};
-
-	root.oneTimeInitializeMidi = function () {
-
-		if (global_midiInitialized) {
-			root.midiEventCallbacks.midiInitialized(root.midiEventCallbacks.classRoot);
-			return;
-		}
-
-		global_midiInitialized = true;
-		MIDI.loadPlugin({
-			soundfontUrl: getMidiSoundFontLocation(),
-			instruments: ["gunshot"],
-			callback: function () {
-				MIDI.programChange(9, 127); // use "Gunshot" instrument because I don't know how to create new ones
-				root.midiEventCallbacks.midiInitialized(root.midiEventCallbacks.classRoot);
-			}
-		});
-	};
-
-	root.getMidiStartTime = function () {
-		return global_current_midi_start_time;
-	};
-
-	// calculate how long the midi has been playing total (since the last play/pause press
-	// this is computationally expensive
-	root.getMidiPlayTime = function () {
-		var time_now = new Date();
-		var play_time_diff = new Date(time_now.getTime() - global_current_midi_start_time.getTime());
-
-		var TotalPlayTime = document.getElementById("totalPlayTime");
-		if (TotalPlayTime) {
-			if (global_last_midi_update_time === 0)
-				global_last_midi_update_time = global_current_midi_start_time;
-			var delta_time_diff = new Date(time_now - global_last_midi_update_time);
-			global_total_midi_play_time_msecs += delta_time_diff.getTime();
-			var totalTime = new Date(global_total_midi_play_time_msecs);
-			var time_string = "";
-			if (totalTime.getUTCHours() > 0)
-				time_string = totalTime.getUTCHours() + ":" + (totalTime.getUTCMinutes() < 10 ? "0" : "");
-			time_string += totalTime.getUTCMinutes() + ":" + (totalTime.getSeconds() < 10 ? "0" : "") + totalTime.getSeconds();
-			TotalPlayTime.innerHTML = 'Total Play Time: <span class="totalTimeNum">' + time_string + '</span> notes: <span class="totalTimeNum">' + global_total_midi_notes + '</span> repetitions: <span class="totalTimeNum">' + global_total_midi_repeats + '</span>';
-		}
-
-		global_last_midi_update_time = time_now;
-
-		return play_time_diff; // a time struct that represents the total time played so far since the last play button push
-	};
-
-	// update the midi play timer on the player.
-	// Keeps track of how long we have been playing.
-	root.updateMidiPlayTime = function () {
-		var totalTime = root.getMidiPlayTime();
-		var time_string = totalTime.getUTCMinutes() + ":" + (totalTime.getSeconds() < 10 ? "0" : "") + totalTime.getSeconds();
-
-		var MidiPlayTime = document.getElementById("MIDIPlayTime" + root.grooveUtilsUniqueIndex);
-		if (MidiPlayTime)
-			MidiPlayTime.innerHTML = time_string;
-	};
 
 	
 	
@@ -377,7 +206,7 @@ function GrooveUtils() {
 		document.getElementById('tempoTextField' + root.grooveUtilsUniqueIndex).value = "" + tempo;
 
 		updateRangeSlider('tempoInput' + root.grooveUtilsUniqueIndex);
-		root.midiNoteHasChanged();
+		midiNoteHasChanged(root);
 
 		if (root.tempoChangeCallback)
 			root.tempoChangeCallback(tempo);
@@ -471,7 +300,7 @@ function GrooveUtils() {
 		} else {
 			document.getElementById('swingOutput' + root.grooveUtilsUniqueIndex).innerHTML = "" + swingAmount + "%";
 			root.swingPercent = swingAmount;
-			root.midiNoteHasChanged();
+			midiNoteHasChanged(root);
 		}
 
 	};
@@ -524,7 +353,7 @@ function GrooveUtils() {
 			root.myGrooveData.metronomeFrequency = 4;
 
 		root.setMetronomeFrequencyDisplay(root.myGrooveData.metronomeFrequency);
-		root.midiNoteHasChanged();
+		midiNoteHasChanged(root);
 	};
 
 	
