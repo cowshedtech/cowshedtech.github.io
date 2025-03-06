@@ -238,7 +238,7 @@ function GrooveUtils() {
 			if (root.myGrooveData) {
 				root.myGrooveData.tempo = root.getTempo();
 				root.myGrooveData.swingPercent = root.getSwing();
-				var midiURL = root.create_MIDIURLFromGrooveData(root.myGrooveData);
+				var midiURL = create_MIDIURLFromGrooveData(root.myGrooveData, root.metrononeSolo);
 				root.loadMIDIFromURL(midiURL);
 				root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
 			} else {
@@ -299,58 +299,7 @@ function GrooveUtils() {
 	
 	
 
-	// returns a URL that is a MIDI track
-	root.create_MIDIURLFromGrooveData = function (myGrooveData, MIDI_type) {
-
-		var midiFile = new Midi.File();
-		var midiTrack = new Midi.Track();
-		midiFile.addTrack(midiTrack);
-
-		midiTrack.setTempo(myGrooveData.tempo);
-		midiTrack.setInstrument(0, 0x13);
-
-		var swing_percentage = myGrooveData.swingPercent / 100;
-
-		// the midi converter expects all the arrays to be 32 or 48 notes long.
-		// Expand them
-		var FullNoteHHArray = scaleNoteArrayToFullSize(myGrooveData.hh_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-		var FullNoteSnareArray = scaleNoteArrayToFullSize(myGrooveData.snare_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-		var FullNoteKickArray = scaleNoteArrayToFullSize(myGrooveData.kick_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-
-		// the midi functions expect just one measure at a time to work correctly
-		// call once for each measure
-		var measure_notes = FullNoteHHArray.length / myGrooveData.numberOfMeasures;
-		for (var measureIndex = 0; measureIndex < myGrooveData.numberOfMeasures; measureIndex++) {
-
-			var FullNoteTomsArray = [];
-			for (var i = 0; i < constant_NUMBER_OF_TOMS; i++) {
-				var orig_measure_notes = myGrooveData.notesPerMeasure;
-				FullNoteTomsArray[i] = scaleNoteArrayToFullSize(myGrooveData.toms_array[i].slice(orig_measure_notes * measureIndex, orig_measure_notes * (measureIndex + 1)),
-					1,
-					myGrooveData.notesPerMeasure,
-					myGrooveData.numBeats,
-					myGrooveData.noteValue);
-			}
-
-			MIDI_from_HH_Snare_Kick_Arrays(midiTrack,
-				FullNoteHHArray.slice(measure_notes * measureIndex, measure_notes * (measureIndex + 1)),
-				FullNoteSnareArray.slice(measure_notes * measureIndex, measure_notes * (measureIndex + 1)),
-				FullNoteKickArray.slice(measure_notes * measureIndex, measure_notes * (measureIndex + 1)),
-				FullNoteTomsArray,
-				MIDI_type,
-				myGrooveData.metronomeFrequency,
-				measure_notes,
-				myGrooveData.timeDivision,
-				swing_percentage,
-				myGrooveData.numBeats,
-				myGrooveData.noteValue,
-				root.metronomeSolo);
-		}
-
-		var midi_url = "data:audio/midi;base64," + btoa(midiFile.toBytes());
-
-		return midi_url;
-	};
+	
 
 	root.loadMIDIFromURL = function (midiURL) {
 
@@ -810,37 +759,7 @@ function GrooveUtils() {
 		root.midiNoteHasChanged();
 	};
 
-	root.expandOrRetractMIDI_playback = function (force, expandElseContract) {
-
-		var playerControlElement = document.getElementById('playerControl' + root.grooveUtilsUniqueIndex);
-		var playerControlRowElement = document.getElementById('playerControlsRow' + root.grooveUtilsUniqueIndex);
-		var tempoAndProgressElement = document.getElementById('tempoAndProgress' + root.grooveUtilsUniqueIndex);
-		var midiMetronomeMenuElement = document.getElementById('midiMetronomeMenu' + root.grooveUtilsUniqueIndex);
-		var gsLogoLoadFullGSElement = document.getElementById('midiGSLogo' + root.grooveUtilsUniqueIndex);
-		var midiExpandImageElement = document.getElementById('midiExpandImage' + root.grooveUtilsUniqueIndex);
-		var midiPlayTime = document.getElementById('MIDIPlayTime' + root.grooveUtilsUniqueIndex);
-
-		if (playerControlElement.className.indexOf("small") > -1 || (force && expandElseContract)) {
-			// make large
-			playerControlElement.className = playerControlElement.className.replace(" small", "") + " large";
-			playerControlRowElement.className = playerControlRowElement.className.replace(" small", "") + " large";
-			tempoAndProgressElement.className = tempoAndProgressElement.className.replace(" small", "") + " large";
-			midiMetronomeMenuElement.className = midiMetronomeMenuElement.className.replace(" small", "") + " large";
-			gsLogoLoadFullGSElement.className = gsLogoLoadFullGSElement.className.replace(" small", "") + " large";
-			midiExpandImageElement.className = midiExpandImageElement.className.replace(" small", "") + " large";
-			midiPlayTime.className = midiPlayTime.className.replace(" small", "") + " large";
-		} else {
-			// make small
-			playerControlElement.className = playerControlElement.className.replace(" large", "") + " small";
-			playerControlRowElement.className = playerControlRowElement.className.replace(" large", "") + " small";
-			midiMetronomeMenuElement.className = midiMetronomeMenuElement.className.replace(" large", "") + " small";
-			tempoAndProgressElement.className = tempoAndProgressElement.className.replace(" large", "") + " small";
-			gsLogoLoadFullGSElement.className = gsLogoLoadFullGSElement.className.replace(" large", "") + " small";
-			midiExpandImageElement.className = midiExpandImageElement.className.replace(" large", "") + " small";
-			midiPlayTime.className = midiPlayTime.className.replace(" large", "") + " small";
-		}
-
-	};
+	
 
 
 
