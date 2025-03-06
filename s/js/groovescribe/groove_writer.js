@@ -2364,7 +2364,7 @@ function GrooveWriter() {
 				midiURL = createMidiUrlFromClickableUI("our_MIDI");
 				root.myGrooveUtils.midiResetNoteHasChanged();
 			}
-			root.myGrooveUtils.loadMIDIFromURL(midiURL);
+			loadMIDIFromURL(root.myGrooveUtils, midiURL, root.myGrooveUtils.getTempo());
 			root.updateGrooveDBSource();
 		};
 

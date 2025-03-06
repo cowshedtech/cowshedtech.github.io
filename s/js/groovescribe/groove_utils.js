@@ -239,7 +239,7 @@ function GrooveUtils() {
 				root.myGrooveData.tempo = root.getTempo();
 				root.myGrooveData.swingPercent = root.getSwing();
 				var midiURL = create_MIDIURLFromGrooveData(root.myGrooveData, root.metrononeSolo);
-				root.loadMIDIFromURL(midiURL);
+				loadMIDIFromURL(root, midiURL, root.getTempo());
 				root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
 			} else {
 				console.log("can't load midi song.   myGrooveData is empty");
@@ -301,28 +301,7 @@ function GrooveUtils() {
 
 	
 
-	root.loadMIDIFromURL = function (midiURL) {
-
-		MIDI.Player.timeWarp = 1; // speed the song is played back
-		MIDI.Player.BPM = root.getTempo();
-		MIDI.Player.loadFile(midiURL, midiLoaderCallback());
-	};
-
-	root.MIDISaveAs = function (midiURL) {
-
-		// save as
-		document.location = midiURL;
-	};
-
-	root.pauseMIDI_playback = function () {
-		if (root.isMIDIPaused === false) {
-			root.isMIDIPaused = true;
-			root.midiEventCallbacks.pauseEvent(root.midiEventCallbacks.classRoot);
-			MIDI.Player.pause();
-			root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, "clear", -1);
-			clearHighlightNoteInABCSVG(root.grooveUtilsUniqueIndex);
-		}
-	};
+	
 
 	// play button or keypress
 	root.startMIDI_playback = function () {
@@ -371,7 +350,7 @@ function GrooveUtils() {
 	root.startOrPauseMIDI_playback = function () {
 
 		if (MIDI.Player.playing) {
-			root.pauseMIDI_playback();
+			pauseMIDI_playback(root);
 		} else {
 			root.startMIDI_playback();
 		}
@@ -451,118 +430,8 @@ function GrooveUtils() {
 			MidiPlayTime.innerHTML = time_string;
 	};
 
-	var debug_note_count = 0;
-	//var class_midi_note_num = 0;  // global, but only used in this function
-	// This is the function that the 3rd party midi library calls to give us events.
-	// This is different from the callbacks that we use for the midi code in this library to
-	// do events.   (Double chaining)
-	function ourMIDICallback(data) {
-		var percentComplete = (data.now / data.end);
-		root.midiEventCallbacks.percentProgress(root.midiEventCallbacks.classRoot, percentComplete * 100);
-
-		if (root.lastMidiTimeUpdate && root.lastMidiTimeUpdate < (data.now + 800)) {
-			root.updateMidiPlayTime();
-			root.lastMidiTimeUpdate = data.now;
-		}
-
-		if (data.now < 16) {
-			// this is considered the start.   It doesn't come in at zero for some reason
-			// The second note should always be at least 16 ms behind the first
-			//class_midi_note_num = 0;
-			root.lastMidiTimeUpdate = -1;
-		}
-		if (data.now == data.end) {
-
-			// at the end of a song
-			root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, "complete", 1);
-
-			if (root.shouldMIDIRepeat) {
-
-				global_total_midi_repeats++;
-
-				// regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
-				// advanceMetronomeOptionsOffsetClickStartRotation will return false if not rotating
-				if (advanceMetronomeOptionsOffsetClickStartRotation() || root.midiEventCallbacks.doesMidiDataNeedRefresh(root.midiEventCallbacks.classRoot)) {
-					MIDI.Player.stop();
-					root.midiEventCallbacks.loadMidiDataEvent(root.midiEventCallbacks.classRoot, false);
-					MIDI.Player.start();
-					//  } else {
-					// let midi.loop handle the repeat for us
-					//MIDI.Player.stop();
-					//MIDI.Player.start();
-				}
-				if (root.repeatCallback) {
-					root.repeatCallback();
-				}
-			} else {
-				// not repeating, so stopping
-				MIDI.Player.stop();
-				root.midiEventCallbacks.percentProgress(root.midiEventCallbacks.classRoot, 100);
-				root.midiEventCallbacks.stopEvent(root.midiEventCallbacks.classRoot);
-			}
-		}
-
-		// note on
-		var note_type = false;
-		if (data.message == 144) {
-			if (data.note == constant_OUR_MIDI_METRONOME_1 || data.note == constant_OUR_MIDI_METRONOME_NORMAL) {
-				note_type = "metronome";
-			} else if (data.note == constant_OUR_MIDI_HIHAT_NORMAL || data.note == constant_OUR_MIDI_HIHAT_OPEN ||
-				data.note == constant_OUR_MIDI_HIHAT_ACCENT || data.note == constant_OUR_MIDI_HIHAT_CRASH ||
-				data.note == constant_OUR_MIDI_HIHAT_RIDE || data.note == constant_OUR_MIDI_HIHAT_STACKER ||
-				data.note == constant_OUR_MIDI_HIHAT_RIDE_BELL || data.note == constant_OUR_MIDI_HIHAT_COW_BELL ||
-				data.note == constant_OUR_MIDI_HIHAT_METRONOME_NORMAL || data.note == constant_OUR_MIDI_HIHAT_METRONOME_NORMAL) {
-				note_type = "hi-hat";
-			} else if (data.note == constant_OUR_MIDI_SNARE_NORMAL || data.note == constant_OUR_MIDI_SNARE_ACCENT ||
-				data.note == constant_OUR_MIDI_SNARE_GHOST || data.note == constant_OUR_MIDI_SNARE_XSTICK ||
-				data.note == constant_OUR_MIDI_SNARE_FLAM || data.note == constant_OUR_MIDI_SNARE_DRAG ||
-				data.note == constant_OUR_MIDI_SNARE_BUZZ) {
-				note_type = "snare";
-			} else if (data.note == constant_OUR_MIDI_KICK_NORMAL || data.note == constant_OUR_MIDI_HIHAT_FOOT) {
-				note_type = "kick";
-			} else if (data.note == constant_OUR_MIDI_TOM1_NORMAL || data.note == constant_OUR_MIDI_TOM2_NORMAL || data.note == constant_OUR_MIDI_TOM3_NORMAL || data.note == constant_OUR_MIDI_TOM4_NORMAL) {
-				note_type = "tom";
-			}
-			if (note_type) {
-				global_total_midi_notes++;
-				root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, note_type, percentComplete);
-				if (root.highlightOn) highlightNoteInABCSVGFromPercentComplete(root.grooveUtilsUniqueIndex, root.note_mapping_array, percentComplete, root.numberOfMeasures, root.repeatedMeasures);
-				if (root.noteCallback) {
-					root.noteCallback(note_type);
-				}
-			}
-		}
-
-		// this used to work when we used note 60 as a spacer between chords
-		//if(data.note == 60)
-		//	class_midi_note_num++;
-		/*
-		if (0 && data.message == 144) {
-		debug_note_count++;
-		// my debugging code for midi
-		var newHTML = "";
-		if (data.note != 60)
-		newHTML += "<b>";
-
-		newHTML += note_type + " total notes: " + debug_note_count + " - count#: " + class_midi_note_num +
-		" now: " + data.now +
-		" note: " + data.note +
-		" message: " + data.message +
-		" channel: " + data.channel +
-		" velocity: " + data.velocity +
-		"<br>";
-
-		if (data.note != 60)
-		newHTML += "</b>";
-
-		document.getElementById("midiTextOutput").innerHTML += newHTML;
-		}
-		 */
-	}
-
-	function midiLoaderCallback() {
-		MIDI.Player.addListener(ourMIDICallback);
-	}
+	
+	
 
 	root.getTempo = function () {
 		var tempoInput = document.getElementById("tempoInput" + root.grooveUtilsUniqueIndex);

@@ -25,7 +25,7 @@ function setupHotKeys(myGrooveUtils) {
         }
         if (e.which == 179) {
             // Play button
-            myGrooveUtils.startOrPauseMIDI_playback();
+            myGrooveUtils.startOrPauseMIDI_playback(myGrooveUtils);
         }
         if (e.which == 178) {
             // Stop button
