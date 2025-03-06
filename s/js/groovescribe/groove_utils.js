@@ -219,67 +219,7 @@ function GrooveUtils() {
 	// ******************************************************************************************************************
 	
 
-	root.midiEventCallbackClass = function (classRoot) {
-		this.classRoot = classRoot;
-		this.noteHasChangedSinceLastDataLoad = false;
-
-		this.playEvent = function (root) {
-			var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
-			if (icon)
-				icon.className = "midiPlayImage Playing";
-			if (root.playEventCallback) {
-				root.playEventCallback();
-			}
-		};
-		// default loadMIDIDataEvent.  You probably want to override this
-		// it will only make changes to the tempo and swing
-		// playStarting: boolean that is true on the first time through the midi playback
-		this.loadMidiDataEvent = function (root, playStarting) {
-			if (root.myGrooveData) {
-				root.myGrooveData.tempo = root.getTempo();
-				root.myGrooveData.swingPercent = root.getSwing();
-				var midiURL = create_MIDIURLFromGrooveData(root.myGrooveData, root.metrononeSolo);
-				loadMIDIFromURL(root, midiURL, root.getTempo());
-				root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
-			} else {
-				console.log("can't load midi song.   myGrooveData is empty");
-			}
-		};
-		this.doesMidiDataNeedRefresh = function (root) {
-			return root.midiEventCallbacks.noteHasChangedSinceLastDataLoad;
-		};
-		this.pauseEvent = function (root) {
-			var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
-			if (icon)
-				icon.className = "midiPlayImage Paused";
-		};
-
-		this.resumeEvent = function (root) { };
-		this.stopEvent = function (root) {
-			var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
-			if (icon)
-				icon.className = "midiPlayImage Stopped";
-		};
-		this.repeatChangeEvent = function (root, newValue) {
-			if (newValue)
-				document.getElementById("midiRepeatImage" + root.grooveUtilsUniqueIndex).src = getMidiImageLocation() + "repeat.png";
-			else
-				document.getElementById("midiRepeatImage" + root.grooveUtilsUniqueIndex).src = getMidiImageLocation() + "grey_repeat.png";
-		};
-		this.percentProgress = function (root, percent) { };
-		this.notePlaying = function (root, note_type, note_position) { };
-
-		this.midiInitialized = function (root) {
-			var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
-			if (icon)
-				icon.className = "midiPlayImage Stopped";
-			document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex).onclick = function (event) {
-				root.startOrStopMIDI_playback();
-			}; // enable play button
-			setupHotKeys(root); // spacebar to play
-		};
-	};
-	root.midiEventCallbacks = new root.midiEventCallbackClass(root);
+	
 
 	// set a URL for midi playback.
 	// useful for static content, so you don't have to override the loadMidiDataEvent callback
@@ -299,7 +239,7 @@ function GrooveUtils() {
 	
 	
 
-	
+	this.midiEventCallbacks = new midiEventCallbackClass(root);
 
 	
 
@@ -354,10 +294,6 @@ function GrooveUtils() {
 		} else {
 			root.startMIDI_playback();
 		}
-	};
-
-	root.isPlaying = function () {
-		return MIDI.Player.playing;
 	};
 
 	root.repeatMIDI_playback = function () {
