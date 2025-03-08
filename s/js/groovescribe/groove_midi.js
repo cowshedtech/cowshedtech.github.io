@@ -7,6 +7,17 @@
 // local constants
 var CONSTANT_Midi_play_time_zero = "0:00";
 
+class MIDIPlayer {
+
+    constructor() {
+        this.playTime = "0:00";
+    }    
+
+}
+
+var player = new MIDIPlayer();
+console.log(`play time [${player.playTime}]`)
+
 
 var global_grooveUtilsScriptSrc = "";
 if (document.currentScript)
