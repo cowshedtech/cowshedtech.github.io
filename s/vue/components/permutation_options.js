@@ -25,7 +25,7 @@ export default {
     var genHTML = "";
     
     // TODO Need to revisit and ensure permutations working!!
-    
+    // TODO
     // genHTML += HTMLforPermutationOptions();
     content.value = genHTML
     return { content }    
