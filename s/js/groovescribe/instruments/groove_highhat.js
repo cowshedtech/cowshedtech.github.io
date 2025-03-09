@@ -78,60 +78,60 @@ function set_hh_state(id, mode, make_sound) {
         case "normal":
             document.getElementById("hh_cross" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_NORMAL);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_NORMAL);
             break;
         case "ride":
             document.getElementById("hh_ride" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_RIDE);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_RIDE);
             break;
         case "ride_bell":
             document.getElementById("hh_ride_bell" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_RIDE_BELL);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_RIDE_BELL);
             break;
         case "cow_bell":
             document.getElementById("hh_cow_bell" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_COW_BELL);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_COW_BELL);
             break;
         case "crash":
             document.getElementById("hh_crash" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_CRASH);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_CRASH);
             break;
         case "stacker":
             document.getElementById("hh_stacker" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_STACKER);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_STACKER);
             break;
         case "metronome_normal":
             document.getElementById("hh_metronome_normal" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_METRONOME_NORMAL);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_METRONOME_NORMAL);
             break;
         case "metronome_accent":
             document.getElementById("hh_metronome_accent" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_METRONOME_ACCENT);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_METRONOME_ACCENT);
             break;
         case "open":
             document.getElementById("hh_cross" + id).style.color = constant_note_on_color_hex;
             document.getElementById("hh_open" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_OPEN);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_OPEN);
             break;
         case "close":
             document.getElementById("hh_cross" + id).style.color = constant_note_on_color_hex;
             document.getElementById("hh_close" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_NORMAL);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_NORMAL);
             break;
         case "accent":
             document.getElementById("hh_cross" + id).style.color = constant_note_on_color_hex;
             document.getElementById("hh_accent" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_ACCENT);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_ACCENT);
             break;
         default:
             console.log("bad switch in set_hh_state");

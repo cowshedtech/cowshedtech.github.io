@@ -77,10 +77,10 @@ function set_tom_state(id, tom_num, mode, make_sound) {
             if (make_sound)
                 switch (tom_num) {
                     case 1:
-                        play_single_note_for_note_setting(constant_OUR_MIDI_TOM1_NORMAL);
+                        midiPlayer.playSingleNote(constant_OUR_MIDI_TOM1_NORMAL);
                         break;
                     case 4:
-                        play_single_note_for_note_setting(constant_OUR_MIDI_TOM4_NORMAL);
+                        midiPlayer.playSingleNote(constant_OUR_MIDI_TOM4_NORMAL);
                         break;
                     default:
                         console.log("bad switch in set_tom_state. bad tom num:" + tom_num);

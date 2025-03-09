@@ -4,33 +4,164 @@
 // Functions related to MIDI
 //
 
-// local constants
-var CONSTANT_Midi_play_time_zero = "0:00";
 
 class MIDIPlayer {
+    
+    globalCurrentMIDIStartTime = 0;
 
+    //
+    //
+    // 
     constructor() {
         this.playTime = "0:00";
     }    
 
+
+    //
+    //
+    //
+    getMIDIStartTime() {
+        return this.globalCurrentMIDIStartTime;
+    };
+
+    
+    //
+    //
+    //
+    resetMIDIStartTime() {
+        this.globalCurrentMIDIStartTime = new Date();
+    };
+
+
+    //
+    // calculate how long the midi has been playing total (since the last play/pause press
+    //
+    getMidiPlayTime() {
+        const now = new Date();
+        const playTimeDiff = new Date(now - this.getMIDIStartTime());
+
+        const totalPlayTime = document.getElementById("totalPlayTime");
+        if (totalPlayTime) {
+            if (!global_last_midi_update_time) {
+                global_last_midi_update_time = this.getMIDIStartTime();
+            }
+            
+            const deltaTime = now - global_last_midi_update_time;
+            global_total_midi_play_time_msecs += deltaTime;
+            
+            const totalTime = new Date(global_total_midi_play_time_msecs);
+            const hours = totalTime.getUTCHours();
+            const minutes = totalTime.getUTCMinutes().toString().padStart(2, '0');
+            const seconds = totalTime.getSeconds().toString().padStart(2, '0');
+            
+            const timeString = hours > 0 ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
+            
+            totalPlayTime.innerHTML = `Total Play Time: <span class="totalTimeNum">${timeString}</span> notes: <span class="totalTimeNum">${global_total_midi_notes}</span> repetitions: <span class="totalTimeNum">${global_total_midi_repeats}</span>`;
+        }
+
+        global_last_midi_update_time = now;
+        return playTimeDiff;
+    };
+
+
+    //
+    // update the midi play timer on the player.
+    // Keeps track of how long we have been playing.
+     updateMidiPlayTime() {
+        const totalTime = this.getMidiPlayTime();
+        const minutes = totalTime.getUTCMinutes();
+        const seconds = totalTime.getSeconds();
+        const time_string = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+        const midiPlayTime = document.getElementById(`MIDIPlayTime${root.grooveUtilsUniqueIndex}`);
+        if (midiPlayTime) {
+            midiPlayTime.innerHTML = time_string;
+        }
+    };
+
+
+    //
+    //
+    //
+    playSingleNote(note_val) {
+        if (MIDI.WebAudio) {
+            MIDI.WebAudio.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
+        } else if (MIDI.AudioTag) {
+            MIDI.AudioTag.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
+        }
+    }
+
+    //
+    // pass in a tag ID.  (not a class)
+    // HTML will be put within the tag replacing whatever else was there
+    AddMidiPlayerToPage(grooveUtil, HTML_Id_to_attach_to, division, expandable) {
+        var html_element = document.getElementById(HTML_Id_to_attach_to);
+        if (html_element)
+            html_element.innerHTML = HTMLForMidiPlayer(grooveUtil, expandable);
+
+        var browserInfo = getBrowserInfo();
+        var isIE10 = false;
+        if (browserInfo.browser == "MSIE" && browserInfo.version < 12)
+            isIE10 = true;
+
+        // now attach the onclicks
+        html_element = document.getElementById("tempoInput" + grooveUtil.grooveUtilsUniqueIndex);
+        if (html_element) {
+            if (isIE10)
+                html_element.addEventListener("click", grooveUtil.tempoUpdateFromSlider, false);
+            else
+                html_element.addEventListener("input", grooveUtil.tempoUpdateFromSlider, false);
+        }
+
+        html_element = document.getElementById("tempoTextField" + grooveUtil.grooveUtilsUniqueIndex);
+        if (html_element) {
+            html_element.addEventListener("change", grooveUtil.tempoUpdateFromTextField, false);
+        }
+
+        html_element = document.getElementById("swingInput" + grooveUtil.grooveUtilsUniqueIndex);
+        if (html_element) {
+            if (isIE10)
+                html_element.addEventListener("click", grooveUtil.swingUpdateEvent, false);
+            else
+                html_element.addEventListener("input", grooveUtil.swingUpdateEvent, false);
+        }
+
+        html_element = document.getElementById("midiRepeatImage" + grooveUtil.grooveUtilsUniqueIndex);
+        if (html_element) {
+            html_element.addEventListener("click", grooveUtil.repeatMIDI_playback, false);
+        }
+
+        html_element = document.getElementById("midiExpandImage" + grooveUtil.grooveUtilsUniqueIndex);
+        if (html_element) {
+            html_element.addEventListener("click", expandOrRetractMIDI_playback, false);
+        }
+
+        html_element = document.getElementById("midiGSLogo" + grooveUtil.grooveUtilsUniqueIndex);
+        if (html_element) {
+            html_element.addEventListener("click", grooveUtil.loadFullScreenGrooveScribe, false);
+        }
+
+        html_element = document.getElementById("midiMetronomeMenu" + grooveUtil.grooveUtilsUniqueIndex);
+        if (html_element) {
+            html_element.addEventListener("click", grooveUtil.metronomeMiniMenuClick, false);
+        }
+
+        // enable or disable swing
+        grooveUtil.swingEnabled(grooveUtil.doesDivisionSupportSwing(division));
+    };
 }
 
-var player = new MIDIPlayer();
-console.log(`play time [${player.playTime}]`)
+
+//
+// Start with a singleton
+// 
+var midiPlayer = new MIDIPlayer();
 
 
 var global_grooveUtilsScriptSrc = "";
 if (document.currentScript)
 	global_grooveUtilsScriptSrc = document.currentScript.src;
 
-
-function play_single_note_for_note_setting(note_val) {
-    if (MIDI.WebAudio) {
-        MIDI.WebAudio.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
-    } else if (MIDI.AudioTag) {
-        MIDI.AudioTag.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
-    }
-}
 
 function MIDI_build_midi_url_count_in_track(timeSigTop, timeSigBottom, tempo) {
 
@@ -448,63 +579,7 @@ function getMidiImageLocation() {
 }; // end of function
 
 
-// pass in a tag ID.  (not a class)
-// HTML will be put within the tag replacing whatever else was there
- function AddMidiPlayerToPage(grooveUtil, HTML_Id_to_attach_to, division, expandable) {
-    var html_element = document.getElementById(HTML_Id_to_attach_to);
-    if (html_element)
-        html_element.innerHTML = HTMLForMidiPlayer(grooveUtil, expandable);
 
-    var browserInfo = getBrowserInfo();
-    var isIE10 = false;
-    if (browserInfo.browser == "MSIE" && browserInfo.version < 12)
-        isIE10 = true;
-
-    // now attach the onclicks
-    html_element = document.getElementById("tempoInput" + grooveUtil.grooveUtilsUniqueIndex);
-    if (html_element) {
-        if (isIE10)
-            html_element.addEventListener("click", grooveUtil.tempoUpdateFromSlider, false);
-        else
-            html_element.addEventListener("input", grooveUtil.tempoUpdateFromSlider, false);
-    }
-
-    html_element = document.getElementById("tempoTextField" + grooveUtil.grooveUtilsUniqueIndex);
-    if (html_element) {
-        html_element.addEventListener("change", grooveUtil.tempoUpdateFromTextField, false);
-    }
-
-    html_element = document.getElementById("swingInput" + grooveUtil.grooveUtilsUniqueIndex);
-    if (html_element) {
-        if (isIE10)
-            html_element.addEventListener("click", grooveUtil.swingUpdateEvent, false);
-        else
-            html_element.addEventListener("input", grooveUtil.swingUpdateEvent, false);
-    }
-
-    html_element = document.getElementById("midiRepeatImage" + grooveUtil.grooveUtilsUniqueIndex);
-    if (html_element) {
-        html_element.addEventListener("click", grooveUtil.repeatMIDI_playback, false);
-    }
-
-    html_element = document.getElementById("midiExpandImage" + grooveUtil.grooveUtilsUniqueIndex);
-    if (html_element) {
-        html_element.addEventListener("click", expandOrRetractMIDI_playback, false);
-    }
-
-    html_element = document.getElementById("midiGSLogo" + grooveUtil.grooveUtilsUniqueIndex);
-    if (html_element) {
-        html_element.addEventListener("click", grooveUtil.loadFullScreenGrooveScribe, false);
-    }
-
-    html_element = document.getElementById("midiMetronomeMenu" + grooveUtil.grooveUtilsUniqueIndex);
-    if (html_element) {
-        html_element.addEventListener("click", grooveUtil.metronomeMiniMenuClick, false);
-    }
-
-    // enable or disable swing
-    grooveUtil.swingEnabled(grooveUtil.doesDivisionSupportSwing(division));
-};
 
 
 function HTMLForMidiPlayer(grooveUtil, expandable) {
@@ -512,7 +587,7 @@ function HTMLForMidiPlayer(grooveUtil, expandable) {
         '<div id="playerControl' + grooveUtil.grooveUtilsUniqueIndex + '" class="playerControl">' +
         '	<div class="playerControlsRow" id="playerControlsRow' + grooveUtil.grooveUtilsUniqueIndex + '">' +
         '		<span title="Play/Pause" class="midiPlayImage" id="midiPlayImage' + grooveUtil.grooveUtilsUniqueIndex + '"></span>' +
-        '       <span class="MIDIPlayTime" id="MIDIPlayTime' + grooveUtil.grooveUtilsUniqueIndex + '">' + CONSTANT_Midi_play_time_zero + '</span>';
+        '       <span class="MIDIPlayTime" id="MIDIPlayTime' + grooveUtil.grooveUtilsUniqueIndex + '">' + midiPlayer.playTime + '</span>';
 
     if (expandable)
         newHTML += '' +
@@ -668,7 +743,7 @@ function ourMIDICallback(data) {
     root.midiEventCallbacks.percentProgress(root.midiEventCallbacks.classRoot, percentComplete * 100);
 
     if (root.lastMidiTimeUpdate && root.lastMidiTimeUpdate < (data.now + 800)) {
-        updateMidiPlayTime();
+        midiPlayer.updateMidiPlayTime();
         root.lastMidiTimeUpdate = data.now;
     }
 
@@ -837,12 +912,13 @@ function startMIDI_playback(root) {
     if (MIDI.Player.playing) {
         return;
     } else if (root.isMIDIPaused && false === root.midiEventCallbacks.doesMidiDataNeedRefresh(root.midiEventCallbacks.classRoot)) {
-        global_current_midi_start_time = new Date();
+        // global_current_midi_start_time = new Date();
+        midiPlayer.resetMIDIStartTime()
         global_last_midi_update_time = 0;
         MIDI.Player.resume();
     } else {
         MIDI.Player.ctx.resume();
-        global_current_midi_start_time = new Date();
+        midiPlayer.resetMIDIStartTime()
         global_last_midi_update_time = 0;
         root.midiEventCallbacks.loadMidiDataEvent(root.midiEventCallbacks.classRoot, true);
         MIDI.Player.stop();
@@ -920,47 +996,11 @@ function repeatMIDI_playback() {
 };
 
 
-function getMidiStartTime() {
-    return global_current_midi_start_time;
-};
 
 
 
-// calculate how long the midi has been playing total (since the last play/pause press
-// this is computationally expensive
-function getMidiPlayTime() {
-    var time_now = new Date();
-    var play_time_diff = new Date(time_now.getTime() - global_current_midi_start_time.getTime());
 
-    var TotalPlayTime = document.getElementById("totalPlayTime");
-    if (TotalPlayTime) {
-        if (global_last_midi_update_time === 0)
-            global_last_midi_update_time = global_current_midi_start_time;
-        var delta_time_diff = new Date(time_now - global_last_midi_update_time);
-        global_total_midi_play_time_msecs += delta_time_diff.getTime();
-        var totalTime = new Date(global_total_midi_play_time_msecs);
-        var time_string = "";
-        if (totalTime.getUTCHours() > 0)
-            time_string = totalTime.getUTCHours() + ":" + (totalTime.getUTCMinutes() < 10 ? "0" : "");
-        time_string += totalTime.getUTCMinutes() + ":" + (totalTime.getSeconds() < 10 ? "0" : "") + totalTime.getSeconds();
-        TotalPlayTime.innerHTML = 'Total Play Time: <span class="totalTimeNum">' + time_string + '</span> notes: <span class="totalTimeNum">' + global_total_midi_notes + '</span> repetitions: <span class="totalTimeNum">' + global_total_midi_repeats + '</span>';
-    }
 
-    global_last_midi_update_time = time_now;
-
-    return play_time_diff; // a time struct that represents the total time played so far since the last play button push
-};
-
-// update the midi play timer on the player.
-// Keeps track of how long we have been playing.
-function updateMidiPlayTime() {
-    var totalTime = getMidiPlayTime();
-    var time_string = totalTime.getUTCMinutes() + ":" + (totalTime.getSeconds() < 10 ? "0" : "") + totalTime.getSeconds();
-
-    var MidiPlayTime = document.getElementById("MIDIPlayTime" + root.grooveUtilsUniqueIndex);
-    if (MidiPlayTime)
-        MidiPlayTime.innerHTML = time_string;
-};
 
 
 // This is called so that the MIDI player will reload the groove

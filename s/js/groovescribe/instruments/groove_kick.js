@@ -83,21 +83,21 @@ function set_kick_state(id, mode, make_sound) {
             document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_on_color_hex;
             document.getElementById("kick_circle" + id).style.borderColor = constant_note_border_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_KICK_NORMAL);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
             break;
         case "splash":
             document.getElementById("kick_splash" + id).style.color = constant_note_on_color_hex;
             document.getElementById("kick_circle" + id).style.borderColor = constant_note_hidden_color_rgb;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_FOOT);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
             break;
         case "kick_and_splash":
             document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_on_color_hex;
             document.getElementById("kick_splash" + id).style.color = constant_note_on_color_hex;
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_HIHAT_FOOT);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
             if (make_sound)
-                play_single_note_for_note_setting(constant_OUR_MIDI_KICK_NORMAL);
+                midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
             break;
         default:
             console.log("bad switch in set_kick_state");

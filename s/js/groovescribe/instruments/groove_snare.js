@@ -173,7 +173,7 @@ function set_snare_state(id, mode, make_sound) {
 
     // Play sound if required
     if (make_sound && config.midiNote) {
-        play_single_note_for_note_setting(config.midiNote);
+        midiPlayer.playSingleNote(config.midiNote);
     }
 }
 

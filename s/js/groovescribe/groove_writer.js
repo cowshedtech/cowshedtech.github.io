@@ -2342,7 +2342,7 @@ function GrooveWriter() {
 		selectButton(document.getElementById("subdivision_" + class_notes_per_measure + "ths"));
 
 		// add html for the midi player
-		AddMidiPlayerToPage(root.myGrooveUtils, "midiPlayer", class_time_division);
+		midiPlayer.AddMidiPlayerToPage(root.myGrooveUtils, "midiPlayer", class_time_division);
 
 		// load the groove from the URL data if it was passed in.
 		set_Default_notes(window.location.search);
@@ -2431,7 +2431,7 @@ function GrooveWriter() {
 
 		var curTempo = root.myGrooveUtils.getTempo();
 
-		var midiStartTime = getMidiStartTime();
+		var midiStartTime = midiPlayer.getMIDIStartTime();
 		if (class_our_midi_start_time != midiStartTime) {
 			class_our_midi_start_time = midiStartTime;
 			class_our_last_midi_tempo_increase_remainder = 0;
@@ -2443,7 +2443,7 @@ function GrooveWriter() {
 				return; // don't increase any more after we have gone up the total amount
 			}
 		}
-		var totalMidiPlayTime = root.myGrooveUtils.getMidiPlayTime();
+		var totalMidiPlayTime = midiPlayer.getMidiPlayTime();
 		var timeDiffMilliseconds = totalMidiPlayTime.getTime() - class_our_last_midi_tempo_increase_time.getTime();
 		var tempoDiffFloat = (totalTempoIncreaseAmount) * (timeDiffMilliseconds / (tempoIncreaseInterval * 1000));
 
