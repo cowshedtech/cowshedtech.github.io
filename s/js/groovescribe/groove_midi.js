@@ -41,14 +41,40 @@ class MIDIPlayer {
         });
     };
 
+    /**
+     * 
+     */
     _getMidiSoundFontLocation() {
         return getGrooveUtilsBaseLocation() + "../soundfont/";
     };
     
+    /**
+     * 
+     */
     getMidiImageLocation() {
         return getGrooveUtilsBaseLocation() + "../images/";
     };
     
+    
+    //
+    //  functions
+    //
+
+    /**
+     * 
+     */
+    loadFromURL(grooveUtils, midiURL, tempo) {
+
+        MIDI.Player.timeWarp = 1; // speed the song is played back
+        MIDI.Player.BPM = tempo
+        MIDI.Player.loadFile(midiURL, this.initCallback(grooveUtils));
+    };
+
+    root; 
+    initCallback(grooveUtils) {
+        this.root = grooveUtils;
+        MIDI.Player.addListener(ourMIDICallback);
+    }
 
     //
     // Time functions
@@ -110,7 +136,7 @@ class MIDIPlayer {
         const seconds = totalTime.getSeconds();
         const time_string = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-        const midiPlayTime = document.getElementById(`MIDIPlayTime${root.grooveUtilsUniqueIndex}`);
+        const midiPlayTime = document.getElementById(`MIDIPlayTime${this.root.grooveUtilsUniqueIndex}`);
         if (midiPlayTime) {
             midiPlayTime.innerHTML = time_string;
         }
@@ -436,9 +462,6 @@ class MIDIPlayer {
 var midiPlayer = new MIDIPlayer();
 
 
-var global_grooveUtilsScriptSrc = "";
-if (document.currentScript)
-	global_grooveUtilsScriptSrc = document.currentScript.src;
 
 
 
@@ -451,18 +474,9 @@ if (document.currentScript)
 
 
 
-var root; 
-function midiLoaderCallback(grooveUtils) {
-    root = grooveUtils;
-    MIDI.Player.addListener(ourMIDICallback);
-}
 
-function loadMIDIFromURL(grooveUtils, midiURL, tempo) {
 
-    MIDI.Player.timeWarp = 1; // speed the song is played back
-    MIDI.Player.BPM = tempo
-    MIDI.Player.loadFile(midiURL, midiLoaderCallback(grooveUtils));
-};
+
 
 
 
@@ -473,47 +487,47 @@ var debug_note_count = 0;
 // do events.   (Double chaining)
 function ourMIDICallback(data) {
     var percentComplete = (data.now / data.end);
-    root.midiEventCallbacks.percentProgress(root.midiEventCallbacks.classRoot, percentComplete * 100);
+    midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, percentComplete * 100);
 
-    if (root.lastMidiTimeUpdate && root.lastMidiTimeUpdate < (data.now + 800)) {
+    if (midiPlayer.root.lastMidiTimeUpdate && midiPlayer.root.lastMidiTimeUpdate < (data.now + 800)) {
         midiPlayer.updateMidiPlayTime();
-        root.lastMidiTimeUpdate = data.now;
+        midiPlayer.root.lastMidiTimeUpdate = data.now;
     }
 
     if (data.now < 16) {
         // this is considered the start.   It doesn't come in at zero for some reason
         // The second note should always be at least 16 ms behind the first
         //class_midi_note_num = 0;
-        root.lastMidiTimeUpdate = -1;
+        midiPlayer.root.lastMidiTimeUpdate = -1;
     }
     if (data.now == data.end) {
 
         // at the end of a song
-        root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, "complete", 1);
+        midiPlayer.root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, "complete", 1);
 
-        if (root.shouldMIDIRepeat) {
+        if (midiPlayer.midiPlayer.root.shouldMIDIRepeat) {
 
             global_total_midi_repeats++;
 
             // regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
             // advanceMetronomeOptionsOffsetClickStartRotation will return false if not rotating
-            if (advanceMetronomeOptionsOffsetClickStartRotation() || root.midiEventCallbacks.doesMidiDataNeedRefresh(root.midiEventCallbacks.classRoot)) {
+            if (advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.root.midiEventCallbacks.doesMidiDataNeedRefresh(midiPlayer.root.midiEventCallbacks.classRoot)) {
                 MIDI.Player.stop();
-                root.midiEventCallbacks.loadMidiDataEvent(root.midiEventCallbacks.classRoot, false);
+                midiPlayer.root.midiEventCallbacks.loadMidiDataEvent(midiPlayer.root.midiEventCallbacks.classRoot, false);
                 MIDI.Player.start();
                 //  } else {
                 // let midi.loop handle the repeat for us
                 //MIDI.Player.stop();
                 //MIDI.Player.start();
             }
-            if (root.repeatCallback) {
-                root.repeatCallback();
+            if (midiPlayer.root.repeatCallback) {
+                midiPlayer.root.repeatCallback();
             }
         } else {
             // not repeating, so stopping
             MIDI.Player.stop();
-            root.midiEventCallbacks.percentProgress(root.midiEventCallbacks.classRoot, 100);
-            root.midiEventCallbacks.stopEvent(root.midiEventCallbacks.classRoot);
+            midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, 100);
+            midiPlayer.root.midiEventCallbacks.stopEvent(midiPlayer.root.midiEventCallbacks.classRoot);
         }
     }
 
@@ -540,10 +554,11 @@ function ourMIDICallback(data) {
         }
         if (note_type) {
             global_total_midi_notes++;
-            root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, note_type, percentComplete);
-            if (root.highlightOn) highlightNoteInABCSVGFromPercentComplete(root.rootsUniqueIndex, root.note_mapping_array, percentComplete, root.numberOfMeasures, root.repeatedMeasures);
-            if (root.noteCallback) {
-                root.noteCallback(note_type);
+            midiPlayer.root.midiEventCallbacks.notePlaying(midiPlayer.root.midiEventCallbacks.classRoot, note_type, percentComplete);
+            // TODO Fix this
+            // if (midiPlayer.root.highlightOn) highlightNoteInABCSVGFromPercentComplete(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.note_mapping_array, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
+            if (midiPlayer.root.noteCallback) {
+                midiPlayer.root.noteCallback(note_type);
             }
         }
     }
@@ -598,7 +613,7 @@ function ourMIDICallback(data) {
             classRoot.myGrooveData.tempo = classRoot.getTempo();
             classRoot.myGrooveData.swingPercent = classRoot.getSwing();
             var midiURL = create_MIDIURLFromGrooveData(classRoot.myGrooveData, classRoot.metrononeSolo);
-            loadMIDIFromURL(classRoot, midiURL, classRoot.getTempo());
+            midiPlayer.loadFromURL(classRoot, midiURL, classRoot.getTempo());
             classRoot.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
         } else {
             console.log("can't load midi song.   myGrooveData is empty");

@@ -93,6 +93,10 @@ function convert_sticking_counts_to_actual_counts(sticking_array, time_division,
 };
 
 
+var global_grooveUtilsScriptSrc = "";
+if (document.currentScript)
+	global_grooveUtilsScriptSrc = document.currentScript.src;
+
 var baseLocation = ""; // global
 function getGrooveUtilsBaseLocation() {
 
