@@ -20,16 +20,16 @@ function setupHotKeys(myGrooveUtils) {
         if (e.which == 32 && (e.target.type == "range" || (e.target.tagName.toUpperCase() != "INPUT" && e.target.tagName.toUpperCase() != "TEXTAREA"))) {
 
             // spacebar
-            startOrStopMIDI_playback(myGrooveUtils);
+            midiPlayer.startOrStop(myGrooveUtils);
             return false;
         }
         if (e.which == 179) {
             // Play button
-            startOrPauseMIDI_playback(myGrooveUtils);
+            midiPlayer.startOrPause(myGrooveUtils);
         }
         if (e.which == 178) {
             // Stop button
-            stopMIDI_playback(myGrooveUtils);
+            midiPlayer.stop(myGrooveUtils);
         }
 
         return true;
