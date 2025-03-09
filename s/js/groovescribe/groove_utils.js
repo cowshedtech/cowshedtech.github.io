@@ -27,7 +27,7 @@
 /*global Abc, MIDI, Midi */
 
 var global_num_GrooveUtilsCreated = 0;
-var global_midiInitialized = false;
+
 
 
 
@@ -206,7 +206,7 @@ function GrooveUtils() {
 		document.getElementById('tempoTextField' + root.grooveUtilsUniqueIndex).value = "" + tempo;
 
 		updateRangeSlider('tempoInput' + root.grooveUtilsUniqueIndex);
-		midiNoteHasChanged(root);
+		midiPlayer.noteHasChanged(root);
 
 		if (root.tempoChangeCallback)
 			root.tempoChangeCallback(tempo);
@@ -300,7 +300,7 @@ function GrooveUtils() {
 		} else {
 			document.getElementById('swingOutput' + root.grooveUtilsUniqueIndex).innerHTML = "" + swingAmount + "%";
 			root.swingPercent = swingAmount;
-			midiNoteHasChanged(root);
+			midiPlayer.noteHasChanged(root);
 		}
 
 	};
@@ -353,7 +353,7 @@ function GrooveUtils() {
 			root.myGrooveData.metronomeFrequency = 4;
 
 		root.setMetronomeFrequencyDisplay(root.myGrooveData.metronomeFrequency);
-		midiNoteHasChanged(root);
+		midiPlayer.noteHasChanged(root);
 	};
 
 	

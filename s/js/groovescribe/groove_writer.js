@@ -139,7 +139,7 @@ function GrooveWriter() {
 
 		selectButton(document.getElementById(id));
 
-		midiNoteHasChanged(root.myGrooveUtils); // pretty likely the case
+		midiPlayer.noteHasChanged(root.myGrooveUtils); // pretty likely the case
 	};
 
 	root.class_metronome_frequency = 0;
@@ -329,7 +329,7 @@ function GrooveWriter() {
 					setMetronomeSolo(false);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
 				}
-				midiNoteHasChanged(root.myGrooveUtils);
+				midiPlayer.noteHasChanged(root.myGrooveUtils);
 				break;
 
 			case "SpeedUp":
@@ -412,7 +412,7 @@ function GrooveWriter() {
 			addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuOffTheOne", "menuChecked", false);
 		}
 
-		midiNoteHasChanged(root.myGrooveUtils);
+		midiPlayer.noteHasChanged(root.myGrooveUtils);
 		root.metronomeOptionsMenuSetSelectedState();
 	};
 
@@ -489,7 +489,7 @@ function GrooveWriter() {
 		else
 			button.style.display = "none";
 
-			midiNoteHasChanged(root.myGrooveUtils);
+			midiPlayer.noteHasChanged(root.myGrooveUtils);
 	}
 
 
@@ -1690,7 +1690,7 @@ function GrooveWriter() {
 		document.getElementById("ABCsource").value = fullABC;
 		root.updateGrooveDBSource();
 
-		midiNoteHasChanged(root.myGrooveUtils);
+		midiPlayer.noteHasChanged(root.myGrooveUtils);
 
 		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
 		root.updateCurrentURL();
@@ -2353,7 +2353,7 @@ function GrooveWriter() {
 			if (playStarting && class_metronome_count_in_active) {
 
 				midiURL = MIDI_build_midi_url_count_in_track(class_num_beats_per_measure, class_note_value_per_measure, root.myGrooveUtils.getTempo());
-				midiNoteHasChanged(root.myGrooveUtils);
+				midiPlayer.noteHasChanged(root.myGrooveUtils);
 				class_metronome_count_in_is_playing = true;
 			} else {
 				if (class_metronome_count_in_is_playing) {
@@ -2362,7 +2362,7 @@ function GrooveWriter() {
 					resetMetronomeOptionsOffsetClickStartRotation();
 				}
 				midiURL = createMidiUrlFromClickableUI("our_MIDI");
-				midiResetNoteHasChanged(root.myGrooveUtils);
+				midiPlayer.resetNoteHasChanged(root.myGrooveUtils);
 			}
 			loadMIDIFromURL(root.myGrooveUtils, midiURL, root.myGrooveUtils.getTempo());
 			root.updateGrooveDBSource();
@@ -2371,14 +2371,14 @@ function GrooveWriter() {
 		root.myGrooveUtils.midiEventCallbacks.notePlaying = function (myroot, note_type, percent_complete) {
 			if (note_type == "complete" && class_metronome_auto_speed_up_active) {
 				// reload with new tempo
-				midiNoteHasChanged(root.myGrooveUtils);
+				midiPlayer.noteHasChanged(root.myGrooveUtils);
 				root.metronomeAutoSpeedUpTempoUpdate();
 			}
 
 			if (class_highlight_on) hilight_note(note_type, percent_complete, class_permutation_type, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures, class_notes_per_measure, class_repeated_measures, usingTriplets());
 		};
 
-		oneTimeInitializeMidi(root.myGrooveUtils);
+		midiPlayer.initialise(root.myGrooveUtils);
 
 		// enable or disable swing
 		root.myGrooveUtils.swingEnabled(root.myGrooveUtils.doesDivisionSupportSwing(class_notes_per_measure));

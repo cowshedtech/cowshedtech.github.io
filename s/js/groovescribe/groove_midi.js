@@ -4,52 +4,86 @@
 // Functions related to MIDI
 //
 
+initialised = false;
 
 class MIDIPlayer {
     
-    globalCurrentMIDIStartTime = 0;
+    currentStartTime = 0;
+    lastUpdateTime = 0;
 
-    //
-    //
-    // 
+    
+    /**
+     * 
+     */    
     constructor() {
         this.playTime = "0:00";
     }    
+
+    
+    /**
+     * 
+     */
+    initialise(root) {
+
+        if (initialised) {
+            root.midiEventCallbacks.midiInitialized(root.midiEventCallbacks.classRoot);
+            return;
+        }
+    
+        initialised = true;
+        MIDI.loadPlugin({
+            soundfontUrl: this._getMidiSoundFontLocation(),
+            instruments: ["gunshot"],
+            callback: function () {
+                MIDI.programChange(9, 127); // use "Gunshot" instrument because I don't know how to create new ones
+                root.midiEventCallbacks.midiInitialized(root.midiEventCallbacks.classRoot);
+            }
+        });
+    };
+
+    _getMidiSoundFontLocation() {
+        return getGrooveUtilsBaseLocation() + "../soundfont/";
+    };
+    
+    getMidiImageLocation() {
+        return getGrooveUtilsBaseLocation() + "../images/";
+    };
+    
 
     //
     // Time functions
     //
 
-    //
-    //
-    //
+    /**
+     * 
+     */
     getMIDIStartTime() {
-        return this.globalCurrentMIDIStartTime;
+        return this.currentStartTime;
     };
 
     
-    //
-    //
-    //
+    /**
+     * 
+     */
     resetMIDIStartTime() {
-        this.globalCurrentMIDIStartTime = new Date();
+        this.currentStartTime = new Date();
     };
 
 
-    //
-    // calculate how long the midi has been playing total (since the last play/pause press
-    //
+    /**
+     * calculate how long the midi has been playing total (since the last play/pause press
+     */
     getMidiPlayTime() {
         const now = new Date();
         const playTimeDiff = new Date(now - this.getMIDIStartTime());
 
         const totalPlayTime = document.getElementById("totalPlayTime");
         if (totalPlayTime) {
-            if (!global_last_midi_update_time) {
-                global_last_midi_update_time = this.getMIDIStartTime();
+            if (!this.lastUpdateTime) {
+                this.lastUpdateTime = this.getMIDIStartTime();
             }
             
-            const deltaTime = now - global_last_midi_update_time;
+            const deltaTime = now - this.lastUpdateTime;
             global_total_midi_play_time_msecs += deltaTime;
             
             const totalTime = new Date(global_total_midi_play_time_msecs);
@@ -62,15 +96,15 @@ class MIDIPlayer {
             totalPlayTime.innerHTML = `Total Play Time: <span class="totalTimeNum">${timeString}</span> notes: <span class="totalTimeNum">${global_total_midi_notes}</span> repetitions: <span class="totalTimeNum">${global_total_midi_repeats}</span>`;
         }
 
-        global_last_midi_update_time = now;
+        this.lastUpdateTime = now;
         return playTimeDiff;
     };
 
 
-    //
-    // update the midi play timer on the player.
-    // Keeps track of how long we have been playing.
-     updateMidiPlayTime() {
+    /**
+     * update the midi play timer on the player. Keeps track of how long we have been playing.
+     */    
+    updateMidiPlayTime() {
         const totalTime = this.getMidiPlayTime();
         const minutes = totalTime.getUTCMinutes();
         const seconds = totalTime.getSeconds();
@@ -87,10 +121,31 @@ class MIDIPlayer {
     // Play and stop functions
     //
 
+    // This is called so that the MIDI player will reload the groove
+    // at repeat time.   If not set then the midi player just repeats what is already loaded.
+    /**
+     * 
+     */    
+    noteHasChanged(root) {
+        root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = true;
+    };
+
+    /**
+     * 
+     */    
+    resetNoteHasChanged(root) {
+        root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
+    };
+
 
     //
+    // Play and stop functions
     //
-    //
+
+
+    /**
+     * Play single specific note
+     */    
     playSingleNote(note_val) {
         if (MIDI.WebAudio) {
             MIDI.WebAudio.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
@@ -100,22 +155,21 @@ class MIDIPlayer {
     }
 
     
-    //
-    //
-    //
-    // play button or keypress
+    /**
+     * Play 
+     */    
     play(root) {
         if (MIDI.Player.playing) {
             return;
         } else if (root.isMIDIPaused && false === root.midiEventCallbacks.doesMidiDataNeedRefresh(root.midiEventCallbacks.classRoot)) {
             // global_current_midi_start_time = new Date();
             midiPlayer.resetMIDIStartTime()
-            global_last_midi_update_time = 0;
+            this.lastUpdateTime = 0;
             MIDI.Player.resume();
         } else {
             MIDI.Player.ctx.resume();
             midiPlayer.resetMIDIStartTime()
-            global_last_midi_update_time = 0;
+            this.lastUpdateTime = 0;
             root.midiEventCallbacks.loadMidiDataEvent(root.midiEventCallbacks.classRoot, true);
             MIDI.Player.stop();
             MIDI.Player.loop(root.shouldMIDIRepeat); // set the loop parameter
@@ -126,35 +180,70 @@ class MIDIPlayer {
     };
 
 
-    //
-    // stop button or keypress
-    //
-    stop(root) {
-        if (MIDI.Player.playing || root.isMIDIPaused) {
-            root.isMIDIPaused = false;
-            MIDI.Player.stop();
-            root.midiEventCallbacks.stopEvent(root.midiEventCallbacks.classRoot);
-            root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, "clear", -1);
-            clearHighlightNoteInABCSVG(root.grooveUtilsUniqueIndex);
-            resetMetronomeOptionsOffsetClickStartRotation()
+    /**
+     * Pauses  MIDI playback and resets player state
+     * @param {Object} root - The root object containing player state and callbacks
+     */
+    pause(grooveUtils) {
+        if (grooveUtils.isMIDIPaused === false) {
+            grooveUtils.isMIDIPaused = true;
+            grooveUtils.midiEventCallbacks.pauseEvent(grooveUtils.midiEventCallbacks.classRoot);
+            MIDI.Player.pause();
+            grooveUtils.midiEventCallbacks.notePlaying(grooveUtils.midiEventCallbacks.classRoot, "clear", -1);
+            clearHighlightNoteInABCSVG(grooveUtils.grooveUtilsUniqueIndex);
         }
+    };
+    
+
+    /**
+     * Stop 
+     */    
+    stop(root) {
+        if (!MIDI.Player.playing && !root.isMIDIPaused) return;
+
+        // Reset player state
+        root.isMIDIPaused = false;
+        MIDI.Player.stop();
+    
+        // Trigger callbacks and cleanup
+        const { midiEventCallbacks, grooveUtilsUniqueIndex } = root;
+        const { classRoot } = midiEventCallbacks;
+        
+        midiEventCallbacks.stopEvent(classRoot);
+        midiEventCallbacks.notePlaying(classRoot, "clear", -1);
+        clearHighlightNoteInABCSVG(grooveUtilsUniqueIndex);
+        resetMetronomeOptionsOffsetClickStartRotation();
     };
 
 
-    //
-    // modal play/stop button
-    //
+    /**
+     * toggle stop and start 
+     */    
     startOrStop(root) {
         MIDI.Player.playing ? this.stop(root) : this.play(root);
     };
 
 
-    //
-    // modal play/pause button
-    //
+    /**
+     * toggle pause and start 
+     */    
     startOrPause(root) {
-        MIDI.Player.playing ? pauseMIDI_playback(root) : this.play(root);
+        MIDI.Player.playing ? this.pause(root) : this.play(root);
     };
+
+    
+    /**
+     * Toggles MIDI playback repeat mode
+     * @param {Object} root - The root object containing player state and callbacks
+     */
+    repeatToggle(root) {
+        // Toggle repeat state
+        root.shouldMIDIRepeat = !root.shouldMIDIRepeat;
+        
+        // Update MIDI player and UI
+        MIDI.Player.loop(root.shouldMIDIRepeat);
+        root.midiEventCallbacks.repeatChangeEvent(root.midiEventCallbacks.classRoot, root.shouldMIDIRepeat);
+    }
 
 
     //
@@ -194,7 +283,7 @@ class MIDIPlayer {
             {
                 id: `midiRepeatImage${uniqueIndex}`,
                 event: 'click',
-                handler: grooveUtil.repeatMIDI_playback
+                handler: midiPlayer.repeatToggle
             },
             {
                 id: `midiExpandImage${uniqueIndex}`,
@@ -355,34 +444,9 @@ if (document.currentScript)
 
 
 
-var baseLocation = ""; // global
-function getGrooveUtilsBaseLocation() {
 
-    if (baseLocation.length > 0)
-        return baseLocation;
 
-    if (global_grooveUtilsScriptSrc !== "") {
-        var lastSlash = global_grooveUtilsScriptSrc.lastIndexOf("/");
-        // lets find the slash before it since we need to go up a directory
-        lastSlash = global_grooveUtilsScriptSrc.lastIndexOf("/", lastSlash - 1);
-        baseLocation = global_grooveUtilsScriptSrc.slice(0, lastSlash + 1);
-    }
-
-    if (baseLocation.length < 1) {
-        baseLocation = "https://b125c4f8bf7d89726feec9ab8202d31e0c8d14d8.googledrive.com/host/0B2wxVWzVoWGYfnB5b3VTekxyYUowVjZ5YVE3UllLaVk5dVd4TzF4Q2ZaUXVsazhNSTdRM1E/";
-    }
-
-    return baseLocation;
-};
-
- function getMidiSoundFontLocation() {
-    return getGrooveUtilsBaseLocation() + "../soundfont/";
-};
-
-function getMidiImageLocation() {
-    return getGrooveUtilsBaseLocation() + "../images/";
-};
-
+ 
 
 
 
@@ -400,15 +464,6 @@ function loadMIDIFromURL(grooveUtils, midiURL, tempo) {
     MIDI.Player.loadFile(midiURL, midiLoaderCallback(grooveUtils));
 };
 
-function pauseMIDI_playback(grooveUtils) {
-    if (grooveUtils.isMIDIPaused === false) {
-        grooveUtils.isMIDIPaused = true;
-        grooveUtils.midiEventCallbacks.pauseEvent(grooveUtils.midiEventCallbacks.classRoot);
-        MIDI.Player.pause();
-        grooveUtils.midiEventCallbacks.notePlaying(grooveUtils.midiEventCallbacks.classRoot, "clear", -1);
-        clearHighlightNoteInABCSVG(grooveUtils.grooveUtilsUniqueIndex);
-    }
-};
 
 
 var debug_note_count = 0;
@@ -566,9 +621,9 @@ function ourMIDICallback(data) {
     };
     this.repeatChangeEvent = function (classRoot, newValue) {
         if (newValue)
-            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = getMidiImageLocation() + "repeat.png";
+            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getMidiImageLocation() + "repeat.png";
         else
-            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = getMidiImageLocation() + "grey_repeat.png";
+            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getMidiImageLocation() + "grey_repeat.png";
     };
     this.percentProgress = function (classRoot, percent) { };
     this.notePlaying = function (classRoot, note_type, note_position) { };
@@ -591,36 +646,8 @@ function ourMIDICallback(data) {
 
 
 
-// TODO FIx this!!
-function repeatMIDI_playback() {
-    if (root.shouldMIDIRepeat === false) {
-        root.shouldMIDIRepeat = true;
-        MIDI.Player.loop(true);
-    } else {
-        root.shouldMIDIRepeat = false;
-        MIDI.Player.loop(false);
-    }
-    root.midiEventCallbacks.repeatChangeEvent(root.midiEventCallbacks.classRoot, root.shouldMIDIRepeat);
 
-};
-
- function oneTimeInitializeMidi(root) {
-
-    if (global_midiInitialized) {
-        root.midiEventCallbacks.midiInitialized(root.midiEventCallbacks.classRoot);
-        return;
-    }
-
-    global_midiInitialized = true;
-    MIDI.loadPlugin({
-        soundfontUrl: getMidiSoundFontLocation(),
-        instruments: ["gunshot"],
-        callback: function () {
-            MIDI.programChange(9, 127); // use "Gunshot" instrument because I don't know how to create new ones
-            root.midiEventCallbacks.midiInitialized(root.midiEventCallbacks.classRoot);
-        }
-    });
-};
+ 
 
 
 
@@ -630,14 +657,7 @@ function repeatMIDI_playback() {
 
 
 
-// This is called so that the MIDI player will reload the groove
-// at repeat time.   If not set then the midi player just repeats what is already loaded.
-function midiNoteHasChanged(root) {
-    root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = true;
-};
-function midiResetNoteHasChanged(root) {
-    root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
-};
+
 
 
 
