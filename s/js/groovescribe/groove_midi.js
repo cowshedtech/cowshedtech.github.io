@@ -17,8 +17,6 @@ class MIDIPlayer {
     isMIDIPaused = false;
     shouldMIDIRepeat = true;
     
-    root;    
-    
     midiEventCallbacks;
     noteHasChangedSinceLastDataLoad = false;
 
@@ -36,12 +34,11 @@ class MIDIPlayer {
      * 
      */
     
-    initialise(root) {
+    initialise() {
 
         if (this.initialised) return;        
     
-        this.initialised = true;
-        this.root = root;        
+        this.initialised = true;        
 
         let parent = this;
 
