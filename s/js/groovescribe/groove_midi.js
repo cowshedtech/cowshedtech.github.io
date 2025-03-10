@@ -201,7 +201,15 @@ class MIDIPlayer {
             MIDI.Player.loop(this.shouldMIDIRepeat); // set the loop parameter
             MIDI.Player.start();
         }
-        this.root.midiEventCallbacks.playEvent(this.root);
+        // this.root.midiEventCallbacks.playEvent(this.root);
+
+        var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
+        if (icon)
+            icon.className = "midiPlayImage Playing";
+        if (this.classRoot.playEventCallback) {
+            this.classRoot.playEventCallback();
+        }
+
         this.isMIDIPaused = false;
     };
 
@@ -212,7 +220,11 @@ class MIDIPlayer {
     pause() {
         if (this.isMIDIPaused === false) {
             this.isMIDIPaused = true;
-            this.root.midiEventCallbacks.pauseEvent(this.root.midiEventCallbacks.classRoot);
+            // this.root.midiEventCallbacks.pauseEvent(this.root.midiEventCallbacks.classRoot);
+            var icon = document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex);
+            if (icon)
+                icon.className = "midiPlayImage Paused";
+
             MIDI.Player.pause();
             this.root.midiEventCallbacks.notePlaying(this.root.midiEventCallbacks.classRoot, "clear", -1);
             clearHighlightNoteInABCSVG(this.root.grooveUtilsUniqueIndex);
@@ -234,7 +246,11 @@ class MIDIPlayer {
         const { midiEventCallbacks, grooveUtilsUniqueIndex } = this.root;
         const { classRoot } = midiEventCallbacks;
         
-        midiEventCallbacks.stopEvent(classRoot);
+        // midiEventCallbacks.stopEvent(classRoot);
+        var icon = document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex);
+        if (icon)
+            icon.className = "midiPlayImage Stopped";
+
         midiEventCallbacks.notePlaying(classRoot, "clear", -1);
         clearHighlightNoteInABCSVG(grooveUtilsUniqueIndex);
         resetMetronomeOptionsOffsetClickStartRotation();
@@ -266,7 +282,11 @@ class MIDIPlayer {
         
         // Update MIDI player and UI
         MIDI.Player.loop(this.shouldMIDIRepeat);
-        this.root.midiEventCallbacks.repeatChangeEvent(this.root.midiEventCallbacks.classRoot, this.shouldMIDIRepeat);
+        // this.root.midiEventCallbacks.repeatChangeEvent(this.root.midiEventCallbacks.classRoot, this.shouldMIDIRepeat);
+        if (this.shouldMIDIRepeat)
+            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getImageLocation() + "repeat.png";
+        else
+            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getImageLocation() + "grey_repeat.png";
     }
 
 
@@ -491,7 +511,7 @@ class MIDIPlayer {
                 // not repeating, so stopping
                 MIDI.Player.stop();
                 midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, 100);
-                midiPlayer.root.midiEventCallbacks.stopEvent(midiPlayer.root.midiEventCallbacks.classRoot);
+                // midiPlayer.root.midiEventCallbacks.stopEvent(midiPlayer.root.midiEventCallbacks.classRoot);                
             }
         }
 
@@ -679,12 +699,12 @@ var midiPlayer = new MIDIPlayer();
     this.noteHasChangedSinceLastDataLoad = false;
 
     this.playEvent = function (root) {
-        var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
-        if (icon)
-            icon.className = "midiPlayImage Playing";
-        if (this.classRoot.playEventCallback) {
-            this.classRoot.playEventCallback();
-        }
+        // var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
+        // if (icon)
+        //     icon.className = "midiPlayImage Playing";
+        // if (this.classRoot.playEventCallback) {
+        //     this.classRoot.playEventCallback();
+        // }
     };
     // default loadMIDIDataEvent.  You probably want to override this
     // it will only make changes to the tempo and swing
@@ -704,22 +724,22 @@ var midiPlayer = new MIDIPlayer();
         return classRoot.midiEventCallbacks.noteHasChangedSinceLastDataLoad;
     };
     this.pauseEvent = function (classRoot) {
-        var icon = document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex);
-        if (icon)
-            icon.className = "midiPlayImage Paused";
+        // var icon = document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex);
+        // if (icon)
+        //     icon.className = "midiPlayImage Paused";
     };
 
-    this.resumeEvent = function (classRoot) { };
+    // this.resumeEvent = function (classRoot) { };
     this.stopEvent = function (classRoot) {
-        var icon = document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex);
-        if (icon)
-            icon.className = "midiPlayImage Stopped";
+        // var icon = document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex);
+        // if (icon)
+        //     icon.className = "midiPlayImage Stopped";
     };
     this.repeatChangeEvent = function (classRoot, newValue) {
-        if (newValue)
-            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getImageLocation() + "repeat.png";
-        else
-            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getImageLocation() + "grey_repeat.png";
+        // if (newValue)
+        //     document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getImageLocation() + "repeat.png";
+        // else
+        //     document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getImageLocation() + "grey_repeat.png";
     };
     this.percentProgress = function (classRoot, percent) { };
     this.notePlaying = function (classRoot, note_type, note_position) { };

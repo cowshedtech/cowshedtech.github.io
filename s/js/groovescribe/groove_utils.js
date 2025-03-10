@@ -64,7 +64,7 @@ function GrooveUtils() {
 
 	// integration with third party components
 	root.noteCallback = null;  //function triggered when a note is played
-	root.playEventCallback = null;  //triggered when the play button is pressed
+	// root.playEventCallback = null;  //triggered when the play button is pressed
 	root.repeatCallback = null;  //triggered when a groove is going to be repeated
 	root.tempoChangeCallback = null;  //triggered when the tempo changes.  ARG1 is the new Tempo integer (needs to be very fast, it can get called a lot of times from the slider)
 
