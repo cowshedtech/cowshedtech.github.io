@@ -15,6 +15,7 @@ class MIDIPlayer {
     isMIDIPaused = false;
     root;    
     midiEventCallbacks;
+    noteHasChangedSinceLastDataLoad = false;
 
     /**
      * 
@@ -154,16 +155,22 @@ class MIDIPlayer {
      * 
      */    
     noteHasChanged() {
-        if (this.midiEventCallbacks) this.midiEventCallbacks.noteHasChangedSinceLastDataLoad = true;
+        // if (this.midiEventCallbacks) this.midiEventCallbacks.noteHasChangedSinceLastDataLoad = true;
+        this.noteHasChangedSinceLastDataLoad = true;
     };
 
     /**
      * 
      */    
     resetNoteHasChanged() {
-        if (this.midiEventCallbacks) this.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
+        // if (this.midiEventCallbacks) this.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
+        this.noteHasChangedSinceLastDataLoad = false;
     };
 
+
+    doesMidiDataNeedRefresh() {
+        return this.noteHasChangedSinceLastDataLoad;
+    }
 
     //
     // Play and stop functions
@@ -188,7 +195,7 @@ class MIDIPlayer {
     play() {
         if (MIDI.Player.playing) {
             return;
-        } else if (this.isMIDIPaused && false === this.midiEventCallbacks.doesMidiDataNeedRefresh(this.root)) {
+        } else if (this.isMIDIPaused && false === this.doesMidiDataNeedRefresh()) {
             this.currentStartTime = new Date();
             this.lastUpdateTime = 0;
             MIDI.Player.resume();
@@ -495,7 +502,7 @@ class MIDIPlayer {
 
                 // regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
                 // advanceMetronomeOptionsOffsetClickStartRotation will return false if not rotating
-                if (advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.midiEventCallbacks.doesMidiDataNeedRefresh(midiPlayer.midiEventCallbacks.classRoot)) {
+                if (advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.doesMidiDataNeedRefresh()) {
                     MIDI.Player.stop();
                     midiPlayer.midiEventCallbacks.loadMidiDataEvent(midiPlayer.midiEventCallbacks.classRoot, false);
                     MIDI.Player.start();
@@ -568,7 +575,7 @@ var midiPlayer = new MIDIPlayer();
 
  function midiEventCallbackClass(classRoot) {
     this.classRoot = classRoot;
-    this.noteHasChangedSinceLastDataLoad = false;
+    // this.noteHasChangedSinceLastDataLoad = false;
 
     // default loadMIDIDataEvent.  You probably want to override this
     // it will only make changes to the tempo and swing
@@ -584,9 +591,9 @@ var midiPlayer = new MIDIPlayer();
         //     console.log("can't load midi song.   myGrooveData is empty");
         // }
     };
-    this.doesMidiDataNeedRefresh = function (classRoot) {
-        return midiPlayer.midiEventCallbacks.noteHasChangedSinceLastDataLoad;
-    };    
+    // this.doesMidiDataNeedRefresh = function (classRoot) {
+    //     return midiPlayer.midiEventCallbacks.noteHasChangedSinceLastDataLoad;
+    // };    
 };
 
 
