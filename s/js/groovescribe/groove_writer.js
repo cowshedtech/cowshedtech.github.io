@@ -2347,12 +2347,12 @@ function GrooveWriter() {
 		// add html for the midi player
 		midiPlayer = new MIDIPlayer(root.myGrooveUtils.grooveUtilsUniqueIndex);
 		midiPlayer.AddMidiPlayerToPage(root.myGrooveUtils, "midiPlayer", class_time_division);
-		midiPlayer.midiEventCallbacks = new midiEventCallbackClass(root);
+		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 		
 		// load the groove from the URL data if it was passed in.
 		set_Default_notes(window.location.search);
 
-		midiPlayer.midiEventCallbacks.loadMidiDataEvent = function (playStarting) {
+		midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
 			var midiURL;
 
 			if (playStarting && class_metronome_count_in_active) {
@@ -2373,7 +2373,7 @@ function GrooveWriter() {
 			root.updateGrooveDBSource();
 		};
 
-		midiPlayer.midiEventCallbacks.notePlaying = function (note_type, percent_complete) {
+		midiPlayer.eventCallbacks.notePlaying = function (note_type, percent_complete) {
 			if (note_type == "complete" && class_metronome_auto_speed_up_active) {
 				// reload with new tempo
 				midiPlayer.noteHasChanged();

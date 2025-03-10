@@ -14,10 +14,10 @@ class MIDIPlayer {
     lastUpdateTime = 0;
     lastMidiTimeUpdate = 0;
     
-    isMIDIPaused = false;
-    shouldMIDIRepeat = true;
+    isPaused = false;
+    shouldRepeat = true;
     
-    midiEventCallbacks;
+    eventCallbacks;
     noteHasChangedSinceLastDataLoad = false;
 
     containerIndex = 0;
@@ -32,12 +32,10 @@ class MIDIPlayer {
     
     /**
      * 
-     */
-    
+     */    
     initialise() {
 
-        if (this.initialised) return;        
-    
+        if (this.initialised) return;            
         this.initialised = true;        
 
         let parent = this;
@@ -49,8 +47,7 @@ class MIDIPlayer {
                 MIDI.programChange(9, 127); // use "Gunshot" instrument because I don't know how to create new ones
                 
                 // Successfully loaded MIDI plugin so lets init our MIDI play button
-                var icon = document.getElementById("midiPlayImage" + parent.containerIndex);
-                if (icon) icon.className = "midiPlayImage Stopped";
+                parent._updatePlayButtonState(parent.containerIndex, 'Stopped');
                 document.getElementById("midiPlayImage" + parent.containerIndex).onclick = function (event) {
                     midiPlayer.startOrStop();
                 }; 
@@ -146,9 +143,7 @@ class MIDIPlayer {
         const time_string = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
         const midiPlayTime = document.getElementById(`MIDIPlayTime${this.containerIndex}`);
-        if (midiPlayTime) {
-            midiPlayTime.innerHTML = time_string;
-        }
+        if (midiPlayTime) midiPlayTime.innerHTML = time_string;        
     };
 
 
@@ -156,10 +151,8 @@ class MIDIPlayer {
     // Play and stop functions
     //
 
-    // This is called so that the MIDI player will reload the groove
-    // at repeat time.   If not set then the midi player just repeats what is already loaded.
     /**
-     * 
+     * This is called so that the MIDI player will reload the groove at repeat time.   If not set then the midi player just repeats what is already loaded.
      */    
     noteHasChanged() {
         this.noteHasChangedSinceLastDataLoad = true;
@@ -177,10 +170,10 @@ class MIDIPlayer {
         return this.noteHasChangedSinceLastDataLoad;
     }
 
+
     //
     // Play and stop functions
     //
-
 
     /**
      * Play single specific note
@@ -198,9 +191,9 @@ class MIDIPlayer {
      * Play 
      */    
     play() {
-        if (MIDI.Player.playing) {
-            return;
-        } else if (this.isMIDIPaused && false === this.doesMidiDataNeedRefresh()) {
+        if (MIDI.Player.playing) return;
+        
+        if (this.isPaused && false === this.doesMidiDataNeedRefresh()) {
             this.currentStartTime = new Date();
             this.lastUpdateTime = 0;
             MIDI.Player.resume();
@@ -208,21 +201,15 @@ class MIDIPlayer {
             MIDI.Player.ctx.resume();
             this.currentStartTime = new Date();
             this.lastUpdateTime = 0;
-            this.midiEventCallbacks.loadMidiDataEvent(true);
+            this.eventCallbacks.loadMidiDataEvent(true);
             MIDI.Player.stop();
-            MIDI.Player.loop(this.shouldMIDIRepeat); // set the loop parameter
+            MIDI.Player.loop(this.shouldRepeat); // set the loop parameter
             MIDI.Player.start();
         }
-        // this.midiEventCallbacks.playEvent(this.root);
-
-        // var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
-        // if (icon)
-        //     icon.className = "midiPlayImage Playing";
-        // if (this.classRoot.playEventCallback) {
-        //     this.classRoot.playEventCallback();
-        // }
-
-        this.isMIDIPaused = false;
+        
+        this._updatePlayButtonState(this.containerIndex, 'Playing');
+        
+        this.isPaused = false;
     };
 
 
@@ -230,17 +217,13 @@ class MIDIPlayer {
      * Pauses  MIDI playback and resets player state
      */
     pause() {
-        if (this.isMIDIPaused === false) {
-            this.isMIDIPaused = true;
-            // this.midiEventCallbacks.pauseEvent(this.midiEventCallbacks.classRoot);
-            var icon = document.getElementById("midiPlayImage" + this.containerIndex);
-            if (icon)
-                icon.className = "midiPlayImage Paused";
-
-            MIDI.Player.pause();
-            this.midiEventCallbacks.notePlaying("clear", -1);
-            clearHighlightNoteInABCSVG(this.containerIndex);
-        }
+        if (this.isPaused === true) return
+        this.isPaused = true;
+                
+        MIDI.Player.pause();
+        this._updatePlayButtonState(this.containerIndex, 'Paused');
+        this.eventCallbacks.notePlaying("clear", -1);
+        clearHighlightNoteInABCSVG(this.containerIndex);        
     };
     
 
@@ -248,22 +231,15 @@ class MIDIPlayer {
      * Stop 
      */    
     stop() {
-        if (!MIDI.Player.playing && !this.isMIDIPaused) return;
+        if (!MIDI.Player.playing && !this.isPaused) return;
 
         // Reset player state
-        this.isMIDIPaused = false;
+        this.isPaused = false;
         MIDI.Player.stop();
     
-        // Trigger callbacks and cleanup
-        // const { grooveUtilsUniqueIndex } = this.root;
-        // const { classRoot } = midiEventCallbacks;
-        
-        // midiEventCallbacks.stopEvent(classRoot);
-        var icon = document.getElementById("midiPlayImage" + this.containerIndex);
-        if (icon)
-            icon.className = "midiPlayImage Stopped";
+        this._updatePlayButtonState(this.containerIndex, 'Stopped');
 
-        this.midiEventCallbacks.notePlaying("clear", -1);
+        this.eventCallbacks.notePlaying("clear", -1);
         clearHighlightNoteInABCSVG(this.containerIndex);
         resetMetronomeOptionsOffsetClickStartRotation();
     };
@@ -289,13 +265,11 @@ class MIDIPlayer {
      * Toggles MIDI playback repeat mode
      */
     repeatToggle() {
-        // Toggle repeat state
-        this.shouldMIDIRepeat = !this.shouldMIDIRepeat;
+        this.shouldRepeat = !this.shouldRepeat; // Toggle repeat state
         
         // Update MIDI player and UI
-        MIDI.Player.loop(this.shouldMIDIRepeat);
-        // this.midiEventCallbacks.repeatChangeEvent(this.midiEventCallbacks.classRoot, this.shouldMIDIRepeat);
-        if (this.shouldMIDIRepeat)
+        MIDI.Player.loop(this.shouldRepeat);
+        if (this.shouldRepeat)
             document.getElementById("midiRepeatImage" + this.containerIndex).src = midiPlayer.getImageLocation() + "repeat.png";
         else
             document.getElementById("midiRepeatImage" + this.containerIndex).src = midiPlayer.getImageLocation() + "grey_repeat.png";
@@ -305,7 +279,6 @@ class MIDIPlayer {
     //
     // Setup and display functions
     //
-
 
     //
     // pass in a tag ID.  (not a class)
@@ -481,7 +454,7 @@ class MIDIPlayer {
      */
     callback(data) {
         var percentComplete = (data.now / data.end);
-        // midiPlayer.midiEventCallbacks.percentProgress(midiPlayer.midiEventCallbacks.classRoot, percentComplete * 100);
+        // midiPlayer.eventCallbacks.percentProgress(midiPlayer.eventCallbacks.classRoot, percentComplete * 100);
 
         if (midiPlayer.lastMidiTimeUpdate && midiPlayer.lastMidiTimeUpdate < (data.now + 800)) {
             midiPlayer.updatePlayTime();
@@ -497,9 +470,9 @@ class MIDIPlayer {
         if (data.now == data.end) {
 
             // at the end of a song
-            midiPlayer.midiEventCallbacks.notePlaying("complete", 1);
+            midiPlayer.eventCallbacks.notePlaying("complete", 1);
 
-            if (midiPlayer.shouldMIDIRepeat) {
+            if (midiPlayer.shouldRepeat) {
 
                 global_total_midi_repeats++;
 
@@ -507,21 +480,11 @@ class MIDIPlayer {
                 // advanceMetronomeOptionsOffsetClickStartRotation will return false if not rotating
                 if (advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.doesMidiDataNeedRefresh()) {
                     MIDI.Player.stop();
-                    midiPlayer.midiEventCallbacks.loadMidiDataEvent(midiPlayer.midiEventCallbacks.classRoot, false);
-                    MIDI.Player.start();
-                    //  } else {
-                    // let midi.loop handle the repeat for us
-                    //MIDI.Player.stop();
-                    //MIDI.Player.start();
-                }
-                // if (midiPlayer.root.repeatCallback) {
-                //     midiPlayer.root.repeatCallback();
-                // }
+                    midiPlayer.eventCallbacks.loadMidiDataEvent(midiPlayer.eventCallbacks.classRoot, false);
+                    MIDI.Player.start();                    
+                }                
             } else {
-                MIDI.Player.stop();  // not repeating, so stopping
-               
-                //midiPlayer.midiEventCallbacks.percentProgress(midiPlayer.midiEventCallbacks.classRoot, 100);
-                // midiPlayer.midiEventCallbacks.stopEvent(midiPlayer.midiEventCallbacks.classRoot);                
+                MIDI.Player.stop();  // not repeating, so stopping               
             }
         }
 
@@ -548,7 +511,7 @@ class MIDIPlayer {
             }
             if (note_type) {
                 global_total_midi_notes++;
-                midiPlayer.midiEventCallbacks.notePlaying(note_type, percentComplete);
+                midiPlayer.eventCallbacks.notePlaying(note_type, percentComplete);
                 // TODO Fix this
                 // if (midiPlayer.root.highlightOn) highlightNoteInABCSVGFromPercentComplete(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.note_mapping_array, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
                 // if (midiPlayer.root.noteCallback) {
@@ -564,40 +527,24 @@ class MIDIPlayer {
         const browserInfo = getBrowserInfo();
         return browserInfo.browser === "MSIE" && browserInfo.version < 12;
     }
+
+    /**
+     * Updates the MIDI play button icon state
+     * @param {string} containerIndex - The unique index for the container
+     * @param {string} state - The state to set ('Playing', 'Stopped', or 'Paused')
+     * @returns {void}
+     */
+    _updatePlayButtonState(containerIndex, state) {
+        const icon = document.getElementById(`midiPlayImage${containerIndex}`);
+        if (icon) {
+            icon.className = `midiPlayImage ${state}`;
+        }
+    }
 }
 
 
-//
-// Start with a singleton
-// 
-// var midiPlayer = new MIDIPlayer();
 
-
-
-
-
- function midiEventCallbackClass(classRoot) {
-    this.classRoot = classRoot;
-    // this.noteHasChangedSinceLastDataLoad = false;
-
-    // default loadMIDIDataEvent.  You probably want to override this
-    // it will only make changes to the tempo and swing
-    // playStarting: boolean that is true on the first time through the midi playback
-    this.loadMidiDataEvent = function (classRoot, playStarting) {
-        // if (classRoot.myGrooveData) {
-        //     classRoot.myGrooveData.tempo = classRoot.getTempo();
-        //     classRoot.myGrooveData.swingPercent = classRoot.getSwing();
-        //     var midiURL = create_MIDIURLFromGrooveData(classRoot.myGrooveData, classRoot.metrononeSolo);
-        //     midiPlayer.loadFromURL(classRoot, midiURL, classRoot.getTempo());
-        //     classRoot.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
-        // } else {
-        //     console.log("can't load midi song.   myGrooveData is empty");
-        // }
-    };
-    // this.doesMidiDataNeedRefresh = function (classRoot) {
-    //     return midiPlayer.midiEventCallbacks.noteHasChangedSinceLastDataLoad;
-    // };    
-};
+function midiEventCallbackClass() { };
 
 
 
