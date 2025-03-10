@@ -240,7 +240,7 @@ class MIDIPlayer {
                 icon.className = "midiPlayImage Paused";
 
             MIDI.Player.pause();
-            this.midiEventCallbacks.notePlaying(this.midiEventCallbacks.classRoot, "clear", -1);
+            this.midiEventCallbacks.notePlaying("clear", -1);
             clearHighlightNoteInABCSVG(this.containerIndex);
         }
     };
@@ -265,7 +265,7 @@ class MIDIPlayer {
         if (icon)
             icon.className = "midiPlayImage Stopped";
 
-        this.midiEventCallbacks.notePlaying(this.root, "clear", -1);
+        this.midiEventCallbacks.notePlaying("clear", -1);
         clearHighlightNoteInABCSVG(this.containerIndex);
         resetMetronomeOptionsOffsetClickStartRotation();
     };
@@ -500,7 +500,7 @@ class MIDIPlayer {
         if (data.now == data.end) {
 
             // at the end of a song
-            midiPlayer.midiEventCallbacks.notePlaying(midiPlayer.midiEventCallbacks.classRoot, "complete", 1);
+            midiPlayer.midiEventCallbacks.notePlaying("complete", 1);
 
             if (midiPlayer.shouldMIDIRepeat) {
 
@@ -551,7 +551,7 @@ class MIDIPlayer {
             }
             if (note_type) {
                 global_total_midi_notes++;
-                midiPlayer.midiEventCallbacks.notePlaying(midiPlayer.midiEventCallbacks.classRoot, note_type, percentComplete);
+                midiPlayer.midiEventCallbacks.notePlaying(note_type, percentComplete);
                 // TODO Fix this
                 // if (midiPlayer.root.highlightOn) highlightNoteInABCSVGFromPercentComplete(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.note_mapping_array, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
                 if (midiPlayer.root.noteCallback) {
