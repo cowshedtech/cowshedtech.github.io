@@ -51,8 +51,6 @@ function GrooveUtils() {
 	root.grooveDBAuthoring = false;
 
 	// midi state variables
-	root.isMIDIPaused = false;
-	root.shouldMIDIRepeat = true;
 	root.swingIsEnabled = false;
 	root.grooveUtilsUniqueIndex = global_num_GrooveUtilsCreated;
 

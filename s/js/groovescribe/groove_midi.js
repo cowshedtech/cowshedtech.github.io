@@ -11,6 +11,8 @@ class MIDIPlayer {
     currentStartTime = 0;  // Start time of most recent play
     lastUpdateTime = 0;
     initialised = false;
+    shouldMIDIRepeat = true;
+    isMIDIPaused = false;
     root;    
     
     /**
@@ -44,7 +46,7 @@ class MIDIPlayer {
                 document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex).onclick = function (event) {
                     midiPlayer.startOrStop(root);
                 }; 
-                setupHotKeys(root); // spacebar to play
+                setupHotKeys(); // spacebar to play
             }
         });
     };
@@ -83,7 +85,7 @@ class MIDIPlayer {
      * Return data representing when we started the most recent play
      */
     getStartTime() {
-        return this.currentStartTime;
+        return ;
     };
 
     
@@ -100,12 +102,12 @@ class MIDIPlayer {
      */
     getPlayTime() {
         const now = new Date();
-        const playTimeDiff = new Date(now - this.getStartTime());
+        const playTimeDiff = new Date(now - this.currentStartTime);
 
         const totalPlayTime = document.getElementById("totalPlayTime");
         if (totalPlayTime) {
             if (!this.lastUpdateTime) {
-                this.lastUpdateTime = this.getStartTime();
+                this.lastUpdateTime = this.currentStartTime;
             }
             
             const deltaTime = now - this.lastUpdateTime;
@@ -186,21 +188,21 @@ class MIDIPlayer {
     play() {
         if (MIDI.Player.playing) {
             return;
-        } else if (this.root.isMIDIPaused && false === this.root.midiEventCallbacks.doesMidiDataNeedRefresh(this.root)) {
-            midiPlayer.resetStartTime()
+        } else if (this.isMIDIPaused && false === this.root.midiEventCallbacks.doesMidiDataNeedRefresh(this.root)) {
+            this.currentStartTime = new Date();
             this.lastUpdateTime = 0;
             MIDI.Player.resume();
         } else {
             MIDI.Player.ctx.resume();
-            midiPlayer.resetStartTime()
+            this.currentStartTime = new Date();
             this.lastUpdateTime = 0;
             this.root.midiEventCallbacks.loadMidiDataEvent(this.root, true);
             MIDI.Player.stop();
-            MIDI.Player.loop(this.root.shouldMIDIRepeat); // set the loop parameter
+            MIDI.Player.loop(this.shouldMIDIRepeat); // set the loop parameter
             MIDI.Player.start();
         }
         this.root.midiEventCallbacks.playEvent(this.root);
-        this.root.isMIDIPaused = false;
+        this.isMIDIPaused = false;
     };
 
 
@@ -209,8 +211,8 @@ class MIDIPlayer {
      * @param {Object} root - The root object containing player state and callbacks
      */
     pause() {
-        if (this.root.isMIDIPaused === false) {
-            this.root.isMIDIPaused = true;
+        if (this.isMIDIPaused === false) {
+            this.isMIDIPaused = true;
             this.root.midiEventCallbacks.pauseEvent(this.root.midiEventCallbacks.classRoot);
             MIDI.Player.pause();
             this.root.midiEventCallbacks.notePlaying(this.root.midiEventCallbacks.classRoot, "clear", -1);
@@ -223,10 +225,10 @@ class MIDIPlayer {
      * Stop 
      */    
     stop() {
-        if (!MIDI.Player.playing && !this.root.isMIDIPaused) return;
+        if (!MIDI.Player.playing && !this.isMIDIPaused) return;
 
         // Reset player state
-        this.root.isMIDIPaused = false;
+        this.isMIDIPaused = false;
         MIDI.Player.stop();
     
         // Trigger callbacks and cleanup
@@ -262,11 +264,11 @@ class MIDIPlayer {
      */
     repeatToggle() {
         // Toggle repeat state
-        this.root.shouldMIDIRepeat = !this.root.shouldMIDIRepeat;
+        this.shouldMIDIRepeat = !this.shouldMIDIRepeat;
         
         // Update MIDI player and UI
-        MIDI.Player.loop(this.root.shouldMIDIRepeat);
-        this.root.midiEventCallbacks.repeatChangeEvent(this.root.midiEventCallbacks.classRoot, this.root.shouldMIDIRepeat);
+        MIDI.Player.loop(this.shouldMIDIRepeat);
+        this.root.midiEventCallbacks.repeatChangeEvent(this.root.midiEventCallbacks.classRoot, this.shouldMIDIRepeat);
     }
 
 
@@ -469,7 +471,7 @@ class MIDIPlayer {
             // at the end of a song
             midiPlayer.root.midiEventCallbacks.notePlaying(midiPlayer.root.midiEventCallbacks.classRoot, "complete", 1);
 
-            if (midiPlayer.root.shouldMIDIRepeat) {
+            if (midiPlayer.shouldMIDIRepeat) {
 
                 global_total_midi_repeats++;
 

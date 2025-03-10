@@ -1,4 +1,4 @@
-function setupHotKeys(myGrooveUtils) {
+function setupHotKeys() {
 
     var isCtrl = false;
     document.onkeyup = function (e) {
@@ -20,16 +20,16 @@ function setupHotKeys(myGrooveUtils) {
         if (e.which == 32 && (e.target.type == "range" || (e.target.tagName.toUpperCase() != "INPUT" && e.target.tagName.toUpperCase() != "TEXTAREA"))) {
 
             // spacebar
-            midiPlayer.startOrStop(myGrooveUtils);
+            midiPlayer.startOrStop();
             return false;
         }
         if (e.which == 179) {
             // Play button
-            midiPlayer.startOrPause(myGrooveUtils);
+            midiPlayer.startOrPause();
         }
         if (e.which == 178) {
             // Stop button
-            midiPlayer.stop(myGrooveUtils);
+            midiPlayer.stop();
         }
 
         return true;
