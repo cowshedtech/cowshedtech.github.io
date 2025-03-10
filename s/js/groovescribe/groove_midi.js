@@ -73,7 +73,7 @@ class MIDIPlayer {
     root; 
     initCallback(grooveUtils) {
         this.root = grooveUtils;
-        MIDI.Player.addListener(ourMIDICallback);
+        MIDI.Player.addListener(this.callback);
     }
 
     //
@@ -447,6 +447,112 @@ class MIDIPlayer {
     
     };
 
+    callback(data) {
+        var percentComplete = (data.now / data.end);
+        midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, percentComplete * 100);
+
+
+        if (midiPlayer.root.lastMidiTimeUpdate && midiPlayer.root.lastMidiTimeUpdate < (data.now + 800)) {
+            midiPlayer.updateMidiPlayTime();
+            midiPlayer.root.lastMidiTimeUpdate = data.now;
+        }
+
+        if (data.now < 16) {
+            // this is considered the start.   It doesn't come in at zero for some reason
+            // The second note should always be at least 16 ms behind the first
+            //class_midi_note_num = 0;
+            midiPlayer.root.lastMidiTimeUpdate = -1;
+        }
+        if (data.now == data.end) {
+
+            // at the end of a song
+            midiPlayer.root.midiEventCallbacks.notePlaying(midiPlayer.root.midiEventCallbacks.classRoot, "complete", 1);
+
+            if (midiPlayer.root.shouldMIDIRepeat) {
+
+                global_total_midi_repeats++;
+
+                // regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
+                // advanceMetronomeOptionsOffsetClickStartRotation will return false if not rotating
+                if (advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.root.midiEventCallbacks.doesMidiDataNeedRefresh(midiPlayer.root.midiEventCallbacks.classRoot)) {
+                    MIDI.Player.stop();
+                    midiPlayer.root.midiEventCallbacks.loadMidiDataEvent(midiPlayer.root.midiEventCallbacks.classRoot, false);
+                    MIDI.Player.start();
+                    //  } else {
+                    // let midi.loop handle the repeat for us
+                    //MIDI.Player.stop();
+                    //MIDI.Player.start();
+                }
+                if (midiPlayer.root.repeatCallback) {
+                    midiPlayer.root.repeatCallback();
+                }
+            } else {
+                // not repeating, so stopping
+                MIDI.Player.stop();
+                midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, 100);
+                midiPlayer.root.midiEventCallbacks.stopEvent(midiPlayer.root.midiEventCallbacks.classRoot);
+            }
+        }
+
+        // note on
+        var note_type = false;
+        if (data.message == 144) {
+            if (data.note == constant_OUR_MIDI_METRONOME_1 || data.note == constant_OUR_MIDI_METRONOME_NORMAL) {
+                note_type = "metronome";
+            } else if (data.note == constant_OUR_MIDI_HIHAT_NORMAL || data.note == constant_OUR_MIDI_HIHAT_OPEN ||
+                data.note == constant_OUR_MIDI_HIHAT_ACCENT || data.note == constant_OUR_MIDI_HIHAT_CRASH ||
+                data.note == constant_OUR_MIDI_HIHAT_RIDE || data.note == constant_OUR_MIDI_HIHAT_STACKER ||
+                data.note == constant_OUR_MIDI_HIHAT_RIDE_BELL || data.note == constant_OUR_MIDI_HIHAT_COW_BELL ||
+                data.note == constant_OUR_MIDI_HIHAT_METRONOME_NORMAL || data.note == constant_OUR_MIDI_HIHAT_METRONOME_NORMAL) {
+                note_type = "hi-hat";
+            } else if (data.note == constant_OUR_MIDI_SNARE_NORMAL || data.note == constant_OUR_MIDI_SNARE_ACCENT ||
+                data.note == constant_OUR_MIDI_SNARE_GHOST || data.note == constant_OUR_MIDI_SNARE_XSTICK ||
+                data.note == constant_OUR_MIDI_SNARE_FLAM || data.note == constant_OUR_MIDI_SNARE_DRAG ||
+                data.note == constant_OUR_MIDI_SNARE_BUZZ) {
+                note_type = "snare";
+            } else if (data.note == constant_OUR_MIDI_KICK_NORMAL || data.note == constant_OUR_MIDI_HIHAT_FOOT) {
+                note_type = "kick";
+            } else if (data.note == constant_OUR_MIDI_TOM1_NORMAL || data.note == constant_OUR_MIDI_TOM2_NORMAL || data.note == constant_OUR_MIDI_TOM3_NORMAL || data.note == constant_OUR_MIDI_TOM4_NORMAL) {
+                note_type = "tom";
+            }
+            if (note_type) {
+                global_total_midi_notes++;
+                midiPlayer.root.midiEventCallbacks.notePlaying(midiPlayer.root.midiEventCallbacks.classRoot, note_type, percentComplete);
+                // TODO Fix this
+                // if (midiPlayer.root.highlightOn) highlightNoteInABCSVGFromPercentComplete(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.note_mapping_array, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
+                if (midiPlayer.root.noteCallback) {
+                    midiPlayer.root.noteCallback(note_type);
+                }
+            }
+        }
+
+        // // this used to work when we used note 60 as a spacer between chords
+        // //if(data.note == 60)
+        // //	class_midi_note_num++;
+        // /*
+        // if (0 && data.message == 144) {
+        // debug_note_count++;
+        // // my debugging code for midi
+        // var newHTML = "";
+        // if (data.note != 60)
+        // newHTML += "<b>";
+
+        // newHTML += note_type + " total notes: " + debug_note_count + " - count#: " + class_midi_note_num +
+        // " now: " + data.now +
+        // " note: " + data.note +
+        // " message: " + data.message +
+        // " channel: " + data.channel +
+        // " velocity: " + data.velocity +
+        // "<br>";
+
+        // if (data.note != 60)
+        // newHTML += "</b>";
+
+        // document.getElementById("midiTextOutput").innerHTML += newHTML;
+        // }
+        //     */        
+    }
+
 
     // Helper method for browser detection
     isIE10() {
@@ -480,115 +586,115 @@ var midiPlayer = new MIDIPlayer();
 
 
 
-var debug_note_count = 0;
-//var class_midi_note_num = 0;  // global, but only used in this function
-// This is the function that the 3rd party midi library calls to give us events.
-// This is different from the callbacks that we use for the midi code in this library to
-// do events.   (Double chaining)
-function ourMIDICallback(data) {
-    var percentComplete = (data.now / data.end);
-    midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, percentComplete * 100);
+// var debug_note_count = 0;
+// //var class_midi_note_num = 0;  // global, but only used in this function
+// // This is the function that the 3rd party midi library calls to give us events.
+// // This is different from the callbacks that we use for the midi code in this library to
+// // do events.   (Double chaining)
+// function ourMIDICallback(data) {
+//     var percentComplete = (data.now / data.end);
+//     midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, percentComplete * 100);
 
-    if (midiPlayer.root.lastMidiTimeUpdate && midiPlayer.root.lastMidiTimeUpdate < (data.now + 800)) {
-        midiPlayer.updateMidiPlayTime();
-        midiPlayer.root.lastMidiTimeUpdate = data.now;
-    }
+//     if (midiPlayer.root.lastMidiTimeUpdate && midiPlayer.root.lastMidiTimeUpdate < (data.now + 800)) {
+//         midiPlayer.updateMidiPlayTime();
+//         midiPlayer.root.lastMidiTimeUpdate = data.now;
+//     }
 
-    if (data.now < 16) {
-        // this is considered the start.   It doesn't come in at zero for some reason
-        // The second note should always be at least 16 ms behind the first
-        //class_midi_note_num = 0;
-        midiPlayer.root.lastMidiTimeUpdate = -1;
-    }
-    if (data.now == data.end) {
+//     if (data.now < 16) {
+//         // this is considered the start.   It doesn't come in at zero for some reason
+//         // The second note should always be at least 16 ms behind the first
+//         //class_midi_note_num = 0;
+//         midiPlayer.root.lastMidiTimeUpdate = -1;
+//     }
+//     if (data.now == data.end) {
 
-        // at the end of a song
-        midiPlayer.root.midiEventCallbacks.notePlaying(root.midiEventCallbacks.classRoot, "complete", 1);
+//         // at the end of a song
+//         midiPlayer.root.midiEventCallbacks.notePlaying(midiPlayer.root.midiEventCallbacks.classRoot, "complete", 1);
 
-        if (midiPlayer.midiPlayer.root.shouldMIDIRepeat) {
+//         if (midiPlayer.root.shouldMIDIRepeat) {
 
-            global_total_midi_repeats++;
+//             global_total_midi_repeats++;
 
-            // regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
-            // advanceMetronomeOptionsOffsetClickStartRotation will return false if not rotating
-            if (advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.root.midiEventCallbacks.doesMidiDataNeedRefresh(midiPlayer.root.midiEventCallbacks.classRoot)) {
-                MIDI.Player.stop();
-                midiPlayer.root.midiEventCallbacks.loadMidiDataEvent(midiPlayer.root.midiEventCallbacks.classRoot, false);
-                MIDI.Player.start();
-                //  } else {
-                // let midi.loop handle the repeat for us
-                //MIDI.Player.stop();
-                //MIDI.Player.start();
-            }
-            if (midiPlayer.root.repeatCallback) {
-                midiPlayer.root.repeatCallback();
-            }
-        } else {
-            // not repeating, so stopping
-            MIDI.Player.stop();
-            midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, 100);
-            midiPlayer.root.midiEventCallbacks.stopEvent(midiPlayer.root.midiEventCallbacks.classRoot);
-        }
-    }
+//             // regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
+//             // advanceMetronomeOptionsOffsetClickStartRotation will return false if not rotating
+//             if (advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.root.midiEventCallbacks.doesMidiDataNeedRefresh(midiPlayer.root.midiEventCallbacks.classRoot)) {
+//                 MIDI.Player.stop();
+//                 midiPlayer.root.midiEventCallbacks.loadMidiDataEvent(midiPlayer.root.midiEventCallbacks.classRoot, false);
+//                 MIDI.Player.start();
+//                 //  } else {
+//                 // let midi.loop handle the repeat for us
+//                 //MIDI.Player.stop();
+//                 //MIDI.Player.start();
+//             }
+//             if (midiPlayer.root.repeatCallback) {
+//                 midiPlayer.root.repeatCallback();
+//             }
+//         } else {
+//             // not repeating, so stopping
+//             MIDI.Player.stop();
+//             midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, 100);
+//             midiPlayer.root.midiEventCallbacks.stopEvent(midiPlayer.root.midiEventCallbacks.classRoot);
+//         }
+//     }
 
-    // note on
-    var note_type = false;
-    if (data.message == 144) {
-        if (data.note == constant_OUR_MIDI_METRONOME_1 || data.note == constant_OUR_MIDI_METRONOME_NORMAL) {
-            note_type = "metronome";
-        } else if (data.note == constant_OUR_MIDI_HIHAT_NORMAL || data.note == constant_OUR_MIDI_HIHAT_OPEN ||
-            data.note == constant_OUR_MIDI_HIHAT_ACCENT || data.note == constant_OUR_MIDI_HIHAT_CRASH ||
-            data.note == constant_OUR_MIDI_HIHAT_RIDE || data.note == constant_OUR_MIDI_HIHAT_STACKER ||
-            data.note == constant_OUR_MIDI_HIHAT_RIDE_BELL || data.note == constant_OUR_MIDI_HIHAT_COW_BELL ||
-            data.note == constant_OUR_MIDI_HIHAT_METRONOME_NORMAL || data.note == constant_OUR_MIDI_HIHAT_METRONOME_NORMAL) {
-            note_type = "hi-hat";
-        } else if (data.note == constant_OUR_MIDI_SNARE_NORMAL || data.note == constant_OUR_MIDI_SNARE_ACCENT ||
-            data.note == constant_OUR_MIDI_SNARE_GHOST || data.note == constant_OUR_MIDI_SNARE_XSTICK ||
-            data.note == constant_OUR_MIDI_SNARE_FLAM || data.note == constant_OUR_MIDI_SNARE_DRAG ||
-            data.note == constant_OUR_MIDI_SNARE_BUZZ) {
-            note_type = "snare";
-        } else if (data.note == constant_OUR_MIDI_KICK_NORMAL || data.note == constant_OUR_MIDI_HIHAT_FOOT) {
-            note_type = "kick";
-        } else if (data.note == constant_OUR_MIDI_TOM1_NORMAL || data.note == constant_OUR_MIDI_TOM2_NORMAL || data.note == constant_OUR_MIDI_TOM3_NORMAL || data.note == constant_OUR_MIDI_TOM4_NORMAL) {
-            note_type = "tom";
-        }
-        if (note_type) {
-            global_total_midi_notes++;
-            midiPlayer.root.midiEventCallbacks.notePlaying(midiPlayer.root.midiEventCallbacks.classRoot, note_type, percentComplete);
-            // TODO Fix this
-            // if (midiPlayer.root.highlightOn) highlightNoteInABCSVGFromPercentComplete(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.note_mapping_array, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
-            if (midiPlayer.root.noteCallback) {
-                midiPlayer.root.noteCallback(note_type);
-            }
-        }
-    }
+//     // note on
+//     var note_type = false;
+//     if (data.message == 144) {
+//         if (data.note == constant_OUR_MIDI_METRONOME_1 || data.note == constant_OUR_MIDI_METRONOME_NORMAL) {
+//             note_type = "metronome";
+//         } else if (data.note == constant_OUR_MIDI_HIHAT_NORMAL || data.note == constant_OUR_MIDI_HIHAT_OPEN ||
+//             data.note == constant_OUR_MIDI_HIHAT_ACCENT || data.note == constant_OUR_MIDI_HIHAT_CRASH ||
+//             data.note == constant_OUR_MIDI_HIHAT_RIDE || data.note == constant_OUR_MIDI_HIHAT_STACKER ||
+//             data.note == constant_OUR_MIDI_HIHAT_RIDE_BELL || data.note == constant_OUR_MIDI_HIHAT_COW_BELL ||
+//             data.note == constant_OUR_MIDI_HIHAT_METRONOME_NORMAL || data.note == constant_OUR_MIDI_HIHAT_METRONOME_NORMAL) {
+//             note_type = "hi-hat";
+//         } else if (data.note == constant_OUR_MIDI_SNARE_NORMAL || data.note == constant_OUR_MIDI_SNARE_ACCENT ||
+//             data.note == constant_OUR_MIDI_SNARE_GHOST || data.note == constant_OUR_MIDI_SNARE_XSTICK ||
+//             data.note == constant_OUR_MIDI_SNARE_FLAM || data.note == constant_OUR_MIDI_SNARE_DRAG ||
+//             data.note == constant_OUR_MIDI_SNARE_BUZZ) {
+//             note_type = "snare";
+//         } else if (data.note == constant_OUR_MIDI_KICK_NORMAL || data.note == constant_OUR_MIDI_HIHAT_FOOT) {
+//             note_type = "kick";
+//         } else if (data.note == constant_OUR_MIDI_TOM1_NORMAL || data.note == constant_OUR_MIDI_TOM2_NORMAL || data.note == constant_OUR_MIDI_TOM3_NORMAL || data.note == constant_OUR_MIDI_TOM4_NORMAL) {
+//             note_type = "tom";
+//         }
+//         if (note_type) {
+//             global_total_midi_notes++;
+//             midiPlayer.root.midiEventCallbacks.notePlaying(midiPlayer.root.midiEventCallbacks.classRoot, note_type, percentComplete);
+//             // TODO Fix this
+//             // if (midiPlayer.root.highlightOn) highlightNoteInABCSVGFromPercentComplete(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.note_mapping_array, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
+//             if (midiPlayer.root.noteCallback) {
+//                 midiPlayer.root.noteCallback(note_type);
+//             }
+//         }
+//     }
 
-    // this used to work when we used note 60 as a spacer between chords
-    //if(data.note == 60)
-    //	class_midi_note_num++;
-    /*
-    if (0 && data.message == 144) {
-    debug_note_count++;
-    // my debugging code for midi
-    var newHTML = "";
-    if (data.note != 60)
-    newHTML += "<b>";
+//     // this used to work when we used note 60 as a spacer between chords
+//     //if(data.note == 60)
+//     //	class_midi_note_num++;
+//     /*
+//     if (0 && data.message == 144) {
+//     debug_note_count++;
+//     // my debugging code for midi
+//     var newHTML = "";
+//     if (data.note != 60)
+//     newHTML += "<b>";
 
-    newHTML += note_type + " total notes: " + debug_note_count + " - count#: " + class_midi_note_num +
-    " now: " + data.now +
-    " note: " + data.note +
-    " message: " + data.message +
-    " channel: " + data.channel +
-    " velocity: " + data.velocity +
-    "<br>";
+//     newHTML += note_type + " total notes: " + debug_note_count + " - count#: " + class_midi_note_num +
+//     " now: " + data.now +
+//     " note: " + data.note +
+//     " message: " + data.message +
+//     " channel: " + data.channel +
+//     " velocity: " + data.velocity +
+//     "<br>";
 
-    if (data.note != 60)
-    newHTML += "</b>";
+//     if (data.note != 60)
+//     newHTML += "</b>";
 
-    document.getElementById("midiTextOutput").innerHTML += newHTML;
-    }
-        */
-}
+//     document.getElementById("midiTextOutput").innerHTML += newHTML;
+//     }
+//         */
+// }
 
 
 
