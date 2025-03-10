@@ -1215,10 +1215,10 @@ function GrooveWriter() {
 		var midiTrack = new Midi.Track();
 		midiFile.addTrack(midiTrack);
 
-		midiTrack.setTempo(root.myGrooveUtils.getTempo());
+		midiTrack.setTempo(midiPlayer.getTempo());
 		midiTrack.setInstrument(0, 0x13);
 
-		var swing_percentage = root.myGrooveUtils.getSwing() / 100;
+		var swing_percentage = midiPlayer.getSwing() / 100;
 
 		// all of the permutations use just the first measure
 		switch (class_permutation_type) {
@@ -1327,8 +1327,8 @@ function GrooveWriter() {
 		myGrooveData.author = document.getElementById("tuneAuthor").value;
 		myGrooveData.comments = document.getElementById("tuneComments").value;
 		myGrooveData.showLegend = document.getElementById("showLegend").checked;
-		myGrooveData.swingPercent = root.myGrooveUtils.getSwing();
-		myGrooveData.tempo = root.myGrooveUtils.getTempo();
+		myGrooveData.swingPercent = midiPlayer.getSwing();
+		myGrooveData.tempo = midiPlayer.getTempo();
 		myGrooveData.metronomeFrequency = root.getMetronomeFrequency();
 		myGrooveData.kickStemsUp = true;
 		myGrooveData.repeatedMeasures = class_repeated_measures;
@@ -2369,7 +2369,7 @@ function GrooveWriter() {
 				midiURL = createMidiUrlFromClickableUI("our_MIDI");
 				midiPlayer.resetNoteHasChanged();
 			}
-			midiPlayer.loadFromURL(midiURL, root.myGrooveUtils.getTempo());
+			midiPlayer.loadFromURL(midiURL, midiPlayer.getTempo());
 			root.updateGrooveDBSource();
 		};
 
@@ -2386,7 +2386,7 @@ function GrooveWriter() {
 		midiPlayer.initialise();
 
 		// enable or disable swing
-		root.myGrooveUtils.swingEnabled(root.myGrooveUtils.doesDivisionSupportSwing(class_notes_per_measure));
+		midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(class_notes_per_measure));
 
 		window.onresize = root.refresh_ABC;
 
@@ -3095,9 +3095,10 @@ function GrooveWriter() {
 
 		document.getElementById("tuneComments").value = myGrooveData.comments;
 
-		root.myGrooveUtils.setTempo(myGrooveData.tempo);
+		// TODO
+		midiPlayer.setTempo(midiPlayer.tempo);
 
-		root.myGrooveUtils.setSwing(myGrooveData.swingPercent);
+		midiPlayer.setSwing(midiPlayer.swingPercent);
 
 		root.setMetronomeFrequency(myGrooveData.metronomeFrequency);
 
