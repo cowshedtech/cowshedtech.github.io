@@ -12,6 +12,7 @@ class MIDIPlayer {
     totalPlayTimeMsecs = 0;  // Culmative play time
     currentStartTime = 0;  // Start time of most recent play
     lastUpdateTime = 0;
+    lastMidiTimeUpdate = 0;
     
     isMIDIPaused = false;
     shouldMIDIRepeat = true;
@@ -485,17 +486,16 @@ class MIDIPlayer {
         var percentComplete = (data.now / data.end);
         // midiPlayer.midiEventCallbacks.percentProgress(midiPlayer.midiEventCallbacks.classRoot, percentComplete * 100);
 
-
-        if (midiPlayer.root.lastMidiTimeUpdate && midiPlayer.root.lastMidiTimeUpdate < (data.now + 800)) {
+        if (midiPlayer.lastMidiTimeUpdate && midiPlayer.lastMidiTimeUpdate < (data.now + 800)) {
             midiPlayer.updatePlayTime();
-            midiPlayer.root.lastMidiTimeUpdate = data.now;
+            midiPlayer.lastMidiTimeUpdate = data.now;
         }
 
         if (data.now < 16) {
             // this is considered the start.   It doesn't come in at zero for some reason
             // The second note should always be at least 16 ms behind the first
             //class_midi_note_num = 0;
-            midiPlayer.root.lastMidiTimeUpdate = -1;
+            midiPlayer.lastMidiTimeUpdate = -1;
         }
         if (data.now == data.end) {
 
@@ -517,9 +517,9 @@ class MIDIPlayer {
                     //MIDI.Player.stop();
                     //MIDI.Player.start();
                 }
-                if (midiPlayer.root.repeatCallback) {
-                    midiPlayer.root.repeatCallback();
-                }
+                // if (midiPlayer.root.repeatCallback) {
+                //     midiPlayer.root.repeatCallback();
+                // }
             } else {
                 MIDI.Player.stop();  // not repeating, so stopping
                
@@ -554,9 +554,9 @@ class MIDIPlayer {
                 midiPlayer.midiEventCallbacks.notePlaying(note_type, percentComplete);
                 // TODO Fix this
                 // if (midiPlayer.root.highlightOn) highlightNoteInABCSVGFromPercentComplete(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.note_mapping_array, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
-                if (midiPlayer.root.noteCallback) {
-                    midiPlayer.root.noteCallback(note_type);
-                }
+                // if (midiPlayer.root.noteCallback) {
+                //     midiPlayer.root.noteCallback(note_type);
+                // }
             }
         }            
     }

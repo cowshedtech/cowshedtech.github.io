@@ -2383,7 +2383,7 @@ function GrooveWriter() {
 			if (class_highlight_on) hilight_note(note_type, percent_complete, class_permutation_type, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures, class_notes_per_measure, class_repeated_measures, usingTriplets());
 		};
 
-		midiPlayer.initialise(root.myGrooveUtils);
+		midiPlayer.initialise();
 
 		// enable or disable swing
 		root.myGrooveUtils.swingEnabled(root.myGrooveUtils.doesDivisionSupportSwing(class_notes_per_measure));
