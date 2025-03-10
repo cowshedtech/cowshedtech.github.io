@@ -11,7 +11,7 @@ class MIDIPlayer {
     currentStartTime = 0;  // Start time of most recent play
     lastUpdateTime = 0;
     initialised = false;
-    
+    root;    
     
     /**
      * 
@@ -74,10 +74,7 @@ class MIDIPlayer {
         MIDI.Player.loadFile(midiURL);
     };
 
-    // initCallback(grooveUtils) {
-    // }
-
-
+    
     //
     // Time functions
     //
@@ -99,7 +96,7 @@ class MIDIPlayer {
 
 
     /**
-     * calculate how long the midi has been playing total (since the last play/pause press
+     * calculate how long the midi has been playing total (since the last play/pause press)
      */
     getPlayTime() {
         const now = new Date();
@@ -186,11 +183,10 @@ class MIDIPlayer {
     /**
      * Play 
      */    
-    play(root) {
+    play() {
         if (MIDI.Player.playing) {
             return;
-        } else if (root.isMIDIPaused && false === root.midiEventCallbacks.doesMidiDataNeedRefresh(root.midiEventCallbacks.classRoot)) {
-            // global_current_midi_start_time = new Date();
+        } else if (this.root.isMIDIPaused && false === this.root.midiEventCallbacks.doesMidiDataNeedRefresh(this.root)) {
             midiPlayer.resetStartTime()
             this.lastUpdateTime = 0;
             MIDI.Player.resume();
@@ -198,13 +194,13 @@ class MIDIPlayer {
             MIDI.Player.ctx.resume();
             midiPlayer.resetStartTime()
             this.lastUpdateTime = 0;
-            root.midiEventCallbacks.loadMidiDataEvent(root.midiEventCallbacks.classRoot, true);
+            this.root.midiEventCallbacks.loadMidiDataEvent(this.root, true);
             MIDI.Player.stop();
-            MIDI.Player.loop(root.shouldMIDIRepeat); // set the loop parameter
+            MIDI.Player.loop(this.root.shouldMIDIRepeat); // set the loop parameter
             MIDI.Player.start();
         }
-        root.midiEventCallbacks.playEvent(root.midiEventCallbacks.classRoot);
-        root.isMIDIPaused = false;
+        this.root.midiEventCallbacks.playEvent(this.root);
+        this.root.isMIDIPaused = false;
     };
 
 
@@ -212,13 +208,13 @@ class MIDIPlayer {
      * Pauses  MIDI playback and resets player state
      * @param {Object} root - The root object containing player state and callbacks
      */
-    pause(grooveUtils) {
-        if (grooveUtils.isMIDIPaused === false) {
-            grooveUtils.isMIDIPaused = true;
-            grooveUtils.midiEventCallbacks.pauseEvent(grooveUtils.midiEventCallbacks.classRoot);
+    pause() {
+        if (this.root.isMIDIPaused === false) {
+            this.root.isMIDIPaused = true;
+            this.root.midiEventCallbacks.pauseEvent(this.root.midiEventCallbacks.classRoot);
             MIDI.Player.pause();
-            grooveUtils.midiEventCallbacks.notePlaying(grooveUtils.midiEventCallbacks.classRoot, "clear", -1);
-            clearHighlightNoteInABCSVG(grooveUtils.grooveUtilsUniqueIndex);
+            this.root.midiEventCallbacks.notePlaying(this.root.midiEventCallbacks.classRoot, "clear", -1);
+            clearHighlightNoteInABCSVG(this.root.grooveUtilsUniqueIndex);
         }
     };
     
@@ -226,15 +222,15 @@ class MIDIPlayer {
     /**
      * Stop 
      */    
-    stop(root) {
-        if (!MIDI.Player.playing && !root.isMIDIPaused) return;
+    stop() {
+        if (!MIDI.Player.playing && !this.root.isMIDIPaused) return;
 
         // Reset player state
-        root.isMIDIPaused = false;
+        this.root.isMIDIPaused = false;
         MIDI.Player.stop();
     
         // Trigger callbacks and cleanup
-        const { midiEventCallbacks, grooveUtilsUniqueIndex } = root;
+        const { midiEventCallbacks, grooveUtilsUniqueIndex } = this.root;
         const { classRoot } = midiEventCallbacks;
         
         midiEventCallbacks.stopEvent(classRoot);
@@ -247,16 +243,16 @@ class MIDIPlayer {
     /**
      * toggle stop and start 
      */    
-    startOrStop(root) {
-        MIDI.Player.playing ? this.stop(root) : this.play(root);
+    startOrStop() {
+        MIDI.Player.playing ? this.stop() : this.play();
     };
 
 
     /**
      * toggle pause and start 
      */    
-    startOrPause(root) {
-        MIDI.Player.playing ? this.pause(root) : this.play(root);
+    startOrPause() {
+        MIDI.Player.playing ? this.pause() : this.play();
     };
 
     
@@ -264,13 +260,13 @@ class MIDIPlayer {
      * Toggles MIDI playback repeat mode
      * @param {Object} root - The root object containing player state and callbacks
      */
-    repeatToggle(root) {
+    repeatToggle() {
         // Toggle repeat state
-        root.shouldMIDIRepeat = !root.shouldMIDIRepeat;
+        this.root.shouldMIDIRepeat = !this.root.shouldMIDIRepeat;
         
         // Update MIDI player and UI
-        MIDI.Player.loop(root.shouldMIDIRepeat);
-        root.midiEventCallbacks.repeatChangeEvent(root.midiEventCallbacks.classRoot, root.shouldMIDIRepeat);
+        MIDI.Player.loop(this.root.shouldMIDIRepeat);
+        this.root.midiEventCallbacks.repeatChangeEvent(this.root.midiEventCallbacks.classRoot, this.root.shouldMIDIRepeat);
     }
 
 
