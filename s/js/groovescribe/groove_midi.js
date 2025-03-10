@@ -210,7 +210,7 @@ class MIDIPlayer {
             MIDI.Player.ctx.resume();
             this.currentStartTime = new Date();
             this.lastUpdateTime = 0;
-            this.midiEventCallbacks.loadMidiDataEvent(this.root, true);
+            this.midiEventCallbacks.loadMidiDataEvent(true);
             MIDI.Player.stop();
             MIDI.Player.loop(this.shouldMIDIRepeat); // set the loop parameter
             MIDI.Player.start();
