@@ -14,14 +14,14 @@ class MIDIPlayer {
     shouldMIDIRepeat = true;
     isMIDIPaused = false;
     root;    
-    
+    midiEventCallbacks;
+
     /**
      * 
      */    
     constructor() {
         this.playTime = "0:00";
-    }    
-
+    }        
     
     /**
      * 
@@ -153,15 +153,15 @@ class MIDIPlayer {
     /**
      * 
      */    
-    noteHasChanged(root) {
-        root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = true;
+    noteHasChanged() {
+        if (this.midiEventCallbacks) this.midiEventCallbacks.noteHasChangedSinceLastDataLoad = true;
     };
 
     /**
      * 
      */    
-    resetNoteHasChanged(root) {
-        root.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
+    resetNoteHasChanged() {
+        if (this.midiEventCallbacks) this.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
     };
 
 
@@ -188,7 +188,7 @@ class MIDIPlayer {
     play() {
         if (MIDI.Player.playing) {
             return;
-        } else if (this.isMIDIPaused && false === this.root.midiEventCallbacks.doesMidiDataNeedRefresh(this.root)) {
+        } else if (this.isMIDIPaused && false === this.midiEventCallbacks.doesMidiDataNeedRefresh(this.root)) {
             this.currentStartTime = new Date();
             this.lastUpdateTime = 0;
             MIDI.Player.resume();
@@ -196,19 +196,19 @@ class MIDIPlayer {
             MIDI.Player.ctx.resume();
             this.currentStartTime = new Date();
             this.lastUpdateTime = 0;
-            this.root.midiEventCallbacks.loadMidiDataEvent(this.root, true);
+            this.midiEventCallbacks.loadMidiDataEvent(this.root, true);
             MIDI.Player.stop();
             MIDI.Player.loop(this.shouldMIDIRepeat); // set the loop parameter
             MIDI.Player.start();
         }
-        // this.root.midiEventCallbacks.playEvent(this.root);
+        // this.midiEventCallbacks.playEvent(this.root);
 
-        var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
-        if (icon)
-            icon.className = "midiPlayImage Playing";
-        if (this.classRoot.playEventCallback) {
-            this.classRoot.playEventCallback();
-        }
+        // var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
+        // if (icon)
+        //     icon.className = "midiPlayImage Playing";
+        // if (this.classRoot.playEventCallback) {
+        //     this.classRoot.playEventCallback();
+        // }
 
         this.isMIDIPaused = false;
     };
@@ -220,13 +220,13 @@ class MIDIPlayer {
     pause() {
         if (this.isMIDIPaused === false) {
             this.isMIDIPaused = true;
-            // this.root.midiEventCallbacks.pauseEvent(this.root.midiEventCallbacks.classRoot);
+            // this.midiEventCallbacks.pauseEvent(this.midiEventCallbacks.classRoot);
             var icon = document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex);
             if (icon)
                 icon.className = "midiPlayImage Paused";
 
             MIDI.Player.pause();
-            this.root.midiEventCallbacks.notePlaying(this.root.midiEventCallbacks.classRoot, "clear", -1);
+            this.midiEventCallbacks.notePlaying(this.midiEventCallbacks.classRoot, "clear", -1);
             clearHighlightNoteInABCSVG(this.root.grooveUtilsUniqueIndex);
         }
     };
@@ -243,16 +243,16 @@ class MIDIPlayer {
         MIDI.Player.stop();
     
         // Trigger callbacks and cleanup
-        const { midiEventCallbacks, grooveUtilsUniqueIndex } = this.root;
-        const { classRoot } = midiEventCallbacks;
+        // const { grooveUtilsUniqueIndex } = this.root;
+        // const { classRoot } = midiEventCallbacks;
         
         // midiEventCallbacks.stopEvent(classRoot);
-        var icon = document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex);
+        var icon = document.getElementById("midiPlayImage" + this.root.grooveUtilsUniqueIndex);
         if (icon)
             icon.className = "midiPlayImage Stopped";
 
-        midiEventCallbacks.notePlaying(classRoot, "clear", -1);
-        clearHighlightNoteInABCSVG(grooveUtilsUniqueIndex);
+        this.midiEventCallbacks.notePlaying(this.root, "clear", -1);
+        clearHighlightNoteInABCSVG(this.root.grooveUtilsUniqueIndex);
         resetMetronomeOptionsOffsetClickStartRotation();
     };
 
@@ -282,7 +282,7 @@ class MIDIPlayer {
         
         // Update MIDI player and UI
         MIDI.Player.loop(this.shouldMIDIRepeat);
-        // this.root.midiEventCallbacks.repeatChangeEvent(this.root.midiEventCallbacks.classRoot, this.shouldMIDIRepeat);
+        // this.midiEventCallbacks.repeatChangeEvent(this.midiEventCallbacks.classRoot, this.shouldMIDIRepeat);
         if (this.shouldMIDIRepeat)
             document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getImageLocation() + "repeat.png";
         else
@@ -470,7 +470,7 @@ class MIDIPlayer {
      */
     callback(data) {
         var percentComplete = (data.now / data.end);
-        // midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, percentComplete * 100);
+        // midiPlayer.midiEventCallbacks.percentProgress(midiPlayer.midiEventCallbacks.classRoot, percentComplete * 100);
 
 
         if (midiPlayer.root.lastMidiTimeUpdate && midiPlayer.root.lastMidiTimeUpdate < (data.now + 800)) {
@@ -487,7 +487,7 @@ class MIDIPlayer {
         if (data.now == data.end) {
 
             // at the end of a song
-            midiPlayer.root.midiEventCallbacks.notePlaying(midiPlayer.root.midiEventCallbacks.classRoot, "complete", 1);
+            midiPlayer.midiEventCallbacks.notePlaying(midiPlayer.midiEventCallbacks.classRoot, "complete", 1);
 
             if (midiPlayer.shouldMIDIRepeat) {
 
@@ -495,9 +495,9 @@ class MIDIPlayer {
 
                 // regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
                 // advanceMetronomeOptionsOffsetClickStartRotation will return false if not rotating
-                if (advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.root.midiEventCallbacks.doesMidiDataNeedRefresh(midiPlayer.root.midiEventCallbacks.classRoot)) {
+                if (advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.midiEventCallbacks.doesMidiDataNeedRefresh(midiPlayer.midiEventCallbacks.classRoot)) {
                     MIDI.Player.stop();
-                    midiPlayer.root.midiEventCallbacks.loadMidiDataEvent(midiPlayer.root.midiEventCallbacks.classRoot, false);
+                    midiPlayer.midiEventCallbacks.loadMidiDataEvent(midiPlayer.midiEventCallbacks.classRoot, false);
                     MIDI.Player.start();
                     //  } else {
                     // let midi.loop handle the repeat for us
@@ -510,8 +510,8 @@ class MIDIPlayer {
             } else {
                 MIDI.Player.stop();  // not repeating, so stopping
                
-                //midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, 100);
-                // midiPlayer.root.midiEventCallbacks.stopEvent(midiPlayer.root.midiEventCallbacks.classRoot);                
+                //midiPlayer.midiEventCallbacks.percentProgress(midiPlayer.midiEventCallbacks.classRoot, 100);
+                // midiPlayer.midiEventCallbacks.stopEvent(midiPlayer.midiEventCallbacks.classRoot);                
             }
         }
 
@@ -538,7 +538,7 @@ class MIDIPlayer {
             }
             if (note_type) {
                 global_total_midi_notes++;
-                midiPlayer.root.midiEventCallbacks.notePlaying(midiPlayer.root.midiEventCallbacks.classRoot, note_type, percentComplete);
+                midiPlayer.midiEventCallbacks.notePlaying(midiPlayer.midiEventCallbacks.classRoot, note_type, percentComplete);
                 // TODO Fix this
                 // if (midiPlayer.root.highlightOn) highlightNoteInABCSVGFromPercentComplete(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.note_mapping_array, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
                 if (midiPlayer.root.noteCallback) {
@@ -585,7 +585,7 @@ var midiPlayer = new MIDIPlayer();
         // }
     };
     this.doesMidiDataNeedRefresh = function (classRoot) {
-        return classRoot.midiEventCallbacks.noteHasChangedSinceLastDataLoad;
+        return midiPlayer.midiEventCallbacks.noteHasChangedSinceLastDataLoad;
     };    
 };
 

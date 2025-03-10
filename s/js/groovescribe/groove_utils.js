@@ -147,18 +147,7 @@ function GrooveUtils() {
 	};
 
 	
-
 	
-	
-
-	this.midiEventCallbacks = new midiEventCallbackClass(root);
-
-
-	
-
-	
-	
-
 	root.getTempo = function () {
 		var tempoInput = document.getElementById("tempoInput" + root.grooveUtilsUniqueIndex);
 		var tempo = constant_DEFAULT_TEMPO;
@@ -204,7 +193,7 @@ function GrooveUtils() {
 		document.getElementById('tempoTextField' + root.grooveUtilsUniqueIndex).value = "" + tempo;
 
 		updateRangeSlider('tempoInput' + root.grooveUtilsUniqueIndex);
-		midiPlayer.noteHasChanged(root);
+		midiPlayer.noteHasChanged();
 
 		if (root.tempoChangeCallback)
 			root.tempoChangeCallback(tempo);
@@ -298,7 +287,7 @@ function GrooveUtils() {
 		} else {
 			document.getElementById('swingOutput' + root.grooveUtilsUniqueIndex).innerHTML = "" + swingAmount + "%";
 			root.swingPercent = swingAmount;
-			midiPlayer.noteHasChanged(root);
+			midiPlayer.noteHasChanged();
 		}
 
 	};
@@ -351,7 +340,7 @@ function GrooveUtils() {
 			root.myGrooveData.metronomeFrequency = 4;
 
 		root.setMetronomeFrequencyDisplay(root.myGrooveData.metronomeFrequency);
-		midiPlayer.noteHasChanged(root);
+		midiPlayer.noteHasChanged();
 	};
 
 	
