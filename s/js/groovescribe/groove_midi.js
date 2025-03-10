@@ -44,7 +44,7 @@ class MIDIPlayer {
                 var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
                 if (icon) icon.className = "midiPlayImage Stopped";
                 document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex).onclick = function (event) {
-                    midiPlayer.startOrStop(root);
+                    midiPlayer.startOrStop();
                 }; 
                 setupHotKeys(); // spacebar to play
             }
@@ -208,7 +208,6 @@ class MIDIPlayer {
 
     /**
      * Pauses  MIDI playback and resets player state
-     * @param {Object} root - The root object containing player state and callbacks
      */
     pause() {
         if (this.isMIDIPaused === false) {
@@ -260,7 +259,6 @@ class MIDIPlayer {
     
     /**
      * Toggles MIDI playback repeat mode
-     * @param {Object} root - The root object containing player state and callbacks
      */
     repeatToggle() {
         // Toggle repeat state
