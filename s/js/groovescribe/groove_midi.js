@@ -40,8 +40,7 @@ class MIDIPlayer {
         if (this.initialised) return;        
     
         this.initialised = true;
-        this.root = root;
-        this.containerIndex = this.root.grooveUtilsUniqueIndex
+        this.root = root;        
 
         let parent = this;
 
@@ -267,7 +266,7 @@ class MIDIPlayer {
             icon.className = "midiPlayImage Stopped";
 
         this.midiEventCallbacks.notePlaying(this.root, "clear", -1);
-        clearHighlightNoteInABCSVG(this.root.grooveUtilsUniqueIndex);
+        clearHighlightNoteInABCSVG(this.containerIndex);
         resetMetronomeOptionsOffsetClickStartRotation();
     };
 
@@ -317,7 +316,7 @@ class MIDIPlayer {
         const rootElement = document.getElementById(HTML_Id_to_attach_to);
         if (!rootElement) return;
         
-        rootElement.innerHTML = this._HTMLForMidiPlayer(grooveUtil, expandable);
+        rootElement.innerHTML = this._HTMLForMidiPlayer(expandable);
         
         const uniqueIndex = this.containerIndex
         
@@ -376,53 +375,52 @@ class MIDIPlayer {
     //
     //
     //
-    _HTMLForMidiPlayer(grooveUtil, expandable) {
-        const { grooveUtilsUniqueIndex } = grooveUtil;
+    _HTMLForMidiPlayer(expandable) {
         const touchClass = is_touch_device() ? ' touch' : '';
         
         // Build the base player controls
         const baseControls = `
             <div id="playerControl${this.containerIndex}" class="playerControl">
                 <div class="playerControlsRow" id="playerControlsRow${this.containerIndex}">
-                    <span title="Play/Pause" class="midiPlayImage" id="midiPlayImage${grooveUtilsUniqueIndex}"></span>
-                    <span class="MIDIPlayTime" id="MIDIPlayTime${grooveUtilsUniqueIndex}">${midiPlayer.playTime}</span>`;
+                    <span title="Play/Pause" class="midiPlayImage" id="midiPlayImage${this.containerIndex}"></span>
+                    <span class="MIDIPlayTime" id="MIDIPlayTime${this.containerIndex}">${midiPlayer.playTime}</span>`;
 
         // Optional metronome controls
         const metronomeControls = expandable ? `
-                    <span title="Metronome controls" class="midiMetronomeMenu" id="midiMetronomeMenu${grooveUtilsUniqueIndex}">
+                    <span title="Metronome controls" class="midiMetronomeMenu" id="midiMetronomeMenu${this.containerIndex}">
                         ${addInlineMetronomeSVG()}
                     </span>` : '';
 
         // Tempo and swing controls
         const tempoAndSwingControls = `
-                    <span class="tempoAndProgress" id="tempoAndProgress${grooveUtilsUniqueIndex}">
+                    <span class="tempoAndProgress" id="tempoAndProgress${this.containerIndex}">
                         <div class="tempoRow">
                             <span class="tempoLabel">BPM</span>
                             <input type="text" 
                                    for="tempo" 
                                    class="tempoTextField" 
                                    pattern="\\d+" 
-                                   id="tempoTextField${grooveUtilsUniqueIndex}" 
+                                   id="tempoTextField${this.containerIndex}" 
                                    value="80">
                             <input type="range" 
                                    min="30" 
                                    max="300" 
                                    value="90" 
                                    class="tempoInput${touchClass}" 
-                                   id="tempoInput${grooveUtilsUniqueIndex}" 
+                                   id="tempoInput${this.containerIndex}" 
                                    list="tempoSettings">
                         </div>
                         <div class="swingRow">
                             <span class="swingLabel">SWING</span>
                             <span for="swingAmount" 
                                   class="swingOutput" 
-                                  id="swingOutput${grooveUtilsUniqueIndex}">0% swing</span>
+                                  id="swingOutput${this.containerIndex}">0% swing</span>
                             <input type="range" 
                                    min="0" 
                                    max="50" 
                                    value="0" 
                                    class="swingInput${touchClass}" 
-                                   id="swingInput${grooveUtilsUniqueIndex}" 
+                                   id="swingInput${this.containerIndex}" 
                                    list="swingSettings" 
                                    step="5">
                         </div>
@@ -432,12 +430,12 @@ class MIDIPlayer {
         const expandControls = expandable ? `
                     <span title="Expand full screen in GrooveScribe" 
                           class="midiGSLogo" 
-                          id="midiGSLogo${grooveUtilsUniqueIndex}">
+                          id="midiGSLogo${this.containerIndex}">
                         ${addInLineGScribeLogoLoneGSVG()}
                     </span>
                     <span title="Expand/Retract player" 
                           class="midiExpandImage" 
-                          id="midiExpandImage${grooveUtilsUniqueIndex}"></span>` : '';
+                          id="midiExpandImage${this.containerIndex}"></span>` : '';
 
         // Combine all components
         return `${baseControls}${metronomeControls}${tempoAndSwingControls}${expandControls}</div>`;
@@ -449,13 +447,13 @@ class MIDIPlayer {
     //
     expandOrRetractMIDIPlayback(force, expandElseContract) {
 
-        var playerControlElement = document.getElementById('playerControl' + root.grooveUtilsUniqueIndex);
-        var playerControlRowElement = document.getElementById('playerControlsRow' + root.grooveUtilsUniqueIndex);
-        var tempoAndProgressElement = document.getElementById('tempoAndProgress' + root.grooveUtilsUniqueIndex);
-        var midiMetronomeMenuElement = document.getElementById('midiMetronomeMenu' + root.grooveUtilsUniqueIndex);
-        var gsLogoLoadFullGSElement = document.getElementById('midiGSLogo' + root.grooveUtilsUniqueIndex);
-        var midiExpandImageElement = document.getElementById('midiExpandImage' + root.grooveUtilsUniqueIndex);
-        var midiPlayTime = document.getElementById('MIDIPlayTime' + root.grooveUtilsUniqueIndex);
+        var playerControlElement = document.getElementById('playerControl' + this.containerIndex);
+        var playerControlRowElement = document.getElementById('playerControlsRow' + this.containerIndex);
+        var tempoAndProgressElement = document.getElementById('tempoAndProgress' + this.containerIndex);
+        var midiMetronomeMenuElement = document.getElementById('midiMetronomeMenu' + this.containerIndex);
+        var gsLogoLoadFullGSElement = document.getElementById('midiGSLogo' + this.containerIndex);
+        var midiExpandImageElement = document.getElementById('midiExpandImage' + this.containerIndex);
+        var midiPlayTime = document.getElementById('MIDIPlayTime' + this.containerIndex);
     
         if (playerControlElement.className.indexOf("small") > -1 || (force && expandElseContract)) {
             // make large
