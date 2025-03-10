@@ -4,13 +4,14 @@
 // Functions related to MIDI
 //
 
-initialised = false;
 
 class MIDIPlayer {
     
-    currentStartTime = 0;
+    totalPlayTimeMsecs = 0;  // Culmative play time
+    currentStartTime = 0;  // Start time of most recent play
     lastUpdateTime = 0;
-
+    initialised = false;
+    
     
     /**
      * 
@@ -23,20 +24,27 @@ class MIDIPlayer {
     /**
      * 
      */
+    
     initialise(root) {
 
-        if (initialised) {
-            root.midiEventCallbacks.midiInitialized(root.midiEventCallbacks.classRoot);
-            return;
-        }
+        if (this.initialised) return;        
     
-        initialised = true;
+        this.initialised = true;
+        this.root = root;
+
         MIDI.loadPlugin({
-            soundfontUrl: this._getMidiSoundFontLocation(),
+            soundfontUrl: this._getSoundFontLocation(),
             instruments: ["gunshot"],
             callback: function () {
                 MIDI.programChange(9, 127); // use "Gunshot" instrument because I don't know how to create new ones
-                root.midiEventCallbacks.midiInitialized(root.midiEventCallbacks.classRoot);
+                
+                // Successfully loaded MIDI plugin so lets init our MIDI play button
+                var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
+                if (icon) icon.className = "midiPlayImage Stopped";
+                document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex).onclick = function (event) {
+                    midiPlayer.startOrStop(root);
+                }; 
+                setupHotKeys(root); // spacebar to play
             }
         });
     };
@@ -44,54 +52,48 @@ class MIDIPlayer {
     /**
      * 
      */
-    _getMidiSoundFontLocation() {
+    _getSoundFontLocation() {
         return getGrooveUtilsBaseLocation() + "../soundfont/";
     };
     
     /**
      * 
      */
-    getMidiImageLocation() {
+    getImageLocation() {
         return getGrooveUtilsBaseLocation() + "../images/";
     };
     
     
-    //
-    //  functions
-    //
-
     /**
      * 
      */
-    loadFromURL(grooveUtils, midiURL, tempo) {
-
+    loadFromURL(midiURL, tempo) {
         MIDI.Player.timeWarp = 1; // speed the song is played back
         MIDI.Player.BPM = tempo
-        MIDI.Player.loadFile(midiURL, this.initCallback(grooveUtils));
+        MIDI.Player.addListener(this.callback);
+        MIDI.Player.loadFile(midiURL);
     };
 
-    root; 
-    initCallback(grooveUtils) {
-        this.root = grooveUtils;
-        MIDI.Player.addListener(this.callback);
-    }
+    // initCallback(grooveUtils) {
+    // }
+
 
     //
     // Time functions
     //
 
     /**
-     * 
+     * Return data representing when we started the most recent play
      */
-    getMIDIStartTime() {
+    getStartTime() {
         return this.currentStartTime;
     };
 
     
     /**
-     * 
+     * Reset the 
      */
-    resetMIDIStartTime() {
+    resetStartTime() {
         this.currentStartTime = new Date();
     };
 
@@ -99,20 +101,20 @@ class MIDIPlayer {
     /**
      * calculate how long the midi has been playing total (since the last play/pause press
      */
-    getMidiPlayTime() {
+    getPlayTime() {
         const now = new Date();
-        const playTimeDiff = new Date(now - this.getMIDIStartTime());
+        const playTimeDiff = new Date(now - this.getStartTime());
 
         const totalPlayTime = document.getElementById("totalPlayTime");
         if (totalPlayTime) {
             if (!this.lastUpdateTime) {
-                this.lastUpdateTime = this.getMIDIStartTime();
+                this.lastUpdateTime = this.getStartTime();
             }
             
             const deltaTime = now - this.lastUpdateTime;
-            global_total_midi_play_time_msecs += deltaTime;
+            this.totalPlayTimeMsecs += deltaTime;
             
-            const totalTime = new Date(global_total_midi_play_time_msecs);
+            const totalTime = new Date(this.totalPlayTimeMsecs);
             const hours = totalTime.getUTCHours();
             const minutes = totalTime.getUTCMinutes().toString().padStart(2, '0');
             const seconds = totalTime.getSeconds().toString().padStart(2, '0');
@@ -130,8 +132,8 @@ class MIDIPlayer {
     /**
      * update the midi play timer on the player. Keeps track of how long we have been playing.
      */    
-    updateMidiPlayTime() {
-        const totalTime = this.getMidiPlayTime();
+    updatePlayTime() {
+        const totalTime = this.getPlayTime();
         const minutes = totalTime.getUTCMinutes();
         const seconds = totalTime.getSeconds();
         const time_string = `${minutes}:${seconds.toString().padStart(2, '0')}`;
@@ -189,12 +191,12 @@ class MIDIPlayer {
             return;
         } else if (root.isMIDIPaused && false === root.midiEventCallbacks.doesMidiDataNeedRefresh(root.midiEventCallbacks.classRoot)) {
             // global_current_midi_start_time = new Date();
-            midiPlayer.resetMIDIStartTime()
+            midiPlayer.resetStartTime()
             this.lastUpdateTime = 0;
             MIDI.Player.resume();
         } else {
             MIDI.Player.ctx.resume();
-            midiPlayer.resetMIDIStartTime()
+            midiPlayer.resetStartTime()
             this.lastUpdateTime = 0;
             root.midiEventCallbacks.loadMidiDataEvent(root.midiEventCallbacks.classRoot, true);
             MIDI.Player.stop();
@@ -456,7 +458,7 @@ class MIDIPlayer {
 
 
         if (midiPlayer.root.lastMidiTimeUpdate && midiPlayer.root.lastMidiTimeUpdate < (data.now + 800)) {
-            midiPlayer.updateMidiPlayTime();
+            midiPlayer.updatePlayTime();
             midiPlayer.root.lastMidiTimeUpdate = data.now;
         }
 
@@ -573,7 +575,7 @@ var midiPlayer = new MIDIPlayer();
 //     midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, percentComplete * 100);
 
 //     if (midiPlayer.root.lastMidiTimeUpdate && midiPlayer.root.lastMidiTimeUpdate < (data.now + 800)) {
-//         midiPlayer.updateMidiPlayTime();
+//         midiPlayer.updatePlayTime();
 //         midiPlayer.root.lastMidiTimeUpdate = data.now;
 //     }
 
@@ -719,21 +721,21 @@ var midiPlayer = new MIDIPlayer();
     };
     this.repeatChangeEvent = function (classRoot, newValue) {
         if (newValue)
-            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getMidiImageLocation() + "repeat.png";
+            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getImageLocation() + "repeat.png";
         else
-            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getMidiImageLocation() + "grey_repeat.png";
+            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getImageLocation() + "grey_repeat.png";
     };
     this.percentProgress = function (classRoot, percent) { };
     this.notePlaying = function (classRoot, note_type, note_position) { };
 
     this.midiInitialized = function (classRoot) {
-        var icon = document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex);
-        if (icon)
-            icon.className = "midiPlayImage Stopped";
-        document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex).onclick = function (event) {
-            midiPlayer.startOrStop(classRoot);
-        }; // enable play button
-        setupHotKeys(classRoot); // spacebar to play
+        // var icon = document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex);
+        // if (icon)
+        //     icon.className = "midiPlayImage Stopped";
+        // document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex).onclick = function (event) {
+        //     midiPlayer.startOrStop(classRoot);
+        // }; // enable play button
+        // setupHotKeys(classRoot); // spacebar to play
     };
 };
 

@@ -66,7 +66,6 @@ var constant_OUR_MIDI_TOM3_NORMAL = 45;
 var constant_OUR_MIDI_TOM4_NORMAL = 43;
 
 // make these global so that they are shared among all the GrooveUtils classes invoked
-var global_total_midi_play_time_msecs = 0;
 var global_total_midi_notes = 0;
 var global_total_midi_repeats = 0;
 
