@@ -29,6 +29,9 @@
 
 // GrooveWriter class.   The only one in this file.
 
+
+var midiPlayer;
+
 function GrooveWriter() {
 	"use strict";
 
@@ -2342,6 +2345,7 @@ function GrooveWriter() {
 		selectButton(document.getElementById("subdivision_" + class_notes_per_measure + "ths"));
 
 		// add html for the midi player
+		midiPlayer = new MIDIPlayer(root.myGrooveUtils.grooveUtilsUniqueIndex);
 		midiPlayer.AddMidiPlayerToPage(root.myGrooveUtils, "midiPlayer", class_time_division);
 		midiPlayer.midiEventCallbacks = new midiEventCallbackClass(root);
 		

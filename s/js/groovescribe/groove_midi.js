@@ -7,21 +7,28 @@
 
 class MIDIPlayer {
     
+    initialised = false;
+    
     totalPlayTimeMsecs = 0;  // Culmative play time
     currentStartTime = 0;  // Start time of most recent play
     lastUpdateTime = 0;
-    initialised = false;
-    shouldMIDIRepeat = true;
+    
     isMIDIPaused = false;
+    shouldMIDIRepeat = true;
+    
     root;    
+    
     midiEventCallbacks;
     noteHasChangedSinceLastDataLoad = false;
+
+    containerIndex = 0;
 
     /**
      * 
      */    
-    constructor() {
+    constructor(containerIndex) {
         this.playTime = "0:00";
+        this.containerIndex = containerIndex;
     }        
     
     /**
@@ -34,6 +41,9 @@ class MIDIPlayer {
     
         this.initialised = true;
         this.root = root;
+        this.containerIndex = this.root.grooveUtilsUniqueIndex
+
+        let parent = this;
 
         MIDI.loadPlugin({
             soundfontUrl: this._getSoundFontLocation(),
@@ -42,9 +52,9 @@ class MIDIPlayer {
                 MIDI.programChange(9, 127); // use "Gunshot" instrument because I don't know how to create new ones
                 
                 // Successfully loaded MIDI plugin so lets init our MIDI play button
-                var icon = document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex);
+                var icon = document.getElementById("midiPlayImage" + parent.containerIndex);
                 if (icon) icon.className = "midiPlayImage Stopped";
-                document.getElementById("midiPlayImage" + root.grooveUtilsUniqueIndex).onclick = function (event) {
+                document.getElementById("midiPlayImage" + parent.containerIndex).onclick = function (event) {
                     midiPlayer.startOrStop();
                 }; 
                 setupHotKeys(); // spacebar to play
@@ -138,7 +148,7 @@ class MIDIPlayer {
         const seconds = totalTime.getSeconds();
         const time_string = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-        const midiPlayTime = document.getElementById(`MIDIPlayTime${this.root.grooveUtilsUniqueIndex}`);
+        const midiPlayTime = document.getElementById(`MIDIPlayTime${this.containerIndex}`);
         if (midiPlayTime) {
             midiPlayTime.innerHTML = time_string;
         }
@@ -155,7 +165,6 @@ class MIDIPlayer {
      * 
      */    
     noteHasChanged() {
-        // if (this.midiEventCallbacks) this.midiEventCallbacks.noteHasChangedSinceLastDataLoad = true;
         this.noteHasChangedSinceLastDataLoad = true;
     };
 
@@ -163,7 +172,6 @@ class MIDIPlayer {
      * 
      */    
     resetNoteHasChanged() {
-        // if (this.midiEventCallbacks) this.midiEventCallbacks.noteHasChangedSinceLastDataLoad = false;
         this.noteHasChangedSinceLastDataLoad = false;
     };
 
@@ -228,13 +236,13 @@ class MIDIPlayer {
         if (this.isMIDIPaused === false) {
             this.isMIDIPaused = true;
             // this.midiEventCallbacks.pauseEvent(this.midiEventCallbacks.classRoot);
-            var icon = document.getElementById("midiPlayImage" + classRoot.grooveUtilsUniqueIndex);
+            var icon = document.getElementById("midiPlayImage" + this.containerIndex);
             if (icon)
                 icon.className = "midiPlayImage Paused";
 
             MIDI.Player.pause();
             this.midiEventCallbacks.notePlaying(this.midiEventCallbacks.classRoot, "clear", -1);
-            clearHighlightNoteInABCSVG(this.root.grooveUtilsUniqueIndex);
+            clearHighlightNoteInABCSVG(this.containerIndex);
         }
     };
     
@@ -254,7 +262,7 @@ class MIDIPlayer {
         // const { classRoot } = midiEventCallbacks;
         
         // midiEventCallbacks.stopEvent(classRoot);
-        var icon = document.getElementById("midiPlayImage" + this.root.grooveUtilsUniqueIndex);
+        var icon = document.getElementById("midiPlayImage" + this.containerIndex);
         if (icon)
             icon.className = "midiPlayImage Stopped";
 
@@ -291,9 +299,9 @@ class MIDIPlayer {
         MIDI.Player.loop(this.shouldMIDIRepeat);
         // this.midiEventCallbacks.repeatChangeEvent(this.midiEventCallbacks.classRoot, this.shouldMIDIRepeat);
         if (this.shouldMIDIRepeat)
-            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getImageLocation() + "repeat.png";
+            document.getElementById("midiRepeatImage" + this.containerIndex).src = midiPlayer.getImageLocation() + "repeat.png";
         else
-            document.getElementById("midiRepeatImage" + classRoot.grooveUtilsUniqueIndex).src = midiPlayer.getImageLocation() + "grey_repeat.png";
+            document.getElementById("midiRepeatImage" + this.containerIndex).src = midiPlayer.getImageLocation() + "grey_repeat.png";
     }
 
 
@@ -311,7 +319,7 @@ class MIDIPlayer {
         
         rootElement.innerHTML = this._HTMLForMidiPlayer(grooveUtil, expandable);
         
-        const uniqueIndex = grooveUtil.grooveUtilsUniqueIndex;
+        const uniqueIndex = this.containerIndex
         
         // Define event listeners configuration
         const eventListeners = [
@@ -374,8 +382,8 @@ class MIDIPlayer {
         
         // Build the base player controls
         const baseControls = `
-            <div id="playerControl${grooveUtilsUniqueIndex}" class="playerControl">
-                <div class="playerControlsRow" id="playerControlsRow${grooveUtilsUniqueIndex}">
+            <div id="playerControl${this.containerIndex}" class="playerControl">
+                <div class="playerControlsRow" id="playerControlsRow${this.containerIndex}">
                     <span title="Play/Pause" class="midiPlayImage" id="midiPlayImage${grooveUtilsUniqueIndex}"></span>
                     <span class="MIDIPlayTime" id="MIDIPlayTime${grooveUtilsUniqueIndex}">${midiPlayer.playTime}</span>`;
 
@@ -567,7 +575,7 @@ class MIDIPlayer {
 //
 // Start with a singleton
 // 
-var midiPlayer = new MIDIPlayer();
+// var midiPlayer = new MIDIPlayer();
 
 
 
