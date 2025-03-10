@@ -286,7 +286,6 @@ class MIDIPlayer {
         
         rootElement.innerHTML = this._HTMLForMidiPlayer(grooveUtil, expandable);
         
-        const isIE10 = this.isIE10();
         const uniqueIndex = grooveUtil.grooveUtilsUniqueIndex;
         
         // Define event listeners configuration
@@ -447,6 +446,10 @@ class MIDIPlayer {
     
     };
 
+
+    /**
+     * 
+     */
     callback(data) {
         var percentComplete = (data.now / data.end);
         midiPlayer.root.midiEventCallbacks.percentProgress(midiPlayer.root.midiEventCallbacks.classRoot, percentComplete * 100);
@@ -524,33 +527,7 @@ class MIDIPlayer {
                     midiPlayer.root.noteCallback(note_type);
                 }
             }
-        }
-
-        // // this used to work when we used note 60 as a spacer between chords
-        // //if(data.note == 60)
-        // //	class_midi_note_num++;
-        // /*
-        // if (0 && data.message == 144) {
-        // debug_note_count++;
-        // // my debugging code for midi
-        // var newHTML = "";
-        // if (data.note != 60)
-        // newHTML += "<b>";
-
-        // newHTML += note_type + " total notes: " + debug_note_count + " - count#: " + class_midi_note_num +
-        // " now: " + data.now +
-        // " note: " + data.note +
-        // " message: " + data.message +
-        // " channel: " + data.channel +
-        // " velocity: " + data.velocity +
-        // "<br>";
-
-        // if (data.note != 60)
-        // newHTML += "</b>";
-
-        // document.getElementById("midiTextOutput").innerHTML += newHTML;
-        // }
-        //     */        
+        }            
     }
 
 

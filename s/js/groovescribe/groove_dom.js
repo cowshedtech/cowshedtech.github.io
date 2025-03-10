@@ -133,3 +133,10 @@ function isElementOnScreen(element) {
         rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
     );
 };
+
+
+// Helper method for browser detection
+function isIE10() {
+    const browserInfo = getBrowserInfo();
+    return browserInfo.browser === "MSIE" && browserInfo.version < 12;
+}
