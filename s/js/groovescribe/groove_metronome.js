@@ -396,8 +396,6 @@ class Metronome {
 		if (popup)
 			popup.style.display = "none";
 	};
-
-
 }
 
 var metronome = new Metronome();

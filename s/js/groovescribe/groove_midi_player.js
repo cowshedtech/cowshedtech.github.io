@@ -13,6 +13,8 @@ class MIDIPlayer {
     currentStartTime = 0;  // Start time of most recent play
     lastUpdateTime = 0;
     lastMidiTimeUpdate = 0;
+    totalNotes = 0;
+    totalRepeats = 0;
     
     isPaused = false;
     shouldRepeat = true;
@@ -129,7 +131,7 @@ class MIDIPlayer {
             
             const timeString = hours > 0 ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
             
-            totalPlayTime.innerHTML = `Total Play Time: <span class="totalTimeNum">${timeString}</span> notes: <span class="totalTimeNum">${global_total_midi_notes}</span> repetitions: <span class="totalTimeNum">${global_total_midi_repeats}</span>`;
+            totalPlayTime.innerHTML = `Total Play Time: <span class="totalTimeNum">${timeString}</span> notes: <span class="totalTimeNum">${this.totalNotes}</span> repetitions: <span class="totalTimeNum">${this.totalRepeats}</span>`;
         }
 
         this.lastUpdateTime = now;
@@ -672,7 +674,7 @@ class MIDIPlayer {
 
             if (midiPlayer.shouldRepeat) {
 
-                global_total_midi_repeats++;
+                midiPlayer.totalRepeats++;
 
                 // regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
                 // advanceOptionsOffsetClickStartRotation will return false if not rotating
@@ -708,7 +710,7 @@ class MIDIPlayer {
                 note_type = "tom";
             }
             if (note_type) {
-                global_total_midi_notes++;
+                midiPlayer.totalNotes++;
                 midiPlayer.eventCallbacks.notePlaying(note_type, percentComplete);
                 // TODO Fix this
                 // if (midiPlayer.root.highlightOn) highlightNoteInABCSVGFromPercentComplete(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.note_mapping_array, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);

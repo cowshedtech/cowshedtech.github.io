@@ -64,10 +64,3 @@ var constant_OUR_MIDI_TOM1_NORMAL = 48;
 var constant_OUR_MIDI_TOM2_NORMAL = 47;
 var constant_OUR_MIDI_TOM3_NORMAL = 45;
 var constant_OUR_MIDI_TOM4_NORMAL = 43;
-
-// make these global so that they are shared among all the GrooveUtils classes invoked
-var global_total_midi_notes = 0;
-var global_total_midi_repeats = 0;
-
-//
-var constant_HIGHLIGHT_ON = false;
