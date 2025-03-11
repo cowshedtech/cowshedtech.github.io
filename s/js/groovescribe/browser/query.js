@@ -4,89 +4,128 @@
 // Functions for reading and manipulating the browser query
 //
 
-//
-//
-//
-function getQueryVariableFromString(variable, def_value, my_string) {
-    var query = my_string.substring(1);
-    var vars = query.split("&");
-    for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split("=");
-        if (pair[0].toLowerCase() == variable.toLowerCase()) {
-            return pair[1];
-        }
+/**
+ * Extracts a query parameter value from a URL string
+ * @param {string} key - The parameter key to search for
+ * @param {string} defaultValue - Value to return if parameter not found
+ * @param {string} queryString - The URL query string to parse
+ * @returns {string} The parameter value or default value
+ * @example
+ * getQueryVariableFromString('page', '1', '?page=2&sort=desc');
+ */
+const getQueryVariableFromString = (key, defaultValue, queryString) => {
+    try {
+        const params = new URLSearchParams(queryString.slice(1));
+        const value = params.get(key.toLowerCase());
+        return value ?? defaultValue;
+    } catch (error) {
+        console.warn('Failed to parse query string:', error);
+        return defaultValue;
     }
-    return (def_value);
 };
 
 
-//
-//
-//
-function getQueryVariableFromURL(variable, def_value) {
-    return (getQueryVariableFromString(variable, def_value, window.location.search));
-};
+/**
+ * Gets a query parameter value from the current URL
+ * @param {string} key - The parameter key to search for
+ * @param {string} defaultValue - Value to return if parameter not found
+ * @returns {string} The parameter value or default value
+ * @example
+ * const page = getQueryVariableFromURL('page', '1');
+ */
+const getQueryVariableFromURL = (key, defaultValue) => 
+    getQueryVariableFromString(key, defaultValue, window.location.search);
 
 
-//
-//
-//
-function getBrowserInfo() {
+/**
+ * Gets information about the current browser environment
+ * @returns {{browser: string, version: string, platform: string, uastring: string}}
+ */
+const getBrowserInfo = () => {
+    const UNKNOWN = 'Unknown';
+    const PLATFORMS = {
+        IOS: /iPhone|iPad|iPod/,
+        MAC: /Mac/,
+        ANDROID: /Android/
+    };
+
+    const BROWSERS = {
+        Edge: /Edge\/(\d+)/,
+        Chrome: /Chrome\/(\d+)/,
+        Firefox: /Firefox\/(\d+)/,
+        Safari: /Safari\/(\d+).*Version\/(\d+)/,
+        MSIE: /(?:MSIE |rv:)(\d+)/
+    };
+
+    let browser = UNKNOWN;
+    let version = UNKNOWN;
     const useragent = navigator.userAgent;
-    let browser = "Unknown";
-    let version = "Unknown";
-    
-    // Modern browser detection using User-Agent Client Hints when available
-    if (navigator.userAgentData) {
-        const brands = navigator.userAgentData.brands;
-        const brand = brands.find(b => !b.brand.includes("Not") && !b.brand.includes("Brand"));
-        if (brand) {
-            browser = brand.brand;
-            version = brand.version;
-        }
-    } else {
-        // Fallback to user agent parsing
-        const browserMatches = {
-            'Edge': /Edge\/(\d+)/,
-            'Chrome': /Chrome\/(\d+)/,
-            'Firefox': /Firefox\/(\d+)/,
-            'Safari': /Safari\/(\d+).*Version\/(\d+)/,
-            'MSIE': /(?:MSIE |rv:)(\d+)/
-        };
 
-        for (const [name, regex] of Object.entries(browserMatches)) {
+    try {
+        // Try modern User-Agent Client Hints API
+        if (navigator.userAgentData?.brands) {
+            const brand = navigator.userAgentData.brands
+                .find(b => !b.brand.includes('Not') && !b.brand.includes('Brand'));
+            
+            if (brand) {
+                ({ brand: browser, version } = brand);
+                return { browser, version, platform: getPlatform(), uastring: useragent };
+            }
+        }
+
+        // Fallback to traditional UA parsing
+        for (const [name, regex] of Object.entries(BROWSERS)) {
             const match = useragent.match(regex);
             if (match) {
                 browser = name;
-                // For Safari, use Version/X.X instead of Safari/X.X
                 version = name === 'Safari' ? match[2] : match[1];
                 break;
             }
         }
+
+        return {
+            browser,
+            version,
+            platform: getPlatform(),
+            uastring: useragent
+        };
+    } catch (error) {
+        console.warn('Error detecting browser info:', error);
+        return {
+            browser: UNKNOWN,
+            version: UNKNOWN,
+            platform: 'windows',
+            uastring: useragent
+        };
     }
 
-    // Platform detection using modern navigator.platform (when available)
-    let platform = "windows";
-    if (navigator.platform) {
-        if (/iPhone|iPad|iPod/.test(navigator.platform)) {
-            platform = "iOS";
-        } else if (/Mac/.test(navigator.platform)) {
-            platform = "mac";
-        } else if (/Android/.test(useragent)) {
-            platform = "android";
-        }
+    /**
+     * Determines the current platform
+     * @returns {string} Platform identifier
+     */
+    function getPlatform() {
+        if (!navigator.platform) return 'windows';
+
+        if (PLATFORMS.IOS.test(navigator.platform)) return 'iOS';
+        if (PLATFORMS.MAC.test(navigator.platform)) return 'mac';
+        if (PLATFORMS.ANDROID.test(useragent)) return 'android';
+        
+        return 'windows';
     }
-
-    return {
-        browser,
-        version,
-        platform,
-        uastring: useragent
-    };
-}
+};
 
 
-// is the browser a touch device.   Usually this means no right click
-function is_touch_device() {
-    return (('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+/**
+ * Detects if the current device supports touch input
+ * @returns {boolean} True if touch is supported
+ */
+const isTouchDevice = () => {
+    try {
+        return 'ontouchstart' in window || 
+            navigator.maxTouchPoints > 0 || 
+            window.matchMedia('(pointer: coarse)').matches;
+    } catch (error) {
+        console.warn('Error detecting touch capability:', error);
+        return false;
+    }
 };

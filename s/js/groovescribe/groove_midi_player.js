@@ -547,7 +547,7 @@ class MIDIPlayer {
     //
     //
     _HTMLForMidiPlayer(expandable) {
-        const touchClass = is_touch_device() ? ' touch' : '';
+        const touchClass = isTouchDevice() ? ' touch' : '';
 
         // Build the base player controls
         const baseControls = `

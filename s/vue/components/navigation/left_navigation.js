@@ -22,7 +22,7 @@ export default {
             </script>
 
             <script>
-                if (is_touch_device()) {
+                if (isTouchDevice()) {
                     document.write('<span class="left-button edit-block" id="advancedEditAnchor" onclick="event.preventDefault(); myGrooveWriter.toggleAdvancedEdit()"><span class="left-button-content">Advanced Edit</span></span>');
                 }
             </script>
