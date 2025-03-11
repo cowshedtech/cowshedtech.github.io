@@ -49,9 +49,6 @@ function GrooveWriter() {
 	var class_num_beats_per_measure = 4;     // TimeSigTop
 	var class_note_value_per_measure = 4;     // TimeSigBottom
 	var class_notes_per_measure = calc_notes_per_measure(class_time_division, class_num_beats_per_measure, class_note_value_per_measure);
-	var class_metronome_auto_speed_up_active = false;
-	var class_metronome_count_in_active = false;
-	var class_metronome_count_in_is_playing = false;
 	var class_repeated_measures = new Map();
 	var class_highlight_on = true;
 
@@ -108,73 +105,7 @@ function GrooveWriter() {
 	}
 
 
-	root.setMetronomeButton = function (metronomeInterval) {
-
-		var id = "";
-		switch (metronomeInterval) {
-			case 4:
-				id = "metronome4ths";
-				break;
-			case 8:
-				id = "metronome8ths";
-				break;
-			case 16:
-				id = "metronome16ths";
-				break;
-			case 0:
-			/* falls through */
-			default:
-				id = "metronomeOff";
-				if (metronome.getMetronomeSolo()) {
-					// turn off solo if we are turning off the metronome
-					root.metronomeOptionsMenuPopupClick("Solo");
-				}
-				break;
-		}
-
-		// clear other buttons
-		var myElements = document.querySelectorAll(".metronomeButton");
-		for (var i = 0; i < myElements.length; i++) {
-			var thisButton = myElements[i];
-			// remove active status
-			unselectButton(thisButton);
-		}
-
-		selectButton(document.getElementById(id));
-
-		midiPlayer.noteHasChanged(); // pretty likely the case
-	};
-
-	root.class_metronome_frequency = 0;
-	root.getMetronomeFrequency = function () {
-		return root.class_metronome_frequency;
-	};
-
-	root.setMetronomeFrequency = function (newFrequency) {
-		root.class_metronome_frequency = newFrequency;
-		root.setMetronomeButton(newFrequency);
-
-		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
-		root.updateCurrentURL();
-	};
-
-	// the user has clicked on the metronome options button
-	root.metronomeOptionsAnchorClick = function (event) {
-
-		var contextMenu = document.getElementById("metronomeOptionsContextMenu");
-		if (contextMenu) {
-
-			var anchorPoint = document.getElementById("metronomeOptionsAnchor");
-
-			if (anchorPoint) {
-				var anchorPos = getTagPosition(anchorPoint);
-				contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
-				contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
-			}
-
-			showContextMenu(contextMenu);
-		}
-	};
+	
 
 	// the user has clicked on the permutation menu
 	root.permutationAnchorClick = function (event) {
@@ -282,19 +213,7 @@ function GrooveWriter() {
 		}
 	};
 
-	// figure out if the metronome options menu should be selected and change the UI
-	root.metronomeOptionsMenuSetSelectedState = function () {
-
-		if (metronome.getMetronomeSolo() ||
-			class_metronome_auto_speed_up_active ||
-			metronome.getMetronomeOffsetClickStart() != "1") {
-			// make menu look active
-			addOrRemoveKeywordFromClassById("metronomeOptionsAnchor", "selected", true)
-		} else {
-			// inactive
-			addOrRemoveKeywordFromClassById("metronomeOptionsAnchor", "selected", false)
-		}
-	};
+	
 
 	root.optionsMenuSetSelectedState = function () {
 
@@ -318,111 +237,9 @@ function GrooveWriter() {
 		root.updateCurrentURL();
 	};
 
-	root.metronomeOptionsMenuPopupClick = function (option_type) {
+	
 
-		switch (option_type) {
-			case "Solo":
-				var current = metronome.getMetronomeSolo();
-				if (!current) {
-					metronome.setMetronomeSolo(true);
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", true);
-					if (root.getMetronomeFrequency() === 0)
-						root.setMetronomeFrequency(4);
-				} else {
-					metronome.setMetronomeSolo(false);
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
-				}
-				midiPlayer.noteHasChanged();
-				break;
-
-			case "SpeedUp":
-				if (class_metronome_auto_speed_up_active) {
-					// just turn it off if it is on, don't show the configurator
-					class_metronome_auto_speed_up_active = false;
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSpeedUp", "menuChecked", false);
-				} else {
-					class_metronome_auto_speed_up_active = true;
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSpeedUp", "menuChecked", true);
-					root.show_MetronomeAutoSpeedupConfiguration();
-				}
-				break;
-
-			case "CountIn":
-				if (class_metronome_count_in_active) {
-					// just turn it off if it is on, don't show the configurator
-					class_metronome_count_in_active = false;
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", false);
-				} else {
-					class_metronome_count_in_active = true;
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", true);
-				}
-				break;
-
-			case "OffTheOne":
-				// bring up the next menu to be clicked
-				var contextMenu;
-
-				if (usingTriplets())
-					contextMenu = document.getElementById("metronomeOptionsOffsetClickForTripletsContextMenu");
-				else
-					contextMenu = document.getElementById("metronomeOptionsOffsetClickContextMenu");
-				if (contextMenu) {
-					var anchorPoint = document.getElementById("metronomeOptionsContextMenuOffTheOne");
-
-					if (anchorPoint) {
-						var anchorPos = getTagPosition(anchorPoint);
-						contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
-						contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
-					}
-					showContextMenu(contextMenu);
-				}
-				break;
-
-			case "Dropper":
-
-				break;
-
-			default:
-				console.log("bad case in metronomeOptionsMenuPopupClick()");
-				break;
-		}
-
-		root.metronomeOptionsMenuSetSelectedState();
-	};
-
-	root.metronomeOptionsMenuOffsetClickPopupClick = function (option_type) {
-
-		metronome.setMetronomeOffsetClickStart(option_type);
-
-		// clear other and select
-		var myElements = document.querySelectorAll(".metronomeOptionsOffsetClickContextMenuItem");
-		for (var i = 0; i < myElements.length; i++) {
-			var thisItem = myElements[i];
-			// remove active status
-			addOrRemoveKeywordFromClass(thisItem, "menuChecked", false);
-
-		}
-
-		// turn on the new one selected
-		addOrRemoveKeywordFromClassById("metronomeOptionsOffsetClickContextMenuOnThe" + option_type, "menuChecked", true);
-
-
-		if (option_type != "1") { // 1 is the default state
-			// add a check to the menu
-			addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuOffTheOne", "menuChecked", true);
-		} else {
-
-			addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuOffTheOne", "menuChecked", false);
-		}
-
-		midiPlayer.noteHasChanged();
-		root.metronomeOptionsMenuSetSelectedState();
-	};
-
-	root.resetMetronomeOptionsMenuOffsetClick = function () {
-		// call with the default option
-		root.metronomeOptionsMenuOffsetClickPopupClick("1");
-	};
+	
 
 	function setupPermutationMenu() {
 
@@ -1205,7 +1022,7 @@ function GrooveWriter() {
 			new_snare_array,
 			num_notes_for_swing = 16;
 
-		var metronomeFrequency = root.getMetronomeFrequency();
+		var metronomeFrequency = metronome.getMetronomeFrequency();
 
 		// just the first measure
 		var num_notes = get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
@@ -1329,7 +1146,7 @@ function GrooveWriter() {
 		myGrooveData.showLegend = document.getElementById("showLegend").checked;
 		myGrooveData.swingPercent = midiPlayer.getSwing();
 		myGrooveData.tempo = midiPlayer.getTempo();
-		myGrooveData.metronomeFrequency = root.getMetronomeFrequency();
+		// metronome.metronomeFrequency = root.getMetronomeFrequency();
 		myGrooveData.kickStemsUp = true;
 		myGrooveData.repeatedMeasures = class_repeated_measures;
 		myGrooveData.highlightOn = class_highlight_on;
@@ -2355,15 +2172,15 @@ function GrooveWriter() {
 		midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
 			var midiURL;
 
-			if (playStarting && class_metronome_count_in_active) {
+			if (playStarting && metronome.class_metronome_count_in_active) {
 
-				midiURL = buildMIDICountInTrack(class_num_beats_per_measure, class_note_value_per_measure, root.myGrooveUtils.getTempo());
+				midiURL = buildMIDICountInTrack(class_num_beats_per_measure, class_note_value_per_measure, midiPlayer.getTempo());
 				midiPlayer.noteHasChanged();
-				class_metronome_count_in_is_playing = true;
+				metronome.class_metronome_count_in_is_playing = true;
 			} else {
-				if (class_metronome_count_in_is_playing) {
+				if (metronome.class_metronome_count_in_is_playing) {
 					// we saved the state above so that we could reset the Offset click start, otherwise it starts on the 'e'
-					class_metronome_count_in_is_playing = false;
+					metronome.class_metronome_count_in_is_playing = false;
 					metronome.resetMetronomeOptionsOffsetClickStartRotation();
 				}
 				midiURL = createMidiUrlFromClickableUI("our_MIDI");
@@ -2374,7 +2191,7 @@ function GrooveWriter() {
 		};
 
 		midiPlayer.eventCallbacks.notePlaying = function (note_type, percent_complete) {
-			if (note_type == "complete" && class_metronome_auto_speed_up_active) {
+			if (note_type == "complete" && metronome.class_metronome_auto_speed_up_active) {
 				// reload with new tempo
 				midiPlayer.noteHasChanged();
 				root.metronomeAutoSpeedUpTempoUpdate();
@@ -3100,7 +2917,7 @@ function GrooveWriter() {
 
 		midiPlayer.setSwing(midiPlayer.swingPercent);
 
-		root.setMetronomeFrequency(myGrooveData.metronomeFrequency);
+		//metronome.setMetronomeFrequency(myGrooveData.metronomeFrequency);
 
 		updateSheetMusic();
 	}
@@ -3261,7 +3078,7 @@ function GrooveWriter() {
 			uiKick = GetDefaultKickGroove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
 
 			// reset the metronome click, since it has different options
-			root.resetMetronomeOptionsMenuOffsetClick();
+			metronome.resetMetronomeOptionsMenuOffsetClick();
 		}
 
 		root.expandAuthoringViewWhenNecessary(newDivision, class_number_of_measures);

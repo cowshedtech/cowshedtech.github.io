@@ -334,7 +334,7 @@ class MIDIPlayer {
             {
                 id: `midiMetronomeMenu${uniqueIndex}`,
                 event: 'click',
-                handler: grooveUtil.metronomeMiniMenuClick
+                handler: metronome.metronomeMiniMenuClick
             }
         ];
 

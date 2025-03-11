@@ -93,7 +93,7 @@ function GrooveUtils() {
 		this.swingPercent = 0;
 		this.tempo = constant_DEFAULT_TEMPO;
 		this.kickStemsUp = true;
-		this.metronomeFrequency = 0; // 0, 4, 8, 16
+		// this.metronomeFrequency = 0; // 0, 4, 8, 16
 		this.debugMode = root.debugMode;
 		this.grooveDBAuthoring = root.grooveDBAuthoring;
 		this.viewMode = root.viewMode;

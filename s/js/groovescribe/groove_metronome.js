@@ -5,6 +5,12 @@ class Metronome {
     metronomeSolo = false;
     metronomeOffsetClickStart = "1";
     metronomeOffsetClickStartRotation = 0;
+    metronomeFrequency = 0;
+
+    class_metronome_auto_speed_up_active = false;
+	class_metronome_count_in_active = false;
+	class_metronome_count_in_is_playing = false;
+	
 
     /**
      * 
@@ -12,6 +18,19 @@ class Metronome {
     constructor(containerIndex) {
         
     }    
+
+    setMetronomeFrequency(frequency) {
+        this.metronomeFrequency = frequency;
+        this.setMetronomeButton(frequency);
+
+        // TODO!!
+        //root.updateCurrentURL();
+    }
+
+    getMetronomeFrequency() {
+        return this.metronomeFrequency
+    }
+
 
     //
     //
@@ -102,38 +121,216 @@ class Metronome {
             }
         }
     };
+
+    
+    ///
+    //
+    //
+
+    // turn the metronome on and off
+    metronomeMiniMenuClick() {
+        if (this.metronomeFrequency > 0)
+            this.metronomeFrequency = 0;
+        else
+            this.metronomeFrequency = 4;
+
+        midiPlayer.setMetronomeFrequencyDisplay(this.metronomeFrequency);
+        midiPlayer.noteHasChanged();
+    };
+
+
+    //
+    //
+    //
+    setMetronomeButton(metronomeInterval) {
+
+		var id = "";
+		switch (metronomeInterval) {
+			case 4:
+				id = "metronome4ths";
+				break;
+			case 8:
+				id = "metronome8ths";
+				break;
+			case 16:
+				id = "metronome16ths";
+				break;
+			case 0:
+			/* falls through */
+			default:
+				id = "metronomeOff";
+				if (metronome.getMetronomeSolo()) {
+					// turn off solo if we are turning off the metronome
+					root.metronomeOptionsMenuPopupClick("Solo");
+				}
+				break;
+		}
+
+		// clear other buttons
+		var myElements = document.querySelectorAll(".metronomeButton");
+		for (var i = 0; i < myElements.length; i++) {
+			var thisButton = myElements[i];
+			// remove active status
+			unselectButton(thisButton);
+		}
+
+		selectButton(document.getElementById(id));
+
+		midiPlayer.noteHasChanged(); // pretty likely the case
+	};
+
+	// root.setMetronomeFrequency = function (newFrequency) {
+	// 	root.class_metronome_frequency = newFrequency;
+	// 	root.setMetronomeButton(newFrequency);
+
+	// 	// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
+	// 	root.updateCurrentURL();
+	// };
+
+	// the user has clicked on the metronome options button
+	metronomeOptionsAnchorClick(event) {
+
+		var contextMenu = document.getElementById("metronomeOptionsContextMenu");
+		if (contextMenu) {
+
+			var anchorPoint = document.getElementById("metronomeOptionsAnchor");
+
+			if (anchorPoint) {
+				var anchorPos = getTagPosition(anchorPoint);
+				contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
+				contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
+			}
+
+			showContextMenu(contextMenu);
+		}
+	};
+
+
+    // figure out if the metronome options menu should be selected and change the UI
+    metronomeOptionsMenuSetSelectedState() {
+
+        if (metronome.getMetronomeSolo() ||
+            this.class_metronome_auto_speed_up_active ||
+            metronome.getMetronomeOffsetClickStart() != "1") {
+            // make menu look active
+            addOrRemoveKeywordFromClassById("metronomeOptionsAnchor", "selected", true)
+        } else {
+            // inactive
+            addOrRemoveKeywordFromClassById("metronomeOptionsAnchor", "selected", false)
+        }
+    };
+
+
+    metronomeOptionsMenuPopupClick(option_type) {
+
+		switch (option_type) {
+			case "Solo":
+				var current = metronome.getMetronomeSolo();
+				if (!current) {
+					metronome.setMetronomeSolo(true);
+					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", true);
+					if (metronome.getMetronomeFrequency() === 0)
+						metronome.setMetronomeFrequency(4);
+				} else {
+					metronome.setMetronomeSolo(false);
+					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
+				}
+				midiPlayer.noteHasChanged();
+				break;
+
+			case "SpeedUp":
+				if (metronome.class_metronome_auto_speed_up_active) {
+					// just turn it off if it is on, don't show the configurator
+					metronome.class_metronome_auto_speed_up_active = false;
+					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSpeedUp", "menuChecked", false);
+				} else {
+					metronome.class_metronome_auto_speed_up_active = true;
+					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSpeedUp", "menuChecked", true);
+					root.show_MetronomeAutoSpeedupConfiguration();
+				}
+				break;
+
+			case "CountIn":
+				if (metronome.class_metronome_count_in_active) {
+					// just turn it off if it is on, don't show the configurator
+					metronome.class_metronome_count_in_active = false;
+					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", false);
+				} else {
+					metronome.class_metronome_count_in_active = true;
+					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", true);
+				}
+				break;
+
+			case "OffTheOne":
+				// bring up the next menu to be clicked
+				var contextMenu;
+
+				if (usingTriplets())
+					contextMenu = document.getElementById("metronomeOptionsOffsetClickForTripletsContextMenu");
+				else
+					contextMenu = document.getElementById("metronomeOptionsOffsetClickContextMenu");
+				if (contextMenu) {
+					var anchorPoint = document.getElementById("metronomeOptionsContextMenuOffTheOne");
+
+					if (anchorPoint) {
+						var anchorPos = getTagPosition(anchorPoint);
+						contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
+						contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
+					}
+					showContextMenu(contextMenu);
+				}
+				break;
+
+			case "Dropper":
+
+				break;
+
+			default:
+				console.log("bad case in metronomeOptionsMenuPopupClick()");
+				break;
+		}
+
+		metronome.metronomeOptionsMenuSetSelectedState();
+	};
+
+
+    metronomeOptionsMenuOffsetClickPopupClick(option_type) {
+
+		metronome.setMetronomeOffsetClickStart(option_type);
+
+		// clear other and select
+		var myElements = document.querySelectorAll(".metronomeOptionsOffsetClickContextMenuItem");
+		for (var i = 0; i < myElements.length; i++) {
+			var thisItem = myElements[i];
+			// remove active status
+			addOrRemoveKeywordFromClass(thisItem, "menuChecked", false);
+
+		}
+
+		// turn on the new one selected
+		addOrRemoveKeywordFromClassById("metronomeOptionsOffsetClickContextMenuOnThe" + option_type, "menuChecked", true);
+
+
+		if (option_type != "1") { // 1 is the default state
+			// add a check to the menu
+			addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuOffTheOne", "menuChecked", true);
+		} else {
+
+			addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuOffTheOne", "menuChecked", false);
+		}
+
+		midiPlayer.noteHasChanged();
+		metronome.metronomeOptionsMenuSetSelectedState();
+	};
+
+	resetMetronomeOptionsMenuOffsetClick() {
+		// call with the default option
+		root.metronomeOptionsMenuOffsetClickPopupClick("1");
+	};
+
 }
 
 var metronome = new Metronome();
-
-
-
-// start with last in the rotation so the next rotation brings it to '1'
-
-
-
-
-// turn the metronome on and off
-function metronomeMiniMenuClick() {
-    if (root.myGrooveData.metronomeFrequency > 0)
-        root.myGrooveData.metronomeFrequency = 0;
-    else
-        root.myGrooveData.metronomeFrequency = 4;
-
-    midiPlayer.setMetronomeFrequencyDisplay(root.myGrooveData.metronomeFrequency);
-    midiPlayer.noteHasChanged();
-};
-
-
-
-
-
-
-
-
-
-
-
 
 
 

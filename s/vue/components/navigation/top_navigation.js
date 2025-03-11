@@ -9,11 +9,11 @@ export default {
         <span id="upperLeft">
             <span id="metronomeContainer">
                 <span id="metronomeLabel"> METRONOME:</span>
-                <span class="metronomeButton" id="metronomeOff" onclick="myGrooveWriter.setMetronomeFrequency(0);">OFF</span>
-                <span class="metronomeButton" id="metronome4ths" onclick="myGrooveWriter.setMetronomeFrequency(4);">4th</span>
-                <span class="metronomeButton" id="metronome8ths" onclick="myGrooveWriter.setMetronomeFrequency(8);">8th</span>
-                <span class="metronomeButton" id="metronome16ths" onclick="myGrooveWriter.setMetronomeFrequency(16);">16th</span>
-                <span class="metronomeButton Options grooveDB_hidden" id="metronomeOptionsAnchor" onclick="myGrooveWriter.metronomeOptionsAnchorClick(event);">Options</span>
+                <span class="metronomeButton" id="metronomeOff" onclick="metronome.setMetronomeFrequency(0);">OFF</span>
+                <span class="metronomeButton" id="metronome4ths" onclick="metronome.setMetronomeFrequency(4);">4th</span>
+                <span class="metronomeButton" id="metronome8ths" onclick="metronome.setMetronomeFrequency(8);">8th</span>
+                <span class="metronomeButton" id="metronome16ths" onclick="metronome.setMetronomeFrequency(16);">16th</span>
+                <span class="metronomeButton Options grooveDB_hidden" id="metronomeOptionsAnchor" onclick="metronome.metronomeOptionsAnchorClick(event);">Options</span>
                 <a id="linkGrooveScribe" href="https://www.mikeslessons.com/groove/"><span id="metronomeLabel">&nbsp;&nbsp;&nbsp;&nbsp;(GrooveScribe Link)</span></a>
             </span>
         </span>

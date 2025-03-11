@@ -73,8 +73,8 @@
     }
 
     // # metronome setting
-    if (myGrooveData.metronomeFrequency !== 0) {
-        fullURL += "&MetronomeFreq=" + myGrooveData.metronomeFrequency;
+    if (metronome.metronomeFrequency !== 0) {
+        fullURL += "&MetronomeFreq=" + metronome.metronomeFrequency;
     }
 
     // notes
@@ -118,7 +118,7 @@ function getGrooveDataFromUrlString(encodedURLData, myGrooveData, debugMode) {
     myGrooveData.timeDivision = parseInt(getQueryVariableFromString("Div", 16, encodedURLData), 10);
     myGrooveData.notesPerMeasure = calc_notes_per_measure(myGrooveData.timeDivision, myGrooveData.numBeats, myGrooveData.noteValue);
 
-    myGrooveData.metronomeFrequency = parseInt(getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10);
+    metronome.metronomeFrequency = parseInt(getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10);
 
     myGrooveData.numberOfMeasures = parseInt(getQueryVariableFromString("measures", 1, encodedURLData), 10);
     if (myGrooveData.numberOfMeasures < 1 || isNaN(myGrooveData.numberOfMeasures))
