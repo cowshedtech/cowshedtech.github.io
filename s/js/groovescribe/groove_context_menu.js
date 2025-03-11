@@ -3,16 +3,7 @@
 //
 //
 //
-var visible_context_menu = false; // a single context menu can be visible at a time.
-
-
-// every document click passes through here.
-// close a popup if one is up and we click off of it.
-function documentOnClickHanderCloseContextMenu(event) {
-    if (visible_context_menu) {
-        hideContextMenu(visible_context_menu);
-    }
-};
+var isContextMenuVisible = false; // a single context menu can be visible at a time.
 
 
 //
@@ -21,12 +12,12 @@ function documentOnClickHanderCloseContextMenu(event) {
 function showContextMenu(contextMenu) {
 
     // if there is another context menu open, close it
-    if (visible_context_menu) {
-        hideContextMenu(visible_context_menu);
+    if (isContextMenuVisible) {
+        hideContextMenu(isContextMenuVisible);
     }
 
     contextMenu.style.display = "block";
-    visible_context_menu = contextMenu;
+    isContextMenuVisible = contextMenu;
 
     // Check for screen visibility of the bottom of the menu
     if (contextMenu.offsetTop + contextMenu.clientHeight > document.documentElement.clientHeight) {
@@ -53,5 +44,13 @@ function hideContextMenu(contextMenu) {
     if (contextMenu) {
         contextMenu.style.display = "none";
     }
-    visible_context_menu = false;
+    isContextMenuVisible = false;
+};
+
+// every document click passes through here.
+// close a popup if one is up and we click off of it.
+function documentOnClickHanderCloseContextMenu(event) {
+    if (isContextMenuVisible) {
+        hideContextMenu(isContextMenuVisible);
+    }
 };

@@ -70,7 +70,7 @@ function GrooveUtils() {
 
 	var class_empty_note_array = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
 
-	root.visible_context_menu = false; // a single context menu can be visible at a time.
+	root.isContextMenuVisible = false; // a single context menu can be visible at a time.
 
 	root.grooveDataNew = function () {
 		this.notesPerMeasure = 16;
