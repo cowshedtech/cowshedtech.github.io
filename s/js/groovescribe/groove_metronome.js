@@ -2,10 +2,10 @@
 
 class Metronome {
 
-    metronomeSolo = false;
-    metronomeOffsetClickStart = "1";
-    metronomeOffsetClickStartRotation = 0;
-    metronomeFrequency = 0;
+    solo = false;
+    offsetClickStart = "1";
+    offsetClickStartRotation = 0;
+    frequency = 0;
 
     class_metronome_auto_speed_up_active = false;
 	class_metronome_count_in_active = false;
@@ -19,16 +19,22 @@ class Metronome {
         
     }    
 
-    setMetronomeFrequency(frequency) {
-        this.metronomeFrequency = frequency;
+    /**
+     * 
+     */    
+    setFrequency(frequency) {
+        this.frequency = frequency;
         this.setMetronomeButton(frequency);
 
         // TODO!!
         //root.updateCurrentURL();
     }
 
-    getMetronomeFrequency() {
-        return this.metronomeFrequency
+    /**
+     * 
+     */    
+    getFrequency() {
+        return this.frequency
     }
 
 
@@ -36,51 +42,71 @@ class Metronome {
     //
     //
 
-    getMetronomeSolo() {
-        return this.metronomeSolo;
+    /**
+     * 
+     */    
+    getSolo() {
+        return this.solo;
     };
     
-    setMetronomeSolo(trueElseFalse) {
-        this.metronomeSolo = trueElseFalse;
+    /**
+     * 
+     */    
+    setSolo(trueElseFalse) {
+        this.solo = trueElseFalse;
     };
 
     //
     //
     //
 
+    /**
+     * 
+     */    
     getMetronomeOffsetClickStart() {
-        return this.metronomeOffsetClickStart;
+        return this.offsetClickStart;
     };
     
+    /**
+     * 
+     */    
     getMetronomeOffsetClickStartIsRotating() {
-        return this.metronomeOffsetClickStart == 'ROTATE';
+        return this.offsetClickStart == 'ROTATE';
     };
     
+    /**
+     * 
+     */    
     setMetronomeOffsetClickStart(value) {
-        this.metronomeOffsetClickStart = value;
+        this.offsetClickStart = value;
     };
 
-    // if the Metronome offset click start is set to rotate this
-    // will advance the position of the rotation and return TRUE
-    // returns FALSE if rotation is OFF
+    /**
+     * if the Metronome offset click start is set to rotate this
+     * will advance the position of the rotation and return TRUE
+     * returns FALSE if rotation is OFF     
+     */    
     advanceMetronomeOptionsOffsetClickStartRotation(isTriplets) {
         if (metronome.getMetronomeOffsetClickStartIsRotating()) {
-            metronome.metronomeOffsetClickStartRotation++;
+            metronome.offsetClickStartRotation++;
             return true;
         } else {
             return false;
         }
     };
 
+    /**
+     * 
+     */    
     getMetronomeOptionsOffsetClickStartRotation(isTriplets) {
         if (metronome.getMetronomeOffsetClickStartIsRotating()) {
             // constrain the rotation
-            if (isTriplets && metronome.metronomeOffsetClickStartRotation > 2)
-                metronome.metronomeOffsetClickStartRotation = 0;
-            else if (metronome.metronomeOffsetClickStartRotation > 3)
-                metronome.metronomeOffsetClickStartRotation = 0;
+            if (isTriplets && metronome.offsetClickStartRotation > 2)
+                metronome.offsetClickStartRotation = 0;
+            else if (metronome.offsetClickStartRotation > 3)
+                metronome.offsetClickStartRotation = 0;
     
-            switch (metronome.metronomeOffsetClickStartRotation) {
+            switch (metronome.offsetClickStartRotation) {
                 case 0:
                     return '1';
                 case 1:
@@ -101,16 +127,22 @@ class Metronome {
         }
     };
     
+    /**
+     * 
+     */    
     resetMetronomeOptionsOffsetClickStartRotation(value) {
         // start with last in the rotation so the next rotation brings it to '1'
-        return metronome.metronomeOffsetClickStartRotation = 0;
+        return metronome.offsetClickStartRotation = 0;
     };
 
     //
     //
     //
 
-    setMetronomeFrequencyDisplay(newFrequency) {
+    /**
+     * 
+     */    
+    setFrequencyDisplay(newFrequency) {
         var mm = document.getElementById('midiMetronomeMenu' + root.grooveUtilsUniqueIndex);
     
         if (mm) {
@@ -127,21 +159,23 @@ class Metronome {
     //
     //
 
-    // turn the metronome on and off
+    /**
+     * 
+     */    
     metronomeMiniMenuClick() {
-        if (this.metronomeFrequency > 0)
-            this.metronomeFrequency = 0;
+        if (this.frequency > 0)
+            this.frequency = 0;
         else
-            this.metronomeFrequency = 4;
+            this.frequency = 4;
 
-        midiPlayer.setMetronomeFrequencyDisplay(this.metronomeFrequency);
+        midiPlayer.setFrequencyDisplay(this.frequency);
         midiPlayer.noteHasChanged();
     };
 
 
-    //
-    //
-    //
+    /**
+     * 
+     */    
     setMetronomeButton(metronomeInterval) {
 
 		var id = "";
@@ -159,7 +193,7 @@ class Metronome {
 			/* falls through */
 			default:
 				id = "metronomeOff";
-				if (metronome.getMetronomeSolo()) {
+				if (metronome.getSolo()) {
 					// turn off solo if we are turning off the metronome
 					root.metronomeOptionsMenuPopupClick("Solo");
 				}
@@ -179,7 +213,7 @@ class Metronome {
 		midiPlayer.noteHasChanged(); // pretty likely the case
 	};
 
-	// root.setMetronomeFrequency = function (newFrequency) {
+	// root.setFrequency = function (newFrequency) {
 	// 	root.class_metronome_frequency = newFrequency;
 	// 	root.setMetronomeButton(newFrequency);
 
@@ -207,9 +241,12 @@ class Metronome {
 
 
     // figure out if the metronome options menu should be selected and change the UI
+    /**
+     * 
+     */    
     metronomeOptionsMenuSetSelectedState() {
 
-        if (metronome.getMetronomeSolo() ||
+        if (metronome.getSolo() ||
             this.class_metronome_auto_speed_up_active ||
             metronome.getMetronomeOffsetClickStart() != "1") {
             // make menu look active
@@ -221,18 +258,21 @@ class Metronome {
     };
 
 
+    /**
+     * 
+     */    
     metronomeOptionsMenuPopupClick(option_type) {
 
 		switch (option_type) {
 			case "Solo":
-				var current = metronome.getMetronomeSolo();
+				var current = metronome.getSolo();
 				if (!current) {
-					metronome.setMetronomeSolo(true);
+					metronome.setSolo(true);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", true);
-					if (metronome.getMetronomeFrequency() === 0)
-						metronome.setMetronomeFrequency(4);
+					if (metronome.getFrequency() === 0)
+						metronome.setFrequency(4);
 				} else {
-					metronome.setMetronomeSolo(false);
+					metronome.setSolo(false);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
 				}
 				midiPlayer.noteHasChanged();
@@ -294,6 +334,9 @@ class Metronome {
 	};
 
 
+    /**
+     * 
+     */    
     metronomeOptionsMenuOffsetClickPopupClick(option_type) {
 
 		metronome.setMetronomeOffsetClickStart(option_type);
@@ -323,12 +366,18 @@ class Metronome {
 		metronome.metronomeOptionsMenuSetSelectedState();
 	};
 
-	resetMetronomeOptionsMenuOffsetClick() {
+	/**
+     * 
+     */    
+    resetMetronomeOptionsMenuOffsetClick() {
 		// call with the default option
 		root.metronomeOptionsMenuOffsetClickPopupClick("1");
 	};
 
-	show_MetronomeAutoSpeedupConfiguration() {
+	/**
+     * 
+     */    
+    show_MetronomeAutoSpeedupConfiguration() {
 		var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
 
 		if (popup) {
@@ -339,7 +388,10 @@ class Metronome {
 		document.getElementById('metronomeAutoSpeedupTempoIncreaseIntervalOutput').innerHTML = document.getElementById('metronomeAutoSpeedupTempoIncreaseInterval').value;
 	};
 
-	close_MetronomeAutoSpeedupConfiguration(type) {
+	/**
+     * 
+     */    
+    close_MetronomeAutoSpeedupConfiguration(type) {
 		var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
 
 		if (popup)

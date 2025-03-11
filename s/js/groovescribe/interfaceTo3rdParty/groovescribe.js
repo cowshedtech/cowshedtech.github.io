@@ -55,8 +55,8 @@ function getGSUrlStringFromGrooveData(myGrooveData, url_destination) {
     fullURL += "&Measures=" + myGrooveData.numberOfMeasures;
 
     // # metronome setting
-    if (metronome.metronomeFrequency !== 0) {
-        fullURL += "&MetronomeFreq=" + metronome.metronomeFrequency;
+    if (metronome.frequency !== 0) {
+        fullURL += "&MetronomeFreq=" + metronome.frequency;
     }
 
     // notes

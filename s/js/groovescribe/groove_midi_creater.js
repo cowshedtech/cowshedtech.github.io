@@ -393,7 +393,7 @@ function create_MIDIURLFromGrooveData(myGrooveData, MIDI_type, metronomeSolo) {
             FullNoteKickArray.slice(measure_notes * measureIndex, measure_notes * (measureIndex + 1)),
             FullNoteTomsArray,
             MIDI_type,
-            metronome.metronomeFrequency,
+            metronome.frequency,
             measure_notes,
             myGrooveData.timeDivision,
             swing_percentage,
