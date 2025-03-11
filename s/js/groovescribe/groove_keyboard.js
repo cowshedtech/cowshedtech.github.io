@@ -1,37 +1,75 @@
-function setupHotKeys() {
-
-    var isCtrl = false;
-    document.onkeyup = function (e) {
-        if (e.which == 17)
-            isCtrl = false;
+/**
+ * Sets up keyboard shortcuts for MIDI player controls
+ */
+const setupHotKeys = () => {
+    const KEYS = {
+        CTRL: 'Control',
+        SPACEBAR: 'Space',
+        PLAY: 'MediaPlayPause',
+        STOP: 'MediaStop'
     };
 
-    document.onkeydown = function (e) {
-        if (e.which == 17)
-            isCtrl = true;
-        /*
-        if(e.which == 83 && isCtrl == true) {
-        alert('CTRL-S pressed');
-        return false;
-        }
-         */
-        // only accept the event if it not going to an INPUT field
-        // otherwise we can't use spacebar in text fields :(
-        if (e.which == 32 && (e.target.type == "range" || (e.target.tagName.toUpperCase() != "INPUT" && e.target.tagName.toUpperCase() != "TEXTAREA"))) {
+    const IGNORED_ELEMENTS = new Set(['INPUT', 'TEXTAREA']);
+    let isCtrlPressed = false;
 
-            // spacebar
-            midiPlayer.startOrStop();
-            return false;
+    /**
+     * Checks if the event target is valid for keyboard shortcuts
+     * @param {KeyboardEvent} event - The keyboard event
+     * @returns {boolean} True if the target is valid
+     */
+    const isValidTarget = (event) => {
+        const targetTag = event.target.tagName.toUpperCase();
+        return event.target.type !== 'range' && !IGNORED_ELEMENTS.has(targetTag);
+    };
+
+    /**
+     * Handles keydown events
+     * @param {KeyboardEvent} event - The keyboard event
+     * @returns {boolean} False if event was handled, true otherwise
+     */
+    const handleKeyDown = (event) => {
+        // Handle Ctrl key
+        if (event.code === KEYS.CTRL) {
+            isCtrlPressed = true;
+            return true;
         }
-        if (e.which == 179) {
-            // Play button
-            midiPlayer.startOrPause();
-        }
-        if (e.which == 178) {
-            // Stop button
-            midiPlayer.stop();
+
+        // Handle media keys
+        switch (event.code) {
+            case KEYS.PLAY:
+                midiPlayer.startOrPause();
+                return false;
+            case KEYS.STOP:
+                midiPlayer.stop();
+                return false;
+            case KEYS.SPACEBAR:
+                if (isValidTarget(event)) {
+                    midiPlayer.startOrStop();
+                    return false;
+                }
+                break;
         }
 
         return true;
     };
-}
+
+    /**
+     * Handles keyup events
+     * @param {KeyboardEvent} event - The keyboard event
+     */
+    const handleKeyUp = (event) => {
+        if (event.code === KEYS.CTRL) {
+            isCtrlPressed = false;
+        }
+    };
+
+    // Add event listeners
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
+
+    // Return cleanup function
+    return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+        document.removeEventListener('keyup', handleKeyUp);
+    };
+};

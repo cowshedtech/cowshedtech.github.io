@@ -4,87 +4,137 @@
 // Functions for manipulating the browser dom
 //
 
-//
-//
-//
-function addOrRemoveKeywordFromClass(tag_class, keyword, addElseRemove) {
-    if (!tag_class) {
-        console.log("Warning in addOrRemoveKeywordFromClassName: null tag_class passed in");
+
+/**
+ * Adds or removes a keyword from an element's class list
+ * @param {HTMLElement} element - The DOM element to modify
+ * @param {string} keyword - The class name to add or remove
+ * @param {boolean} shouldAdd - True to add the class, false to remove it
+ * @returns {boolean} True if operation succeeded, false if invalid input
+ */
+function addOrRemoveKeywordFromClass(element, keyword, shouldAdd) {
+    // Validate inputs
+    if (!element?.className) {
+        console.warn(
+            'Invalid element in addOrRemoveKeywordFromClass:',
+            !element ? 'null element' : `missing className for ID: ${element.id}`
+        );
         return false;
     }
 
-    if (!tag_class.className) {
-        console.log("Warning in addOrRemoveKeywordFromClassName: null className for tag id: " + tag_class.id);
-        console.trace();
-        return false;
-    }
-
-    if (addElseRemove) {
-        const classes = tag_class.className.split(' ');
-        if (!classes.includes(keyword)) {
-            classes.push(keyword);
-            tag_class.className = classes.join(' ');
+    try {
+        // Use native classList methods for better performance
+        if (shouldAdd) {
+            element.classList.add(keyword);
+        } else {
+            element.classList.remove(keyword);
         }
-    } else {
-        tag_class.className = tag_class.className.split(' ')
-            .filter(cls => cls !== keyword)
-            .join(' ');
+        return true;
+    } catch (error) {
+        console.warn('Error modifying class:', error);
+        return false;
     }
-
-    return true;
 }
 
 
-//
-//
-//
-function addOrRemoveKeywordFromClassById(tagId, keyword, addElseRemove) {
-    const element = document.getElementById(tagId);
-
+/**
+ * Adds or removes a class from an element identified by its ID
+ * @param {string} elementId - The ID of the element to modify
+ * @param {string} className - The class name to add or remove
+ * @param {boolean} shouldAdd - True to add the class, false to remove it
+ * @returns {boolean} True if operation succeeded, false if element not found or operation failed
+ * @example
+ * // Add 'active' class to element with ID 'myButton'
+ * addOrRemoveKeywordFromClassById('myButton', 'active', true);
+ */
+function addOrRemoveKeywordFromClassById(elementId, className, shouldAdd) {
+    const element = document.getElementById(elementId);
+    
     if (!element) {
-        console.warn(`Element with ID "${tagId}" not found`);
+        console.warn(`Unable to modify class: element with ID "${elementId}" not found`);
         return false;
     }
 
-    return addOrRemoveKeywordFromClass(element, keyword, addElseRemove);
+    return addOrRemoveKeywordFromClass(element, className, shouldAdd);
 }
 
 
-//
-//
-// highlight the new div by adding selected css class   
-function selectButton(element) {
-    addOrRemoveKeywordFromClass(element, "buttonSelected", true);
-}
+/**
+ * Adds the 'buttonSelected' class to highlight an element
+ * @param {HTMLElement} element - The element to highlight
+ * @returns {boolean} True if highlighting succeeded, false otherwise
+ * @example
+ * selectButton(document.getElementById('myButton'));
+ */
+const selectButton = (element) => {
+    if (!element) {
+        console.warn('Cannot highlight null element');
+        return false;
+    }
+
+    // Use classList directly for better performance
+    try {
+        element.classList.add('buttonSelected');
+        return true;
+    } catch (error) {
+        console.warn('Failed to highlight element:', error);
+        return false;
+    }
+};
 
 
-//
-//
-// remove selected class if it exists
-function unselectButton(element) {
-    addOrRemoveKeywordFromClass(element, "buttonSelected", false);
-}
+/**
+ * Removes the 'buttonSelected' class to unhighlight an element
+ * @param {HTMLElement} element - The element to unhighlight
+ * @returns {boolean} True if unhighlighting succeeded, false otherwise
+ * @example
+ * unselectButton(document.getElementById('myButton'));
+ */
+const unselectButton = (element) => {
+    if (!element) {
+        console.warn('Cannot unhighlight null element');
+        return false;
+    }
+
+    // Use classList directly for better performance
+    try {
+        element.classList.remove('buttonSelected');
+        return true;
+    } catch (error) {
+        console.warn('Failed to unhighlight element:', error);
+        return false;
+    }
+};
 
 
-//
-//
-//
-function getTagPosition(tag) {
-    // Return early if no tag is provided
-    if (!tag) {
+/**
+ * Gets the absolute position of an element on the page
+ * @param {HTMLElement} element - The element to get position for
+ * @returns {{x: number, y: number}} Object containing absolute x,y coordinates
+ * @example
+ * const pos = getTagPosition(document.getElementById('myElement'));
+ * console.log(pos.x, pos.y);
+ */
+const getTagPosition = (element) => {
+    // Return origin point if no element provided
+    if (!element) {
+        console.warn('Cannot get position of null element');
         return { x: 0, y: 0 };
     }
 
-    // Use getBoundingClientRect() for more accurate positioning
-    const rect = tag.getBoundingClientRect();
-    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    return {
-        x: rect.left + scrollLeft,
-        y: rect.top + scrollTop
-    };
-}
+    try {
+        const rect = element.getBoundingClientRect();
+        const { scrollX = 0, scrollY = 0 } = window;
+        
+        return {
+            x: Math.round(rect.left + scrollX),
+            y: Math.round(rect.top + scrollY)
+        };
+    } catch (error) {
+        console.warn('Failed to get element position:', error);
+        return { x: 0, y: 0 };
+    }
+};
 
 
 //
