@@ -133,97 +133,66 @@ const tablatureToABCNotationPerNote = (drumType, tabChar) => {
 	}
 };
 
-// same as above, but reversed
-function abcNotationToTablaturePerNote(drumType, abcChar) {
-	var tabChar = "-";
+/**
+ * Converts ABC notation to tablature notation for drum notation
+ * @param {string} drumType - The type of drum (unused in this direction)
+ * @param {string} abcChar - The ABC notation character to convert
+ * @returns {string} Tablature notation character
+ */
+const abcNotationToTablaturePerNote = (drumType, abcChar) => {
+	const ABC_TO_TAB = {
+		[constant_ABC_STICK_R]: 'R',
+		[constant_ABC_STICK_L]: 'L',
+		[constant_ABC_STICK_BOTH]: 'B',
+		[constant_ABC_STICK_COUNT]: 'c',
+		[constant_ABC_HH_Ride]: 'r',
+		[constant_ABC_HH_Ride_Bell]: 'b',
+		[constant_ABC_HH_Cow_Bell]: 'm',
+		[constant_ABC_HH_Crash]: 'c',
+		[constant_ABC_HH_Stacker]: 's',
+		[constant_ABC_HH_Metronome_Normal]: 'n',
+		[constant_ABC_HH_Metronome_Accent]: 'N',
+		[constant_ABC_HH_Open]: 'o',
+		[constant_ABC_HH_Close]: '+',
+		[constant_ABC_SN_Accent]: 'O',
+		[constant_ABC_SN_Buzz]: 'b',
+		[constant_ABC_SN_Ghost]: 'g',
+		[constant_ABC_SN_Flam]: 'f',
+		[constant_ABC_SN_Drag]: 'd',
+		[constant_ABC_KI_Splash]: 'x',
+		[constant_ABC_STICK_OFF]: '-',
+		[constant_ABC_OFF]: '-'
+	};
 
-	switch (abcChar) {
-		case constant_ABC_STICK_R:
-			tabChar = "R";
-			break;
-		case constant_ABC_STICK_L:
-			tabChar = "L";
-			break;
-		case constant_ABC_STICK_BOTH:
-			tabChar = "B";
-			break;
-		case constant_ABC_STICK_OFF:
-			tabChar = "-";
-			break;
-		case constant_ABC_STICK_COUNT:
-			tabChar = "c";
-			break;
-		case constant_ABC_HH_Ride:
-			tabChar = "r";
-			break;
-		case constant_ABC_HH_Ride_Bell:
-			tabChar = "b";
-			break;
-		case constant_ABC_HH_Cow_Bell:
-			tabChar = "m";
-			break;
-		case constant_ABC_HH_Crash:
-			tabChar = "c";
-			break;
-		case constant_ABC_HH_Stacker:
-			tabChar = "s";
-			break;
-		case constant_ABC_HH_Metronome_Normal:
-			tabChar = "n";
-			break;
-		case constant_ABC_HH_Metronome_Accent:
-			tabChar = "N";
-			break;
-		case constant_ABC_HH_Open:
-			tabChar = "o";
-			break;
-		case constant_ABC_HH_Close:
-			tabChar = "+";
-			break;
-		case constant_ABC_SN_Accent:
-			tabChar = "O";
-			break;
-		case constant_ABC_SN_Buzz:
-			tabChar = "b";
-			break;
-		case constant_ABC_HH_Normal:
-		case constant_ABC_SN_XStick:
-			tabChar = "x";
-			break;
-		case constant_ABC_SN_Ghost:
-			tabChar = "g";
-			break;
-		case constant_ABC_SN_Normal:
-		case constant_ABC_KI_Normal:
-		case constant_ABC_T1_Normal:
-		case constant_ABC_T2_Normal:
-		case constant_ABC_T3_Normal:
-		case constant_ABC_T4_Normal:
-			tabChar = "o";
-			break;
-		case constant_ABC_SN_Flam:
-			tabChar = "f";
-			break;
-		case constant_ABC_SN_Drag:
-			tabChar = "d";
-			break;
-		case constant_ABC_HH_Accent:
-		case constant_ABC_KI_SandK:
-			tabChar = "X";
-			break;
-		case constant_ABC_KI_Splash:
-			tabChar = "x";
-			break;
-		case constant_ABC_OFF:
-			tabChar = "-";
-			break;
-		default:
-			console.log("bad case in abcNotationToTablaturePerNote: " + abcChar);
-			break;
+	// Handle special cases with shared tablature characters
+	if ([constant_ABC_HH_Normal, constant_ABC_SN_XStick].includes(abcChar)) {
+		return 'x';
+	}
+	
+	if ([constant_ABC_HH_Accent, constant_ABC_KI_SandK].includes(abcChar)) {
+		return 'X';
+	}
+	
+	if ([
+		constant_ABC_SN_Normal,
+		constant_ABC_KI_Normal,
+		constant_ABC_T1_Normal,
+		constant_ABC_T2_Normal,
+		constant_ABC_T3_Normal,
+		constant_ABC_T4_Normal
+	].includes(abcChar)) {
+		return 'o';
+	}
+
+	// Look up in mapping or return default
+	const tabChar = ABC_TO_TAB[abcChar];
+	if (!tabChar) {
+		console.warn(`Invalid ABC notation: ${abcChar}`);
+		return '-';
 	}
 
 	return tabChar;
-}
+};
 
 
 // take an array of notes in ABC format and convert it into a drum tab String
