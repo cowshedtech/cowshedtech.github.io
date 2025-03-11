@@ -49,151 +49,89 @@
 // or  T2=|o---o---o---o|
 // or  T3=|o---o---o---o|
 // or  T4=|o---o---o---o|
-function tablatureToABCNotationPerNote(drumType, tablatureChar) {
+const tablatureToABCNotationPerNote = (drumType, tabChar) => {
+	const NOTATION_MAP = {
+		Stickings: {
+			B: constant_ABC_STICK_BOTH,
+			b: constant_ABC_STICK_BOTH,
+			c: constant_ABC_STICK_COUNT,
+			L: constant_ABC_STICK_L,
+			l: constant_ABC_STICK_L,
+			R: constant_ABC_STICK_R,
+			r: constant_ABC_STICK_R
+		},
+		H: {
+			b: constant_ABC_HH_Ride_Bell,
+			B: constant_ABC_HH_Ride_Bell,
+			c: constant_ABC_HH_Crash,
+			m: constant_ABC_HH_Cow_Bell,
+			n: constant_ABC_HH_Metronome_Normal,
+			N: constant_ABC_HH_Metronome_Accent,
+			o: constant_ABC_HH_Open,
+			r: constant_ABC_HH_Ride,
+			R: constant_ABC_HH_Ride,
+			s: constant_ABC_HH_Stacker,
+			x: constant_ABC_HH_Normal,
+			X: constant_ABC_HH_Accent,
+			'+': constant_ABC_HH_Close
+		},
+		S: {
+			b: constant_ABC_SN_Buzz,
+			B: constant_ABC_SN_Buzz,
+			d: constant_ABC_SN_Drag,
+			f: constant_ABC_SN_Flam,
+			g: constant_ABC_SN_Ghost,
+			O: constant_ABC_SN_Accent,
+			o: constant_ABC_SN_Normal,
+			x: constant_ABC_SN_XStick
+		},
+		K: {
+			o: constant_ABC_KI_Normal,
+			x: constant_ABC_KI_Splash,
+			X: constant_ABC_KI_SandK
+		},
+		B: {
+			o: constant_ABC_KI_Normal,
+			x: constant_ABC_KI_Splash,
+			X: constant_ABC_KI_SandK
+		},
+		T1: {
+			o: constant_ABC_T1_Normal,
+			x: constant_ABC_T1_Normal
+		},
+		T2: {
+			o: constant_ABC_T2_Normal
+		},
+		T3: {
+			o: constant_ABC_T3_Normal
+		},
+		T4: {
+			o: constant_ABC_T4_Normal,
+			x: constant_ABC_T4_Normal
+		}
+	};
 
-	switch (tablatureChar) {
-		case "b":
-		case "B":
-			if (drumType == "Stickings")
-				return constant_ABC_STICK_BOTH;
-			else if (drumType == "H")
-				return constant_ABC_HH_Ride_Bell;
-			else if (drumType == "S")
-				return constant_ABC_SN_Buzz;
-			break;
-		case "c":
-			if (drumType == "Stickings")
-				return constant_ABC_STICK_COUNT;
-			else if (drumType == "H")
-				return constant_ABC_HH_Crash;
-			break;
-		case "d":
-			if (drumType == "S")
-				return constant_ABC_SN_Drag;
-			break;
-		case "f":
-			if (drumType == "S")
-				return constant_ABC_SN_Flam;
-			break;
-		case "g":
-			if (drumType == "S")
-				return constant_ABC_SN_Ghost;
-			break;
-		case "l":
-		case "L":
-			if (drumType == "Stickings")
-				return constant_ABC_STICK_L;
-			break;
-		case "m":  // (more) cow bell
-			if (drumType == "H")
-				return constant_ABC_HH_Cow_Bell;
-			break;
-		case "n":  // (more) cow bell
-			if (drumType == "H")
-				return constant_ABC_HH_Metronome_Normal;
-			break;
-		case "N":  // (more) cow bell
-			if (drumType == "H")
-				return constant_ABC_HH_Metronome_Accent;
-			break;
-		case "O":
-			if (drumType == "S")
-				return constant_ABC_SN_Accent;
-			break;
-		case "o":
-			switch (drumType) {
-				case "H":
-					return constant_ABC_HH_Open;
-				//break;
-				case "S":
-					return constant_ABC_SN_Normal;
-				//break;
-				case "K":
-				case "B":
-					return constant_ABC_KI_Normal;
-				//break;
-				case "T1":
-					return constant_ABC_T1_Normal;
-				//break;
-				case "T2":
-					return constant_ABC_T2_Normal;
-				//break;
-				case "T3":
-					return constant_ABC_T3_Normal;
-				//break;
-				case "T4":
-					return constant_ABC_T4_Normal;
-				//break;
-				default:
-					break;
-			}
-			break;
-		case "r":
-		case "R":
-			switch (drumType) {
-				case "H":
-					return constant_ABC_HH_Ride;
-				//break;
-				case "Stickings":
-					return constant_ABC_STICK_R;
-				//break;
-				default:
-					break;
-			}
-			break;
-		case "s":
-			if (drumType == "H")
-				return constant_ABC_HH_Stacker;
-			break;
-		case "x":
-			switch (drumType) {
-				case "S":
-					return constant_ABC_SN_XStick;
-				//break;
-				case "K":
-				case "B":
-					return constant_ABC_KI_Splash;
-				//break;
-				case "H":
-					return constant_ABC_HH_Normal;
-				//break;
-				case "T1":
-					return constant_ABC_T1_Normal;
-				//break;
-				case "T4":
-					return constant_ABC_T4_Normal;
-				//break;
-				default:
-					break;
-			}
-			break;
-		case "X":
-			switch (drumType) {
-				case "K":
-					return constant_ABC_KI_SandK;
-				//break;
-				case "H":
-					return constant_ABC_HH_Accent;
-				//break;
-				default:
-					break;
-			}
-			break;
-		case "+":
-			if (drumType == "H") {
-				return constant_ABC_HH_Close;
-			}
-			break;
-		case "-":
-			return false;
-		//break;
-		default:
-			break;
+	try {
+		// Handle special case for rest
+		if (tabChar === '-') return false;
+
+		// Look up notation in map
+		const drumMap = NOTATION_MAP[drumType];
+		if (!drumMap) {
+			throw new Error(`Invalid drum type: ${drumType}`);
+		}
+
+		const notation = drumMap[tabChar];
+		if (!notation) {
+			throw new Error(`Invalid tablature char: ${tabChar}`);
+		}
+
+		return notation;
+	} catch (error) {
+		console.warn(`Tablature conversion error: ${error.message}`);
+		return false;
 	}
-
-	console.log("Bad tablature note found in tablatureToABCNotationPerNote.  Tab: " + tablatureChar + " for drum type: " + drumType);
-	return false;
-}
+};
 
 // same as above, but reversed
 function abcNotationToTablaturePerNote(drumType, abcChar) {
