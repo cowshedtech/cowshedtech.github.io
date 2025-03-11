@@ -20,7 +20,7 @@ export default {
 			<input type=range min=1 max=20 value=2 class="metronomeAutoSpeedUpRange" id="metronomeAutoSpeedupTempoIncreaseInterval" step="1" oninput="myGrooveWriter.updateRangeLabel(event, 'metronomeAutoSpeedupTempoIncreaseIntervalOutput');">
 		</div>
 		<div id="metronomeAutoSpeedupCloseButtonDiv">
-			<button id="metronomeAutoSpeedupConfigurationCloseButton" onclick="myGrooveWriter.close_MetronomeAutoSpeedupConfiguration('ok');">Done</button>
+			<button id="metronomeAutoSpeedupConfigurationCloseButton" onclick="metronome.close_MetronomeAutoSpeedupConfiguration('ok');">Done</button>
 		</div>
 	</div>
 `

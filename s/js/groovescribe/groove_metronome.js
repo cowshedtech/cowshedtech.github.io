@@ -246,7 +246,7 @@ class Metronome {
 				} else {
 					metronome.class_metronome_auto_speed_up_active = true;
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSpeedUp", "menuChecked", true);
-					root.show_MetronomeAutoSpeedupConfiguration();
+					metronome.show_MetronomeAutoSpeedupConfiguration();
 				}
 				break;
 
@@ -327,6 +327,25 @@ class Metronome {
 		// call with the default option
 		root.metronomeOptionsMenuOffsetClickPopupClick("1");
 	};
+
+	show_MetronomeAutoSpeedupConfiguration() {
+		var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
+
+		if (popup) {
+			popup.style.display = "block";
+		}
+
+		document.getElementById('metronomeAutoSpeedupTempoIncreaseAmountOutput').innerHTML = document.getElementById('metronomeAutoSpeedupTempoIncreaseAmount').value;
+		document.getElementById('metronomeAutoSpeedupTempoIncreaseIntervalOutput').innerHTML = document.getElementById('metronomeAutoSpeedupTempoIncreaseInterval').value;
+	};
+
+	close_MetronomeAutoSpeedupConfiguration(type) {
+		var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
+
+		if (popup)
+			popup.style.display = "none";
+	};
+
 
 }
 

@@ -2615,24 +2615,6 @@ function GrooveWriter() {
 		return getGSUrlStringFromGrooveData(myGrooveData, url_destination)
 	}
 
-	root.show_MetronomeAutoSpeedupConfiguration = function () {
-		var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
-
-		if (popup) {
-			popup.style.display = "block";
-		}
-
-		document.getElementById('metronomeAutoSpeedupTempoIncreaseAmountOutput').innerHTML = document.getElementById('metronomeAutoSpeedupTempoIncreaseAmount').value;
-		document.getElementById('metronomeAutoSpeedupTempoIncreaseIntervalOutput').innerHTML = document.getElementById('metronomeAutoSpeedupTempoIncreaseInterval').value;
-	};
-
-	root.close_MetronomeAutoSpeedupConfiguration = function (type) {
-		var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
-
-		if (popup)
-			popup.style.display = "none";
-	};
-
 	root.timeSigPopupOpen = function (type) {
 		var popup = document.getElementById("timeSigPopup");
 
