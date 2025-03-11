@@ -3,14 +3,12 @@
  */
 const setupHotKeys = () => {
     const KEYS = {
-        CTRL: 'Control',
         SPACEBAR: 'Space',
         PLAY: 'MediaPlayPause',
         STOP: 'MediaStop'
     };
 
-    const IGNORED_ELEMENTS = new Set(['INPUT', 'TEXTAREA']);
-    let isCtrlPressed = false;
+    const IGNORED_ELEMENTS = new Set(['INPUT', 'TEXTAREA']);    
 
     /**
      * Checks if the event target is valid for keyboard shortcuts
@@ -28,12 +26,7 @@ const setupHotKeys = () => {
      * @returns {boolean} False if event was handled, true otherwise
      */
     const handleKeyDown = (event) => {
-        // Handle Ctrl key
-        if (event.code === KEYS.CTRL) {
-            isCtrlPressed = true;
-            return true;
-        }
-
+        
         // Handle media keys
         switch (event.code) {
             case KEYS.PLAY:
@@ -51,25 +44,13 @@ const setupHotKeys = () => {
         }
 
         return true;
-    };
-
-    /**
-     * Handles keyup events
-     * @param {KeyboardEvent} event - The keyboard event
-     */
-    const handleKeyUp = (event) => {
-        if (event.code === KEYS.CTRL) {
-            isCtrlPressed = false;
-        }
-    };
+    };    
 
     // Add event listeners
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
+    document.addEventListener('keydown', handleKeyDown);    
 
     // Return cleanup function
     return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-        document.removeEventListener('keyup', handleKeyUp);
+        document.removeEventListener('keydown', handleKeyDown);        
     };
 };
