@@ -1,7 +1,7 @@
 // Javascript for the Groove Scribe HTML application
 // Groove Scribe is for drummers and helps create sheet music with an easy to use WYSIWYG groove editor.
 //
-// Functions related to MIDI
+// This is our MIDI player wrapper integrating MIDI.js into Groove Scribe
 //
 
 
@@ -249,7 +249,7 @@ class MIDIPlayer {
 
         this.eventCallbacks.notePlaying("clear", -1);
         clearHighlightNoteInABCSVG(this.containerIndex);
-        resetMetronomeOptionsOffsetClickStartRotation();
+        metronome.resetMetronomeOptionsOffsetClickStartRotation();
     };
 
 
@@ -546,7 +546,7 @@ class MIDIPlayer {
     //
     _HTMLForMidiPlayer(expandable) {
         const touchClass = is_touch_device() ? ' touch' : '';
-        
+
         // Build the base player controls
         const baseControls = `
             <div id="playerControl${this.containerIndex}" class="playerControl">
@@ -676,7 +676,7 @@ class MIDIPlayer {
 
                 // regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
                 // advanceMetronomeOptionsOffsetClickStartRotation will return false if not rotating
-                if (advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.doesMidiDataNeedRefresh()) {
+                if (metronome.advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.doesMidiDataNeedRefresh()) {
                     MIDI.Player.stop();
                     midiPlayer.eventCallbacks.loadMidiDataEvent(midiPlayer.eventCallbacks.classRoot, false);
                     MIDI.Player.start();                    

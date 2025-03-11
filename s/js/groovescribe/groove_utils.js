@@ -147,17 +147,7 @@ function GrooveUtils() {
 	};
 
 		
-	root.setMetronomeFrequencyDisplay = function (newFrequency) {
-		var mm = document.getElementById('midiMetronomeMenu' + root.grooveUtilsUniqueIndex);
-
-		if (mm) {
-			mm.className = mm.className.replace(" selected", "");
-
-			if (newFrequency > 0) {
-				mm.className += " selected";
-			}
-		}
-	};
+	
 
 
 	// open a new tab with GrooveScribe with the current groove
@@ -169,15 +159,6 @@ function GrooveUtils() {
 	};
 
 
-	// turn the metronome on and off
-	root.metronomeMiniMenuClick = function () {
-		if (root.myGrooveData.metronomeFrequency > 0)
-			root.myGrooveData.metronomeFrequency = 0;
-		else
-			root.myGrooveData.metronomeFrequency = 4;
-
-		root.setMetronomeFrequencyDisplay(root.myGrooveData.metronomeFrequency);
-		midiPlayer.noteHasChanged();
-	};
+	
 	
 } // end of class

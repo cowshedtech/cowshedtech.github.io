@@ -125,7 +125,7 @@ function GrooveWriter() {
 			/* falls through */
 			default:
 				id = "metronomeOff";
-				if (getMetronomeSolo()) {
+				if (metronome.getMetronomeSolo()) {
 					// turn off solo if we are turning off the metronome
 					root.metronomeOptionsMenuPopupClick("Solo");
 				}
@@ -285,9 +285,9 @@ function GrooveWriter() {
 	// figure out if the metronome options menu should be selected and change the UI
 	root.metronomeOptionsMenuSetSelectedState = function () {
 
-		if (getMetronomeSolo() ||
+		if (metronome.getMetronomeSolo() ||
 			class_metronome_auto_speed_up_active ||
-			getMetronomeOffsetClickStart() != "1") {
+			metronome.getMetronomeOffsetClickStart() != "1") {
 			// make menu look active
 			addOrRemoveKeywordFromClassById("metronomeOptionsAnchor", "selected", true)
 		} else {
@@ -322,14 +322,14 @@ function GrooveWriter() {
 
 		switch (option_type) {
 			case "Solo":
-				var current = getMetronomeSolo();
+				var current = metronome.getMetronomeSolo();
 				if (!current) {
-					setMetronomeSolo(true);
+					metronome.setMetronomeSolo(true);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", true);
 					if (root.getMetronomeFrequency() === 0)
 						root.setMetronomeFrequency(4);
 				} else {
-					setMetronomeSolo(false);
+					metronome.setMetronomeSolo(false);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
 				}
 				midiPlayer.noteHasChanged();
@@ -392,7 +392,7 @@ function GrooveWriter() {
 
 	root.metronomeOptionsMenuOffsetClickPopupClick = function (option_type) {
 
-		setMetronomeOffsetClickStart(option_type);
+		metronome.setMetronomeOffsetClickStart(option_type);
 
 		// clear other and select
 		var myElements = document.querySelectorAll(".metronomeOptionsOffsetClickContextMenuItem");
@@ -1240,7 +1240,7 @@ function GrooveWriter() {
 						Kick_Array = filter_kick_array_for_permutation(Kick_Array);
 						new_kick_array = merge_kick_arrays(new_kick_array, Kick_Array);
 
-						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, new_kick_array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, getMetronomeSolo());
+						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, new_kick_array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, metronome.getMetronomeSolo());
 					}
 				}
 				break;
@@ -1260,7 +1260,7 @@ function GrooveWriter() {
 							new_snare_array = get_snare_permutation_array(i);
 
 
-						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, new_snare_array, Kick_Array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, getMetronomeSolo());
+						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, new_snare_array, Kick_Array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, metronome.getMetronomeSolo());
 					}
 				}
 				break;
@@ -1275,7 +1275,7 @@ function GrooveWriter() {
 
 				let repeat = class_repeated_measures.has(0) ? class_repeated_measures.get(0) : 1;
 				for (let i = 0; i < repeat; i++) {
-					MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, getMetronomeSolo());
+					MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, metronome.getMetronomeSolo());
 				}
 
 				for (i = 1; i < class_number_of_measures; i++) {
@@ -1293,7 +1293,7 @@ function GrooveWriter() {
 
 					let repeat = class_repeated_measures.has(i) ? class_repeated_measures.get(i) : 1;
 					for (let i = 0; i < repeat; i++) {
-						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, getMetronomeSolo());
+						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronomeFrequency, num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, metronome.getMetronomeSolo());
 					}
 				}
 				break;
@@ -2357,14 +2357,14 @@ function GrooveWriter() {
 
 			if (playStarting && class_metronome_count_in_active) {
 
-				midiURL = MIDI_build_midi_url_count_in_track(class_num_beats_per_measure, class_note_value_per_measure, root.myGrooveUtils.getTempo());
+				midiURL = buildMIDICountInTrack(class_num_beats_per_measure, class_note_value_per_measure, root.myGrooveUtils.getTempo());
 				midiPlayer.noteHasChanged();
 				class_metronome_count_in_is_playing = true;
 			} else {
 				if (class_metronome_count_in_is_playing) {
 					// we saved the state above so that we could reset the Offset click start, otherwise it starts on the 'e'
 					class_metronome_count_in_is_playing = false;
-					resetMetronomeOptionsOffsetClickStartRotation();
+					metronome.resetMetronomeOptionsOffsetClickStartRotation();
 				}
 				midiURL = createMidiUrlFromClickableUI("our_MIDI");
 				midiPlayer.resetNoteHasChanged();

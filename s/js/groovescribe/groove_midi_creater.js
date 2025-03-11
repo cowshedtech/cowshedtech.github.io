@@ -29,7 +29,7 @@ function MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_A
     }
 
     var isTriplets = isTripletDivisionFromNotesPerMeasure(num_notes, timeSigTop, timeSigBottom);
-    var offsetClickStartBeat = getMetronomeOptionsOffsetClickStartRotation(isTriplets);
+    var offsetClickStartBeat = metronome.getMetronomeOptionsOffsetClickStartRotation(isTriplets);
     var delay_for_next_note = 0;
 
     for (var i = 0; i < num_notes; i++) {
@@ -352,15 +352,9 @@ function MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_A
 
 
 
-
-
-
-
-
-
-
-
-// returns a URL that is a MIDI track
+/**
+ * 
+ */    
 function create_MIDIURLFromGrooveData(myGrooveData, MIDI_type, metronomeSolo) {
 
     var midiFile = new Midi.File();
@@ -414,7 +408,10 @@ function create_MIDIURLFromGrooveData(myGrooveData, MIDI_type, metronomeSolo) {
 };
 
 
-function MIDI_build_midi_url_count_in_track(timeSigTop, timeSigBottom, tempo) {
+/**
+ * 
+ */    
+function buildMIDICountInTrack(timeSigTop, timeSigBottom, tempo) {
 
     var midiFile = new Midi.File();
     var midiTrack = new Midi.Track();
@@ -424,8 +421,7 @@ function MIDI_build_midi_url_count_in_track(timeSigTop, timeSigBottom, tempo) {
     midiTrack.setInstrument(0, 0x13);
 
     // start of midi track
-    // Some sort of bug in the midi player makes it skip the first note without a blank
-    // TODO: Find and fix midi bug
+    // TODO: Find and fix midi bug Some sort of bug in the midi player makes it skip the first note without a blank
     midiTrack.addNoteOff(9, 60, 1); // add a blank note for spacing
 
     var noteDelay = 128;  // quarter notes over x/4 time
