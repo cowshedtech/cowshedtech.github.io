@@ -249,7 +249,7 @@ class MIDIPlayer {
 
         this.eventCallbacks.notePlaying("clear", -1);
         clearHighlightNoteInABCSVG(this.containerIndex);
-        metronome.resetMetronomeOptionsOffsetClickStartRotation();
+        metronome.resetOptionsOffsetClickStartRotation();
     };
 
 
@@ -334,7 +334,7 @@ class MIDIPlayer {
             {
                 id: `midiMetronomeMenu${uniqueIndex}`,
                 event: 'click',
-                handler: metronome.metronomeMiniMenuClick
+                handler: metronome.miniMenuClick
             }
         ];
 
@@ -675,8 +675,8 @@ class MIDIPlayer {
                 global_total_midi_repeats++;
 
                 // regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
-                // advanceMetronomeOptionsOffsetClickStartRotation will return false if not rotating
-                if (metronome.advanceMetronomeOptionsOffsetClickStartRotation() || midiPlayer.doesMidiDataNeedRefresh()) {
+                // advanceOptionsOffsetClickStartRotation will return false if not rotating
+                if (metronome.advanceOptionsOffsetClickStartRotation() || midiPlayer.doesMidiDataNeedRefresh()) {
                     MIDI.Player.stop();
                     midiPlayer.eventCallbacks.loadMidiDataEvent(midiPlayer.eventCallbacks.classRoot, false);
                     MIDI.Player.start();                    

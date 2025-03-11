@@ -13,7 +13,7 @@ export default {
                 <span class="metronomeButton" id="metronome4ths" onclick="metronome.setFrequency(4);">4th</span>
                 <span class="metronomeButton" id="metronome8ths" onclick="metronome.setFrequency(8);">8th</span>
                 <span class="metronomeButton" id="metronome16ths" onclick="metronome.setFrequency(16);">16th</span>
-                <span class="metronomeButton Options grooveDB_hidden" id="metronomeOptionsAnchor" onclick="metronome.metronomeOptionsAnchorClick(event);">Options</span>
+                <span class="metronomeButton Options grooveDB_hidden" id="metronomeOptionsAnchor" onclick="metronome.optionsAnchorClick(event);">Options</span>
                 <a id="linkGrooveScribe" href="https://www.mikeslessons.com/groove/"><span id="metronomeLabel">&nbsp;&nbsp;&nbsp;&nbsp;(GrooveScribe Link)</span></a>
             </span>
         </span>

@@ -29,7 +29,7 @@ function MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_A
     }
 
     var isTriplets = isTripletDivisionFromNotesPerMeasure(num_notes, timeSigTop, timeSigBottom);
-    var offsetClickStartBeat = metronome.getMetronomeOptionsOffsetClickStartRotation(isTriplets);
+    var offsetClickStartBeat = metronome.getOptionsOffsetClickStartRotation(isTriplets);
     var delay_for_next_note = 0;
 
     for (var i = 0; i < num_notes; i++) {
