@@ -15,9 +15,7 @@ class Metronome {
     /**
      * 
      */    
-    constructor(containerIndex) {
-        
-    }    
+    constructor(containerIndex) { }    
 
     /**
      * 
@@ -56,6 +54,7 @@ class Metronome {
         this.solo = trueElseFalse;
     };
 
+
     //
     //
     //
@@ -87,8 +86,8 @@ class Metronome {
      * returns FALSE if rotation is OFF     
      */    
     advanceOptionsOffsetClickStartRotation(isTriplets) {
-        if (metronome.getOffsetClickStartIsRotating()) {
-            metronome.offsetClickStartRotation++;
+        if (this.getOffsetClickStartIsRotating()) {
+            this.offsetClickStartRotation++;
             return true;
         } else {
             return false;
@@ -99,14 +98,14 @@ class Metronome {
      * 
      */    
     getOptionsOffsetClickStartRotation(isTriplets) {
-        if (metronome.getOffsetClickStartIsRotating()) {
+        if (this.getOffsetClickStartIsRotating()) {
             // constrain the rotation
             if (isTriplets && metronome.offsetClickStartRotation > 2)
-                metronome.offsetClickStartRotation = 0;
-            else if (metronome.offsetClickStartRotation > 3)
-                metronome.offsetClickStartRotation = 0;
+                this.offsetClickStartRotation = 0;
+            else if (this.offsetClickStartRotation > 3)
+                this.offsetClickStartRotation = 0;
     
-            switch (metronome.offsetClickStartRotation) {
+            switch (this.offsetClickStartRotation) {
                 case 0:
                     return '1';
                 case 1:
@@ -123,7 +122,7 @@ class Metronome {
                     return 'A';
             }
         } else {
-            return metronome.getOffsetClickStart();
+            return this.getOffsetClickStart();
         }
     };
     
@@ -132,7 +131,7 @@ class Metronome {
      */    
     resetOptionsOffsetClickStartRotation(value) {
         // start with last in the rotation so the next rotation brings it to '1'
-        return metronome.offsetClickStartRotation = 0;
+        return this.offsetClickStartRotation = 0;
     };
 
     //
@@ -193,7 +192,7 @@ class Metronome {
 			/* falls through */
 			default:
 				id = "metronomeOff";
-				if (metronome.getSolo()) {
+				if (this.getSolo()) {
 					// turn off solo if we are turning off the metronome
 					root.optionsMenuPopupClick("Solo");
 				}
@@ -246,9 +245,9 @@ class Metronome {
      */    
     optionsMenuSetSelectedState() {
 
-        if (metronome.getSolo() ||
+        if (this.getSolo() ||
             this.autoSpeedUpActive ||
-            metronome.getOffsetClickStart() != "1") {
+            this.getOffsetClickStart() != "1") {
             // make menu look active
             addOrRemoveKeywordFromClassById("metronomeOptionsAnchor", "selected", true)
         } else {
@@ -265,38 +264,38 @@ class Metronome {
 
 		switch (option_type) {
 			case "Solo":
-				var current = metronome.getSolo();
+				var current = this.getSolo();
 				if (!current) {
-					metronome.setSolo(true);
+					this.setSolo(true);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", true);
-					if (metronome.getFrequency() === 0)
-						metronome.setFrequency(4);
+					if (this.getFrequency() === 0)
+						this.setFrequency(4);
 				} else {
-					metronome.setSolo(false);
+					this.setSolo(false);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
 				}
 				midiPlayer.noteHasChanged();
 				break;
 
 			case "SpeedUp":
-				if (metronome.autoSpeedUpActive) {
+				if (this.autoSpeedUpActive) {
 					// just turn it off if it is on, don't show the configurator
-					metronome.autoSpeedUpActive = false;
+					this.autoSpeedUpActive = false;
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSpeedUp", "menuChecked", false);
 				} else {
-					metronome.autoSpeedUpActive = true;
+					this.autoSpeedUpActive = true;
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSpeedUp", "menuChecked", true);
-					metronome.showAutoSpeedupConfiguration();
+					this.showAutoSpeedupConfiguration();
 				}
 				break;
 
 			case "CountIn":
-				if (metronome.countInActive) {
+				if (this.countInActive) {
 					// just turn it off if it is on, don't show the configurator
-					metronome.countInActive = false;
+					this.countInActive = false;
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", false);
 				} else {
-					metronome.countInActive = true;
+					this.countInActive = true;
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", true);
 				}
 				break;
@@ -339,7 +338,7 @@ class Metronome {
      */    
     optionsMenuOffsetClickPopupClick(option_type) {
 
-		metronome.setOffsetClickStart(option_type);
+		this.setOffsetClickStart(option_type);
 
 		// clear other and select
 		var myElements = document.querySelectorAll(".metronomeOptionsOffsetClickContextMenuItem");
@@ -363,7 +362,7 @@ class Metronome {
 		}
 
 		midiPlayer.noteHasChanged();
-		metronome.optionsMenuSetSelectedState();
+		this.optionsMenuSetSelectedState();
 	};
 
 	/**
