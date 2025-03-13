@@ -185,8 +185,15 @@ function isElementOnScreen(element) {
 };
 
 
-// Helper method for browser detection
-function isIE10() {
-    const browserInfo = getBrowserInfo();
-    return browserInfo.browser === "MSIE" && browserInfo.version < 12;
-}
+/**
+ * Checks if the current browser is Internet Explorer 10 or 11
+ * @returns {boolean} True if browser is IE10/11
+ */
+const isIE10 = () => {
+    try {
+        const { browser, version } = getBrowserInfo();
+        return browser === 'MSIE' && Number(version) < 12;
+    } catch {
+        return false;
+    }
+};

@@ -29,8 +29,6 @@
 var global_num_GrooveUtilsCreated = 0;
 
 
-
-
 // GrooveUtils class.   The only one in this file.
 function GrooveUtils() {
 	"use strict";
@@ -101,26 +99,9 @@ function GrooveUtils() {
 	};
 
 	root.myGrooveData = root.grooveDataNew();
-
-
-
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 	
 	this.abcToSVGCallback = new SVGLibCallback(this); // singleton
 
-
-	
 
 	// set a URL for midi playback.
 	// useful for static content, so you don't have to override the loadMidiDataEvent callback
@@ -128,19 +109,5 @@ function GrooveUtils() {
 		root.myGrooveData = grooveData;
 	};
 
-		
-	
-
-
-	// open a new tab with GrooveScribe with the current groove
-	root.loadFullScreenGrooveScribe = function () {
-		var fullURL = getUrlStringFromGrooveData(root.myGrooveData, 'fullGrooveScribe')
-
-		var win = window.open(fullURL, '_blank');
-		win.focus();
-	};
-
-
-	
 	
 } // end of class

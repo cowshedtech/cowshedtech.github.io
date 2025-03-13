@@ -316,7 +316,7 @@ class MIDIPlayer {
             {
                 id: `swingInput${uniqueIndex}`,
                 event: isIE10 ? 'click' : 'input',
-                handler: grooveUtil.swingUpdateEvent
+                handler: midiPlayer.swingUpdateEvent
             },
             {
                 id: `midiRepeatImage${uniqueIndex}`,
@@ -482,11 +482,27 @@ class MIDIPlayer {
 
 		midiPlayer.updateRangeSlider('tempoInput' + this.containerIndex);
 		midiPlayer.noteHasChanged();
-
-        // TODO
-		// if (root.tempoChangeCallback)
-		// 	root.tempoChangeCallback(tempo);
+        
+        this.tempoChangeCallback(tempo);
 	};
+
+    // called every time the tempo changes, which can be a lot of times due to the range slider
+	// update the main URL with the tempo, but only do it every third of a second at the most
+	tempoChangeCallbackTimeout = null;
+	tempoChangeCallback(newTempo) {
+
+		// if there is a timeout running clear it
+		if (this.tempoChangeCallbackTimeout != null)
+			window.clearTimeout(this.tempoChangeCallbackTimeout);
+
+		// set a new timeout
+		this.tempoChangeCallbackTimeout = window.setTimeout(function () {
+			this.tempoChangeCallbackTimeout = null
+            // TODO
+			// update the Main URL to show the new tempo
+			// root.updateCurrentURL();
+		}, 300);
+	}
 
 	//
     //
@@ -504,6 +520,8 @@ class MIDIPlayer {
     tempoUpdateFromSlider(event) {
 		midiPlayer.tempoUpdate(event.target.value);
 	};
+
+    
 
     //
     //
@@ -759,6 +777,14 @@ class MIDIPlayer {
             icon.className = `midiPlayImage ${state}`;
         }
     }
+
+    // open a new tab with GrooveScribe with the current groove
+	loadFullScreenGrooveScribe() {
+		var fullURL = getUrlStringFromGrooveData(root.myGrooveData, 'fullGrooveScribe')
+
+		var win = window.open(fullURL, '_blank');
+		win.focus();
+	};
 }
 
 

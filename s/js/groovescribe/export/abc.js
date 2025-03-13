@@ -1023,3 +1023,15 @@ function create_ABC_from_snare_HH_kick_arrays(sticking_array,
 			numberOfMeasuresPerLine);
 	}
 }
+
+// TODO
+
+// root.saveABCtoFile = function () {
+// 	var myABC = getABCDataWithLineEndings();
+
+// 	var myURL = 'data:text/plain;charset=utf-8;base64,' + btoa(myABC);
+
+// 	console.log("Use \"Save As\" to save the new page to a local file");
+// 	window.open(myURL);
+
+// };

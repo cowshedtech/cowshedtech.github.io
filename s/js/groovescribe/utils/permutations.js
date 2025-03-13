@@ -542,3 +542,44 @@ function get_permutation_post_ABC(section, usingTriplets) {
 
     return abc;
 }
+
+
+// TODO
+
+// a click on a permutation option checkbox
+// root.permutationOptionClick = function (event) {
+
+//     var optionId = event.target.id;
+//     var checkbox = document.getElementById(optionId);
+//     var OnElseOff = checkbox.checked;
+
+//     for (var i = 1; i < 5; i++) {
+//         var subOption = optionId + "_sub" + i;
+
+//         checkbox = document.getElementById(subOption);
+//         if (checkbox)
+//             checkbox.checked = OnElseOff;
+//     }
+
+//     root.refresh_ABC();
+// };
+
+// // a click on a permutation sub option checkbox
+// root.permutationSubOptionClick = function (event) {
+
+//     var optionId = event.target.id;
+//     var checkbox = document.getElementById(optionId);
+//     var OnElseOff = checkbox.checked;
+
+//     if (OnElseOff) { // only do this if turning a sub option on
+//         // remove the "_sub" and the number on the end (the last char)
+//         var mainOption = optionId.replace("_sub", "").slice(0, -1);
+
+//         checkbox = document.getElementById(mainOption);
+//         if (checkbox)
+//             checkbox.checked = true;
+
+//     }
+
+//     root.refresh_ABC();
+// };

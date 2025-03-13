@@ -87,22 +87,7 @@ function GrooveWriter() {
 		return false;
 	}
 
-	// called every time the tempo changes, which can be a lot of times due to the range slider
-	// update the main URL with the tempo, but only do it every third of a second at the most
-	var global_tempoChangeCallbackTimeout = null;
-	root.tempoChangeCallback = function (newTempo) {
-
-		// if there is a timeout running clear it
-		if (global_tempoChangeCallbackTimeout != null)
-			window.clearTimeout(global_tempoChangeCallbackTimeout);
-
-		// set a new timeout
-		global_tempoChangeCallbackTimeout = window.setTimeout(function () {
-			global_tempoChangeCallbackTimeout = null
-			// update the Main URL to show the new tempo
-			root.updateCurrentURL();
-		}, 300);
-	}
+	
 
 
 	
@@ -2224,7 +2209,7 @@ function GrooveWriter() {
 		}
 
 		// get updates when the tempo changes
-		root.myGrooveUtils.tempoChangeCallback = root.tempoChangeCallback
+		// root.myGrooveUtils.tempoChangeCallback = root.tempoChangeCallback
 	};
 
 	// called right before the midi reloads for the next replay
@@ -2914,15 +2899,7 @@ function GrooveWriter() {
 		return myABC;
 	}
 
-	root.saveABCtoFile = function () {
-		var myABC = getABCDataWithLineEndings();
-
-		var myURL = 'data:text/plain;charset=utf-8;base64,' + btoa(myABC);
-
-		console.log("Use \"Save As\" to save the new page to a local file");
-		window.open(myURL);
-
-	};
+	
 
 	// change the base division to something else.
 	// eg  16th to 8ths or   32nds to 8th note triplets
@@ -3130,44 +3107,7 @@ function GrooveWriter() {
 	}; // end function HTMLforStaffContainer
 
 
-	// a click on a permutation option checkbox
-	root.permutationOptionClick = function (event) {
-
-		var optionId = event.target.id;
-		var checkbox = document.getElementById(optionId);
-		var OnElseOff = checkbox.checked;
-
-		for (var i = 1; i < 5; i++) {
-			var subOption = optionId + "_sub" + i;
-
-			checkbox = document.getElementById(subOption);
-			if (checkbox)
-				checkbox.checked = OnElseOff;
-		}
-
-		root.refresh_ABC();
-	};
-
-	// a click on a permutation sub option checkbox
-	root.permutationSubOptionClick = function (event) {
-
-		var optionId = event.target.id;
-		var checkbox = document.getElementById(optionId);
-		var OnElseOff = checkbox.checked;
-
-		if (OnElseOff) { // only do this if turning a sub option on
-			// remove the "_sub" and the number on the end (the last char)
-			var mainOption = optionId.replace("_sub", "").slice(0, -1);
-
-			checkbox = document.getElementById(mainOption);
-			if (checkbox)
-				checkbox.checked = true;
-
-		}
-
-		root.refresh_ABC();
-	};
-
+	
 	
 
 	
