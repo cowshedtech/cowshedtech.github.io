@@ -170,7 +170,7 @@ function generateHiHatContainerHTML(indexStartForNotes, baseindex, class_notes_p
 
     for (let i = indexStartForNotes; i < class_notes_per_measure + indexStartForNotes; i++) {
         html.push(`
-            <div id="hi-hat${i}" class="hi-hat" onClick="myGrooveWriter.noteLeftClick(event, 'hh', ${i})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, 'hh', ${i})" onmouseenter="myGrooveWriter.noteOnMouseEnter(event, 'hh', ${i})">
+            <div id="hi-hat${i}" class="hi-hat" onClick="noteLeftClick(event, 'hh', ${i})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, 'hh', ${i})" onmouseenter="noteOnMouseEnter(event, 'hh', ${i})">
                 <div class="hh_crash note_part" id="hh_crash${i}"><i class="fa fa-asterisk"></i></div>
                 <div class="hh_ride note_part" id="hh_ride${i}"><i class="fa fa-dot-circle-o"></i></div>
                 <div class="hh_ride_bell note_part" id="hh_ride_bell${i}"><i class="fa fa-bell-o"></i></div>

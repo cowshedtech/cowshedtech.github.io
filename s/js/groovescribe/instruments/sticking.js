@@ -136,10 +136,10 @@ function generateStickingContainerHTML(baseindex, indexStartForNotes, class_note
 
     for (var i = indexStartForNotes; i < class_notes_per_measure + indexStartForNotes; i++) {
         newHTML.push('       <div id="sticking' + i + '" class="sticking">');
-        newHTML.push('         <div class="sticking_right note_part" id="sticking_right' + i + '" onClick="myGrooveWriter.noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')" onmouseenter="myGrooveWriter.noteOnMouseEnter(event, \'sticking\')">R</div>');
-        newHTML.push('         <div class="sticking_left note_part" id="sticking_left' + i + '" onClick="myGrooveWriter.noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')">L</div>');
-        newHTML.push('         <div class="sticking_both note_part" id="sticking_both' + i + '" onClick="myGrooveWriter.noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')">R/L</div>');
-        newHTML.push('         <div class="sticking_count note_part" id="sticking_count' + i + '" onClick="myGrooveWriter.noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')">C</div>');
+        newHTML.push('         <div class="sticking_right note_part" id="sticking_right' + i + '" onClick="noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')" onmouseenter="noteOnMouseEnter(event, \'sticking\')">R</div>');
+        newHTML.push('         <div class="sticking_left note_part" id="sticking_left' + i + '" onClick="noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')">L</div>');
+        newHTML.push('         <div class="sticking_both note_part" id="sticking_both' + i + '" onClick="noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')">R/L</div>');
+        newHTML.push('         <div class="sticking_count note_part" id="sticking_count' + i + '" onClick="noteLeftClick(event, \'sticking\', ' + i + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, \'sticking\', ' + i + ')">C</div>');
         newHTML.push('       </div>');
 
         // add space between notes, except on the last note
@@ -154,3 +154,24 @@ function generateStickingContainerHTML(baseindex, indexStartForNotes, class_note
 
     return newHTML.join(''); // Join the array into a single string
 }
+
+
+
+// // the user has clicked on the stickings menu (at bottom)
+function stickingsAnchorClick(event) {
+
+    var contextMenu = document.getElementById("stickingsContextMenu");
+    if (contextMenu) {
+        var anchorPoint = document.getElementById("stickingsButton");
+
+        if (anchorPoint) {
+            if (!event)
+                event = window.event;
+            if (event.clientX || event.clientY) {
+                contextMenu.style.top = event.clientY - 100 + "px";
+                contextMenu.style.left = event.clientX - 150 + "px";
+            }
+        }
+        showContextMenu(contextMenu);
+    }
+};

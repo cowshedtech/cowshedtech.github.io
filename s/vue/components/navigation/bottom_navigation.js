@@ -18,7 +18,7 @@ export default {
       <i id="icon-tom1" class="fa fa-circle"></i><i id="icon-tom2" class="fa fa-circle-o"></i><i id="icon-tom3" class="fa fa-circle-o"></i>
     </BottomNavigationButton>
     
-    <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="stickingsButton" button-text="STICKINGS" click-handler="myGrooveWriter.stickingsAnchorClick();"></BottomNavigationButton>
+    <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="stickingsButton" button-text="STICKINGS" click-handler="stickingsAnchorClick();"></BottomNavigationButton>
     
     <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="downloadButton" button-text="DOWNLOAD" click-handler="myGrooveWriter.DownloadAnchorClick();">
       <span class="bottomButtonIcon"><i class="fa fa-download fa-2x"></i></span>

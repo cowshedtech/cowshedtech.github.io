@@ -139,7 +139,7 @@ function generateKickContainerHTML(indexStartForNotes, baseindex, class_notes_pe
 
     for (var j = indexStartForNotes; j < class_notes_per_measure + indexStartForNotes; j++) {
         newHTML.push(`
-            <div id="kick${j}" class="kick" onClick="myGrooveWriter.noteLeftClick(event, 'kick', ${j})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, 'kick', ${j})" onmouseenter="myGrooveWriter.noteOnMouseEnter(event, 'kick', ${j})">
+            <div id="kick${j}" class="kick" onClick="noteLeftClick(event, 'kick', ${j})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, 'kick', ${j})" onmouseenter="noteOnMouseEnter(event, 'kick', ${j})">
                 <div class="kick_splash note_part" id="kick_splash${j}"><i class="fa fa-times"></i></div>
                 <div class="kick_circle note_part" id="kick_circle${j}"></div>
             </div>

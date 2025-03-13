@@ -116,3 +116,19 @@ function getGrooveUtilsBaseLocation() {
 
     return baseLocation;
 };
+
+
+function fill_array_with_value_false(array_of_notes, number_of_notes) {
+	for (var i = 0; i < number_of_notes; i++) {
+		array_of_notes[i] = false;
+	}
+}
+
+// create a new instance of an array with all the values prefilled with false
+function get_empty_note_array(number_of_notes) {
+
+	var newArray = [number_of_notes];
+	fill_array_with_value_false(newArray, number_of_notes);
+	return newArray;
+}
+

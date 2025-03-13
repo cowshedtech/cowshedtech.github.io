@@ -77,3 +77,21 @@ if (typeof(grooves) === "undefined")
 	};
 
 })();
+
+
+
+// // the user has clicked on the grooves menu
+// root.groovesAnchorClick = function (event) {
+
+// 	var contextMenu = document.getElementById("grooveListWrapper");
+// 	if (contextMenu) {
+// 		var anchorPoint = document.getElementById("groovesAnchor");
+
+// 		if (anchorPoint) {
+// 			var anchorPos = getTagPosition(anchorPoint);
+// 			contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
+// 			contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 283 + "px";
+// 		}
+// 		showContextMenu(contextMenu);
+// 	}
+// };

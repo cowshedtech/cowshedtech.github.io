@@ -583,3 +583,650 @@ function get_permutation_post_ABC(section, usingTriplets) {
 
 //     root.refresh_ABC();
 // };
+
+
+// // the user has clicked on the permutation menu
+// root.permutationAnchorClick = function (event) {
+
+//     if (class_num_beats_per_measure != 4 || class_note_value_per_measure != 4)
+//         return;   // permutations disabled except in 4/4 time
+
+//     var contextMenu = document.getElementById("permutationContextMenu");
+//     if (contextMenu) {
+//         var anchorPoint = document.getElementById("permutationAnchor");
+
+//         if (anchorPoint) {
+//             var anchorPos = getTagPosition(anchorPoint);
+//             contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
+//             contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
+//         }
+//         showContextMenu(contextMenu);
+//     }
+// };
+
+
+
+// function setupPermutationMenu() {
+
+//     if (class_num_beats_per_measure == 4 && class_note_value_per_measure == 4) {
+
+//         addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", true);
+
+//     } else {
+//         // permutations disabled except in 4/4 time
+//         addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", false);
+//         root.permutationPopupClick("none");  // make sure permutation is off
+//     }
+// }
+
+// root.permutationPopupClick = function (perm_type) {
+
+//     if (class_permutation_type == perm_type)
+//         return;
+
+//     class_permutation_type = perm_type;
+
+//     switch (perm_type) {
+//         case "kick_16ths":
+//             showHideCSS_ClassVisibility(".kick-container", true, false); // hide it
+//             showHideCSS_ClassVisibility(".snare-container", true, true); // show it
+//             while (class_number_of_measures > 1) {
+//                 root.closeMeasureButtonClick(2);
+//             }
+//             selectButton(document.getElementById("permutationAnchor"));
+//             document.getElementById("PermutationOptions").innerHTML = HTMLforPermutationOptions(class_permutation_type, usingTriplets());
+//             document.getElementById("PermutationOptions").className += " displayed";
+//             break;
+
+//         case "snare_16ths":
+//             showHideCSS_ClassVisibility(".kick-container", true, true); // show it
+//             showHideCSS_ClassVisibility(".snare-container", true, false); // hide it
+//             while (class_number_of_measures > 1) {
+//                 root.closeMeasureButtonClick(2);
+//             }
+//             selectButton(document.getElementById("permutationAnchor"));
+//             document.getElementById("PermutationOptions").innerHTML = HTMLforPermutationOptions(class_permutation_type, usingTriplets());
+//             document.getElementById("PermutationOptions").className += " displayed";
+//             break;
+
+//         case "none":
+//         /* falls through */
+//         default:
+//             showHideCSS_ClassVisibility(".kick-container", true, true); // show it
+//             showHideCSS_ClassVisibility(".snare-container", true, true); // show it
+//             class_permutation_type = "none";
+
+//             unselectButton(document.getElementById("permutationAnchor"));
+//             document.getElementById("PermutationOptions").innerHTML = HTMLforPermutationOptions(class_permutation_type, usingTriplets());
+//             addOrRemoveKeywordFromClassById("PermutationOptions", "displayed", false);
+//             break;
+//     }
+
+//     updateSheetMusic();
+// };
+
+
+
+function get_kick16th_permutation_array(section) {
+    console.log("get_kick16th_permutation_array");
+    console.log("class_notes_per_measure: " + class_notes_per_measure);
+    if (usingTriplets()) {
+        return get_kick16th_triplets_permutation_array(section);
+    }
+
+    return get_kick16th_strait_permutation_array(section);
+}
+
+function get_kick16th_permutation_array_minus_some(section) {
+    console.log("get_kick16th_permutation_array_minus_some");
+    if (usingTriplets()) {
+        // triplets never skip any: delegate
+        return get_kick16th_permutation_array(section);
+    }
+
+    return get_kick16th_minus_some_strait_permutation_array(section);
+}
+
+// snare permutation
+function get_snare_permutation_array(section) {
+
+    // its the same as the 16th kick permutation, but with different notes
+    var snare_array = get_kick16th_permutation_array(section);
+
+    // turn the kicks into snares
+    for (var i = 0; i < snare_array.length; i++) {
+        if (snare_array[i] !== false)
+            snare_array[i] = constant_ABC_SN_Normal;
+    }
+
+    return snare_array;
+}
+
+// Snare permutation, with Accented permutation.   Snare hits every 16th note, accent moves
+function get_snare_accent_permutation_array(section) {
+
+    // its the same as the 16th kick permutation, but with different notes
+    var snare_array = get_kick16th_permutation_array(section);
+
+    if (section > 0) { // Don't convert notes for the first measure since it is the ostinato
+        for (var i = 0; i < snare_array.length; i++) {
+            if (snare_array[i] !== false)
+                snare_array[i] = constant_ABC_SN_Accent;
+            else if ((i % 2) === 0) // all other even notes are ghosted snares
+                snare_array[i] = constant_ABC_SN_Ghost;
+        }
+    }
+
+    return snare_array;
+}
+
+// Snare permutation, with Accented and diddled permutation.   Accented notes are singles, non accents are diddled
+function get_snare_accent_with_diddle_permutation_array(section) {
+
+    // its the same as the 16th kick permutation, but with different notes
+    var snare_array = get_kick16th_permutation_array(section);
+
+    if (section > 0) { // Don't convert notes for the first measure since it is the ostinato
+        for (var i = 0; i < snare_array.length; i++) {
+            if (snare_array[i] !== false) {
+                snare_array[i] = constant_ABC_SN_Buzz;
+                i++; // the next one is not diddled  (leave it false)
+            } else { // all other even notes are diddled, which means 32nd notes
+                snare_array[i] = constant_ABC_SN_Ghost;
+            }
+        }
+    }
+
+    return snare_array;
+}
+
+function get_numSectionsFor_permutation_array() {
+    var numSections = 16;
+
+    /*)
+    if(usingTriplets()) {
+    numSections = 8;
+    } else {
+    numSections = 16;
+    }
+     */
+
+    return numSections;
+}
+
+
+// use the Permutation options to figure out if we should display a particular section
+function shouldDisplayPermutationForSection(sectionNum) {
+    var ret_val = false;
+
+    switch (sectionNum) {
+        case 0:
+            if (document.getElementById("PermuationOptionsOstinato").checked &&
+                (!document.getElementById("PermuationOptionsOstinato_sub1") ||
+                    document.getElementById("PermuationOptionsOstinato_sub1").checked))
+                ret_val = true;
+            break;
+        case 1:
+            if (document.getElementById("PermuationOptionsSingles").checked &&
+                document.getElementById("PermuationOptionsSingles_sub1").checked)
+                ret_val = true;
+            break;
+        case 2:
+            if (document.getElementById("PermuationOptionsSingles").checked &&
+                document.getElementById("PermuationOptionsSingles_sub2").checked)
+                ret_val = true;
+            break;
+        case 3:
+            if (document.getElementById("PermuationOptionsSingles").checked &&
+                document.getElementById("PermuationOptionsSingles_sub3").checked)
+                ret_val = true;
+            break;
+        case 4:
+            if (!usingTriplets() &&
+                document.getElementById("PermuationOptionsSingles").checked &&
+                document.getElementById("PermuationOptionsSingles_sub4").checked)
+                ret_val = true;
+            break;
+        case 5:
+            if (document.getElementById("PermuationOptionsDoubles").checked &&
+                document.getElementById("PermuationOptionsDoubles_sub1").checked)
+                ret_val = true;
+            break;
+        case 6:
+            if (document.getElementById("PermuationOptionsDoubles").checked &&
+                document.getElementById("PermuationOptionsDoubles_sub2").checked)
+                ret_val = true;
+            break;
+        case 7:
+            if (document.getElementById("PermuationOptionsDoubles").checked &&
+                document.getElementById("PermuationOptionsDoubles_sub3").checked)
+                ret_val = true;
+            break;
+        case 8:
+            if (!usingTriplets() &&
+                document.getElementById("PermuationOptionsDoubles").checked &&
+                document.getElementById("PermuationOptionsDoubles_sub4").checked)
+                ret_val = true;
+            break;
+        case 9:
+            if (!usingTriplets() &&
+                document.getElementById("PermuationOptionsUpsDowns").checked &&
+                document.getElementById("PermuationOptionsUpsDowns_sub1").checked)
+                ret_val = true;
+            break;
+        case 10:
+            if (!usingTriplets() &&
+                document.getElementById("PermuationOptionsUpsDowns").checked &&
+                document.getElementById("PermuationOptionsUpsDowns_sub2").checked)
+                ret_val = true;
+            break;
+        case 11:
+            if (document.getElementById("PermuationOptionsTriples").checked &&
+                (!document.getElementById("PermuationSubOptionsTriples1") ||
+                    document.getElementById("PermuationOptionsTriples_sub1").checked))
+                ret_val = true;
+            break;
+        case 12:
+            if (!usingTriplets() &&
+                document.getElementById("PermuationOptionsTriples").checked &&
+                document.getElementById("PermuationOptionsTriples_sub2").checked)
+                ret_val = true;
+            break;
+        case 13:
+            if (!usingTriplets() &&
+                document.getElementById("PermuationOptionsTriples").checked &&
+                document.getElementById("PermuationOptionsTriples_sub3").checked)
+                ret_val = true;
+            break;
+        case 14:
+            if (!usingTriplets() &&
+                document.getElementById("PermuationOptionsTriples").checked &&
+                document.getElementById("PermuationOptionsTriples_sub4").checked)
+                ret_val = true;
+            break;
+        case 15:
+            if (!usingTriplets() &&
+                document.getElementById("PermuationOptionsQuads").checked &&
+                (!document.getElementById("PermuationOptionsQuads_sub1") ||
+                    document.getElementById("PermuationOptionsQuads_sub1").checked))
+                ret_val = true;
+            break;
+        default:
+            console.log("bad case in groove_writer.js:shouldDisplayPermutationForSection()");
+            return false;
+        //break;
+    }
+
+    return ret_val;
+}
+
+// use the permutation options to count the number of active permutation sections
+function get_numberOfActivePermutationSections() {
+    var max_num = get_numSectionsFor_permutation_array();
+    var total_on = 0;
+
+    for (var i = 0; i < max_num; i++) {
+        if (shouldDisplayPermutationForSection(i))
+            total_on++;
+    }
+
+    return total_on;
+}
+
+function get_kick16th_permutation_array(section) {
+		console.log("get_kick16th_permutation_array");
+		console.log("class_notes_per_measure: " + class_notes_per_measure);
+		if (usingTriplets()) {
+			return get_kick16th_triplets_permutation_array(section);
+		}
+
+		return get_kick16th_strait_permutation_array(section);
+	}
+
+	function get_kick16th_permutation_array_minus_some(section) {
+		console.log("get_kick16th_permutation_array_minus_some");
+		if (usingTriplets()) {
+			// triplets never skip any: delegate
+			return get_kick16th_permutation_array(section);
+		}
+
+		return get_kick16th_minus_some_strait_permutation_array(section);
+	}
+
+	// snare permutation
+	function get_snare_permutation_array(section) {
+
+		// its the same as the 16th kick permutation, but with different notes
+		var snare_array = get_kick16th_permutation_array(section);
+
+		// turn the kicks into snares
+		for (var i = 0; i < snare_array.length; i++) {
+			if (snare_array[i] !== false)
+				snare_array[i] = constant_ABC_SN_Normal;
+		}
+
+		return snare_array;
+	}
+
+	// Snare permutation, with Accented permutation.   Snare hits every 16th note, accent moves
+	function get_snare_accent_permutation_array(section) {
+
+		// its the same as the 16th kick permutation, but with different notes
+		var snare_array = get_kick16th_permutation_array(section);
+
+		if (section > 0) { // Don't convert notes for the first measure since it is the ostinato
+			for (var i = 0; i < snare_array.length; i++) {
+				if (snare_array[i] !== false)
+					snare_array[i] = constant_ABC_SN_Accent;
+				else if ((i % 2) === 0) // all other even notes are ghosted snares
+					snare_array[i] = constant_ABC_SN_Ghost;
+			}
+		}
+
+		return snare_array;
+	}
+
+	// Snare permutation, with Accented and diddled permutation.   Accented notes are singles, non accents are diddled
+	function get_snare_accent_with_diddle_permutation_array(section) {
+
+		// its the same as the 16th kick permutation, but with different notes
+		var snare_array = get_kick16th_permutation_array(section);
+
+		if (section > 0) { // Don't convert notes for the first measure since it is the ostinato
+			for (var i = 0; i < snare_array.length; i++) {
+				if (snare_array[i] !== false) {
+					snare_array[i] = constant_ABC_SN_Buzz;
+					i++; // the next one is not diddled  (leave it false)
+				} else { // all other even notes are diddled, which means 32nd notes
+					snare_array[i] = constant_ABC_SN_Ghost;
+				}
+			}
+		}
+
+		return snare_array;
+	}
+
+	function get_numSectionsFor_permutation_array() {
+		var numSections = 16;
+
+		/*)
+		if(usingTriplets()) {
+		numSections = 8;
+		} else {
+		numSections = 16;
+		}
+		 */
+
+		return numSections;
+	}
+
+	
+	// use the Permutation options to figure out if we should display a particular section
+	function shouldDisplayPermutationForSection(sectionNum) {
+		var ret_val = false;
+
+		switch (sectionNum) {
+			case 0:
+				if (document.getElementById("PermuationOptionsOstinato").checked &&
+					(!document.getElementById("PermuationOptionsOstinato_sub1") ||
+						document.getElementById("PermuationOptionsOstinato_sub1").checked))
+					ret_val = true;
+				break;
+			case 1:
+				if (document.getElementById("PermuationOptionsSingles").checked &&
+					document.getElementById("PermuationOptionsSingles_sub1").checked)
+					ret_val = true;
+				break;
+			case 2:
+				if (document.getElementById("PermuationOptionsSingles").checked &&
+					document.getElementById("PermuationOptionsSingles_sub2").checked)
+					ret_val = true;
+				break;
+			case 3:
+				if (document.getElementById("PermuationOptionsSingles").checked &&
+					document.getElementById("PermuationOptionsSingles_sub3").checked)
+					ret_val = true;
+				break;
+			case 4:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsSingles").checked &&
+					document.getElementById("PermuationOptionsSingles_sub4").checked)
+					ret_val = true;
+				break;
+			case 5:
+				if (document.getElementById("PermuationOptionsDoubles").checked &&
+					document.getElementById("PermuationOptionsDoubles_sub1").checked)
+					ret_val = true;
+				break;
+			case 6:
+				if (document.getElementById("PermuationOptionsDoubles").checked &&
+					document.getElementById("PermuationOptionsDoubles_sub2").checked)
+					ret_val = true;
+				break;
+			case 7:
+				if (document.getElementById("PermuationOptionsDoubles").checked &&
+					document.getElementById("PermuationOptionsDoubles_sub3").checked)
+					ret_val = true;
+				break;
+			case 8:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsDoubles").checked &&
+					document.getElementById("PermuationOptionsDoubles_sub4").checked)
+					ret_val = true;
+				break;
+			case 9:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsUpsDowns").checked &&
+					document.getElementById("PermuationOptionsUpsDowns_sub1").checked)
+					ret_val = true;
+				break;
+			case 10:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsUpsDowns").checked &&
+					document.getElementById("PermuationOptionsUpsDowns_sub2").checked)
+					ret_val = true;
+				break;
+			case 11:
+				if (document.getElementById("PermuationOptionsTriples").checked &&
+					(!document.getElementById("PermuationSubOptionsTriples1") ||
+						document.getElementById("PermuationOptionsTriples_sub1").checked))
+					ret_val = true;
+				break;
+			case 12:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsTriples").checked &&
+					document.getElementById("PermuationOptionsTriples_sub2").checked)
+					ret_val = true;
+				break;
+			case 13:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsTriples").checked &&
+					document.getElementById("PermuationOptionsTriples_sub3").checked)
+					ret_val = true;
+				break;
+			case 14:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsTriples").checked &&
+					document.getElementById("PermuationOptionsTriples_sub4").checked)
+					ret_val = true;
+				break;
+			case 15:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsQuads").checked &&
+					(!document.getElementById("PermuationOptionsQuads_sub1") ||
+						document.getElementById("PermuationOptionsQuads_sub1").checked))
+					ret_val = true;
+				break;
+			default:
+				console.log("bad case in groove_writer.js:shouldDisplayPermutationForSection()");
+				return false;
+			//break;
+		}
+
+		return ret_val;
+	}
+
+	// use the permutation options to count the number of active permutation sections
+	function get_numberOfActivePermutationSections() {
+		var max_num = get_numSectionsFor_permutation_array();
+		var total_on = 0;
+
+		for (var i = 0; i < max_num; i++) {
+			if (shouldDisplayPermutationForSection(i))
+				total_on++;
+		}
+
+		return total_on;
+	}
+
+
+    function get_numSectionsFor_permutation_array() {
+		var numSections = 16;
+
+		/*)
+		if(usingTriplets()) {
+		numSections = 8;
+		} else {
+		numSections = 16;
+		}
+		 */
+
+		return numSections;
+	}
+
+	
+
+	
+
+	// use the Permutation options to figure out if we should display a particular section
+	function shouldDisplayPermutationForSection(sectionNum) {
+		var ret_val = false;
+
+		switch (sectionNum) {
+			case 0:
+				if (document.getElementById("PermuationOptionsOstinato").checked &&
+					(!document.getElementById("PermuationOptionsOstinato_sub1") ||
+						document.getElementById("PermuationOptionsOstinato_sub1").checked))
+					ret_val = true;
+				break;
+			case 1:
+				if (document.getElementById("PermuationOptionsSingles").checked &&
+					document.getElementById("PermuationOptionsSingles_sub1").checked)
+					ret_val = true;
+				break;
+			case 2:
+				if (document.getElementById("PermuationOptionsSingles").checked &&
+					document.getElementById("PermuationOptionsSingles_sub2").checked)
+					ret_val = true;
+				break;
+			case 3:
+				if (document.getElementById("PermuationOptionsSingles").checked &&
+					document.getElementById("PermuationOptionsSingles_sub3").checked)
+					ret_val = true;
+				break;
+			case 4:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsSingles").checked &&
+					document.getElementById("PermuationOptionsSingles_sub4").checked)
+					ret_val = true;
+				break;
+			case 5:
+				if (document.getElementById("PermuationOptionsDoubles").checked &&
+					document.getElementById("PermuationOptionsDoubles_sub1").checked)
+					ret_val = true;
+				break;
+			case 6:
+				if (document.getElementById("PermuationOptionsDoubles").checked &&
+					document.getElementById("PermuationOptionsDoubles_sub2").checked)
+					ret_val = true;
+				break;
+			case 7:
+				if (document.getElementById("PermuationOptionsDoubles").checked &&
+					document.getElementById("PermuationOptionsDoubles_sub3").checked)
+					ret_val = true;
+				break;
+			case 8:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsDoubles").checked &&
+					document.getElementById("PermuationOptionsDoubles_sub4").checked)
+					ret_val = true;
+				break;
+			case 9:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsUpsDowns").checked &&
+					document.getElementById("PermuationOptionsUpsDowns_sub1").checked)
+					ret_val = true;
+				break;
+			case 10:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsUpsDowns").checked &&
+					document.getElementById("PermuationOptionsUpsDowns_sub2").checked)
+					ret_val = true;
+				break;
+			case 11:
+				if (document.getElementById("PermuationOptionsTriples").checked &&
+					(!document.getElementById("PermuationSubOptionsTriples1") ||
+						document.getElementById("PermuationOptionsTriples_sub1").checked))
+					ret_val = true;
+				break;
+			case 12:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsTriples").checked &&
+					document.getElementById("PermuationOptionsTriples_sub2").checked)
+					ret_val = true;
+				break;
+			case 13:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsTriples").checked &&
+					document.getElementById("PermuationOptionsTriples_sub3").checked)
+					ret_val = true;
+				break;
+			case 14:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsTriples").checked &&
+					document.getElementById("PermuationOptionsTriples_sub4").checked)
+					ret_val = true;
+				break;
+			case 15:
+				if (!usingTriplets() &&
+					document.getElementById("PermuationOptionsQuads").checked &&
+					(!document.getElementById("PermuationOptionsQuads_sub1") ||
+						document.getElementById("PermuationOptionsQuads_sub1").checked))
+					ret_val = true;
+				break;
+			default:
+				console.log("bad case in groove_writer.js:shouldDisplayPermutationForSection()");
+				return false;
+			//break;
+		}
+
+		return ret_val;
+	}
+
+	// use the permutation options to count the number of active permutation sections
+	function get_numberOfActivePermutationSections() {
+		var max_num = get_numSectionsFor_permutation_array();
+		var total_on = 0;
+
+		for (var i = 0; i < max_num; i++) {
+			if (shouldDisplayPermutationForSection(i))
+				total_on++;
+		}
+
+		return total_on;
+	}
+
+
+    function filter_kick_array_for_permutation(old_kick_array) {
+		var new_kick_array = [];
+
+		for (var i in old_kick_array) {
+			if (old_kick_array[i] == constant_ABC_KI_Splash ||
+				old_kick_array[i] == constant_ABC_KI_SandK)
+				new_kick_array.push(constant_ABC_KI_Splash);
+			else
+				new_kick_array.push(false);
+		}
+
+		return new_kick_array;
+	}

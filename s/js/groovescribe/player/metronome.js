@@ -398,7 +398,7 @@ class Metronome {
 	};
 }
 
-var metronome = new Metronome();
+
 
 
 
