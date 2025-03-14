@@ -23,13 +23,13 @@
 
     fullURL += '?';
 
-    if (myGrooveData.debugMode)
+    if (options.debugMode)
         fullURL += "Debug=1&";
 
     if (myGrooveData.viewMode)
         fullURL += "Mode=view&";
 
-    if (myGrooveData.grooveDBAuthoring)
+    if (options.grooveDBAuthoring)
         fullURL += "GDB_Author=1&";
 
     fullURL += 'TimeSig=' + myGrooveData.numBeats + '/' + myGrooveData.noteValue;
@@ -109,7 +109,7 @@ function getGrooveDataFromUrlString(encodedURLData, myGrooveData, debugMode) {
     var stickings_set_from_URL = false;
     var i;
 
-    myGrooveData.debugMode = parseInt(getQueryVariableFromString("Debug", debugMode, encodedURLData), 10);
+    options.debugMode = parseInt(getQueryVariableFromString("Debug", debugMode, encodedURLData), 10);
 
     var timeSigArray = parseTimeSigString(getQueryVariableFromString("TimeSig", "4/4", encodedURLData));
     myGrooveData.numBeats = timeSigArray[0];

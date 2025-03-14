@@ -44,9 +44,9 @@ function GrooveUtils() {
 	root.note_mapping_array = null;
 
 	// debug & special view
-	root.debugMode = false;
+	// root.debugMode = false;
 	root.viewMode = true;  // by default to prevent screen flicker
-	root.grooveDBAuthoring = false;
+	// options.grooveDBAuthoring = false;
 
 	// midi state variables
 	root.swingIsEnabled = false;
@@ -91,8 +91,8 @@ function GrooveUtils() {
 		this.swingPercent = 0;
 		this.tempo = constant_DEFAULT_TEMPO;
 		this.kickStemsUp = true;
-		this.debugMode = root.debugMode;
-		this.grooveDBAuthoring = root.grooveDBAuthoring;
+		this.debugMode = options.debugMode;
+		this.grooveDBAuthoring = options.grooveDBAuthoring;
 		this.viewMode = root.viewMode;
 		this.repeatedMeasures = new Map();
 		this.highlightOn = true;

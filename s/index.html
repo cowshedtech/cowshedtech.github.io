@@ -69,7 +69,7 @@
 		
 		<!-- GS Data Structure -->
 		<script src="./js/groovescribe/groove_utils.js"></script>		
-
+		
 		<!-- Utils -->
 		<script src="./js/groovescribe/utils/consts.js"></script>
 		<script src="./js/groovescribe/utils/image.js"></script>		
@@ -77,6 +77,9 @@
 		<script src="./js/groovescribe/utils/utils.js"></script>						
 		<script src="./js/groovescribe/utils/permutations.js"></script>		
 		<script src="./js/groovescribe/utils/context_menu.js"></script>		
+
+		<!-- Browser -->
+		<script src="./js/groovescribe/controls/options.js"></script>		
 
 		<!-- Browser -->
 		<script src="./js/groovescribe/browser/dom.js"></script>
@@ -113,10 +116,10 @@
 		<!-- Dynamically change up css -->
 		<script type="text/javascript">
 			var myGrooveWriter = new GrooveWriter();
-			if (myGrooveWriter.myGrooveUtils.grooveDBAuthoring) {
+			if (options.grooveDBAuthoring) {
 				document.write('<link rel="stylesheet" type="text/css" href="css/grooveDB_authoring.css">');
 			}
-			if (myGrooveWriter.myGrooveUtils.debugMode) {
+			if (options.debugMode) {
 				document.write('<link rel="stylesheet" type="text/css" href="css/groove_debug.css">');
 			}
 		</script>

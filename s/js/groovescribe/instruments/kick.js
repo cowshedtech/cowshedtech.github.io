@@ -149,7 +149,7 @@ function generateKickContainerHTML(indexStartForNotes, baseindex, class_notes_pe
             newHTML.push('<div class="space_between_note_groups"> </div> ');
         }
     }
-    newHTML.push(`<span class="unmuteKickButton" id="unmutekickButton${baseindex}" onClick='myGrooveWriter.muteInstrument("kick", ${baseindex}, false)'><span class="fa-stack unmuteStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span>`);
+    newHTML.push(`<span class="unmuteKickButton" id="unmutekickButton${baseindex}" onClick='muteInstrument("kick", ${baseindex}, false)'><span class="fa-stack unmuteStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span>`);
     newHTML.push('<div class="end_note_space"></div>\n</div>\n');
 
     return newHTML.join(''); // Join the array into a single string

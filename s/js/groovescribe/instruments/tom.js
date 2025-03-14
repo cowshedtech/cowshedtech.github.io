@@ -138,7 +138,7 @@ function generateTomContainerHTML(indexStartForNotes, baseindex, class_notes_per
         }
     }
 
-    newHTML.push(`<span class="unmuteTom${tomNumber}Button" id="unmutetom${tomNumber}Button${baseindex}" onClick='myGrooveWriter.muteInstrument("tom${tomNumber}", ${baseindex}, false)'><span class="fa-stack unmuteStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span>`);
+    newHTML.push(`<span class="unmuteTom${tomNumber}Button" id="unmutetom${tomNumber}Button${baseindex}" onClick='muteInstrument("tom${tomNumber}", ${baseindex}, false)'><span class="fa-stack unmuteStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span>`);
     newHTML.push('<div class="end_note_space"></div></div>');
 
     return newHTML.join(''); // Join the array into a single string

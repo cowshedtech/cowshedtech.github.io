@@ -14,174 +14,183 @@ function isInstrumentMuted(instrument, measure) {
 }
 
 
-// root.muteInstrument = function (instrument, measure, muteElseUnmute) {
-//     // find unmuteHHButton1  or unmuteSnareButton2
-//     var buttonName = "unmute" + instrument + "Button" + measure
-//     var button = document.getElementById(buttonName);
-//     if (muteElseUnmute)
-//         button.style.display = "inline-block";
-//     else
-//         button.style.display = "none";
+//
+//
+//
+function muteInstrument(instrument, measure, muteElseUnmute) {
+    // find unmuteHHButton1  or unmuteSnareButton2
+    var buttonName = "unmute" + instrument + "Button" + measure
+    var button = document.getElementById(buttonName);
+    if (muteElseUnmute)
+        button.style.display = "inline-block";
+    else
+        button.style.display = "none";
 
-//         midiPlayer.noteHasChanged();
-// }
+        midiPlayer.noteHasChanged();
+}
 
 
+var measureForNoteLabelClick = 0;
 
-// context menu for labels
-// root.noteLabelClick = function (event, instrument, measure) {
-//     var contextMenu = false;
+// context menu for labels;
+function noteLabelClick(event, instrument, measure) {
+    var contextMenu = false;
 
-//     // store this in a global, there can only ever be one context menu open at a time.
-//     // Yes, I agree this sucks
-//     class_measure_for_note_label_click = measure;
+    // store this in a global, there can only ever be one context menu open at a time.
+    // Yes, I agree this sucks
+    measureForNoteLabelClick = measure;
 
-//     switch (instrument) {
-//         case "stickings":
-//             contextMenu = document.getElementById("stickingsLabelContextMenu");
-//             break;
-//         case "hh":
-//             contextMenu = document.getElementById("hhLabelContextMenu");
-//             break;
-//         case "tom1":
-//             contextMenu = document.getElementById("tom1LabelContextMenu");
-//             break;
-//         case "tom4":
-//             contextMenu = document.getElementById("tom4LabelContextMenu");
-//             break;
-//         case "snare":
-//             contextMenu = document.getElementById("snareLabelContextMenu");
-//             break;
-//         case "kick":
-//             contextMenu = document.getElementById("kickLabelContextMenu");
-//             break;
-//         default:
-//             console.log("bad case in noteLabelClick: " + instrument);
-//             break;
-//     }
+    switch (instrument) {
+        case "stickings":
+            contextMenu = document.getElementById("stickingsLabelContextMenu");
+            break;
+        case "hh":
+            contextMenu = document.getElementById("hhLabelContextMenu");
+            break;
+        case "tom1":
+            contextMenu = document.getElementById("tom1LabelContextMenu");
+            break;
+        case "tom4":
+            contextMenu = document.getElementById("tom4LabelContextMenu");
+            break;
+        case "snare":
+            contextMenu = document.getElementById("snareLabelContextMenu");
+            break;
+        case "kick":
+            contextMenu = document.getElementById("kickLabelContextMenu");
+            break;
+        default:
+            console.log("bad case in noteLabelClick: " + instrument);
+            break;
+    }
 
-//     if (contextMenu) {
-//         if (!event)
-//             event = window.event;
-//         if (event.clientX || event.clientY) {
-//             contextMenu.style.top = event.clientY - 30 + "px";
-//             contextMenu.style.left = event.clientX - 35 + "px";
-//         }
-//         showContextMenu(contextMenu);
-//     }
+    if (contextMenu) {
+        if (!event)
+            event = window.event;
+        if (event.clientX || event.clientY) {
+            contextMenu.style.top = event.clientY - 30 + "px";
+            contextMenu.style.left = event.clientX - 35 + "px";
+        }
+        showContextMenu(contextMenu);
+    }
 
-//     return false;
-// };
+    return false;
+};
 
-// root.noteLabelPopupClick = function (instrument, action) {
-//     var setFunction = false;
-//     var contextMenu = false;
+//
+//
+//
+function noteLabelPopupClick(instrument, action) {
+    var setFunction = false;
+    var contextMenu = false;
 
-//     switch (instrument) {
-//         case "stickings":
-//             setFunction = set_sticking_state;
-//             break;
-//         case "hh":
-//             setFunction = set_hh_state;
-//             break;
-//         case "tom1":
-//             setFunction = set_tom1_state;
-//             break;
-//         case "tom4":
-//             setFunction = set_tom4_state;
-//             break;
-//         case "snare":
-//             setFunction = set_snare_state;
-//             break;
-//         case "kick":
-//             setFunction = set_kick_state;
-//             break;
-//         default:
-//             console.log("bad case in noteLabelPopupClick");
-//             return false;
-//     }
+    switch (instrument) {
+        case "stickings":
+            setFunction = set_sticking_state;
+            break;
+        case "hh":
+            setFunction = set_hh_state;
+            break;
+        case "tom1":
+            setFunction = set_tom1_state;
+            break;
+        case "tom4":
+            setFunction = set_tom4_state;
+            break;
+        case "snare":
+            setFunction = set_snare_state;
+            break;
+        case "kick":
+            setFunction = set_kick_state;
+            break;
+        default:
+            console.log("bad case in noteLabelPopupClick");
+            return false;
+    }
 
-//     if (action == "mute") {
-//         root.muteInstrument(instrument, class_measure_for_note_label_click, true);
-//         return false;
-//     }
+    if (action == "mute") {
+        muteInstrument(instrument, measureForNoteLabelClick, true);
+        return false;
+    }
 
-//     // start at the first note of the measure we want to effect.   Only fill in the
-//     // notes for that measure
-//     // the last boolean in the setFunction should only be true on the first call (plays a sound)
-//     var startIndex = class_notes_per_measure * (class_measure_for_note_label_click - 1);
-//     for (var i = startIndex; i - startIndex < class_notes_per_measure; i++) {
-//         if (action == "all_off") {
-//             setFunction(i, "off", i == startIndex);
+    // start at the first note of the measure we want to effect.   Only fill in the
+    // notes for that measure
+    // the last boolean in the setFunction should only be true on the first call (plays a sound)
+    var startIndex = editor.class_notes_per_measure * (measureForNoteLabelClick - 1);
+    for (var i = startIndex; i - startIndex < editor.class_notes_per_measure; i++) {
+        if (action == "all_off") {
+            setFunction(i, "off", i == startIndex);
 
-//         } else if (instrument == "stickings") {
-//             switch (action) {
-//                 case "all_right":
-//                     set_sticking_state(i, "right", i == startIndex, class_notes_per_measure, class_time_division, class_note_value_per_measure);
-//                     break;
-//                 case "all_left":
-//                     set_sticking_state(i, "left", i == startIndex, class_notes_per_measure, class_time_division, class_note_value_per_measure);
-//                     break;
-//                 case "alternate":
-//                     set_sticking_state(i, (i % 2 === 0 ? "right" : "left"), i == startIndex, class_notes_per_measure, class_time_division, class_note_value_per_measure);
-//                     break;
-//                 case "all_count":
-//                     set_sticking_state(i, "count", i == startIndex, class_notes_per_measure, class_time_division, class_note_value_per_measure);
-//                     break;
-//                 default:
-//                     console.log("Bad sticking case in noteLabelPopupClick");
-//                     break;
-//             }
-//         } else if (instrument == "hh" && action == "downbeats") {
-//             set_hh_state(i, (i % 2 === 0 ? "normal" : "off"), i == startIndex);
+        } else if (instrument == "stickings") {
+            switch (action) {
+                case "all_right":
+                    set_sticking_state(i, "right", i == startIndex, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+                    break;
+                case "all_left":
+                    set_sticking_state(i, "left", i == startIndex, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+                    break;
+                case "alternate":
+                    set_sticking_state(i, (i % 2 === 0 ? "right" : "left"), i == startIndex, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+                    break;
+                case "all_count":
+                    set_sticking_state(i, "count", i == startIndex, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+                    break;
+                default:
+                    console.log("Bad sticking case in noteLabelPopupClick");
+                    break;
+            }
+        } else if (instrument == "hh" && action == "downbeats") {
+            set_hh_state(i, (i % 2 === 0 ? "normal" : "off"), i == startIndex);
 
-//         } else if (instrument == "hh" && action == "upbeats") {
-//             set_hh_state(i, (i % 2 === 0 ? "off" : "normal"), i == (startIndex + 1));
+        } else if (instrument == "hh" && action == "upbeats") {
+            set_hh_state(i, (i % 2 === 0 ? "off" : "normal"), i == (startIndex + 1));
 
-//         } else if (instrument == "snare" && action == "all_on") {
-//             set_snare_state(i, "accent", i == startIndex);
+        } else if (instrument == "snare" && action == "all_on") {
+            set_snare_state(i, "accent", i == startIndex);
 
-//         } else if (instrument == "snare" && action == "all_on_normal") {
-//             set_snare_state(i, "normal", i == startIndex);
+        } else if (instrument == "snare" && action == "all_on_normal") {
+            set_snare_state(i, "normal", i == startIndex);
 
-//         } else if (instrument == "snare" && action == "all_on_ghost") {
-//             set_snare_state(i, "ghost", i == startIndex);
+        } else if (instrument == "snare" && action == "all_on_ghost") {
+            set_snare_state(i, "ghost", i == startIndex);
 
-//         } else if (instrument == "kick" && action == "hh_foot_nums_on") {
-//             var num_notes_per_count = class_time_division / class_note_value_per_measure
-//             var cur_state = get_kick_state(i, "ABC");
-//             var kick_is_on = false;
-//             if (cur_state == constant_ABC_KI_SandK || cur_state == constant_ABC_KI_Normal)
-//                 kick_is_on = true;
-//             set_kick_state(i, (i % num_notes_per_count === 0 ? (kick_is_on ? "kick_and_splash" : "splash") : (kick_is_on ? "normal" : "off")), i == (startIndex));
+        } else if (instrument == "kick" && action == "hh_foot_nums_on") {
+            var num_notes_per_count = editor.class_time_division / editor.class_note_value_per_measure
+            var cur_state = get_kick_state(i, "ABC");
+            var kick_is_on = false;
+            if (cur_state == constant_ABC_KI_SandK || cur_state == constant_ABC_KI_Normal)
+                kick_is_on = true;
+            set_kick_state(i, (i % num_notes_per_count === 0 ? (kick_is_on ? "kick_and_splash" : "splash") : (kick_is_on ? "normal" : "off")), i == (startIndex));
 
-//         } else if (instrument == "kick" && action == "hh_foot_ands_on") {
-//             var num_notes_per_count = class_time_division / class_note_value_per_measure
-//             var cur_state = get_kick_state(i, "ABC");
-//             var kick_is_on = false;
-//             if (cur_state == constant_ABC_KI_SandK || cur_state == constant_ABC_KI_Normal)
-//                 kick_is_on = true;
+        } else if (instrument == "kick" && action == "hh_foot_ands_on") {
+            var num_notes_per_count = editor.class_time_division / editor.class_note_value_per_measure
+            var cur_state = get_kick_state(i, "ABC");
+            var kick_is_on = false;
+            if (cur_state == constant_ABC_KI_SandK || cur_state == constant_ABC_KI_Normal)
+                kick_is_on = true;
 
-//             set_kick_state(i, (i % num_notes_per_count === (num_notes_per_count / 2) ? (kick_is_on ? "kick_and_splash" : "splash") : (kick_is_on ? "normal" : "off")), i == (startIndex + num_notes_per_count / 2));
+            set_kick_state(i, (i % num_notes_per_count === (num_notes_per_count / 2) ? (kick_is_on ? "kick_and_splash" : "splash") : (kick_is_on ? "normal" : "off")), i == (startIndex + num_notes_per_count / 2));
 
-//         } else if (action == "all_on") {
-//             setFunction(i, "normal", i == startIndex);
+        } else if (action == "all_on") {
+            setFunction(i, "normal", i == startIndex);
 
-//         } else if (action == "cancel") {
-//             continue; // do nothing.
+        } else if (action == "cancel") {
+            continue; // do nothing.
 
-//         } else {
-//             console.log("Bad IF case in noteLabelPopupClick");
+        } else {
+            console.log("Bad IF case in noteLabelPopupClick");
 
-//         }
-//     }
+        }
+    }
 
-//     class_measure_for_note_label_click = 0; // reset
+    measureForNoteLabelClick = 0; // reset
 
-//     updateSheetMusic();
+    editor.updateSheetMusic();
 
-//     return false;
-// };
+    return false;
+};
+
+var class_which_index_last_clicked = 0; // which note was last clicked for the context menu	
 
 // // returns true on error!
 // // returns false if working.  (this is because of the onContextMenu handler
@@ -254,7 +263,7 @@ function noteLeftClick(event, type, id) {
                 set_kick_state(id, is_kick_on(id) ? "off" : "normal", true);
                 break;
             case "sticking":
-                sticking_rotate_state(id, class_notes_per_measure, class_time_division, class_note_value_per_measure);
+                sticking_rotate_state(id, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
                 break;
             default:
                 console.log("Bad case in noteLeftClick: " + type);
@@ -272,7 +281,7 @@ function noteLeftClick(event, type, id) {
 
 //     switch (type) {
 //         case "sticking":
-//             set_sticking_state(id, new_setting, true, class_notes_per_measure, class_time_division, class_note_value_per_measure);
+//             set_sticking_state(id, new_setting, true, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
 //             break;
 //         case "hh":
 //             set_hh_state(id, new_setting, true);

@@ -23,13 +23,13 @@ function getGSUrlStringFromGrooveData(myGrooveData, url_destination) {
 
     fullURL += '?';
 
-    if (myGrooveData.debugMode)
+    if (options.debugMode)
         fullURL += "Debug=1&";
 
     if (myGrooveData.viewMode)
         fullURL += "Mode=view&";
 
-    if (myGrooveData.grooveDBAuthoring)
+    if (options.grooveDBAuthoring)
         fullURL += "GDB_Author=1&";
 
     fullURL += 'TimeSig=' + myGrooveData.numBeats + '/' + myGrooveData.noteValue;

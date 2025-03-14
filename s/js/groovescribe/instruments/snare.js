@@ -290,7 +290,7 @@ function GetDefaultSnareGroove(notes_per_measure, timeSigTop, timeSigBottom, num
 			`;
 		}
 
-		newHTML += '<span class="unmuteSnareButton" id="unmutesnareButton' + baseindex + '" onClick=\'myGrooveWriter.muteInstrument("snare", ' + baseindex + ', false)\'><span class="fa-stack unmuteStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span>';
+		newHTML += '<span class="unmuteSnareButton" id="unmutesnareButton' + baseindex + '" onClick=\'muteInstrument("snare", ' + baseindex + ', false)\'><span class="fa-stack unmuteStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span>';
 		newHTML += ('<div class="end_note_space"></div>\n</div>\n');
 
 		return newHTML; // Return the generated HTML

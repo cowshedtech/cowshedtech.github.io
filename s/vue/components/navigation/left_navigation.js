@@ -16,7 +16,7 @@ export default {
             <span class="left-button subdivision edit-block" id="subdivision_48ths" onclick="myGrooveWriter.changeDivision(48);"><span class="left-button-content"><span>MIXED<br>Division</span></span></span>
 
             <script>
-                if (!myGrooveWriter.myGrooveUtils.grooveDBAuthoring) {
+                if (!options.grooveDBAuthoring) {
                     document.write('<span class="left-button" onclick="myGrooveWriter.swapViewEditMode();"><span class="left-button-content"><span id="view-edit-switch" >Switch to EDIT mode</span></span></span>');
                 }
             </script>

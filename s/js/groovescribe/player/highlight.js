@@ -155,7 +155,7 @@ function clearHighlightNoteInABCSVG(grooveUtilsUniqueIndex) {
             myElements[i].setAttribute("class", class_name.replace(new RegExp(' highlighted', 'g'), ""));
 
             // TODO
-            // if (root.debugMode && i === 0) {
+            // if (options.debugMode && i === 0) {
             //     if (!isElementOnScreen(myElements[i])) {
             //         if (abcNoteNumCurrentlyHighlighted === 0)
             //             myElements[i].scrollIntoView({ block: "start", behavior: "smooth" });   // autoscroll if necessary

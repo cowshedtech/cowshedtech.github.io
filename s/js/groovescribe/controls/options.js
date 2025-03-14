@@ -1,51 +1,74 @@
-// the user has clicked on the options menu
-optionsAnchorClick = function (event) {
 
-    var contextMenu = document.getElementById("optionsContextMenu");
-    if (contextMenu) {
-        var anchorPoint = document.getElementById("optionsAnchor");
+class Options {
 
-        if (anchorPoint) {
-            var anchorPos = getTagPosition(anchorPoint);
-            contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
-            contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
+    advancedEditIsOn;
+    highlightOn;
+    debugMode;
+    grooveDBAuthoring;
+
+    /**
+     * 
+     */    
+    constructor() {}   
+
+    /**
+     * the user has clicked on the options menu
+     */    
+    optionsAnchorClick = function (event) {
+
+        var contextMenu = document.getElementById("optionsContextMenu");
+        if (contextMenu) {
+            var anchorPoint = document.getElementById("optionsAnchor");
+
+            if (anchorPoint) {
+                var anchorPos = getTagPosition(anchorPoint);
+                contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
+                contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
+            }
+            this.optionsMenuSetSelectedState()
+            showContextMenu(contextMenu);
         }
-        root.optionsMenuSetSelectedState()
-        showContextMenu(contextMenu);
-    }
-};
+    };
 
-root.optionsMenuSetSelectedState = function () {
+    /**
+     * the user has clicked on the options menu
+     */    
+    optionsMenuSetSelectedState() {
+        if (this.highlightOn) {
+            addOrRemoveKeywordFromClassById("optionsContextMenuHighlight", "menuChecked", true);			
+        } else {
+            addOrRemoveKeywordFromClassById("optionsContextMenuHighlight", "menuChecked", false);
+        }
+    };
 
-    if (root.myGrooveUtils.highlightOn) {
-        addOrRemoveKeywordFromClassById("optionsContextMenuHighlight", "menuChecked", true);			
-    } else {
-        addOrRemoveKeywordFromClassById("optionsContextMenuHighlight", "menuChecked", false);
-    }
-};
+    /**
+     * the user has clicked on the options menu
+     */    
+    optionsHighlightPopupClick(option_type) {
 
-root.optionsHighlightPopupClick = function (option_type) {
-
-    class_highlight_on = !class_highlight_on
-    root.myGrooveUtils.highlightOn = class_highlight_on
-    
-    // Ensure current highlighting removed if highlighing now off
-    if (!class_highlight_on) clear_all_highlights(null);
-    if (!class_highlight_on) clearHighlightNoteInABCSVG(root.myGrooveUtils.grooveUtilsUniqueIndex);
-    
-    root.optionsMenuSetSelectedState();
-    root.updateCurrentURL();
-};
+        this.highlightOn = !this.highlightOn
+        editor.myGrooveUtils.highlightOn = this.highlightOn
+        
+        // Ensure current highlighting removed if highlighing now off
+        if (!this.highlightOn) clear_all_highlights(null);
+        if (!this.highlightOn) clearHighlightNoteInABCSVG(editor.myGrooveUtils.grooveUtilsUniqueIndex);
+        
+        this.optionsMenuSetSelectedState();
+        editor.updateCurrentURL();
+    };
 
 
-// user has clicked on the advanced edit button
-this.toggleAdvancedEdit = function () {
-    if (class_advancedEditIsOn) {
-        // turn it off
-        class_advancedEditIsOn = false;
-        unselectButton(document.getElementById("advancedEditAnchor"));
-    } else {
-        class_advancedEditIsOn = true;
-        selectButton(document.getElementById("advancedEditAnchor"));
-    }
-};
+    // 
+    /**
+     * user has clicked on the advanced edit button
+     */    
+    toggleAdvancedEdit() {
+        if (this.advancedEditIsOn) {
+            this.advancedEditIsOn = false;
+            unselectButton(document.getElementById("advancedEditAnchor"));
+        } else {
+            this.advancedEditIsOn = true;
+            selectButton(document.getElementById("advancedEditAnchor"));
+        }
+    };
+}

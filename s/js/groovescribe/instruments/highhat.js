@@ -190,7 +190,7 @@ function generateHiHatContainerHTML(indexStartForNotes, baseindex, class_notes_p
         }
     }
 
-    html.push(`<div class="unmuteHHButton" id="unmutehhButton${baseindex}" onClick='myGrooveWriter.muteInstrument("hh", ${baseindex}, false)'><span class="fa-stack unmuteHHStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span></div>`);
+    html.push(`<div class="unmuteHHButton" id="unmutehhButton${baseindex}" onClick='muteInstrument("hh", ${baseindex}, false)'><span class="fa-stack unmuteHHStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span></div>`);
     html.push('</div>'); // Close hi-hat container
 
     return html.join(''); // Join the array into a single string

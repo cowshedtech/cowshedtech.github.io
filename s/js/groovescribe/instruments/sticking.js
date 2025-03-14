@@ -127,7 +127,7 @@ function generateStickingContainerHTML(baseindex, indexStartForNotes, class_note
 
     newHTML.push('<div class="stickings-row-container">');
     newHTML.push('  <div class="line-labels">');
-    newHTML.push('     <div class="stickings-label" onClick="myGrooveWriter.noteLabelClick(event, \'stickings\', ' + baseindex + ')" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, \'stickings\', ' + baseindex + ')">STICKINGS</div>');
+    newHTML.push('     <div class="stickings-label" onClick="noteLabelClick(event, \'stickings\', ' + baseindex + ')" oncontextmenu="event.preventDefault(); noteLabelClick(event, \'stickings\', ' + baseindex + ')">STICKINGS</div>');
     newHTML.push('  </div>');
     newHTML.push('  <div class="music-line-container">');
     newHTML.push('     <div class="notes-container">');

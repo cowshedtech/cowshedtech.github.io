@@ -26,11 +26,11 @@ function generateMeasureButtons(class_number_of_measures, baseindex, repeat) {
 function generateLineLabels(baseindex) {
     return `
 			<div class="line-labels">
-				<div class="hh-label" onClick="myGrooveWriter.noteLabelClick(event, 'hh', ${baseindex})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, 'hh', ${baseindex})">Hi-hat</div>
-				<div class="tom-label" id="tom1-label" onClick="myGrooveWriter.noteLabelClick(event, 'tom1', ${baseindex})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, 'tom1', ${baseindex})">Tom</div>
-				<div class="snare-label" onClick="myGrooveWriter.noteLabelClick(event, 'snare', ${baseindex})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, 'snare', ${baseindex})">Snare</div>
-				<div class="tom-label" id="tom4-label" onClick="myGrooveWriter.noteLabelClick(event, 'tom4', ${baseindex})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, 'tom4', ${baseindex})">Tom</div>
-				<div class="kick-label" onClick="myGrooveWriter.noteLabelClick(event, 'kick', ${baseindex})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, 'kick', ${baseindex})">Kick</div>
+				<div class="hh-label" onClick="noteLabelClick(event, 'hh', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'hh', ${baseindex})">Hi-hat</div>
+				<div class="tom-label" id="tom1-label" onClick="noteLabelClick(event, 'tom1', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'tom1', ${baseindex})">Tom</div>
+				<div class="snare-label" onClick="noteLabelClick(event, 'snare', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'snare', ${baseindex})">Snare</div>
+				<div class="tom-label" id="tom4-label" onClick="noteLabelClick(event, 'tom4', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'tom4', ${baseindex})">Tom</div>
+				<div class="kick-label" onClick="noteLabelClick(event, 'kick', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'kick', ${baseindex})">Kick</div>
 			</div>
 		`;
 }
@@ -38,11 +38,11 @@ function generateLineLabels(baseindex) {
 function generateLineLabels(baseindex) {
     return `
         <div class="line-labels">
-            <div class="hh-label" onClick="myGrooveWriter.noteLabelClick(event, 'hh', ${baseindex})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, 'hh', ${baseindex})">Hi-hat</div>
-            <div class="tom-label" id="tom1-label" onClick="myGrooveWriter.noteLabelClick(event, 'tom1', ${baseindex})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, 'tom1', ${baseindex})">Tom</div>
-            <div class="snare-label" onClick="myGrooveWriter.noteLabelClick(event, 'snare', ${baseindex})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, 'snare', ${baseindex})">Snare</div>
-            <div class="tom-label" id="tom4-label" onClick="myGrooveWriter.noteLabelClick(event, 'tom4', ${baseindex})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, 'tom4', ${baseindex})">Tom</div>
-            <div class="kick-label" onClick="myGrooveWriter.noteLabelClick(event, 'kick', ${baseindex})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteLabelClick(event, 'kick', ${baseindex})">Kick</div>
+            <div class="hh-label" onClick="noteLabelClick(event, 'hh', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'hh', ${baseindex})">Hi-hat</div>
+            <div class="tom-label" id="tom1-label" onClick="noteLabelClick(event, 'tom1', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'tom1', ${baseindex})">Tom</div>
+            <div class="snare-label" onClick="noteLabelClick(event, 'snare', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'snare', ${baseindex})">Snare</div>
+            <div class="tom-label" id="tom4-label" onClick="noteLabelClick(event, 'tom4', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'tom4', ${baseindex})">Tom</div>
+            <div class="kick-label" onClick="noteLabelClick(event, 'kick', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'kick', ${baseindex})">Kick</div>
         </div>
     `;
 }
