@@ -32,11 +32,16 @@
 
 var midiPlayer;
 var metronome;
+// var sheetMusic;
+// var editor;
+// var track;
+var editor;
 
 function GrooveWriter() {
 	"use strict";
 
 	var root = this;
+	editor = this;
 
 	root.myGrooveUtils = new GrooveUtils();
 
@@ -437,7 +442,7 @@ function GrooveWriter() {
 
 	// called by the HTML when changes happen to forms that require the ABC to update
 	root.refresh_ABC = function () {
-		updateSheetMusic();
+		root.updateSheetMusic();
 	};
 
 	// Want to create something like this:
@@ -749,7 +754,7 @@ function GrooveWriter() {
 	// this is called by a bunch of places anytime we modify the musical notes on the page
 	// this will recreate the ABC code and will then use the ABC to rerender the sheet music
 	// on the page.
-	function updateSheetMusic() {
+	root.updateSheetMusic = function () {
 		var renderWidth = 600;
 		var svgTarget = document.getElementById("svgTarget");
 		if (svgTarget) {
@@ -907,7 +912,7 @@ function GrooveWriter() {
 			noteData.kick
 		);
 
-		updateSheetMusic();
+		root.updateSheetMusic();
 	};
 
 
@@ -946,7 +951,7 @@ function GrooveWriter() {
 		const addMeasureButton = document.getElementById("addMeasureButton");
 		addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
 
-		updateSheetMusic();
+		root.updateSheetMusic();
 	};
 
 	
@@ -974,7 +979,7 @@ function GrooveWriter() {
 		const addMeasureButton = document.getElementById("addMeasureButton");
 		addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
 
-		updateSheetMusic();
+		root.updateSheetMusic();
 	};
 
 
@@ -1028,7 +1033,7 @@ function GrooveWriter() {
 		const addMeasureButton = document.getElementById("addMeasureButton");
 		addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
 
-		updateSheetMusic();
+		root.updateSheetMusic();
 	};
 
 
@@ -1091,7 +1096,7 @@ function GrooveWriter() {
 		const addMeasureButton = document.getElementById("addMeasureButton");
 		addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
 
-		updateSheetMusic();
+		root.updateSheetMusic();
 	};
 
 
@@ -1153,7 +1158,7 @@ function GrooveWriter() {
 		if (add_measure_button)
 			add_measure_button.scrollIntoView({ block: "start", behavior: "smooth" });
 
-		updateSheetMusic();
+		root.updateSheetMusic();
 	};
 
 
@@ -1201,7 +1206,7 @@ function GrooveWriter() {
 
 		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
-		updateSheetMusic();
+		root.updateSheetMusic();
 
 		// if(class_number_of_measures === 5)
 		// 	window.alert("Please be aware that the Groove Scribe is not designed to write an entire musical score.\n" +
@@ -1224,7 +1229,7 @@ function GrooveWriter() {
 		}
 		class_number_of_measures = 1;
 
-		updateSheetMusic();
+		root.updateSheetMusic();
 
 		var uiStickings = "";
 		var uiHH = "";
@@ -1257,7 +1262,7 @@ function GrooveWriter() {
 			addOrRemoveKeywordFromClassById("showHideTomsButton", "ClickToHide", false);
 
 		if (!dontRefreshScreen)
-			updateSheetMusic();
+			root.updateSheetMusic();
 
 		return false; // don't follow the link
 	};
@@ -1273,7 +1278,7 @@ function GrooveWriter() {
 		}
 
 		if (!dontRefreshScreen) {
-			updateSheetMusic();
+			root.updateSheetMusic();
 		}
 
 		return false; // don't follow the link
@@ -1296,7 +1301,7 @@ function GrooveWriter() {
 				set_sticking_state(i, "right", false, class_notes_per_measure, class_time_division, class_note_value_per_measure);
 			}
 		}
-		updateSheetMusic();
+		root.updateSheetMusic();
 	}
 
 	root.printMusic = function () {
@@ -1413,6 +1418,8 @@ function GrooveWriter() {
 
 		// set the background and text color of the current subdivision
 		selectButton(document.getElementById("subdivision_" + class_notes_per_measure + "ths"));
+
+
 
 		// add html for the midi player
 		metronome = new Metronome();
@@ -2156,7 +2163,7 @@ function GrooveWriter() {
 
 		//metronome.setFrequency(myGrooveData.metronomeFrequency);
 
-		updateSheetMusic();
+		root.updateSheetMusic();
 	}
 
 	root.loadNewGroove = function (encodedURLData) {
@@ -2314,7 +2321,7 @@ function GrooveWriter() {
 
 		changeDivisionWithNotes(newDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
-		updateSheetMusic();
+		root.updateSheetMusic();
 	};
 
 

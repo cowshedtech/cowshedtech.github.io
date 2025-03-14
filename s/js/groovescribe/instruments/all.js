@@ -228,44 +228,44 @@ function isInstrumentMuted(instrument, measure) {
 //     return false;
 // };
 
-// function noteLeftClick(event, type, id) {
+function noteLeftClick(event, type, id) {
 
-//     // use a popup if advanced edit is on
-//     // if (class_advancedEditIsOn === true) {
-//     //     root.noteRightClick(event, type, id);
+    // use a popup if advanced edit is on
+    // if (class_advancedEditIsOn === true) {
+    //     root.noteRightClick(event, type, id);
 
-//     // } else {
+    // } else {
 
-//         // this is a non advanced edit left click
-//         switch (type) {
-//             case "hh":
-//                 set_hh_state(id, is_hh_on(id) ? "off" : "normal", true);
-//                 break;
-//             case "snare":
-//                 set_snare_state(id, is_snare_on(id) ? "off" : "accent", true);
-//                 break;
-//             case "tom1":
-//                 set_tom_state(id, 1, is_tom_on(id, 1) ? "off" : "normal", true);
-//                 break;
-//             case "tom4":
-//                 set_tom_state(id, 4, is_tom_on(id, 4) ? "off" : "normal", true);
-//                 break;
-//             case "kick":
-//                 set_kick_state(id, is_kick_on(id) ? "off" : "normal", true);
-//                 break;
-//             case "sticking":
-//                 sticking_rotate_state(id, class_notes_per_measure, class_time_division, class_note_value_per_measure);
-//                 break;
-//             default:
-//                 console.log("Bad case in noteLeftClick: " + type);
-//                 break;
-//         }
+        // this is a non advanced edit left click
+        switch (type) {
+            case "hh":
+                set_hh_state(id, is_hh_on(id) ? "off" : "normal", true);
+                break;
+            case "snare":
+                set_snare_state(id, is_snare_on(id) ? "off" : "accent", true);
+                break;
+            case "tom1":
+                set_tom_state(id, 1, is_tom_on(id, 1) ? "off" : "normal", true);
+                break;
+            case "tom4":
+                set_tom_state(id, 4, is_tom_on(id, 4) ? "off" : "normal", true);
+                break;
+            case "kick":
+                set_kick_state(id, is_kick_on(id) ? "off" : "normal", true);
+                break;
+            case "sticking":
+                sticking_rotate_state(id, class_notes_per_measure, class_time_division, class_note_value_per_measure);
+                break;
+            default:
+                console.log("Bad case in noteLeftClick: " + type);
+                break;
+        }
 
-//         // TODO
-//         updateSheetMusic();
-//     // }
+        // TODO
+        editor.updateSheetMusic();
+    // }
 
-// };
+};
 
 // root.notePopupClick = function (type, new_setting) {
 //     var id = class_which_index_last_clicked;
@@ -299,32 +299,32 @@ function isInstrumentMuted(instrument, measure) {
 
 // // called when we initially mouseOver a note.
 // // We can use it to sense left or right mouse or ctrl events
-// function noteOnMouseEnter(event, instrument, id) {
+function noteOnMouseEnter(event, instrument, id) {
 
-//     var action = false;
+    var action = false;
 
-//     if (event.ctrlKey)
-//         action = "on";
-//     if (event.altKey)
-//         action = "off";
+    if (event.ctrlKey)
+        action = "on";
+    if (event.altKey)
+        action = "off";
 
-//     if (action) {
-//         switch (instrument) {
-//             case "hh":
-//                 set_hh_state(id, action == "off" ? "off" : "normal", true);
-//                 break;
-//             case "snare":
-//                 set_snare_state(id, action == "off" ? "off" : "accent", true);
-//                 break;
-//             case "kick":
-//                 set_kick_state(id, action == "off" ? "off" : "normal", true);
-//                 break;
-//             default:
-//                 console.log("Bad case in noteOnMouseEnter");
-//                 break;
-//         }
-//         updateSheetMusic(); // update music
-//     }
+    if (action) {
+        switch (instrument) {
+            case "hh":
+                set_hh_state(id, action == "off" ? "off" : "normal", true);
+                break;
+            case "snare":
+                set_snare_state(id, action == "off" ? "off" : "accent", true);
+                break;
+            case "kick":
+                set_kick_state(id, action == "off" ? "off" : "normal", true);
+                break;
+            default:
+                console.log("Bad case in noteOnMouseEnter");
+                break;
+        }
+        updateSheetMusic(); // update music
+    }
 
-//     return false;
-// };
+    return false;
+};
