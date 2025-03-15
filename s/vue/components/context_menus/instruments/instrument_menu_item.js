@@ -20,7 +20,7 @@ export default {
 				console.warn('myGrooveWriter is not defined');
 				return;
 			}
-			myGrooveWriter.notePopupClick(this.instrument, this.newState);
+			notePopupClick(this.instrument, this.newState);
 		}
 	},
 	template: `<li @click="handleClick">{{ label }}</li>`

@@ -220,7 +220,7 @@ function GetDefaultSnareGroove(notes_per_measure, timeSigTop, timeSigBottom, num
 			const snareAccentId = `snare_accent${i}`;
 
 			newHTML += `
-				<div id="${snareId}" class="snare" onClick="noteLeftClick(event, 'snare', ${i})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, 'snare', ${i})" onmouseenter="noteOnMouseEnter(event, 'snare', ${i})">
+				<div id="${snareId}" class="snare" onClick="noteLeftClick(event, 'snare', ${i})" oncontextmenu="event.preventDefault(); noteRightClick(event, 'snare', ${i})" onmouseenter="noteOnMouseEnter(event, 'snare', ${i})">
 					<div class="snare_ghost note_part" id="${snareGhostId}">(<i class="fa fa-circle dot_in_snare_ghost_note"></i>)</div>
 					<div class="snare_circle note_part" id="${snareCircleId}"></div>
 					<div class="snare_xstick note_part" id="${snareXstickId}"><i class="fa fa-times"></i></div>

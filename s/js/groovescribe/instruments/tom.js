@@ -128,7 +128,7 @@ function generateTomContainerHTML(indexStartForNotes, baseindex, class_notes_per
 
     for (let i = indexStartForNotes; i < class_notes_per_measure + indexStartForNotes; i++) {
         newHTML.push(`
-            <div id="tom${tomNumber}-${i}" class="tom" onClick="noteLeftClick(event, 'tom${tomNumber}', ${i})" oncontextmenu="event.preventDefault(); myGrooveWriter.noteRightClick(event, 'tom${tomNumber}', ${i})" onmouseenter="noteOnMouseEnter(event, 'tom${tomNumber}', ${i})">
+            <div id="tom${tomNumber}-${i}" class="tom" onClick="noteLeftClick(event, 'tom${tomNumber}', ${i})" oncontextmenu="event.preventDefault(); noteRightClick(event, 'tom${tomNumber}', ${i})" onmouseenter="noteOnMouseEnter(event, 'tom${tomNumber}', ${i})">
                 <div class="tom_circle note_part" id="tom_circle${tomNumber}-${i}"></div>
             </div>
         `);

@@ -194,48 +194,48 @@ var class_which_index_last_clicked = 0; // which note was last clicked for the c
 
 // // returns true on error!
 // // returns false if working.  (this is because of the onContextMenu handler
-// root.noteRightClick = function (event, type, id) {
-//     class_which_index_last_clicked = id;
-//     var contextMenu;
+function noteRightClick(event, type, id) {
+    class_which_index_last_clicked = id;
+    var contextMenu;
 
-//     switch (type) {
-//         case "sticking":
-//             contextMenu = document.getElementById("stickingContextMenu");
-//             break;
-//         case "hh":
-//             contextMenu = document.getElementById("hhContextMenu");
-//             break;
-//         case "tom1":
-//             contextMenu = document.getElementById("tom1ContextMenu");
-//             break;
-//         case "tom4":
-//             contextMenu = document.getElementById("tom4ContextMenu");
-//             break;
-//         case "snare":
-//             contextMenu = document.getElementById("snareContextMenu");
-//             break;
-//         case "kick":
-//             contextMenu = document.getElementById("kickContextMenu");
-//             break;
-//         default:
-//             console.log("Bad case in handleNotePopup");
-//             break;
-//     }
+    switch (type) {
+        case "sticking":
+            contextMenu = document.getElementById("stickingContextMenu");
+            break;
+        case "hh":
+            contextMenu = document.getElementById("hhContextMenu");
+            break;
+        case "tom1":
+            contextMenu = document.getElementById("tom1ContextMenu");
+            break;
+        case "tom4":
+            contextMenu = document.getElementById("tom4ContextMenu");
+            break;
+        case "snare":
+            contextMenu = document.getElementById("snareContextMenu");
+            break;
+        case "kick":
+            contextMenu = document.getElementById("kickContextMenu");
+            break;
+        default:
+            console.log("Bad case in handleNotePopup");
+            break;
+    }
 
-//     if (contextMenu) {
-//         if (!event)
-//             event = window.event;
-//         if (event.clientX || event.clientY) {
-//             contextMenu.style.top = event.clientY - 30 + "px";
-//             contextMenu.style.left = event.clientX - 75 + "px";
-//         }
-//         showContextMenu(contextMenu);
-//     } else {
-//         return true; //error
-//     }
+    if (contextMenu) {
+        if (!event)
+            event = window.event;
+        if (event.clientX || event.clientY) {
+            contextMenu.style.top = event.clientY - 30 + "px";
+            contextMenu.style.left = event.clientX - 75 + "px";
+        }
+        showContextMenu(contextMenu);
+    } else {
+        return true; //error
+    }
 
-//     return false;
-// };
+    return false;
+};
 
 function noteLeftClick(event, type, id) {
 
@@ -276,35 +276,35 @@ function noteLeftClick(event, type, id) {
 
 };
 
-// root.notePopupClick = function (type, new_setting) {
-//     var id = class_which_index_last_clicked;
+function notePopupClick(type, new_setting) {
+    var id = class_which_index_last_clicked;
 
-//     switch (type) {
-//         case "sticking":
-//             set_sticking_state(id, new_setting, true, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
-//             break;
-//         case "hh":
-//             set_hh_state(id, new_setting, true);
-//             break;
-//         case "tom1":
-//             set_tom1_state(id, new_setting, true);
-//             break;
-//         case "tom4":
-//             set_tom4_state(id, new_setting, true);
-//             break;
-//         case "snare":
-//             set_snare_state(id, new_setting, true);
-//             break;
-//         case "kick":
-//             set_kick_state(id, new_setting, true);
-//             break;
-//         default:
-//             console.log("Bad case in contextMenuClick");
-//             break;
-//     }
+    switch (type) {
+        case "sticking":
+            set_sticking_state(id, new_setting, true, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+            break;
+        case "hh":
+            set_hh_state(id, new_setting, true);
+            break;
+        case "tom1":
+            set_tom1_state(id, new_setting, true);
+            break;
+        case "tom4":
+            set_tom4_state(id, new_setting, true);
+            break;
+        case "snare":
+            set_snare_state(id, new_setting, true);
+            break;
+        case "kick":
+            set_kick_state(id, new_setting, true);
+            break;
+        default:
+            console.log("Bad case in contextMenuClick");
+            break;
+    }
 
-//     updateSheetMusic();
-// };
+    editor.updateSheetMusic();
+};
 
 // // called when we initially mouseOver a note.
 // // We can use it to sense left or right mouse or ctrl events
