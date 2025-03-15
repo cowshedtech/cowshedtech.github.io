@@ -30,11 +30,11 @@ root.helpMenuPopupClick = function (help_type) {
             break;
 
         case "undo":
-            root.undoCommand();
+            undoCommand();
             break;
 
         case "redo":
-            root.redoCommand();
+            redoCommand();
             break;
 
         default:

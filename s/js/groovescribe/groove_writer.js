@@ -48,9 +48,6 @@ function GrooveWriter() {
 
 	root.myGrooveUtils = new GrooveUtils();
 
-	var class_undo_stack = [];
-	var class_redo_stack = [];
-	var constant_undo_stack_max_size = 40;
 
 	// public class vars
 	var class_number_of_measures = 1;
@@ -497,84 +494,14 @@ function GrooveWriter() {
 		DBString += "\n|HasFootOtherTab=" + tabLineFromAbcNoteArray("K", myGrooveData.kick_array, false, true, maxNotesInTab, 0);
 		DBString += "\n|HasTom1Tab=" + tabLineFromAbcNoteArray("T1", myGrooveData.toms_array[0], false, true, maxNotesInTab, 0);
 		DBString += "\n|HasTom4Tab=" + tabLineFromAbcNoteArray("T4", myGrooveData.toms_array[3], false, true, maxNotesInTab, 0);
-		DBString += "\n|HasEditData=" + class_undo_stack[class_undo_stack.length - 1]
+		DBString += "\n|HasEditData=" + undoStack[undoStack.length - 1]
 
 		DBString += "\n}}";
 
 		document.getElementById("GrooveDB_source").value = DBString;
 	};
 
-	root.undoCommand = function () {
-		if (class_undo_stack.length > 1) {
-			var undoURL = class_undo_stack.pop();
-			root.AddItemToUndoOrRedoStack(undoURL, class_redo_stack); // add to redo stack
-			// the one we want to load is behind the head, since all changes go on the undo stack immediately
-			// no need to pop, since it would just get added right back on anyways
-			undoURL = class_undo_stack[class_undo_stack.length - 1];
-			set_Default_notes(undoURL);
-		}
-	};
-
-	root.redoCommand = function () {
-		if (class_redo_stack.length > 0) {
-			var redoURL = class_redo_stack.pop();
-			root.AddItemToUndoOrRedoStack(redoURL, class_undo_stack); // add to undo stack
-			set_Default_notes(redoURL);
-		}
-	};
-
-	// debug print the stack
-	function debugPrintUndoRedoStack() {
-		var i;
-		var newHTML = "<h3>Undo Stack</h3><ol>";
-		for (i in class_undo_stack) {
-			newHTML += "<li>" + class_undo_stack[i];
-		}
-		newHTML += "</ol><br>";
-		document.getElementById("undoStack").innerHTML = newHTML;
-
-		newHTML = "<h3>Redo Stack</h3><ol>";
-		for (i in class_redo_stack) {
-			newHTML += "<li>" + class_redo_stack[i];
-		}
-		newHTML += "</ol><br>";
-		document.getElementById("redoStack").innerHTML = newHTML;
-	}
-
-	// push the new URL on the undo or redo stack
-	// keep the stacks at a managable size
-	root.AddItemToUndoOrRedoStack = function (newURL, ourStack, noClear) {
-
-		if (!ourStack)
-			return false;
-
-		if (newURL == class_undo_stack[class_undo_stack.length - 1]) {
-			//debugPrintUndoRedoStack();
-			return false; // no change, so don't push
-		}
-
-		ourStack.push(newURL);
-		while (ourStack.length > constant_undo_stack_max_size)
-			ourStack.shift();
-
-		//debugPrintUndoRedoStack();
-
-		return true;
-	};
-
-	root.AddFullURLToUndoStack = function (fullURL) {
-		var urlFragment;
-
-		var searchData = fullURL.indexOf("?");
-
-		urlFragment = fullURL.slice(searchData);
-
-		// clear redo array whenever we add a new valid element to the stack
-		// when we undo, we end up with a null push that returns false here
-		if (root.AddItemToUndoOrRedoStack(urlFragment, class_undo_stack)) {
-			class_redo_stack = [];
-		}
-	};
+	
 
 	// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
 	root.updateCurrentURL = function () {
@@ -589,7 +516,7 @@ function GrooveWriter() {
 
 		var newTitle = false;
 
-		root.AddFullURLToUndoStack(newURL);
+		addFullURLToUndoStack(newURL);
 
 		var title = document.getElementById("tuneTitle").value.trim();
 		if (title !== "")
@@ -1348,7 +1275,7 @@ function GrooveWriter() {
 					case 89: // ctrl-y
 						if (e.ctrlKey) {
 							// ctrl-y
-							root.redoCommand();
+							redoCommand();
 							return false;
 						}
 						break;
@@ -1430,7 +1357,7 @@ function GrooveWriter() {
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 
 		// load the groove from the URL data if it was passed in.
-		set_Default_notes(window.location.search);
+		root.set_Default_notes(window.location.search);
 
 		midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
 			var midiURL;
@@ -2116,7 +2043,7 @@ function GrooveWriter() {
 		}
 	};
 
-	function set_Default_notes(encodedURLData) {
+	root.set_Default_notes = function (encodedURLData) {
 		var Division;
 		var Stickings;
 		var HH;
@@ -2168,7 +2095,7 @@ function GrooveWriter() {
 	}
 
 	root.loadNewGroove = function (encodedURLData) {
-		set_Default_notes(encodedURLData);
+		root.set_Default_notes(encodedURLData);
 	};
 
 	function getABCDataWithLineEndings() {

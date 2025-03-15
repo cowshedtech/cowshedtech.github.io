@@ -27,7 +27,7 @@ export default {
                 }
             </script>
 
-            <span class="left-button edit-block" id="undoButton" onclick="myGrooveWriter.undoCommand();"><span class="left-button-content"><i class="fa fa-undo"></i>&nbsp;&nbsp;Undo</span></span>
+            <span class="left-button edit-block" id="undoButton" onclick="undoCommand();"><span class="left-button-content"><i class="fa fa-undo"></i>&nbsp;&nbsp;Undo</span></span>
         </span>
 
     </div>
