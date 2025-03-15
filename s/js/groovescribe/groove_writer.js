@@ -2158,9 +2158,9 @@ function GrooveWriter() {
 		document.getElementById("tuneComments").value = myGrooveData.comments;
 
 		// TODO
-		midiPlayer.setTempo(midiPlayer.tempo);
+		midiPlayer.setTempo(myGrooveData.tempo);
 
-		midiPlayer.setSwing(midiPlayer.swingPercent);
+		midiPlayer.setSwing(myGrooveData.swingPercent);
 
 		//metronome.setFrequency(myGrooveData.metronomeFrequency);
 
