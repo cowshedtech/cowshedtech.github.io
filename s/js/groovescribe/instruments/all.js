@@ -337,3 +337,19 @@ function noteOnMouseEnter(event, instrument, id) {
 
     return false;
 };
+
+// each of the instruments can be muted.   Check the UI and zero out the array if the instrument is marked as muted
+// for a particular measure
+function muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, measureIndex) {
+    if (isInstrumentMuted("hh", measureIndex + 1))
+        fill_array_with_value_false(HH_Array, HH_Array.length);
+    if (isInstrumentMuted("snare", measureIndex + 1))
+        fill_array_with_value_false(Snare_Array, Snare_Array.length);
+    if (isInstrumentMuted("kick", measureIndex + 1))
+        fill_array_with_value_false(Kick_Array, Kick_Array.length);
+
+    for (var i = 0; i < Toms_Array.length; i++) {
+        if (isInstrumentMuted("tom" + (i + 1), measureIndex + 1))
+            fill_array_with_value_false(Toms_Array[i], Toms_Array[i].length);
+    }
+}

@@ -119,27 +119,6 @@ function GrooveWriter() {
 		return num_notes;
 	}
 
-	// each of the instruments can be muted.   Check the UI and zero out the array if the instrument is marked as muted
-	// for a particular measure
-	root.muteArrayFromClickableUI = function(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, measureIndex) {
-		if (isInstrumentMuted("hh", measureIndex + 1))
-			fill_array_with_value_false(HH_Array, HH_Array.length);
-		if (isInstrumentMuted("snare", measureIndex + 1))
-			fill_array_with_value_false(Snare_Array, Snare_Array.length);
-		if (isInstrumentMuted("kick", measureIndex + 1))
-			fill_array_with_value_false(Kick_Array, Kick_Array.length);
-
-		for (var i = 0; i < Toms_Array.length; i++) {
-			if (isInstrumentMuted("tom" + (i + 1), measureIndex + 1))
-				fill_array_with_value_false(Toms_Array[i], Toms_Array[i].length);
-		}
-	}
-
-
-	
-
-	
-
 	root.MIDISaveAs = function () {
 		var midi_url = createMidiUrlFromClickableUI("general_MIDI");
 
@@ -206,64 +185,7 @@ function GrooveWriter() {
 		root.updateSheetMusic();
 	};
 
-	// Want to create something like this:
-	//
-	// {{GrooveTab
-	// |HasTempo=90
-	// |HasSwingPercent=0
-	// |HasDivision=16
-	// |HasMeasures=2
-	// |HasNotesPerMeasure=32
-	// |HasTimeSignature=4/4
-	// |HasHiHatTab=x---o---+---x---x---o---+---x---x---o---+---x---x---o---+---x---
-	// |HasSnareAccentTab=--------O-------------------O-----------O---------------O-------
-	// |HasSnareOtherTab=--------------g-------------------g-----------g-----------------
-	// |HasKickTab=o---------------o---o---------------o-----------o---o---------o-
-	// |HasFootOtherTab=----------------------------------------------------------------
-	// |HasTom1Tab=--------------------------------------------------------o-------
-	// |HasTom4Tab=----------------o---------------------------------------o-------
-	// |HasEditData=?GDB_Author=1&TimeSig=4/4&Div=32&Tempo=80&Measures=2&H=|--x-----x---x-------------------|--x-----x---x-------------------|&S=|----g-----g-------------ooo-o-o-|----g-----g-----------------gggg|&K=|o-----x-------o-o---------------|o-----x-------o-o---------------|&T1=|--------------------------------|------------------------x-------|&T4=|----------------x---------------|------------------------x-------|
-	// }}
-	//
-	root.updateGrooveDBSource = function () {
-		if (!document.getElementById("GrooveDB_source") || document.getElementById("GrooveDB_source").style.display == 'none')
-			return; // nothing to update
-
-		var myGrooveData = root.grooveDataFromClickableUI();
-
-		var notesPerMeasureInTab = calc_notes_per_measure((usingTriplets() ? 48 : 32), root.class_num_beats_per_measure, root.class_note_value_per_measure);
-		var maxNotesInTab = myGrooveData.numberOfMeasures * notesPerMeasureInTab;
-
-		// scale up all the arrays to 48 or 32 notes so that they look normalized
-
-		myGrooveData.hh_array = scaleNoteArrayToFullSize(myGrooveData.hh_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-		myGrooveData.snare_array = scaleNoteArrayToFullSize(myGrooveData.snare_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-		myGrooveData.kick_array = scaleNoteArrayToFullSize(myGrooveData.kick_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-		myGrooveData.toms_array[0] = scaleNoteArrayToFullSize(myGrooveData.toms_array[0], myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-		myGrooveData.toms_array[3] = scaleNoteArrayToFullSize(myGrooveData.toms_array[3], myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-
-		var DBString = "{{GrooveTab";
-
-		DBString += "\n|HasTempo=" + myGrooveData.tempo;
-		DBString += "\n|HasSwingPercent=" + myGrooveData.swingPercent;
-		DBString += "\n|HasDivision=" + myGrooveData.notesPerMeasure;
-		DBString += "\n|HasMeasures=" + myGrooveData.numberOfMeasures;
-		DBString += "\n|HasNotesPerMeasure=" + notesPerMeasureInTab;
-		DBString += "\n|HasTimeSignature=" + myGrooveData.numBeats + "/" + myGrooveData.noteValue;
-		DBString += "\n|HasHiHatTab=" + tabLineFromAbcNoteArray("H", myGrooveData.hh_array, true, true, maxNotesInTab, 0);
-		DBString += "\n|HasSnareAccentTab=" + tabLineFromAbcNoteArray("S", myGrooveData.snare_array, true, false, maxNotesInTab, 0);
-		DBString += "\n|HasSnareOtherTab=" + tabLineFromAbcNoteArray("S", myGrooveData.snare_array, false, true, maxNotesInTab, 0);
-		DBString += "\n|HasKickTab=" + tabLineFromAbcNoteArray("K", myGrooveData.kick_array, true, false, maxNotesInTab, 0);
-		DBString += "\n|HasFootOtherTab=" + tabLineFromAbcNoteArray("K", myGrooveData.kick_array, false, true, maxNotesInTab, 0);
-		DBString += "\n|HasTom1Tab=" + tabLineFromAbcNoteArray("T1", myGrooveData.toms_array[0], false, true, maxNotesInTab, 0);
-		DBString += "\n|HasTom4Tab=" + tabLineFromAbcNoteArray("T4", myGrooveData.toms_array[3], false, true, maxNotesInTab, 0);
-		DBString += "\n|HasEditData=" + undoStack[undoStack.length - 1]
-
-		DBString += "\n}}";
-
-		document.getElementById("GrooveDB_source").value = DBString;
-	};
-
+	
 	
 
 	// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
@@ -330,7 +252,7 @@ function GrooveWriter() {
 		var fullABC = generate_ABC(renderWidth);
 
 		document.getElementById("ABCsource").value = fullABC;
-		root.updateGrooveDBSource();
+		updateGrooveDBSource();
 
 		midiPlayer.noteHasChanged();
 
@@ -1014,7 +936,7 @@ function GrooveWriter() {
 				midiPlayer.resetNoteHasChanged();
 			}
 			midiPlayer.loadFromURL(midiURL, midiPlayer.getTempo());
-			root.updateGrooveDBSource();
+			updateGrooveDBSource();
 		};
 
 		midiPlayer.eventCallbacks.notePlaying = function (note_type, percent_complete) {
