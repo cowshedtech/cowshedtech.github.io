@@ -86,14 +86,14 @@
     fullURL += HH + Snare + Kick;
 
     // only add if we need them.  // they are long and ugly. :)
-    if (myGrooveData.showToms) {
+    if (options.tomsVisible) {
         var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', myGrooveData.toms_array[0], true, true, total_notes, myGrooveData.notesPerMeasure);
         var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', myGrooveData.toms_array[3], true, true, total_notes, myGrooveData.notesPerMeasure);
         fullURL += Tom1 + Tom4;
     }
 
     // only add if we need them.  // they are long and ugly. :)
-    if (myGrooveData.showStickings) {
+    if (options.showStickings) {
         var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', myGrooveData.sticking_array, true, true, total_notes, myGrooveData.notesPerMeasure);
         fullURL += Stickings;
     }
@@ -119,6 +119,9 @@ function getTrackFromUrlString(encodedURLData, track, debugMode) {
     track.notesPerMeasure = calc_notes_per_measure(track.timeDivision, track.numBeats, track.noteValue);
 
     metronome.frequency = parseInt(getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10);
+
+    midiPlayer.setTempo(track.tempo);
+midiPlayer.setSwing(track.swingPercent);
 
     track.numberOfMeasures = parseInt(getQueryVariableFromString("measures", 1, encodedURLData), 10);
     if (track.numberOfMeasures < 1 || isNaN(track.numberOfMeasures))
@@ -146,9 +149,9 @@ function getTrackFromUrlString(encodedURLData, track, debugMode) {
     Stickings_string = getQueryVariableFromString("Stickings", false, encodedURLData);
     if (!Stickings_string) {
         Stickings_string = GetDefaultStickingsGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
-        track.showStickings = false;
+        options.showStickings = false;
     } else {
-        track.showStickings = true;
+        options.showStickings = true;
     }
 
     HH_string = getQueryVariableFromString("H", false, encodedURLData);
@@ -179,7 +182,7 @@ function getTrackFromUrlString(encodedURLData, track, debugMode) {
         if (!Tom_string) {
             Tom_string = GetDefaultTomGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
         } else {
-            track.showToms = true;
+            options.tomsVisible = true;
         }
 
         /// the toms array index starts at zero (0) the first one is T1

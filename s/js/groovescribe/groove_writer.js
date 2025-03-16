@@ -135,12 +135,12 @@ function GrooveWriter() {
 		myGrooveData.numberOfMeasures = root.class_number_of_measures;
 		myGrooveData.numBeats = root.class_num_beats_per_measure;
 		myGrooveData.noteValue = root.class_note_value_per_measure;
-		myGrooveData.showStickings = isStickingsVisible();
-		myGrooveData.showToms = isTomsVisible();
+		// myGrooveData.showStickings = isStickingsVisible();
+//		myGrooveData.showToms = isTomsVisible();
 		myGrooveData.title = document.getElementById("tuneTitle").value;
 		myGrooveData.author = document.getElementById("tuneAuthor").value;
 		myGrooveData.comments = document.getElementById("tuneComments").value;
-		myGrooveData.showLegend = document.getElementById("showLegend").checked;
+		options.showLegend = document.getElementById("showLegend").checked;
 		myGrooveData.swingPercent = midiPlayer.getSwing();
 		myGrooveData.tempo = midiPlayer.getTempo();
 		myGrooveData.kickStemsUp = true;
@@ -1012,22 +1012,18 @@ function GrooveWriter() {
 		setNotesFromABCArray("T4", track.toms_array[3], root.class_number_of_measures);
 		setNotesFromABCArray("S", track.snare_array, root.class_number_of_measures);
 		setNotesFromABCArray("K", track.kick_array, root.class_number_of_measures);
-
-		if (track.showToms)
-			showHideToms(true, true, true);
-
-		if (track.showStickings)
-			stickingsShowHide(true, true, true);
+	
 		document.getElementById("tuneTitle").value = track.title;
 		document.getElementById("tuneAuthor").value = track.author;
 		document.getElementById("tuneComments").value = track.comments;
 
-		// TODO
-		midiPlayer.setTempo(track.tempo);
-		midiPlayer.setSwing(track.swingPercent);
+		if (options.tomsVisible)
+			showHideToms(true, true, true);
 
-		//metronome.setFrequency(myGrooveData.metronomeFrequency);
-
+		if (track.showStickings)
+			stickingsShowHide(true, true, true);
+		
+		
 		root.updateSheetMusic();
 	}
 

@@ -68,14 +68,14 @@ function getGSUrlStringFromGrooveData(myGrooveData, url_destination) {
     fullURL += HH + Snare + Kick;
 
     // only add if we need them.  // they are long and ugly. :)
-    if (myGrooveData.showToms) {
+    if (options.tomsVisible) {
         var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', myGrooveData.toms_array[0], true, true, total_notes, myGrooveData.notesPerMeasure);
         var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', myGrooveData.toms_array[3], true, true, total_notes, myGrooveData.notesPerMeasure);
         fullURL += Tom1 + Tom4;
     }
 
     // only add if we need them.  // they are long and ugly. :)
-    if (myGrooveData.showStickings) {
+    if (options.showStickings) {
         var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', myGrooveData.sticking_array, true, true, total_notes, myGrooveData.notesPerMeasure);
         fullURL += Stickings;
     }

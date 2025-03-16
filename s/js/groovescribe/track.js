@@ -44,8 +44,6 @@ function Track() {
 
 	root.viewMode = true;  // by default to prevent screen flicker
 
-	root.isLegendVisable = false;
-
 	root.grooveDataNew = function () {
 		this.notesPerMeasure = 16;
 		this.timeDivision = 16;
@@ -58,12 +56,10 @@ function Track() {
 		this.kick_array = class_empty_note_array.slice(0);  // copy by value
 		// toms_array contains 4 toms  T1, T2, T3, T4 index starting at zero
 		this.toms_array = [class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0)];
-		this.showToms = false;
-		this.showStickings = false;
 		this.title = "";
 		this.author = "";
 		this.comments = "";
-		this.showLegend = false;
+		//this.showLegend = false;
 		this.swingPercent = 0;
 		this.tempo = constant_DEFAULT_TEMPO;
 		this.kickStemsUp = true;

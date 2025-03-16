@@ -3,6 +3,9 @@ class Options {
 
     advancedEditIsOn;
     highlightOn;
+    tomsVisible;
+    showStickings;
+    showLegend;
     debugMode;
     grooveDBAuthoring;
 

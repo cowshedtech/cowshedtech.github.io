@@ -932,7 +932,7 @@ function createABCFromGrooveData(myGrooveData, renderWidth) {
 			myGrooveData.title,
 			myGrooveData.author,
 			myGrooveData.comments,
-			myGrooveData.showLegend,
+			options.showLegend,
 			is_triplet_division,
 			myGrooveData.kickStemsUp,
 			myGrooveData.numBeats,
@@ -1055,7 +1055,6 @@ function generate_ABC(renderWidth) {
 	var tuneAuthor = document.getElementById("tuneAuthor").value;
 	var tuneComments = document.getElementById("tuneComments").value;
 	var showLegend = document.getElementById("showLegend").checked;
-	editor.track.isLegendVisable = showLegend;
 
 	var fullABC = "";
 
