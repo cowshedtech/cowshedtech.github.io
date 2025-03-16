@@ -249,24 +249,6 @@ function GrooveWriter() {
 	};
 
 
-	root.showHideToms = function (force, showElseHide, dontRefreshScreen) {
-		var OnElseOff = showHideCSS_ClassVisibility(".toms-container", force, showElseHide);
-		showHideCSS_ClassVisibility(".tom-label", force, showElseHide);
-		if (OnElseOff)
-			addOrRemoveKeywordFromClassById("showHideTomsButton", "ClickToHide", true);
-		else
-			addOrRemoveKeywordFromClassById("showHideTomsButton", "ClickToHide", false);
-
-		if (!dontRefreshScreen)
-			root.updateSheetMusic();
-
-		return false; // don't follow the link
-	};
-
-	
-
-	
-
 	root.printMusic = function () {
 
 		var oldMethod = true;
@@ -1108,7 +1090,7 @@ function GrooveWriter() {
 		setNotesFromABCArray("K", myGrooveData.kick_array, root.class_number_of_measures);
 
 		if (myGrooveData.showToms)
-			root.showHideToms(true, true, true);
+			showHideToms(true, true, true);
 
 		if (myGrooveData.showStickings)
 			stickingsShowHide(true, true, true);
@@ -1174,7 +1156,7 @@ function GrooveWriter() {
 			stickingsShowHide(true, true, true);
 
 		if (wasTomsVisable)
-			root.showHideToms(true, true, true);
+			showHideToms(true, true, true);
 
 		// now set the right notes on and off
 		if (Stickings && HH && Tom1 && Tom4 && Snare && Kick) {
