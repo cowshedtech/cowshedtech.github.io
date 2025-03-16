@@ -167,3 +167,14 @@ function showHideToms(force, showElseHide, dontRefreshScreen) {
 
     return false; // don't follow the link
 };
+
+
+// function isTomsVisible() {
+//     var myElements = document.querySelectorAll(".toms-container");
+//     for (var i = 0; i < myElements.length; i++) {
+//         if (myElements[i].style.visibility == "visible")
+//             return true;
+//     }
+
+//     return false;
+// }

@@ -646,15 +646,7 @@ function GrooveWriter() {
 	}
 
 
-	function isTomsVisible() {
-		var myElements = document.querySelectorAll(".toms-container");
-		for (var i = 0; i < myElements.length; i++) {
-			if (myElements[i].style.visibility == "visible")
-				return true;
-		}
-
-		return false;
-	}
+	
 
 	root.showHideToms = function (force, showElseHide, dontRefreshScreen) {
 		var OnElseOff = showHideCSS_ClassVisibility(".toms-container", force, showElseHide);

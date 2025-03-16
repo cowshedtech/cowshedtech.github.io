@@ -22,7 +22,7 @@ export default {
             <span class="rightButtons" id="optionsAnchor" onclick="options.optionsAnchorClick(event);"><i class="fa fa-bars"></i> Options</span>
             <span class="rightButtons grooveDB_hidden" id="permutationAnchor" onclick="permutationAnchorClick(event);"><i class="fa fa-bars"></i> Permutations</span>
             <span class="rightButtons" id="groovesAnchor" onclick="myGrooveWriter.groovesAnchorClick(event);"><i class="fa fa-bars"></i> Grooves</span>
-            <span class="rightButtons" id="helpAnchor" onclick="myGrooveWriter.helpAnchorClick(event);"><i class="fa fa-bars"></i> Help</span>
+            <span class="rightButtons" id="helpAnchor" onclick="helpAnchorClick(event);"><i class="fa fa-bars"></i> Help</span>
         </span>
     </div>    
   `

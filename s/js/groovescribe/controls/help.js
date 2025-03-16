@@ -1,5 +1,5 @@
 // the user has clicked on the help menu
-root.helpAnchorClick = function (event) {
+function helpAnchorClick(event) {
 
     var contextMenu = document.getElementById("helpContextMenu");
     if (contextMenu) {
@@ -15,7 +15,7 @@ root.helpAnchorClick = function (event) {
 };
 
 
-root.helpMenuPopupClick = function (help_type) {
+function helpMenuPopupClick (help_type) {
     var win;
 
     switch (help_type) {
