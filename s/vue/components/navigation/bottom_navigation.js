@@ -10,7 +10,7 @@ export default {
   template: `
   <div id="bottomButtonRow" class="fullWidthEle">
 
-    <BottomNavigationButton button-id="clearAllNotesButton" button-text="CLEAR ALL" click-handler="event.preventDefault(); myGrooveWriter.clearAllNotes();">
+    <BottomNavigationButton button-id="clearAllNotesButton" button-text="CLEAR ALL" click-handler="event.preventDefault(); clearAllNotes();">
       <i class="fa fa-trash fa-2x"></i>
     </BottomNavigationButton>
     

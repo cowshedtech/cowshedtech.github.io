@@ -83,7 +83,6 @@ function GrooveWriter() {
 		return root.class_notes_per_measure;
 	};
 
-
 	
 	// query the clickable UI and generate a 32 element array representing the notes of one measure
 	// note: the ui may have fewer notes, but we scale them to fit into the 32 elements proportionally
@@ -185,13 +184,6 @@ function GrooveWriter() {
 		root.updateSheetMusic();
 	};
 
-	
-	
-
-	
-
-	
-
 	// this is called by a bunch of places anytime we modify the musical notes on the page
 	// this will recreate the ABC code and will then use the ABC to rerender the sheet music
 	// on the page.
@@ -257,39 +249,6 @@ function GrooveWriter() {
 	};
 
 
-	
-
-
-
-	// clear all the notes on all measures
-	root.clearAllNotes = function () {
-		root.class_repeated_measures.clear();
-		for (var i = 0; i < root.class_number_of_measures * root.class_notes_per_measure; i++) {
-			set_sticking_state(i, 'off', root.class_notes_per_measure, root.class_time_division, root.class_note_value_per_measure);
-			set_hh_state(i, 'off');
-			set_tom1_state(i, 'off');
-			set_tom4_state(i, 'off');
-			set_snare_state(i, 'off');
-			set_kick_state(i, 'off');
-		}
-		root.class_number_of_measures = 1;
-
-		root.updateSheetMusic();
-
-		var uiStickings = "";
-		var uiHH = "";
-		var uiTom1 = "";
-		var uiTom4 = "";
-		var uiSnare = "";
-		var uiKick = "";
-		var i;
-
-		root.changeDivisionWithNotes(root.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
-	}
-
-
-	
-
 	root.showHideToms = function (force, showElseHide, dontRefreshScreen) {
 		var OnElseOff = showHideCSS_ClassVisibility(".toms-container", force, showElseHide);
 		showHideCSS_ClassVisibility(".tom-label", force, showElseHide);
@@ -304,42 +263,9 @@ function GrooveWriter() {
 		return false; // don't follow the link
 	};
 
-	root.stickingsShowHide = function (force, showElseHide, dontRefreshScreen) {
+	
 
-		var OnElseOff = showHideCSS_ClassDisplay(".stickings-container", force, showElseHide, "block");
-		showHideCSS_ClassDisplay(".stickings-label", force, showElseHide, "block");
-		if (OnElseOff) {
-			addOrRemoveKeywordFromClassById("stickingsButton", "ClickToHide", true);
-		} else {
-			addOrRemoveKeywordFromClassById("stickingsButton", "ClickToHide", false);
-		}
-
-		if (!dontRefreshScreen) {
-			root.updateSheetMusic();
-		}
-
-		return false; // don't follow the link
-	};
-
-	// if stickings are shown, hide them and vice versa
-	root.stickingsShowHideToggle = function () {
-
-		var stickingsAreCurrentlyShown = isStickingsVisible();
-		root.stickingsShowHide(true, !stickingsAreCurrentlyShown, false);
-	}
-
-	// Swap Right and Left stickings if any are shown
-	root.stickingsReverseRL = function () {
-		for (var i = 0; i < root.class_number_of_measures * root.class_notes_per_measure; i++) {
-			var cur_state = get_sticking_state(i, "URL");
-			if (cur_state === "R") {
-				set_sticking_state(i, "left", false, root.class_notes_per_measure, root.class_time_division, root.class_note_value_per_measure);
-			} else if (cur_state === "L") {
-				set_sticking_state(i, "right", false, root.class_notes_per_measure, root.class_time_division, root.class_note_value_per_measure);
-			}
-		}
-		root.updateSheetMusic();
-	}
+	
 
 	root.printMusic = function () {
 
@@ -1185,7 +1111,7 @@ function GrooveWriter() {
 			root.showHideToms(true, true, true);
 
 		if (myGrooveData.showStickings)
-			root.stickingsShowHide(true, true, true);
+			stickingsShowHide(true, true, true);
 		document.getElementById("tuneTitle").value = myGrooveData.title;
 
 
@@ -1245,7 +1171,7 @@ function GrooveWriter() {
 		document.getElementById("PermutationOptions").innerHTML = newHTML;
 
 		if (wasStickingsVisable)
-			root.stickingsShowHide(true, true, true);
+			stickingsShowHide(true, true, true);
 
 		if (wasTomsVisable)
 			root.showHideToms(true, true, true);

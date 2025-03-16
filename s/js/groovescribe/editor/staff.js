@@ -407,3 +407,30 @@ function addMeasurePrevButtonClick (event) {
     // 				"You can create as many measures as you want, but your browser may slow down as more measures are added.\n" +
     // 				"There are also many notation features that would be useful for score writing that are not part of Groove Scribe");
 };
+
+
+// clear all the notes on all measures
+function clearAllNotes() {
+    editor.class_repeated_measures.clear();
+    for (var i = 0; i < editor.class_number_of_measures * editor.class_notes_per_measure; i++) {
+        set_sticking_state(i, 'off', editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+        set_hh_state(i, 'off');
+        set_tom1_state(i, 'off');
+        set_tom4_state(i, 'off');
+        set_snare_state(i, 'off');
+        set_kick_state(i, 'off');
+    }
+    editor.class_number_of_measures = 1;
+
+    editor.updateSheetMusic();
+
+    var uiStickings = "";
+    var uiHH = "";
+    var uiTom1 = "";
+    var uiTom4 = "";
+    var uiSnare = "";
+    var uiKick = "";
+    var i;
+
+    editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+}

@@ -175,3 +175,41 @@ function stickingsAnchorClick(event) {
         showContextMenu(contextMenu);
     }
 };
+
+// Swap Right and Left stickings if any are shown
+function stickingsReverseRL() {
+    for (var i = 0; i < editor.class_number_of_measures * editor.class_notes_per_measure; i++) {
+        var cur_state = get_sticking_state(i, "URL");
+        if (cur_state === "R") {
+            set_sticking_state(i, "left", false, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+        } else if (cur_state === "L") {
+            set_sticking_state(i, "right", false, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+        }
+    }
+    editor.updateSheetMusic();
+}
+
+
+function stickingsShowHide(force, showElseHide, dontRefreshScreen) {
+
+    var OnElseOff = showHideCSS_ClassDisplay(".stickings-container", force, showElseHide, "block");
+    showHideCSS_ClassDisplay(".stickings-label", force, showElseHide, "block");
+    if (OnElseOff) {
+        addOrRemoveKeywordFromClassById("stickingsButton", "ClickToHide", true);
+    } else {
+        addOrRemoveKeywordFromClassById("stickingsButton", "ClickToHide", false);
+    }
+
+    if (!dontRefreshScreen) {
+        editor.updateSheetMusic();
+    }
+
+    return false; // don't follow the link
+};
+
+// if stickings are shown, hide them and vice versa
+function stickingsShowHideToggle() {
+
+    var stickingsAreCurrentlyShown = isStickingsVisible();
+    stickingsShowHide(true, !stickingsAreCurrentlyShown, false);
+}
