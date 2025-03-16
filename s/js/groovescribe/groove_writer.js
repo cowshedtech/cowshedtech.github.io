@@ -1002,7 +1002,7 @@ function GrooveWriter() {
 		var Kick;
 		var stickings_set_from_URL = false;
 
-		var track = getGrooveDataFromUrlString(encodedURLData, root.track, options.debugMode);
+		var track = getTrackFromUrlString(encodedURLData, root.track, options.debugMode);
 
 		root.class_num_beats_per_measure = track.numBeats;     // TimeSigTop
 		root.class_note_value_per_measure = track.noteValue;   // TimeSigBottom
