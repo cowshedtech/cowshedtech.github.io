@@ -48,3 +48,18 @@ function generateLineLabels(baseindex) {
 }
 
 
+//
+//
+function shiftRepeatedMeasuresAfterIndex(measureIndex, direction) {
+    // Convert Map to array of entries and sort by measure index
+    const sortedEntries = [...editor.class_repeated_measures.entries()].sort((a, b) => a[0] - b[0]);
+    
+    // Process in reverse order to avoid overwriting
+    for (let i = sortedEntries.length - 1; i >= 0; i--) {
+        const [key, value] = sortedEntries[i];
+        if (key > measureIndex) {
+            editor.class_repeated_measures.set(key + direction, value);
+            editor.class_repeated_measures.delete(key);
+        }
+    }
+}

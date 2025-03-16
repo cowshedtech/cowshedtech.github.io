@@ -257,21 +257,7 @@ function GrooveWriter() {
 	};
 
 
-	//
-	//
-	function shiftRepeatedMeasuresAfterIndex(measureIndex, direction) {
-		// Convert Map to array of entries and sort by measure index
-		const sortedEntries = [...root.class_repeated_measures.entries()].sort((a, b) => a[0] - b[0]);
-		
-		// Process in reverse order to avoid overwriting
-		for (let i = sortedEntries.length - 1; i >= 0; i--) {
-			const [key, value] = sortedEntries[i];
-			if (key > measureIndex) {
-				root.class_repeated_measures.set(key + direction, value);
-				root.class_repeated_measures.delete(key);
-			}
-		}
-	}
+	
 
 	//
 	// remove a measure from the page NB measureNum is indexed starting at 1, not 0
@@ -1634,7 +1620,7 @@ function GrooveWriter() {
 		root.setTimeSigLabel();
 
 		// enable or disable swing
-		root.track.swingEnabled(root.track.doesDivisionSupportSwing(newDivision));
+		midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(newDivision));
 	}
 
 	root.expandAuthoringViewWhenNecessary = function (numNotesPerMeasure, numberOfMeasures) {
