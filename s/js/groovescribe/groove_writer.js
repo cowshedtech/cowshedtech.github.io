@@ -145,7 +145,6 @@ function GrooveWriter() {
 		myGrooveData.tempo = midiPlayer.getTempo();
 		myGrooveData.kickStemsUp = true;
 		myGrooveData.repeatedMeasures = root.class_repeated_measures;
-		myGrooveData.highlightOn = options.highlightOn;
 
 		for (var i = 0; i < root.class_number_of_measures; i++) {
 			var total_notes = root.class_notes_per_measure * root.class_number_of_measures;
@@ -999,7 +998,6 @@ function GrooveWriter() {
 		root.class_num_beats_per_measure = track.numBeats;     // TimeSigTop
 		root.class_note_value_per_measure = track.noteValue;   // TimeSigBottom
 		root.class_repeated_measures = track.repeatedMeasures;
-		options.highlightOn = track.highlightOn;
 
 		if (track.notesPerMeasure != root.class_notes_per_measure || root.class_number_of_measures != track.numberOfMeasures) {
 			root.class_number_of_measures = track.numberOfMeasures;

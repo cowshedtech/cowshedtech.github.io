@@ -1156,7 +1156,6 @@ function generate_ABC(renderWidth) {
 				editor.track.note_mapping_array = editor.track.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, Snare_Array, Kick_Array, Toms_Array, num_notes));
 				editor.track.numberOfMeasures = editor.numberOfMeasures()
 				editor.track.repeatedMeasures = editor.class_repeated_measures;
-				editor.track.highlightOn = options.highlightOn;
 			}
 
 			break;

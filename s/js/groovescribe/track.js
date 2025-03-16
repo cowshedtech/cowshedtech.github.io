@@ -71,7 +71,6 @@ function Track() {
 		this.grooveDBAuthoring = options.grooveDBAuthoring;
 		this.viewMode = root.viewMode;
 		this.repeatedMeasures = new Map();
-		this.highlightOn = true;
 	};
 
 	root.myGrooveData = root.grooveDataNew();

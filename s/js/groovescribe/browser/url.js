@@ -51,7 +51,7 @@
     if (myGrooveData.swingPercent > 0)
         fullURL += "&Swing=" + myGrooveData.swingPercent;
 
-    if (!myGrooveData.highlightOn)
+    if (!options.highlightOn)
         fullURL += "&Highlight=OFF";
 
     // # of measures
@@ -137,9 +137,9 @@ function getTrackFromUrlString(encodedURLData, track, debugMode) {
     let highlight = getQueryVariableFromString("Highlight", "ON", encodedURLData);
     if (highlight && highlight.length > 0) {
         if (highlight.toUpperCase() == "OFF") {
-            track.highlightOn = false
+            options.highlightOn = false
         } else {
-            track.highlightOn = true
+            options.highlightOn = true
         }			
     }
     
