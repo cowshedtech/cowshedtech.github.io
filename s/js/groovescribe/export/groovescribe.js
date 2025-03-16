@@ -82,3 +82,12 @@ function getGSUrlStringFromGrooveData(myGrooveData, url_destination) {
 
     return fullURL;
 }
+
+
+// get a really long URL that encodes all of the notes and the rest of the state of the page.
+// this will allow us to bookmark or reference a groove and handle undo/redo.
+//
+function get_GSURLForPage(url_destination) {
+    var myGrooveData = editor.grooveDataFromClickableUI()
+    return getGSUrlStringFromGrooveData(myGrooveData, url_destination)
+}

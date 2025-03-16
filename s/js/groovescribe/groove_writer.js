@@ -52,9 +52,9 @@ function GrooveWriter() {
 	// public class vars
 	var class_number_of_measures = 1;
 	var class_time_division = parseInt(getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
-	var class_num_beats_per_measure = 4;     // TimeSigTop
-	var class_note_value_per_measure = 4;     // TimeSigBottom
-	root.class_notes_per_measure = calc_notes_per_measure(class_time_division, class_num_beats_per_measure, class_note_value_per_measure);
+	root.class_num_beats_per_measure = 4;     // TimeSigTop
+	root.class_note_value_per_measure = 4;     // TimeSigBottom
+	root.class_notes_per_measure = calc_notes_per_measure(class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
 	var class_repeated_measures = new Map();
 	
 
@@ -83,137 +83,6 @@ function GrooveWriter() {
 		return root.class_notes_per_measure;
 	};
 
-	//
-	//
-	// is the division a triplet groove?   12, 24, or 48 notes
-	function usingTriplets() {
-		if (isTripletDivision(class_time_division)) return true;
-		return false;
-	}
-
-	
-
-
-	
-
-	
-
-	
-
-	
-
-	
-	
-
-	
-
-	
-
-	
-	
-
-	
-
-	
-	
-
-
-
-	
-
-	
-
-		
-	
-
-	// create a new instance of an array with all the values prefilled with false
-	// the array size is 32nd notes for the current time signature
-	// 4/4 would be 32 notes
-	// 5/4 would be 40 notes
-	// 2/4 would be 16 notes
-	// 4/2 would be 32 notes
-	function get_empty_note_array_in_32nds() {
-		var notes_per_4_beats = 32;
-		if (usingTriplets())
-			notes_per_4_beats = 48;
-		var num_notes = (class_num_beats_per_measure * notes_per_4_beats) / class_note_value_per_measure;
-
-		return get_empty_note_array(num_notes);
-	}
-
-
-	function get_kick16th_permutation_array(section) {
-		console.log("get_kick16th_permutation_array");
-		console.log("root.class_notes_per_measure: " + root.class_notes_per_measure);
-		if (usingTriplets()) {
-			return get_kick16th_triplets_permutation_array(section);
-		}
-
-		return get_kick16th_strait_permutation_array(section);
-	}
-
-	function get_kick16th_permutation_array_minus_some(section) {
-		console.log("get_kick16th_permutation_array_minus_some");
-		if (usingTriplets()) {
-			// triplets never skip any: delegate
-			return get_kick16th_permutation_array(section);
-		}
-
-		return get_kick16th_minus_some_strait_permutation_array(section);
-	}
-
-	// snare permutation
-	function get_snare_permutation_array(section) {
-
-		// its the same as the 16th kick permutation, but with different notes
-		var snare_array = get_kick16th_permutation_array(section);
-
-		// turn the kicks into snares
-		for (var i = 0; i < snare_array.length; i++) {
-			if (snare_array[i] !== false)
-				snare_array[i] = constant_ABC_SN_Normal;
-		}
-
-		return snare_array;
-	}
-
-	// Snare permutation, with Accented permutation.   Snare hits every 16th note, accent moves
-	function get_snare_accent_permutation_array(section) {
-
-		// its the same as the 16th kick permutation, but with different notes
-		var snare_array = get_kick16th_permutation_array(section);
-
-		if (section > 0) { // Don't convert notes for the first measure since it is the ostinato
-			for (var i = 0; i < snare_array.length; i++) {
-				if (snare_array[i] !== false)
-					snare_array[i] = constant_ABC_SN_Accent;
-				else if ((i % 2) === 0) // all other even notes are ghosted snares
-					snare_array[i] = constant_ABC_SN_Ghost;
-			}
-		}
-
-		return snare_array;
-	}
-
-	// Snare permutation, with Accented and diddled permutation.   Accented notes are singles, non accents are diddled
-	function get_snare_accent_with_diddle_permutation_array(section) {
-
-		// its the same as the 16th kick permutation, but with different notes
-		var snare_array = get_kick16th_permutation_array(section);
-
-		if (section > 0) { // Don't convert notes for the first measure since it is the ostinato
-			for (var i = 0; i < snare_array.length; i++) {
-				if (snare_array[i] !== false) {
-					snare_array[i] = constant_ABC_SN_Buzz;
-					i++; // the next one is not diddled  (leave it false)
-				} else { // all other even notes are diddled, which means 32nd notes
-					snare_array[i] = constant_ABC_SN_Ghost;
-				}
-			}
-		}
-
-		return snare_array;
-	}
 
 	
 	// query the clickable UI and generate a 32 element array representing the notes of one measure
@@ -222,9 +91,9 @@ function GrooveWriter() {
 	//
 	// (note: Only one measure, not all the notes on the page if multiple measures are present)
 	// Return value is the number of notes.
-	function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, startIndexForClickableUI) {
+	root.get32NoteArrayFromClickableUI = function(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, startIndexForClickableUI) {
 
-		var scaler = getNoteScaler(root.class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure); // fill proportionally
+		var scaler = getNoteScaler(root.class_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure); // fill proportionally
 
 		// fill in the arrays from the clickable UI
 		for (var i = 0; i < root.class_notes_per_measure; i++) {
@@ -281,7 +150,7 @@ function GrooveWriter() {
 			num_notes_for_swing = 16;
 
 		// just the first measure
-		var num_notes = get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
+		var num_notes = root.get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
 		muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
 
 		var midiFile = new Midi.File();
@@ -313,7 +182,7 @@ function GrooveWriter() {
 						Kick_Array = filter_kick_array_for_permutation(Kick_Array);
 						new_kick_array = merge_kick_arrays(new_kick_array, Kick_Array);
 
-						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, new_kick_array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, metronome.getSolo());
+						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, new_kick_array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, root.class_num_beats_per_measure, root.class_note_value_per_measure, metronome.getSolo());
 					}
 				}
 				break;
@@ -333,7 +202,7 @@ function GrooveWriter() {
 							new_snare_array = get_snare_permutation_array(i);
 
 
-						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, new_snare_array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, metronome.getSolo());
+						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, new_snare_array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, root.class_num_beats_per_measure, root.class_note_value_per_measure, metronome.getSolo());
 					}
 				}
 				break;
@@ -342,13 +211,13 @@ function GrooveWriter() {
 			/* falls through */
 			default:
 				if (class_time_division < 16)
-					num_notes_for_swing = 8 * class_num_beats_per_measure / class_note_value_per_measure;
+					num_notes_for_swing = 8 * root.class_num_beats_per_measure / root.class_note_value_per_measure;
 				else
-					num_notes_for_swing = 16 * class_num_beats_per_measure / class_note_value_per_measure;
+					num_notes_for_swing = 16 * root.class_num_beats_per_measure / root.class_note_value_per_measure;
 
 				let repeat = class_repeated_measures.has(0) ? class_repeated_measures.get(0) : 1;
 				for (let i = 0; i < repeat; i++) {
-					MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, metronome.getSolo());
+					MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, root.class_num_beats_per_measure, root.class_note_value_per_measure, metronome.getSolo());
 				}
 
 				for (i = 1; i < class_number_of_measures; i++) {
@@ -361,12 +230,12 @@ function GrooveWriter() {
 					Toms_Array = [get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds()];
 
 					// get another measure
-					get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, root.class_notes_per_measure * i);
+					root.get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, root.class_notes_per_measure * i);
 					muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, i);
 
 					let repeat = class_repeated_measures.has(i) ? class_repeated_measures.get(i) : 1;
 					for (let i = 0; i < repeat; i++) {
-						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, class_num_beats_per_measure, class_note_value_per_measure, metronome.getSolo());
+						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, root.class_num_beats_per_measure, root.class_note_value_per_measure, metronome.getSolo());
 					}
 				}
 				break;
@@ -392,8 +261,8 @@ function GrooveWriter() {
 		myGrooveData.notesPerMeasure = root.class_notes_per_measure;
 		myGrooveData.timeDivision = class_time_division;
 		myGrooveData.numberOfMeasures = class_number_of_measures;
-		myGrooveData.numBeats = class_num_beats_per_measure;
-		myGrooveData.noteValue = class_note_value_per_measure;
+		myGrooveData.numBeats = root.class_num_beats_per_measure;
+		myGrooveData.noteValue = root.class_note_value_per_measure;
 		myGrooveData.showStickings = isStickingsVisible();
 		myGrooveData.showToms = isTomsVisible();
 		myGrooveData.title = document.getElementById("tuneTitle").value;
@@ -468,7 +337,7 @@ function GrooveWriter() {
 
 		var myGrooveData = root.grooveDataFromClickableUI();
 
-		var notesPerMeasureInTab = calc_notes_per_measure((usingTriplets() ? 48 : 32), class_num_beats_per_measure, class_note_value_per_measure);
+		var notesPerMeasureInTab = calc_notes_per_measure((usingTriplets() ? 48 : 32), root.class_num_beats_per_measure, root.class_note_value_per_measure);
 		var maxNotesInTab = myGrooveData.numberOfMeasures * notesPerMeasureInTab;
 
 		// scale up all the arrays to 48 or 32 notes so that they look normalized
@@ -507,10 +376,10 @@ function GrooveWriter() {
 	root.updateCurrentURL = function () {
 		// Update temporary link out to GS
 		var newURLGS = get_GSURLForPage();
-		var linkGrooveScribe = document.getElementById("linkGrooveScribe");
 		if (linkGrooveScribe)
 			linkGrooveScribe.href = newURLGS;
 		// Update temporary link out to GS
+		var linkGrooveScrib
 
 		var newURL = get_FullURLForPage();
 
@@ -551,133 +420,7 @@ function GrooveWriter() {
 		}
 	};
 
-	function generate_ABC(renderWidth) {
-		var Sticking_Array = get_empty_note_array_in_32nds();
-		var HH_Array = get_empty_note_array_in_32nds();
-		var Snare_Array = get_empty_note_array_in_32nds();
-		var Kick_Array = get_empty_note_array_in_32nds();
-		var Toms_Array = [get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds()];
-		var numSections = get_numSectionsFor_permutation_array();
-		var i,
-			new_snare_array,
-			post_abc,
-			num_sections;
-		var num_notes = get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
-
-		// abc header boilerplate
-		var tuneTitle = document.getElementById("tuneTitle").value;
-		var tuneAuthor = document.getElementById("tuneAuthor").value;
-		var tuneComments = document.getElementById("tuneComments").value;
-		var showLegend = document.getElementById("showLegend").checked;
-		root.myGrooveUtils.isLegendVisable = showLegend;
-
-		var fullABC = "";
-
-		switch (class_permutation_type) {
-			case "kick_16ths": // use the hh & snare from the user
-				numSections = get_numSectionsFor_permutation_array();
-
-				fullABC = get_top_ABC_BoilerPlate(class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, class_num_beats_per_measure, class_note_value_per_measure, renderWidth, root.myGrooveUtils.get_top_ABC_BoilerPlate);
-				root.myGrooveUtils.note_mapping_array = [];
-
-				// compute sections with different kick patterns
-				for (i = 0; i < numSections; i++) {
-					if (shouldDisplayPermutationForSection(i)) {
-						var new_kick_array;
-
-						if (document.getElementById("PermuationOptionsSkipSomeFirstNotes") && document.getElementById("PermuationOptionsSkipSomeFirstNotes").checked)
-							new_kick_array = get_kick16th_permutation_array_minus_some(i);
-						else
-							new_kick_array = get_kick16th_permutation_array(i);
-
-						// grab hi-hat foots from existing kick array and merge it in.
-						Kick_Array = filter_kick_array_for_permutation(Kick_Array);
-						new_kick_array = merge_kick_arrays(new_kick_array, Kick_Array);
-
-						post_abc = get_permutation_post_ABC(i, usingTriplets());
-
-						fullABC += get_permutation_pre_ABC(i,  usingTriplets());
-						fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, new_kick_array, Toms_Array, post_abc, num_notes, class_time_division, num_notes, true, class_num_beats_per_measure, class_note_value_per_measure);
-						root.myGrooveUtils.note_mapping_array = root.myGrooveUtils.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, Snare_Array, new_kick_array, Toms_Array, num_notes));
-					}
-				}
-				break;
-
-			case "snare_16ths": // use the hh & kick from the user
-				numSections = get_numSectionsFor_permutation_array();
-
-				fullABC = get_top_ABC_BoilerPlate(class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, class_num_beats_per_measure, class_note_value_per_measure, renderWidth, root.myGrooveUtils.get_top_ABC_BoilerPlate);
-				root.myGrooveUtils.note_mapping_array = [];
-
-				//compute 16 sections with different snare patterns
-				for (i = 0; i < numSections; i++) {
-					if (shouldDisplayPermutationForSection(i)) {
-
-						if (document.getElementById("PermuationOptionsAccentGridDiddled") && document.getElementById("PermuationOptionsAccentGridDiddled").checked)
-							new_snare_array = get_snare_accent_with_diddle_permutation_array(i);
-						else if (document.getElementById("PermuationOptionsAccentGrid") && document.getElementById("PermuationOptionsAccentGrid").checked)
-							new_snare_array = get_snare_accent_permutation_array(i);
-						else
-							new_snare_array = get_snare_permutation_array(i);
-
-						post_abc = get_permutation_post_ABC(i, usingTriplets());
-
-						fullABC += get_permutation_post_ABC(i, usingTriplets());
-						fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, new_snare_array, Kick_Array, Toms_Array, post_abc, num_notes, class_time_division, num_notes, true, class_num_beats_per_measure, class_note_value_per_measure);
-						root.myGrooveUtils.note_mapping_array = root.myGrooveUtils.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, new_snare_array, Kick_Array, Toms_Array, num_notes));
-					}
-				}
-				break;
-
-			case "none":
-			/* falls through */
-			default:
-				fullABC = get_top_ABC_BoilerPlate(class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), true, class_num_beats_per_measure, class_note_value_per_measure, renderWidth, root.myGrooveUtils.get_top_ABC_BoilerPlate);
-				root.myGrooveUtils.note_mapping_array = [];
-
-				var numberOfMeasuresPerLine = 2;
-				var addon_abc;
-
-				if (root.class_notes_per_measure >= 32) {
-					// Only put one measure per line for 32nd notes and above because of width issues
-					numberOfMeasuresPerLine = 1;
-				}
-
-				for (i = 0; i < class_number_of_measures; i++) {
-
-					// we already go the array states above, don't get it again.
-					if (i > 0) {
-						// reset arrays
-						Sticking_Array = get_empty_note_array_in_32nds();
-						HH_Array = get_empty_note_array_in_32nds();
-						Snare_Array = get_empty_note_array_in_32nds();
-						Kick_Array = get_empty_note_array_in_32nds();
-
-						get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, root.class_notes_per_measure * i);
-					}
-
-					if ((i + 1) == class_number_of_measures) {
-						// last measure
-						addon_abc = "|\n";
-					} else if (((i + 1) % numberOfMeasuresPerLine) === 0) {
-						// new line measure
-						addon_abc = "\n";
-					} else {
-						// continuation measure
-						addon_abc = "\\\n";
-					}
-					fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, addon_abc, num_notes, class_time_division, num_notes, true, class_num_beats_per_measure, class_note_value_per_measure);
-					root.myGrooveUtils.note_mapping_array = root.myGrooveUtils.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, Snare_Array, Kick_Array, Toms_Array, num_notes));
-					root.myGrooveUtils.numberOfMeasures = class_number_of_measures
-					root.myGrooveUtils.repeatedMeasures = class_repeated_measures;
-					root.myGrooveUtils.highlightOn = options.highlightOn;
-				}
-
-				break;
-		}
-
-		return fullABC;
-	}
+	
 
 	// this is called by a bunch of places anytime we modify the musical notes on the page
 	// this will recreate the ABC code and will then use the ABC to rerender the sheet music
@@ -1148,7 +891,7 @@ function GrooveWriter() {
 	root.clearAllNotes = function () {
 		class_repeated_measures.clear();
 		for (var i = 0; i < class_number_of_measures * root.class_notes_per_measure; i++) {
-			set_sticking_state(i, 'off', root.class_notes_per_measure, class_time_division, class_note_value_per_measure);
+			set_sticking_state(i, 'off', root.class_notes_per_measure, class_time_division, root.class_note_value_per_measure);
 			set_hh_state(i, 'off');
 			set_tom1_state(i, 'off');
 			set_tom4_state(i, 'off');
@@ -1224,9 +967,9 @@ function GrooveWriter() {
 		for (var i = 0; i < class_number_of_measures * root.class_notes_per_measure; i++) {
 			var cur_state = get_sticking_state(i, "URL");
 			if (cur_state === "R") {
-				set_sticking_state(i, "left", false, root.class_notes_per_measure, class_time_division, class_note_value_per_measure);
+				set_sticking_state(i, "left", false, root.class_notes_per_measure, class_time_division, root.class_note_value_per_measure);
 			} else if (cur_state === "L") {
-				set_sticking_state(i, "right", false, root.class_notes_per_measure, class_time_division, class_note_value_per_measure);
+				set_sticking_state(i, "right", false, root.class_notes_per_measure, class_time_division, root.class_note_value_per_measure);
 			}
 		}
 		root.updateSheetMusic();
@@ -1364,7 +1107,7 @@ function GrooveWriter() {
 
 			if (playStarting && metronome.countInActive) {
 
-				midiURL = buildMIDICountInTrack(class_num_beats_per_measure, class_note_value_per_measure, midiPlayer.getTempo());
+				midiURL = buildMIDICountInTrack(root.class_num_beats_per_measure, root.class_note_value_per_measure, midiPlayer.getTempo());
 				midiPlayer.noteHasChanged();
 				metronome.countInIsPlaying = true;
 			} else {
@@ -1387,7 +1130,7 @@ function GrooveWriter() {
 				root.metronomeAutoSpeedUpTempoUpdate();
 			}
 
-			if (options.highlightOn) hilight_note(note_type, percent_complete, class_permutation_type, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures, root.class_notes_per_measure, class_repeated_measures, usingTriplets());
+			if (options.highlightOn) hilight_note(note_type, percent_complete, class_permutation_type, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures, root.class_notes_per_measure, class_repeated_measures, usingTriplets());
 		};
 
 		midiPlayer.initialise();
@@ -1817,13 +1560,13 @@ function GrooveWriter() {
 	root.setTimeDivisionSelectionOnOrOff = function () {
 
 		// check for incompatible odd time signature division  9/16 and 1/8 notes for instance
-		if ((8 * class_num_beats_per_measure / class_note_value_per_measure) % 1 != 0) {
+		if ((8 * root.class_num_beats_per_measure / root.class_note_value_per_measure) % 1 != 0) {
 			addOrRemoveKeywordFromClassById("subdivision_8ths", "disabled", true);
 		} else {
 			addOrRemoveKeywordFromClassById("subdivision_8ths", "disabled", false);
 		}
 
-		if (class_note_value_per_measure != 4) {
+		if (root.class_note_value_per_measure != 4) {
 			// triplets are too complicated right now outside of x/4 time.
 			// disable them
 
@@ -1844,7 +1587,7 @@ function GrooveWriter() {
 		// turn on/off special features that are only available in 4/4 time
 
 		// set the label
-		document.getElementById("timeSigLabel").innerHTML = '<sup>' + class_num_beats_per_measure + "</sup>/<sub>" + class_note_value_per_measure + "</sub>";
+		document.getElementById("timeSigLabel").innerHTML = '<sup>' + root.class_num_beats_per_measure + "</sup>/<sub>" + root.class_note_value_per_measure + "</sub>";
 	};
 
 	root.timeSigPopupClose = function (type, callback) {
@@ -1862,9 +1605,9 @@ function GrooveWriter() {
 				root.changeDivision(16);  // switch to a non triplet division since they are not supported in this time signature
 			}
 
-			class_num_beats_per_measure = newTimeSigTop;
-			class_note_value_per_measure = newTimeSigBottom;
-			var new_notes_per_measure = calc_notes_per_measure(class_time_division, class_num_beats_per_measure, class_note_value_per_measure);
+			root.class_num_beats_per_measure = newTimeSigTop;
+			root.class_note_value_per_measure = newTimeSigBottom;
+			var new_notes_per_measure = calc_notes_per_measure(class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
 			// If new_notes_per_measure is greater it will cause the changeDivision code to error
 			// as it tries to read the notes from the UI.   Setting it lower will allow the code to truncate
 			// the groove properly to something smaller rather than interpolating the groove into something weird
@@ -2053,8 +1796,8 @@ function GrooveWriter() {
 
 		var myGrooveData = getGrooveDataFromUrlString(encodedURLData, root.myGrooveUtils, options.debugMode);
 
-		class_num_beats_per_measure = myGrooveData.numBeats;     // TimeSigTop
-		class_note_value_per_measure = myGrooveData.noteValue;   // TimeSigBottom
+		root.class_num_beats_per_measure = myGrooveData.numBeats;     // TimeSigTop
+		root.class_note_value_per_measure = myGrooveData.noteValue;   // TimeSigBottom
 		class_repeated_measures = myGrooveData.repeatedMeasures;
 		options.highlightOn = myGrooveData.highlightOn;
 
@@ -2077,8 +1820,8 @@ function GrooveWriter() {
 
 		if (myGrooveData.showStickings)
 			root.stickingsShowHide(true, true, true);
-
 		document.getElementById("tuneTitle").value = myGrooveData.title;
+
 
 		document.getElementById("tuneAuthor").value = myGrooveData.author;
 
@@ -2121,7 +1864,7 @@ function GrooveWriter() {
 		var wasTomsVisable = isTomsVisible();
 
 		class_time_division = newDivision;
-		root.class_notes_per_measure = calc_notes_per_measure(class_time_division, class_num_beats_per_measure, class_note_value_per_measure);
+		root.class_notes_per_measure = calc_notes_per_measure(class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
 
 		var newHTML = "";
 		for (var cur_measure = 1; cur_measure <= class_number_of_measures; cur_measure++) {
@@ -2202,15 +1945,15 @@ function GrooveWriter() {
 		}
 
 		var isNewDivisionTriplets = isTripletDivision(newDivision);
-		var new_notes_per_measure = calc_notes_per_measure((isNewDivisionTriplets ? 48 : 32), class_num_beats_per_measure, class_note_value_per_measure);
+		var new_notes_per_measure = calc_notes_per_measure((isNewDivisionTriplets ? 48 : 32), root.class_num_beats_per_measure, root.class_note_value_per_measure);
 
 		// check for incompatible odd time signature division   9/8 and 1/4notes for instance or 9/16 and 1/8notes
-		if ((newDivision * class_num_beats_per_measure / class_note_value_per_measure) % 1 != 0) {
-			alert("1/" + newDivision + " notes are disabled in " + class_num_beats_per_measure + "/" + class_note_value_per_measure + " time.  This combination would result in a half note.");
+		if ((newDivision * root.class_num_beats_per_measure / root.class_note_value_per_measure) % 1 != 0) {
+			alert("1/" + newDivision + " notes are disabled in " + root.class_num_beats_per_measure + "/" + root.class_note_value_per_measure + " time.  This combination would result in a half note.");
 			return;
 		}
-		if (isNewDivisionTriplets && class_note_value_per_measure != 4) {
-			alert("Triplets are disabled in " + class_num_beats_per_measure + "/" + class_note_value_per_measure + " time.  Use x/4 time for triplets.");
+		if (isNewDivisionTriplets && root.class_note_value_per_measure != 4) {
+			alert("Triplets are disabled in " + root.class_num_beats_per_measure + "/" + root.class_note_value_per_measure + " time.  Use x/4 time for triplets.");
 			return;
 		}
 
@@ -2230,16 +1973,16 @@ function GrooveWriter() {
 			// override the hi-hat if we are going to a higher division.
 			// otherwise the notes get lost in translation (not enough)
 			//if (newDivision > root.class_notes_per_measure)
-			//	uiHH = root.myGrooveUtils.GetDefaultHHGroove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
+			//	uiHH = root.myGrooveUtils.GetDefaultHHGroove(new_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures);
 		} else {
 			// changing from or changing to a triplet division
 			// triplets don't scale well, so use defaults when we change
-			uiStickings = GetDefaultStickingsGroove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
-			uiHH = GetDefaultHHGroove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
-			uiTom1 = GetDefaultTom1Groove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
-			uiTom4 = GetDefaultTom4Groove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
-			uiSnare = GetDefaultSnareGroove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
-			uiKick = GetDefaultKickGroove(new_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, class_number_of_measures);
+			uiStickings = GetDefaultStickingsGroove(new_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures);
+			uiHH = GetDefaultHHGroove(new_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures);
+			uiTom1 = GetDefaultTom1Groove(new_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures);
+			uiTom4 = GetDefaultTom4Groove(new_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures);
+			uiSnare = GetDefaultSnareGroove(new_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures);
+			uiKick = GetDefaultKickGroove(new_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures);
 
 			// reset the metronome click, since it has different options
 			metronome.resetOptionsMenuOffsetClick();
@@ -2268,7 +2011,7 @@ function GrooveWriter() {
 			newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="myGrooveWriter.addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
 			
 		newHTML += ('<div class="staff-container" id="staff-container' + baseindex + '">')
-		newHTML += generateStickingContainerHTML(baseindex, indexStartForNotes, root.class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure);
+		newHTML += generateStickingContainerHTML(baseindex, indexStartForNotes, root.class_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure);
 
 		newHTML += ('  <span class="notes-row-container">')
 		newHTML += generateLineLabels(baseindex); // Call the new function where the line labels are needed
@@ -2291,17 +2034,17 @@ function GrooveWriter() {
 			newHTML += ('						<div id="bg-highlight' + i + '" class="bg-highlight" >\
 												</div>\n');
 
-			if ((i - (indexStartForNotes - 1)) % noteGroupingSize(root.class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure) === 0 && i < root.class_notes_per_measure + indexStartForNotes - 1) {
+			if ((i - (indexStartForNotes - 1)) % noteGroupingSize(root.class_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure) === 0 && i < root.class_notes_per_measure + indexStartForNotes - 1) {
 				newHTML += ('<div class="space_between_note_groups"> </div> \n');
 			}
 		}
 		newHTML += ('<div class="end_note_space"></div>\n</div>\n');
 
-		newHTML += generateHiHatContainerHTML(indexStartForNotes, baseindex, root.class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, indexStartForNotes);
-		newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, root.class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, indexStartForNotes, 1);
-		newHTML += generateSnareContainerHTML(indexStartForNotes, baseindex, root.class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, indexStartForNotes);
-		newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, root.class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, indexStartForNotes, 4);
-		newHTML += generateKickContainerHTML(indexStartForNotes, baseindex, root.class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, indexStartForNotes);
+		newHTML += generateHiHatContainerHTML(indexStartForNotes, baseindex, root.class_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, indexStartForNotes);
+		newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, root.class_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, indexStartForNotes, 1);
+		newHTML += generateSnareContainerHTML(indexStartForNotes, baseindex, root.class_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, indexStartForNotes);
+		newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, root.class_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, indexStartForNotes, 4);
+		newHTML += generateKickContainerHTML(indexStartForNotes, baseindex, root.class_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, indexStartForNotes);
 		newHTML += ('\
 								</div>\
 							</div>\

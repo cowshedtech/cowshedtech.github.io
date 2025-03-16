@@ -1230,3 +1230,77 @@ function get_kick16th_permutation_array(section) {
 
 		return new_kick_array;
 	}
+
+
+    function get_kick16th_permutation_array(section) {
+		console.log("get_kick16th_permutation_array");
+		console.log("root.class_notes_per_measure: " + root.class_notes_per_measure);
+		if (usingTriplets()) {
+			return get_kick16th_triplets_permutation_array(section);
+		}
+
+		return get_kick16th_strait_permutation_array(section);
+	}
+
+	function get_kick16th_permutation_array_minus_some(section) {
+		console.log("get_kick16th_permutation_array_minus_some");
+		if (usingTriplets()) {
+			// triplets never skip any: delegate
+			return get_kick16th_permutation_array(section);
+		}
+
+		return get_kick16th_minus_some_strait_permutation_array(section);
+	}
+
+	// snare permutation
+	function get_snare_permutation_array(section) {
+
+		// its the same as the 16th kick permutation, but with different notes
+		var snare_array = get_kick16th_permutation_array(section);
+
+		// turn the kicks into snares
+		for (var i = 0; i < snare_array.length; i++) {
+			if (snare_array[i] !== false)
+				snare_array[i] = constant_ABC_SN_Normal;
+		}
+
+		return snare_array;
+	}
+
+    // Snare permutation, with Accented permutation.   Snare hits every 16th note, accent moves
+	function get_snare_accent_permutation_array(section) {
+
+		// its the same as the 16th kick permutation, but with different notes
+		var snare_array = get_kick16th_permutation_array(section);
+
+		if (section > 0) { // Don't convert notes for the first measure since it is the ostinato
+			for (var i = 0; i < snare_array.length; i++) {
+				if (snare_array[i] !== false)
+					snare_array[i] = constant_ABC_SN_Accent;
+				else if ((i % 2) === 0) // all other even notes are ghosted snares
+					snare_array[i] = constant_ABC_SN_Ghost;
+			}
+		}
+
+		return snare_array;
+	}
+
+	// Snare permutation, with Accented and diddled permutation.   Accented notes are singles, non accents are diddled
+	function get_snare_accent_with_diddle_permutation_array(section) {
+
+		// its the same as the 16th kick permutation, but with different notes
+		var snare_array = get_kick16th_permutation_array(section);
+
+		if (section > 0) { // Don't convert notes for the first measure since it is the ostinato
+			for (var i = 0; i < snare_array.length; i++) {
+				if (snare_array[i] !== false) {
+					snare_array[i] = constant_ABC_SN_Buzz;
+					i++; // the next one is not diddled  (leave it false)
+				} else { // all other even notes are diddled, which means 32nd notes
+					snare_array[i] = constant_ABC_SN_Ghost;
+				}
+			}
+		}
+
+		return snare_array;
+	}

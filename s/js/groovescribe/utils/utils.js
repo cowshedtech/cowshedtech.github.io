@@ -132,3 +132,18 @@ function get_empty_note_array(number_of_notes) {
 	return newArray;
 }
 
+
+// create a new instance of an array with all the values prefilled with false
+// the array size is 32nd notes for the current time signature
+// 4/4 would be 32 notes
+// 5/4 would be 40 notes
+// 2/4 would be 16 notes
+// 4/2 would be 32 notes
+function get_empty_note_array_in_32nds() {
+	var notes_per_4_beats = 32;
+	if (usingTriplets())
+		notes_per_4_beats = 48;
+	var num_notes = (editor.class_num_beats_per_measure * notes_per_4_beats) / editor.class_note_value_per_measure;
+
+	return get_empty_note_array(num_notes);
+}
