@@ -61,7 +61,6 @@ function Track() {
 		this.swingPercent = 0;
 		this.tempo = constant_DEFAULT_TEMPO;
 		this.kickStemsUp = true;
-		this.debugMode = options.debugMode;
 		this.grooveDBAuthoring = options.grooveDBAuthoring;
 		this.repeatedMeasures = new Map();
 	};
