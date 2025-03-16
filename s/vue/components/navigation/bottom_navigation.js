@@ -20,7 +20,7 @@ export default {
     
     <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="stickingsButton" button-text="STICKINGS" click-handler="stickingsAnchorClick();"></BottomNavigationButton>
     
-    <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="downloadButton" button-text="DOWNLOAD" click-handler="myGrooveWriter.DownloadAnchorClick();">
+    <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="downloadButton" button-text="DOWNLOAD" click-handler="downloadAnchorClick();">
       <span class="bottomButtonIcon"><i class="fa fa-download fa-2x"></i></span>
     </BottomNavigationButton>
     

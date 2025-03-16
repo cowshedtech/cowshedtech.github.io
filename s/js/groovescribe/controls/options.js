@@ -54,7 +54,7 @@ class Options {
         if (!this.highlightOn) clearHighlightNoteInABCSVG(editor.myGrooveUtils.grooveUtilsUniqueIndex);
         
         this.optionsMenuSetSelectedState();
-        editor.updateCurrentURL();
+        updateCurrentURL();
     };
 
 

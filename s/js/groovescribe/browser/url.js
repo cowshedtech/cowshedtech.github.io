@@ -213,3 +213,52 @@ function getGrooveDataFromUrlString(encodedURLData, myGrooveData, debugMode) {
 
     return myGrooveData;
 };
+
+
+// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
+function updateCurrentURL() {
+    // Update temporary link out to GS
+    var newURLGS = get_GSURLForPage();
+    if (linkGrooveScribe)
+        linkGrooveScribe.href = newURLGS;
+    // Update temporary link out to GS
+    var linkGrooveScrib
+
+    var newURL = editor.get_FullURLForPage();
+
+    var newTitle = false;
+
+    addFullURLToUndoStack(newURL);
+
+    var title = document.getElementById("tuneTitle").value.trim();
+    if (title !== "")
+        newTitle = title;
+
+    var author = document.getElementById("tuneAuthor").value.trim();
+    if (author !== "") {
+        if (title)
+            newTitle += " by " + author;
+        else
+            newTitle = "Groove by " + author;
+    }
+
+    if (!newTitle)
+        newTitle = editor.class_app_title;
+
+    document.title = newTitle;
+    try {
+        window.history.replaceState(null, newTitle, newURL);
+    } catch (err) {
+        /* empty */
+    }
+
+    if (options.debugMode) {
+        // put the search data on the bottom of the page to make it easy to cut & paste
+        var searchDataEle = document.getElementById("URLSearchData");
+        if (searchDataEle) {
+            var searchIndex = newURL.indexOf("?");
+            var searchURL = newURL.substring(searchIndex).replace("Debug=1&", "");
+            searchDataEle.innerHTML = '<p style="margin-left: 10px;"><b>' + searchURL + '</b><p>';
+        }
+    }
+};

@@ -63,7 +63,7 @@ function GrooveWriter() {
 	options.grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
 
 	// private vars in the scope of the class
-	var class_app_title = "Groove Scribe";
+	root.class_app_title = "Groove Scribe";
 	root.class_permutation_type = "none";
 	
 
@@ -188,53 +188,7 @@ function GrooveWriter() {
 	
 	
 
-	// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
-	root.updateCurrentURL = function () {
-		// Update temporary link out to GS
-		var newURLGS = get_GSURLForPage();
-		if (linkGrooveScribe)
-			linkGrooveScribe.href = newURLGS;
-		// Update temporary link out to GS
-		var linkGrooveScrib
-
-		var newURL = get_FullURLForPage();
-
-		var newTitle = false;
-
-		addFullURLToUndoStack(newURL);
-
-		var title = document.getElementById("tuneTitle").value.trim();
-		if (title !== "")
-			newTitle = title;
-
-		var author = document.getElementById("tuneAuthor").value.trim();
-		if (author !== "") {
-			if (title)
-				newTitle += " by " + author;
-			else
-				newTitle = "Groove by " + author;
-		}
-
-		if (!newTitle)
-			newTitle = class_app_title;
-
-		document.title = newTitle;
-		try {
-			window.history.replaceState(null, newTitle, newURL);
-		} catch (err) {
-			/* empty */
-		}
-
-		if (options.debugMode) {
-			// put the search data on the bottom of the page to make it easy to cut & paste
-			var searchDataEle = document.getElementById("URLSearchData");
-			if (searchDataEle) {
-				var searchIndex = newURL.indexOf("?");
-				var searchURL = newURL.substring(searchIndex).replace("Debug=1&", "");
-				searchDataEle.innerHTML = '<p style="margin-left: 10px;"><b>' + searchURL + '</b><p>';
-			}
-		}
-	};
+	
 
 	
 
@@ -257,7 +211,7 @@ function GrooveWriter() {
 		midiPlayer.noteHasChanged();
 
 		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
-		root.updateCurrentURL();
+		updateCurrentURL();
 
 		root.displayNewSVG();
 	}
@@ -275,45 +229,7 @@ function GrooveWriter() {
 
 	};
 
-	// Render an SVG that is good for download.
-	// Constant size at 2000x200
-	function downloadImages(imageType) {
-		var abc_source = generate_ABC(800);
-		var svg_obj = renderABCtoSVG(root.myGrooveUtils, abc_source);
-		var filename;
-		var tune_title = document.getElementById("tuneTitle").value;
-
-		if (tune_title.length == 0) {
-			filename = "notation.";
-		} else {
-			filename = tune_title;
-		}
-		filename += imageType;
-
-		var svg_images = svg_obj.svg.split("</svg>");
-		// that split should always create at least 2 since it will match that </svg> if there is only one
-		// since the split creates an extra one reduce the length by 1
-		for (var i = 0; i < svg_images.length - 1; i++) {
-			var myPablo = Pablo(svg_images[i] + "</svg>");
-			var width = parseFloat(myPablo.attr('width'));
-			var height = parseFloat(myPablo.attr('height'));
-			var imageRatio = height / width;
-			var newWidth = 2000;
-			var newHeight = Math.round(newWidth * imageRatio);
-			var newBoxWidth = Math.round(newWidth * .8);
-			var newBoxHeight = Math.round(newHeight * .8);
-			myPablo.attr('width', newWidth + 'px');
-			myPablo.attr('height', newHeight + 'px');
-			myPablo.attr('viewBox', '0 0 ' + newBoxWidth + ' ' + newBoxHeight);
-			myPablo.children('g').attr('transform', 'scale(2)');
-
-			myPablo.download(imageType, filename, function (result) {
-				if (result.error) {
-					alert("An error occurred when trying to convert the sheet music to a PNG file.");
-				}
-			});
-		}
-	}
+	
 
 	root.PNGSaveAs = function () {
 		Pablo.support.image.png(function (acceptable) {
@@ -807,8 +723,8 @@ function GrooveWriter() {
 
 		} else {
 			// open a new window just for printing   (new method)
-			var win = window.open("", class_app_title + " Print");
-			win.document.body.innerHTML = "<title>" + class_app_title + "</title>\n<center>\n";
+			var win = window.open("", root.class_app_title + " Print");
+			win.document.body.innerHTML = "<title>" + root.class_app_title + "</title>\n<center>\n";
 			win.document.body.innerHTML += document.getElementById("svgTarget").innerHTML;
 			win.document.body.innerHTML += "\n</center>";
 			win.print();
@@ -876,7 +792,7 @@ function GrooveWriter() {
 			root.myGrooveUtils.viewMode = false;
 
 			if (!dontUpdateURL)
-				root.updateCurrentURL();
+				updateCurrentURL();
 		} else {
 
 			showHideCSS_ClassDisplay(".edit-block", true, false, "block"); // hide
@@ -885,7 +801,7 @@ function GrooveWriter() {
 				view_edit_button.innerHTML = "Switch to EDIT mode";
 			root.myGrooveUtils.viewMode = true;
 			if (!dontUpdateURL)
-				root.updateCurrentURL();
+				updateCurrentURL();
 		}
 	};
 
@@ -1351,7 +1267,7 @@ function GrooveWriter() {
 	// get a really long URL that encodes all of the notes and the rest of the state of the page.
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
 	//
-	function get_FullURLForPage(url_destination) {
+	root.get_FullURLForPage= function (url_destination) {
 		var myGrooveData = root.grooveDataFromClickableUI()
 		return getUrlStringFromGrooveData(myGrooveData, url_destination)
 	}
@@ -1450,7 +1366,7 @@ function GrooveWriter() {
 
 		var popup = document.getElementById("fullURLPopup");
 		if (popup) {
-			var fullURL = get_FullURLForPage();
+			var fullURL = root.get_FullURLForPage();
 			var textField = document.getElementById("fullURLPopupTextField");
 			textField.value = fullURL;
 
@@ -1519,7 +1435,7 @@ function GrooveWriter() {
 		// open the popup with full url and try to load short in the background
 		root.fillInFullURLInFullURLPopup();
 		// default is to use shortened url
-		fillInShortenedURLInFullURLPopup(get_FullURLForPage(), 'fullURLPopupTextField');
+		fillInShortenedURLInFullURLPopup(root.get_FullURLForPage(), 'fullURLPopupTextField');
 	};
 
 	root.copyShareURLToClipboard = function () {
@@ -1588,7 +1504,7 @@ function GrooveWriter() {
 
 	root.shortenerCheckboxChanged = function () {
 		if (document.getElementById("shortenerCheckbox").checked) {
-			fillInShortenedURLInFullURLPopup(get_FullURLForPage(), 'fullURLPopupTextField');
+			fillInShortenedURLInFullURLPopup(root.get_FullURLForPage(), 'fullURLPopupTextField');
 		} else {
 			root.fillInFullURLInFullURLPopup();
 		}
@@ -1596,9 +1512,9 @@ function GrooveWriter() {
 
 	root.embedCodeCheckboxChanged = function () {
 		if (document.getElementById("embedCodeCheckbox").checked) {
-			fillInEmbedURLInFullURLPopup(get_FullURLForPage("display"), 'fullURLPopupTextField');
+			fillInEmbedURLInFullURLPopup(root.get_FullURLForPage("display"), 'fullURLPopupTextField');
 		} else {
-			fillInShortenedURLInFullURLPopup(get_FullURLForPage(), 'fullURLPopupTextField');
+			fillInShortenedURLInFullURLPopup(root.get_FullURLForPage(), 'fullURLPopupTextField');
 		}
 	};
 

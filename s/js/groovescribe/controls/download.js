@@ -1,5 +1,5 @@
 // the user has clicked on the download menu (at bottom)
-root.DownloadAnchorClick = function (event) {
+function downloadAnchorClick(event) {
 
     var contextMenu = document.getElementById("downloadContextMenu");
     if (contextMenu) {
