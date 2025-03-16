@@ -438,7 +438,7 @@ class MIDIPlayer {
     //
     swingUpdateEvent(event) {
 
-		if (root.swingIsEnabled === false) {
+		if (midiPlayer.swingIsEnabled === false) {
 			midiPlayer.setSwingSlider(0);
 		} else {
 			midiPlayer.swingUpdateText(event.target.value);
