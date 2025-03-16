@@ -146,9 +146,9 @@ function getCurrentMeasureWithRepeats(curNoteIndexNew, numberOfMeasures, repeate
 };
 
 var abcNoteNumCurrentlyHighlighted = -1;
-function clearHighlightNoteInABCSVG(grooveUtilsUniqueIndex) {
+function clearHighlightNoteInABCSVG(trackID) {
     if (abcNoteNumCurrentlyHighlighted > -1) {
-        var myElements = document.querySelectorAll("#abcNoteNum_" + grooveUtilsUniqueIndex + "_" + abcNoteNumCurrentlyHighlighted);
+        var myElements = document.querySelectorAll("#abcNoteNum_" + trackID + "_" + abcNoteNumCurrentlyHighlighted);
         for (var i = 0; i < myElements.length; i++) {
             //note.className = note.className.replace(new RegExp(' highlighted', 'g'), "");
             var class_name = myElements[i].getAttribute("class");
@@ -170,11 +170,11 @@ function clearHighlightNoteInABCSVG(grooveUtilsUniqueIndex) {
 
 	
 // set note to -1 to unhighlight all notes
-function highlightNoteInABCSVGByIndex(grooveUtilsUniqueIndex, noteToHighlight) {
+function highlightNoteInABCSVGByIndex(trackID, noteToHighlight) {
 
-    clearHighlightNoteInABCSVG(grooveUtilsUniqueIndex);
+    clearHighlightNoteInABCSVG(trackID);
 
-    var myElements = document.querySelectorAll("#abcNoteNum_" + grooveUtilsUniqueIndex + "_" + noteToHighlight);
+    var myElements = document.querySelectorAll("#abcNoteNum_" + trackID + "_" + noteToHighlight);
     for (var i = 0; i < myElements.length; i++) {
         myElements[i].setAttribute("class", myElements[i].getAttribute("class") + " highlighted");
         abcNoteNumCurrentlyHighlighted = noteToHighlight;
@@ -183,7 +183,7 @@ function highlightNoteInABCSVGByIndex(grooveUtilsUniqueIndex, noteToHighlight) {
 
 // cross index the percent complete with the myGrooveData note arrays to find the nth note
 // Then highlight the note
-function highlightNoteInABCSVGFromPercentComplete(grooveUtilsUniqueIndex, note_mapping_array, percentComplete, numberOfMeasures, repeatedMeasures) {
+function highlightNoteInABCSVGFromPercentComplete(trackID, note_mapping_array, percentComplete, numberOfMeasures, repeatedMeasures) {
 
     if (note_mapping_array === null) return
         
@@ -203,5 +203,5 @@ function highlightNoteInABCSVGFromPercentComplete(grooveUtilsUniqueIndex, note_m
     var real_note_index = getRealNoteIndex(adjusted_note_id_in_32, note_mapping_array);
     
     // now the real_note_index should map to the correct abc note, highlight italics
-    highlightNoteInABCSVGByIndex(grooveUtilsUniqueIndex, real_note_index);	
+    highlightNoteInABCSVGByIndex(trackID, real_note_index);	
 };

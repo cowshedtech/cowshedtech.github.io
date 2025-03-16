@@ -46,7 +46,7 @@ function GrooveWriter() {
 
 	options = new Options();
 
-	root.myGrooveUtils = new GrooveUtils();
+	root.track = new Track();
 
 
 	// public class vars
@@ -129,7 +129,7 @@ function GrooveWriter() {
 	// creates a grooveData class from the clickable UI elements of the page
 	//
 	root.grooveDataFromClickableUI = function () {
-		var myGrooveData = new root.myGrooveUtils.grooveDataNew();
+		var myGrooveData = new root.track.grooveDataNew();
 
 		myGrooveData.notesPerMeasure = root.class_notes_per_measure;
 		myGrooveData.timeDivision = root.class_time_division;
@@ -222,7 +222,7 @@ function GrooveWriter() {
 			diverr = document.getElementById("diverr");
 
 		var abc_source = document.getElementById("ABCsource").value;
-		var svg_return = renderABCtoSVG(root.myGrooveUtils, abc_source);
+		var svg_return = renderABCtoSVG(root.track, abc_source);
 
 		diverr.innerHTML = svg_return.error_html;
 		svgTarget.innerHTML = svg_return.svg;
@@ -749,13 +749,13 @@ function GrooveWriter() {
 
 					case 37: // left arrow
 						// left arrow
-						root.myGrooveUtils.downTempo();
+						root.track.downTempo();
 						return false;
 					//break;
 
 					case 39: // right arrow
 						// right arrow
-						root.myGrooveUtils.upTempo();
+						root.track.upTempo();
 						return false;
 					//break;
 
@@ -775,13 +775,13 @@ function GrooveWriter() {
 	root.swapViewEditMode = function (dontUpdateURL) {
 		var view_edit_button = document.getElementById("view-edit-switch");
 
-		if (root.myGrooveUtils.viewMode) {
+		if (root.track.viewMode) {
 
 			showHideCSS_ClassDisplay(".edit-block", true, true, "block"); // show
 
 			if (view_edit_button)
 				view_edit_button.innerHTML = "Switch to VIEW mode";
-			root.myGrooveUtils.viewMode = false;
+			root.track.viewMode = false;
 
 			if (!dontUpdateURL)
 				updateCurrentURL();
@@ -791,7 +791,7 @@ function GrooveWriter() {
 
 			if (view_edit_button)
 				view_edit_button.innerHTML = "Switch to EDIT mode";
-			root.myGrooveUtils.viewMode = true;
+			root.track.viewMode = true;
 			if (!dontUpdateURL)
 				updateCurrentURL();
 		}
@@ -819,8 +819,8 @@ function GrooveWriter() {
 		// add html for the midi player
 		metronome = new Metronome();
 		
-		midiPlayer = new MIDIPlayer(root.myGrooveUtils.grooveUtilsUniqueIndex);
-		midiPlayer.AddMidiPlayerToPage(root.myGrooveUtils, "midiPlayer", root.class_time_division);
+		midiPlayer = new MIDIPlayer(root.track.trackID);
+		midiPlayer.AddMidiPlayerToPage(root.track, "midiPlayer", root.class_time_division);
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 
 		// load the groove from the URL data if it was passed in.
@@ -884,7 +884,7 @@ function GrooveWriter() {
 		}
 
 		// get updates when the tempo changes
-		// root.myGrooveUtils.tempoChangeCallback = root.tempoChangeCallback
+		// root.track.tempoChangeCallback = root.tempoChangeCallback
 	};
 
 	// called right before the midi reloads for the next replay
@@ -908,7 +908,7 @@ function GrooveWriter() {
 		if (document.getElementById("metronomeAutoSpeedUpKeepGoingForever"))
 			keepIncreasingForever = document.getElementById("metronomeAutoSpeedUpKeepGoingForever").checked;
 
-		var curTempo = root.myGrooveUtils.getTempo();
+		var curTempo = root.track.getTempo();
 
 		var midiStartTime = midiPlayer.getStartTime();
 		if (class_our_midi_start_time != midiStartTime) {
@@ -942,7 +942,7 @@ function GrooveWriter() {
 		}
 
 		if (tempoDiffInt > 0)
-			root.myGrooveUtils.setTempo(root.myGrooveUtils.getTempo() + tempoDiffInt);
+			root.track.setTempo(root.track.getTempo() + tempoDiffInt);
 	};
 
 	// takes a string of notes encoded in a serialized string and sets the notes on or off
@@ -1518,7 +1518,7 @@ function GrooveWriter() {
 		var Kick;
 		var stickings_set_from_URL = false;
 
-		var myGrooveData = getGrooveDataFromUrlString(encodedURLData, root.myGrooveUtils, options.debugMode);
+		var myGrooveData = getGrooveDataFromUrlString(encodedURLData, root.track, options.debugMode);
 
 		root.class_num_beats_per_measure = myGrooveData.numBeats;     // TimeSigTop
 		root.class_note_value_per_measure = myGrooveData.noteValue;   // TimeSigBottom
@@ -1634,7 +1634,7 @@ function GrooveWriter() {
 		root.setTimeSigLabel();
 
 		// enable or disable swing
-		root.myGrooveUtils.swingEnabled(root.myGrooveUtils.doesDivisionSupportSwing(newDivision));
+		root.track.swingEnabled(root.track.doesDivisionSupportSwing(newDivision));
 	}
 
 	root.expandAuthoringViewWhenNecessary = function (numNotesPerMeasure, numberOfMeasures) {
@@ -1697,7 +1697,7 @@ function GrooveWriter() {
 			// override the hi-hat if we are going to a higher division.
 			// otherwise the notes get lost in translation (not enough)
 			//if (newDivision > root.class_notes_per_measure)
-			//	uiHH = root.myGrooveUtils.GetDefaultHHGroove(new_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures);
+			//	uiHH = root.track.GetDefaultHHGroove(new_notes_per_measure, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures);
 		} else {
 			// changing from or changing to a triplet division
 			// triplets don't scale well, so use defaults when we change

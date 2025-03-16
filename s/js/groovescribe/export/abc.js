@@ -244,10 +244,10 @@ function tabLineFromAbcNoteArray(drumType, noteArray, getAccents, getOthers, max
 };
 
 // the top stuff in the ABC that doesn't depend on the notes
-function get_top_ABC_BoilerPlate(isPermutation, tuneTitle, tuneAuthor, tuneComments, showLegend, isTriplets, kick_stems_up, timeSigTop, timeSigBottom, renderWidth, grooveUtilsUniqueIndex) {
+function get_top_ABC_BoilerPlate(isPermutation, tuneTitle, tuneAuthor, tuneComments, showLegend, isTriplets, kick_stems_up, timeSigTop, timeSigBottom, renderWidth, trackID) {
 
 	// boiler plate
-	var fullABC = '%abc\n%%fullsvg _' + grooveUtilsUniqueIndex + '\nX:6\n';
+	var fullABC = '%abc\n%%fullsvg _' + trackID + '\nX:6\n';
 
 	fullABC += "M:" + timeSigTop + "/" + timeSigBottom + "\n";
 
@@ -938,7 +938,7 @@ function createABCFromGrooveData(myGrooveData, renderWidth) {
 			myGrooveData.numBeats,
 			myGrooveData.noteValue,
 			renderWidth,
-			editor.myGrooveUtils.grooveUtilsUniqueIndex
+			editor.track.trackID
 		);
 
 	fullABC += create_ABC_from_snare_HH_kick_arrays(FullNoteStickingArray,
@@ -954,7 +954,7 @@ function createABCFromGrooveData(myGrooveData, renderWidth) {
 		myGrooveData.numBeats,
 		myGrooveData.noteValue);
 
-	editor.myGrooveUtils.note_mapping_array = create_note_mapping_array_for_highlighting(FullNoteHHArray,
+	editor.track.note_mapping_array = create_note_mapping_array_for_highlighting(FullNoteHHArray,
 			FullNoteSnareArray,
 			FullNoteKickArray,
 			FullNoteTomsArray,
@@ -1055,7 +1055,7 @@ function generate_ABC(renderWidth) {
 	var tuneAuthor = document.getElementById("tuneAuthor").value;
 	var tuneComments = document.getElementById("tuneComments").value;
 	var showLegend = document.getElementById("showLegend").checked;
-	editor.myGrooveUtils.isLegendVisable = showLegend;
+	editor.track.isLegendVisable = showLegend;
 
 	var fullABC = "";
 
@@ -1063,8 +1063,8 @@ function generate_ABC(renderWidth) {
 		case "kick_16ths": // use the hh & snare from the user
 			numSections = get_numSectionsFor_permutation_array();
 
-			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, editor.class_num_beats_per_measure, editor.class_note_value_per_measure, renderWidth, editor.myGrooveUtils.grooveUtilsUniqueIndex);
-			editor.myGrooveUtils.note_mapping_array = [];
+			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, editor.class_num_beats_per_measure, editor.class_note_value_per_measure, renderWidth, editor.track.trackID);
+			editor.track.note_mapping_array = [];
 
 			// compute sections with different kick patterns
 			for (i = 0; i < numSections; i++) {
@@ -1084,7 +1084,7 @@ function generate_ABC(renderWidth) {
 
 					fullABC += get_permutation_pre_ABC(i,  usingTriplets());
 					fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, new_kick_array, Toms_Array, post_abc, num_notes, editor.class_time_division, num_notes, true, editor.class_num_beats_per_measure, editor.class_note_value_per_measure);
-					editor.myGrooveUtils.note_mapping_array = editor.myGrooveUtils.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, Snare_Array, new_kick_array, Toms_Array, num_notes));
+					editor.track.note_mapping_array = editor.track.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, Snare_Array, new_kick_array, Toms_Array, num_notes));
 				}
 			}
 			break;
@@ -1092,8 +1092,8 @@ function generate_ABC(renderWidth) {
 		case "snare_16ths": // use the hh & kick from the user
 			numSections = get_numSectionsFor_permutation_array();
 
-			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, editor.class_num_beats_per_measure, editor.class_note_value_per_measure, renderWidth, editor.myGrooveUtils.grooveUtilsUniqueIndex);
-			editor.myGrooveUtils.note_mapping_array = [];
+			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, editor.class_num_beats_per_measure, editor.class_note_value_per_measure, renderWidth, editor.track.trackID);
+			editor.track.note_mapping_array = [];
 
 			//compute 16 sections with different snare patterns
 			for (i = 0; i < numSections; i++) {
@@ -1110,7 +1110,7 @@ function generate_ABC(renderWidth) {
 
 					fullABC += get_permutation_post_ABC(i, usingTriplets());
 					fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, new_snare_array, Kick_Array, Toms_Array, post_abc, num_notes, editor.class_time_division, num_notes, true, editor.class_num_beats_per_measure, editor.class_note_value_per_measure);
-					editor.myGrooveUtils.note_mapping_array = editor.myGrooveUtils.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, new_snare_array, Kick_Array, Toms_Array, num_notes));
+					editor.track.note_mapping_array = editor.track.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, new_snare_array, Kick_Array, Toms_Array, num_notes));
 				}
 			}
 			break;
@@ -1118,8 +1118,8 @@ function generate_ABC(renderWidth) {
 		case "none":
 		/* falls through */
 		default:
-			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), true, editor.class_num_beats_per_measure, editor.class_note_value_per_measure, renderWidth, editor.myGrooveUtils.grooveUtilsUniqueIndex);
-			editor.myGrooveUtils.note_mapping_array = [];
+			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), true, editor.class_num_beats_per_measure, editor.class_note_value_per_measure, renderWidth, editor.track.trackID);
+			editor.track.note_mapping_array = [];
 
 			var numberOfMeasuresPerLine = 2;
 			var addon_abc;
@@ -1153,10 +1153,10 @@ function generate_ABC(renderWidth) {
 					addon_abc = "\\\n";
 				}
 				fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, addon_abc, num_notes, editor.class_time_division, num_notes, true, editor.class_num_beats_per_measure, editor.class_note_value_per_measure);
-				editor.myGrooveUtils.note_mapping_array = editor.myGrooveUtils.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, Snare_Array, Kick_Array, Toms_Array, num_notes));
-				editor.myGrooveUtils.numberOfMeasures = editor.numberOfMeasures()
-				editor.myGrooveUtils.repeatedMeasures = editor.class_repeated_measures;
-				editor.myGrooveUtils.highlightOn = options.highlightOn;
+				editor.track.note_mapping_array = editor.track.note_mapping_array.concat(create_note_mapping_array_for_highlighting(HH_Array, Snare_Array, Kick_Array, Toms_Array, num_notes));
+				editor.track.numberOfMeasures = editor.numberOfMeasures()
+				editor.track.repeatedMeasures = editor.class_repeated_measures;
+				editor.track.highlightOn = options.highlightOn;
 			}
 
 			break;

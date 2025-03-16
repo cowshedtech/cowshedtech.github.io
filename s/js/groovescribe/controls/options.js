@@ -47,11 +47,11 @@ class Options {
     optionsHighlightPopupClick(option_type) {
 
         this.highlightOn = !this.highlightOn
-        editor.myGrooveUtils.highlightOn = this.highlightOn
+        editor.track.highlightOn = this.highlightOn
         
         // Ensure current highlighting removed if highlighing now off
         if (!this.highlightOn) clear_all_highlights(null);
-        if (!this.highlightOn) clearHighlightNoteInABCSVG(editor.myGrooveUtils.grooveUtilsUniqueIndex);
+        if (!this.highlightOn) clearHighlightNoteInABCSVG(editor.track.trackID);
         
         this.optionsMenuSetSelectedState();
         updateCurrentURL();

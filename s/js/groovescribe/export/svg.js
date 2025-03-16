@@ -42,7 +42,7 @@ function SVGLibCallback(root) {
         if (type == "note" || type == "grace") {
             y = this.svg_highlight_y;
             h = this.svg_highlight_h;
-            root.abc_obj.out_svg('<rect style="fill: transparent;" class="abcr" id="abcNoteNum_' + root.grooveUtilsUniqueIndex + "_" + root.abcNoteNumIndex + '" x="');
+            root.abc_obj.out_svg('<rect style="fill: transparent;" class="abcr" id="abcNoteNum_' + root.trackID + "_" + root.abcNoteNumIndex + '" x="');
             root.abc_obj.out_sxsy(x, '" y="', y);
             root.abc_obj.out_svg('" width="' + w.toFixed(2) + '" height="' + h.toFixed(2) + '"/>\n');
 
@@ -85,7 +85,7 @@ function renderABCtoSVG(root, abc_source) {
 // Constant size at 2000x200
 function downloadImages(imageType) {
     var abc_source = generate_ABC(800);
-    var svg_obj = renderABCtoSVG(editor.myGrooveUtils, abc_source);
+    var svg_obj = renderABCtoSVG(editor.track, abc_source);
     var filename;
     var tune_title = document.getElementById("tuneTitle").value;
 

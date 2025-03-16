@@ -138,8 +138,8 @@ if (typeof(GrooveDisplay) === "undefined") {
 		// Supports multiple grooves on one page as well.
 		// shows the groove via SVG sheet music and a midi player
 		root.GrooveDBFormatPutGrooveInHTMLElement = function (HtmlTagId, GrooveDBTabIn) {
-			var myGrooveUtils = new GrooveUtils();
-			var myGrooveData = new myGrooveUtils.grooveDataNew();
+			var track = new Track();
+			var myGrooveData = new track.grooveDataNew();
 
 			var combinedSnareTab = mergeDrumTabLines(GrooveDBTabIn.snareAccentTab, GrooveDBTabIn.snareOtherTab);
 			var combinedKickTab = mergeDrumTabLines(GrooveDBTabIn.kickTab, GrooveDBTabIn.footOtherTab);
@@ -149,12 +149,12 @@ if (typeof(GrooveDisplay) === "undefined") {
 			if(GrooveDBTabIn.swingPercent !== undefined && !isNaN(GrooveDBTabIn.swingPercent)) myGrooveData.swingPercent = GrooveDBTabIn.swingPercent;
 			if(GrooveDBTabIn.measures !== undefined && !isNaN(GrooveDBTabIn.measures)) myGrooveData.numberOfMeasures = GrooveDBTabIn.measures;
 			if(GrooveDBTabIn.notesPerTabMeasure !== undefined && !isNaN(GrooveDBTabIn.notesPerTabMeasure)) myGrooveData.notesPerMeasure = GrooveDBTabIn.notesPerTabMeasure;
-			if(GrooveDBTabIn.stickingTab !== undefined) myGrooveData.sticking_array = myGrooveUtils.noteArraysFromURLData("Stickings", GrooveDBTabIn.stickingTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
-			if(GrooveDBTabIn.hihatTab !== undefined) myGrooveData.hh_array = myGrooveUtils.noteArraysFromURLData("H", GrooveDBTabIn.hihatTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
-			myGrooveData.snare_array = myGrooveUtils.noteArraysFromURLData("S", combinedSnareTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
-			myGrooveData.kick_array = myGrooveUtils.noteArraysFromURLData("K", combinedKickTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
-			if(GrooveDBTabIn.tom1Tab !== undefined) myGrooveData.toms_array[0] = myGrooveUtils.noteArraysFromURLData("T1", GrooveDBTabIn.tom1Tab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
-			if(GrooveDBTabIn.tom4Tab !== undefined) myGrooveData.toms_array[3] = myGrooveUtils.noteArraysFromURLData("T4", GrooveDBTabIn.tom4Tab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			if(GrooveDBTabIn.stickingTab !== undefined) myGrooveData.sticking_array = track.noteArraysFromURLData("Stickings", GrooveDBTabIn.stickingTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			if(GrooveDBTabIn.hihatTab !== undefined) myGrooveData.hh_array = track.noteArraysFromURLData("H", GrooveDBTabIn.hihatTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			myGrooveData.snare_array = track.noteArraysFromURLData("S", combinedSnareTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			myGrooveData.kick_array = track.noteArraysFromURLData("K", combinedKickTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			if(GrooveDBTabIn.tom1Tab !== undefined) myGrooveData.toms_array[0] = track.noteArraysFromURLData("T1", GrooveDBTabIn.tom1Tab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			if(GrooveDBTabIn.tom4Tab !== undefined) myGrooveData.toms_array[3] = track.noteArraysFromURLData("T4", GrooveDBTabIn.tom4Tab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
 
 			if(GrooveDBTabIn.timeSignature !== undefined) {
 				var timeSig = parseTimeSignature(GrooveDBTabIn.timeSignature);
@@ -176,18 +176,18 @@ if (typeof(GrooveDisplay) === "undefined") {
 			var renderWidth = svgTarget.offsetWidth - 100;
 
 			var abcNotation = createABCFromGrooveData(myGrooveData, renderWidth);
-			var svgReturn = myGrooveUtils.renderABCtoSVG(abcNotation);
+			var svgReturn = track.renderABCtoSVG(abcNotation);
 			//console.log(abcNotation);
 
 			svgTarget.innerHTML = svgReturn.svg;
 
-			myGrooveUtils.setGrooveData(myGrooveData);
+			track.setGrooveData(myGrooveData);
 
-			myGrooveUtils.AddMidiPlayerToPage(midiPlayerTargetId, myGrooveData.notesPerMeasure, true);
-			myGrooveUtils.expandOrRetractMIDI_playback(true, false); // make it small
-			myGrooveUtils.setTempo(myGrooveData.tempo);
-			myGrooveUtils.setSwing(myGrooveData.swingPercent);
-			myGrooveUtils.oneTimeInitializeMidi();
+			track.AddMidiPlayerToPage(midiPlayerTargetId, myGrooveData.notesPerMeasure, true);
+			track.expandOrRetractMIDI_playback(true, false); // make it small
+			track.setTempo(myGrooveData.tempo);
+			track.setSwing(myGrooveData.swingPercent);
+			track.oneTimeInitializeMidi();
 
 			root.GrooveDisplayUniqueCounter++;
 		};
@@ -206,7 +206,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 		};
 
 		root.AddGrooveDisplayToElementId = function (HtmlTagId, GrooveDefinition, showPlayer, linkToEditor, expandPlayer) {
-			var myGrooveUtils = new GrooveUtils();
+			var track = new Track();
 			root.GrooveDisplayUniqueCounter++;
 
 			var svgTargetId = "svgTarget" + root.GrooveDisplayUniqueCounter;
@@ -217,7 +217,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 				'<div class="nonPrintable"><div id="' + midiPlayerTargetId + '"></div></div>\n';
 
 			// load the groove from the URL data if it was passed in.
-			var GrooveData = myGrooveUtils.getGrooveDataFromUrlString(GrooveDefinition, myGrooveUtils.root.grooveDataNew());
+			var GrooveData = track.getGrooveDataFromUrlString(GrooveDefinition, track.root.grooveDataNew());
 			// console.log(GrooveData);
 
 			var layoutFunction = function() {
@@ -228,7 +228,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 
 				var abcNotation = createABCFromGrooveData(GrooveData, renderWidth);
 				// console.log(abcNotation);
-				var svgReturn = myGrooveUtils.renderABCtoSVG(abcNotation);
+				var svgReturn = track.renderABCtoSVG(abcNotation);
 
 				if (linkToEditor)
 					svgTarget.innerHTML = '<a style="text-decoration: none" href="http://mikeslessons.com/gscribe/' + GrooveDefinition + '">' + svgReturn.svg + '</a>';
@@ -244,15 +244,15 @@ if (typeof(GrooveDisplay) === "undefined") {
 
 
 			if (showPlayer) {
-				myGrooveUtils.setGrooveData(GrooveData);
+				track.setGrooveData(GrooveData);
 				//console.log(GrooveData);
 
-				myGrooveUtils.AddMidiPlayerToPage(midiPlayerTargetId, GrooveData.notesPerMeasure, true);
-				myGrooveUtils.expandOrRetractMIDI_playback(true, expandPlayer); // make it small
-				myGrooveUtils.setTempo(GrooveData.tempo);
-				myGrooveUtils.setSwing(GrooveData.swingPercent);
-				myGrooveUtils.setFrequencyDisplay(GrooveData.metronomeFrequency);
-				myGrooveUtils.oneTimeInitializeMidi();
+				track.AddMidiPlayerToPage(midiPlayerTargetId, GrooveData.notesPerMeasure, true);
+				track.expandOrRetractMIDI_playback(true, expandPlayer); // make it small
+				track.setTempo(GrooveData.tempo);
+				track.setSwing(GrooveData.swingPercent);
+				track.setFrequencyDisplay(GrooveData.metronomeFrequency);
+				track.oneTimeInitializeMidi();
 			}
 		};
 

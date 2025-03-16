@@ -142,7 +142,7 @@ class Metronome {
      * 
      */    
     setFrequencyDisplay(newFrequency) {
-        var mm = document.getElementById('midiMetronomeMenu' + root.grooveUtilsUniqueIndex);
+        var mm = document.getElementById('midiMetronomeMenu' + root.trackID);
     
         if (mm) {
             mm.className = mm.className.replace(" selected", "");

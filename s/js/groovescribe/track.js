@@ -26,14 +26,14 @@
 /*jslint browser:true devel:true */
 /*global Abc, MIDI, Midi */
 
-var global_num_GrooveUtilsCreated = 0;
+var trackID = 0;
 
 
 // GrooveUtils class.   The only one in this file.
-function GrooveUtils() {
+function Track() {
 	"use strict";
 
-	global_num_GrooveUtilsCreated++; // should increment on every new
+	trackID++; // should increment on every new
 
 	var root = this;
 
@@ -50,7 +50,7 @@ function GrooveUtils() {
 
 	// midi state variables
 	root.swingIsEnabled = false;
-	root.grooveUtilsUniqueIndex = global_num_GrooveUtilsCreated;
+	root.trackID = trackID;
 
 	// metronome options
 	// root.metronomeSolo = false;
