@@ -26,7 +26,7 @@ function getGSUrlStringFromGrooveData(myGrooveData, url_destination) {
     if (options.debugMode)
         fullURL += "Debug=1&";
 
-    if (myGrooveData.viewMode)
+    if (options.viewMode)
         fullURL += "Mode=view&";
 
     if (options.grooveDBAuthoring)

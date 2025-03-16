@@ -324,13 +324,13 @@ function GrooveWriter() {
 	root.swapViewEditMode = function (dontUpdateURL) {
 		var view_edit_button = document.getElementById("view-edit-switch");
 
-		if (root.track.viewMode) {
+		if (options.viewMode) {
 
 			showHideCSS_ClassDisplay(".edit-block", true, true, "block"); // show
 
 			if (view_edit_button)
 				view_edit_button.innerHTML = "Switch to VIEW mode";
-			root.track.viewMode = false;
+			options.viewMode = false;
 
 			if (!dontUpdateURL)
 				updateCurrentURL();
@@ -340,7 +340,7 @@ function GrooveWriter() {
 
 			if (view_edit_button)
 				view_edit_button.innerHTML = "Switch to EDIT mode";
-			root.track.viewMode = true;
+			options.viewMode = true;
 			if (!dontUpdateURL)
 				updateCurrentURL();
 		}

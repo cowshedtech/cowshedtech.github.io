@@ -6,6 +6,7 @@ class Options {
     tomsVisible;
     showStickings;
     showLegend;
+    viewMode = true;
     debugMode;
     grooveDBAuthoring;
 
