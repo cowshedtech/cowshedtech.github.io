@@ -606,18 +606,18 @@ function get_permutation_post_ABC(section, usingTriplets) {
 
 
 
-// function setupPermutationMenu() {
+function setupPermutationMenu() {
 
-//     if (class_num_beats_per_measure == 4 && class_note_value_per_measure == 4) {
+    if (editor.class_num_beats_per_measure == 4 && editor.class_note_value_per_measure == 4) {
 
-//         addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", true);
+        addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", true);
 
-//     } else {
-//         // permutations disabled except in 4/4 time
-//         addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", false);
-//         root.permutationPopupClick("none");  // make sure permutation is off
-//     }
-// }
+    } else {
+        // permutations disabled except in 4/4 time
+        addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", false);
+        //root.permutationPopupClick("none");  // make sure permutation is off
+    }
+}
 
 // root.permutationPopupClick = function (perm_type) {
 

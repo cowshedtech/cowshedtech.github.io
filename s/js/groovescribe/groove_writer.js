@@ -51,11 +51,11 @@ function GrooveWriter() {
 
 	// public class vars
 	var class_number_of_measures = 1;
-	var class_time_division = parseInt(getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
+	root.class_time_division = parseInt(getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
 	root.class_num_beats_per_measure = 4;     // TimeSigTop
 	root.class_note_value_per_measure = 4;     // TimeSigBottom
-	root.class_notes_per_measure = calc_notes_per_measure(class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
-	var class_repeated_measures = new Map();
+	root.class_notes_per_measure = calc_notes_per_measure(root.class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
+	root.class_repeated_measures = new Map();
 	
 
 	// set debugMode immediately so we can use it in index.html
@@ -64,7 +64,7 @@ function GrooveWriter() {
 
 	// private vars in the scope of the class
 	var class_app_title = "Groove Scribe";
-	var class_permutation_type = "none";
+	root.class_permutation_type = "none";
 	
 
 	// functions below
@@ -121,7 +121,7 @@ function GrooveWriter() {
 
 	// each of the instruments can be muted.   Check the UI and zero out the array if the instrument is marked as muted
 	// for a particular measure
-	function muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, measureIndex) {
+	root.muteArrayFromClickableUI = function(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, measureIndex) {
 		if (isInstrumentMuted("hh", measureIndex + 1))
 			fill_array_with_value_false(HH_Array, HH_Array.length);
 		if (isInstrumentMuted("snare", measureIndex + 1))
@@ -138,113 +138,7 @@ function GrooveWriter() {
 
 	
 
-	function createMidiUrlFromClickableUI(MIDI_type) {
-		var Sticking_Array = get_empty_note_array_in_32nds();
-		var HH_Array = get_empty_note_array_in_32nds();
-		var Snare_Array = get_empty_note_array_in_32nds();
-		var Kick_Array = get_empty_note_array_in_32nds();
-		var Toms_Array = [get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds()];
-
-		var i,
-			new_snare_array,
-			num_notes_for_swing = 16;
-
-		// just the first measure
-		var num_notes = root.get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
-		muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
-
-		var midiFile = new Midi.File();
-		var midiTrack = new Midi.Track();
-		midiFile.addTrack(midiTrack);
-
-		midiTrack.setTempo(midiPlayer.getTempo());
-		midiTrack.setInstrument(0, 0x13);
-
-		var swing_percentage = midiPlayer.getSwing() / 100;
-
-		// all of the permutations use just the first measure
-		switch (class_permutation_type) {
-			case "kick_16ths":
-				var numSections = get_numSectionsFor_permutation_array();
-
-				// compute sections with different kick patterns
-				for (i = 0; i < numSections; i++) {
-
-					if (shouldDisplayPermutationForSection(i)) {
-						var new_kick_array;
-
-						if (document.getElementById("PermuationOptionsSkipSomeFirstNotes") && document.getElementById("PermuationOptionsSkipSomeFirstNotes").checked)
-							new_kick_array = get_kick16th_permutation_array_minus_some(i);
-						else
-							new_kick_array = get_kick16th_permutation_array(i);
-
-						// grab hi-hat foots from existing kick array and merge it in.
-						Kick_Array = filter_kick_array_for_permutation(Kick_Array);
-						new_kick_array = merge_kick_arrays(new_kick_array, Kick_Array);
-
-						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, new_kick_array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, root.class_num_beats_per_measure, root.class_note_value_per_measure, metronome.getSolo());
-					}
-				}
-				break;
-
-			case "snare_16ths": // use the hh & snare from the user
-				numSections = get_numSectionsFor_permutation_array();
-
-				//compute sections with different snare patterns
-				for (i = 0; i < numSections; i++) {
-					if (shouldDisplayPermutationForSection(i)) {
-
-						if (document.getElementById("PermuationOptionsAccentGridDiddled") && document.getElementById("PermuationOptionsAccentGridDiddled").checked)
-							new_snare_array = get_snare_accent_with_diddle_permutation_array(i);
-						else if (document.getElementById("PermuationOptionsAccentGrid") && document.getElementById("PermuationOptionsAccentGrid").checked)
-							new_snare_array = get_snare_accent_permutation_array(i);
-						else
-							new_snare_array = get_snare_permutation_array(i);
-
-
-						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, new_snare_array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, root.class_num_beats_per_measure, root.class_note_value_per_measure, metronome.getSolo());
-					}
-				}
-				break;
-
-			case "none":
-			/* falls through */
-			default:
-				if (class_time_division < 16)
-					num_notes_for_swing = 8 * root.class_num_beats_per_measure / root.class_note_value_per_measure;
-				else
-					num_notes_for_swing = 16 * root.class_num_beats_per_measure / root.class_note_value_per_measure;
-
-				let repeat = class_repeated_measures.has(0) ? class_repeated_measures.get(0) : 1;
-				for (let i = 0; i < repeat; i++) {
-					MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, root.class_num_beats_per_measure, root.class_note_value_per_measure, metronome.getSolo());
-				}
-
-				for (i = 1; i < class_number_of_measures; i++) {
-
-					// reset arrays
-					Sticking_Array = get_empty_note_array_in_32nds();
-					HH_Array = get_empty_note_array_in_32nds();
-					Snare_Array = get_empty_note_array_in_32nds();
-					Kick_Array = get_empty_note_array_in_32nds();
-					Toms_Array = [get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds(), get_empty_note_array_in_32nds()];
-
-					// get another measure
-					root.get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, root.class_notes_per_measure * i);
-					muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, i);
-
-					let repeat = class_repeated_measures.has(i) ? class_repeated_measures.get(i) : 1;
-					for (let i = 0; i < repeat; i++) {
-						MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, root.class_num_beats_per_measure, root.class_note_value_per_measure, metronome.getSolo());
-					}
-				}
-				break;
-		}
-
-		var midi_url = "data:audio/midi;base64," + btoa(midiFile.toBytes());
-
-		return midi_url;
-	}
+	
 
 	root.MIDISaveAs = function () {
 		var midi_url = createMidiUrlFromClickableUI("general_MIDI");
@@ -259,7 +153,7 @@ function GrooveWriter() {
 		var myGrooveData = new root.myGrooveUtils.grooveDataNew();
 
 		myGrooveData.notesPerMeasure = root.class_notes_per_measure;
-		myGrooveData.timeDivision = class_time_division;
+		myGrooveData.timeDivision = root.class_time_division;
 		myGrooveData.numberOfMeasures = class_number_of_measures;
 		myGrooveData.numBeats = root.class_num_beats_per_measure;
 		myGrooveData.noteValue = root.class_note_value_per_measure;
@@ -272,7 +166,7 @@ function GrooveWriter() {
 		myGrooveData.swingPercent = midiPlayer.getSwing();
 		myGrooveData.tempo = midiPlayer.getTempo();
 		myGrooveData.kickStemsUp = true;
-		myGrooveData.repeatedMeasures = class_repeated_measures;
+		myGrooveData.repeatedMeasures = root.class_repeated_measures;
 		myGrooveData.highlightOn = options.highlightOn;
 
 		for (var i = 0; i < class_number_of_measures; i++) {
@@ -529,14 +423,14 @@ function GrooveWriter() {
 	//
 	function shiftRepeatedMeasuresAfterIndex(measureIndex, direction) {
 		// Convert Map to array of entries and sort by measure index
-		const sortedEntries = [...class_repeated_measures.entries()].sort((a, b) => a[0] - b[0]);
+		const sortedEntries = [...root.class_repeated_measures.entries()].sort((a, b) => a[0] - b[0]);
 		
 		// Process in reverse order to avoid overwriting
 		for (let i = sortedEntries.length - 1; i >= 0; i--) {
 			const [key, value] = sortedEntries[i];
 			if (key > measureIndex) {
-				class_repeated_measures.set(key + direction, value);
-				class_repeated_measures.delete(key);
+				root.class_repeated_measures.set(key + direction, value);
+				root.class_repeated_measures.delete(key);
 			}
 		}
 	}
@@ -568,13 +462,13 @@ function GrooveWriter() {
 			}
 		}
 
-		class_repeated_measures.delete(measureNum - 1);
+		root.class_repeated_measures.delete(measureNum - 1);
 		shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
 		class_number_of_measures--;
 
 		root.expandAuthoringViewWhenNecessary(root.class_notes_per_measure, class_number_of_measures);
 		changeDivisionWithNotes(
-			class_time_division,
+			root.class_time_division,
 			noteData.stickings,
 			noteData.hh,
 			noteData.tom1,
@@ -591,8 +485,8 @@ function GrooveWriter() {
 	//
 	root.repeatMeasureIncButtonClick = function (measureNum) {
 		// Increment repeat count for the measure
-		const count = class_repeated_measures.get(measureNum - 1) || 1;
-		class_repeated_measures.set(measureNum - 1, count + 1);
+		const count = root.class_repeated_measures.get(measureNum - 1) || 1;
+		root.class_repeated_measures.set(measureNum - 1, count + 1);
 
 		// Collect all notes from the UI
 		const notes = {
@@ -616,7 +510,7 @@ function GrooveWriter() {
 
 		// Update UI and sheet music
 		root.expandAuthoringViewWhenNecessary(root.class_notes_per_measure, class_number_of_measures);
-		changeDivisionWithNotes(class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
+		changeDivisionWithNotes(root.class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
 		
 		// Scroll to add measure button if it exists
 		const addMeasureButton = document.getElementById("addMeasureButton");
@@ -629,8 +523,8 @@ function GrooveWriter() {
 	//
 	//
 	root.repeatMeasureDecButtonClick = function (measureNum) {
-		const count = class_repeated_measures.get(measureNum - 1) || 1;
-		class_repeated_measures.set(measureNum - 1, count - 1);
+		const count = root.class_repeated_measures.get(measureNum - 1) || 1;
+		root.class_repeated_measures.set(measureNum - 1, count - 1);
 
 		let uiStickings = "", uiHH = "", uiTom1 = "", uiTom4 = "", uiSnare = "", uiKick = "";
 		const topIndex = root.class_notes_per_measure * class_number_of_measures;
@@ -645,7 +539,7 @@ function GrooveWriter() {
 		}
 
 		root.expandAuthoringViewWhenNecessary(root.class_notes_per_measure, class_number_of_measures);
-		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+		changeDivisionWithNotes(root.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
 		const addMeasureButton = document.getElementById("addMeasureButton");
 		addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
@@ -694,11 +588,11 @@ function GrooveWriter() {
 		// Update measure count and repeated measures
 		class_number_of_measures++;
 		shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
-		class_repeated_measures.set(measureNum, class_repeated_measures.get(measureNum - 1) || 1);
+		root.class_repeated_measures.set(measureNum, root.class_repeated_measures.get(measureNum - 1) || 1);
 
 		// Update UI and sheet music
 		root.expandAuthoringViewWhenNecessary(root.class_notes_per_measure, class_number_of_measures);
-		changeDivisionWithNotes(class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
+		changeDivisionWithNotes(root.class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
 
 		// Scroll to add measure button if it exists
 		const addMeasureButton = document.getElementById("addMeasureButton");
@@ -754,7 +648,7 @@ function GrooveWriter() {
 			kick: notes.kick.join('')
 		};
 
-		changeDivisionWithNotes(class_time_division, 
+		changeDivisionWithNotes(root.class_time_division, 
 			noteStrings.stickings, 
 			noteStrings.hh, 
 			noteStrings.tom1, 
@@ -822,7 +716,7 @@ function GrooveWriter() {
 
 		root.expandAuthoringViewWhenNecessary(root.class_notes_per_measure, class_number_of_measures);
 
-		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+		changeDivisionWithNotes(root.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
 		// reference the button and scroll it into view
 		var add_measure_button = document.getElementById("addMeasureButton");
@@ -875,7 +769,7 @@ function GrooveWriter() {
 
 		root.expandAuthoringViewWhenNecessary(root.class_notes_per_measure, class_number_of_measures);
 
-		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+		changeDivisionWithNotes(root.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
 		root.updateSheetMusic();
 
@@ -889,9 +783,9 @@ function GrooveWriter() {
 
 	// clear all the notes on all measures
 	root.clearAllNotes = function () {
-		class_repeated_measures.clear();
+		root.class_repeated_measures.clear();
 		for (var i = 0; i < class_number_of_measures * root.class_notes_per_measure; i++) {
-			set_sticking_state(i, 'off', root.class_notes_per_measure, class_time_division, root.class_note_value_per_measure);
+			set_sticking_state(i, 'off', root.class_notes_per_measure, root.class_time_division, root.class_note_value_per_measure);
 			set_hh_state(i, 'off');
 			set_tom1_state(i, 'off');
 			set_tom4_state(i, 'off');
@@ -910,7 +804,7 @@ function GrooveWriter() {
 		var uiKick = "";
 		var i;
 
-		changeDivisionWithNotes(class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+		changeDivisionWithNotes(root.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 	}
 
 
@@ -967,9 +861,9 @@ function GrooveWriter() {
 		for (var i = 0; i < class_number_of_measures * root.class_notes_per_measure; i++) {
 			var cur_state = get_sticking_state(i, "URL");
 			if (cur_state === "R") {
-				set_sticking_state(i, "left", false, root.class_notes_per_measure, class_time_division, root.class_note_value_per_measure);
+				set_sticking_state(i, "left", false, root.class_notes_per_measure, root.class_time_division, root.class_note_value_per_measure);
 			} else if (cur_state === "L") {
-				set_sticking_state(i, "right", false, root.class_notes_per_measure, class_time_division, root.class_note_value_per_measure);
+				set_sticking_state(i, "right", false, root.class_notes_per_measure, root.class_time_division, root.class_note_value_per_measure);
 			}
 		}
 		root.updateSheetMusic();
@@ -1080,7 +974,7 @@ function GrooveWriter() {
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 
 		// TODO
-		//setupPermutationMenu();
+		setupPermutationMenu();
 		root.setTimeSigLabel();
 
 		// if Mode != "view" put into edit mode  (we default to view mode to prevent screen flicker)
@@ -1096,7 +990,7 @@ function GrooveWriter() {
 		metronome = new Metronome();
 		
 		midiPlayer = new MIDIPlayer(root.myGrooveUtils.grooveUtilsUniqueIndex);
-		midiPlayer.AddMidiPlayerToPage(root.myGrooveUtils, "midiPlayer", class_time_division);
+		midiPlayer.AddMidiPlayerToPage(root.myGrooveUtils, "midiPlayer", root.class_time_division);
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 
 		// load the groove from the URL data if it was passed in.
@@ -1130,7 +1024,7 @@ function GrooveWriter() {
 				root.metronomeAutoSpeedUpTempoUpdate();
 			}
 
-			if (options.highlightOn) hilight_note(note_type, percent_complete, class_permutation_type, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures, root.class_notes_per_measure, class_repeated_measures, usingTriplets());
+			if (options.highlightOn) hilight_note(note_type, percent_complete, root.class_permutation_type, root.class_num_beats_per_measure, root.class_note_value_per_measure, class_number_of_measures, root.class_notes_per_measure, root.class_repeated_measures, usingTriplets());
 		};
 
 		midiPlayer.initialise();
@@ -1607,13 +1501,13 @@ function GrooveWriter() {
 
 			root.class_num_beats_per_measure = newTimeSigTop;
 			root.class_note_value_per_measure = newTimeSigBottom;
-			var new_notes_per_measure = calc_notes_per_measure(class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
+			var new_notes_per_measure = calc_notes_per_measure(root.class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
 			// If new_notes_per_measure is greater it will cause the changeDivision code to error
 			// as it tries to read the notes from the UI.   Setting it lower will allow the code to truncate
 			// the groove properly to something smaller rather than interpolating the groove into something weird
 			if (new_notes_per_measure < root.class_notes_per_measure)
 				root.class_notes_per_measure = new_notes_per_measure;
-			root.changeDivision(class_time_division);   // use this function because it will relayout everything
+			root.changeDivision(root.class_time_division);   // use this function because it will relayout everything
 		}
 		if (callback) {
 			callback();
@@ -1798,7 +1692,7 @@ function GrooveWriter() {
 
 		root.class_num_beats_per_measure = myGrooveData.numBeats;     // TimeSigTop
 		root.class_note_value_per_measure = myGrooveData.noteValue;   // TimeSigBottom
-		class_repeated_measures = myGrooveData.repeatedMeasures;
+		root.class_repeated_measures = myGrooveData.repeatedMeasures;
 		options.highlightOn = myGrooveData.highlightOn;
 
 		if (myGrooveData.notesPerMeasure != root.class_notes_per_measure || class_number_of_measures != myGrooveData.numberOfMeasures) {
@@ -1859,12 +1753,12 @@ function GrooveWriter() {
 	// OMG this needs to be refactored really bad.   There is a GrooveData struct from groove utils that
 	//      would make this whole thing much easier.  :(
 	function changeDivisionWithNotes(newDivision, Stickings, HH, Tom1, Tom4, Snare, Kick) {
-		var oldDivision = class_time_division;
+		var oldDivision = root.class_time_division;
 		var wasStickingsVisable = isStickingsVisible();
 		var wasTomsVisable = isTomsVisible();
 
-		class_time_division = newDivision;
-		root.class_notes_per_measure = calc_notes_per_measure(class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
+		root.class_time_division = newDivision;
+		root.class_notes_per_measure = calc_notes_per_measure(root.class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
 
 		var newHTML = "";
 		for (var cur_measure = 1; cur_measure <= class_number_of_measures; cur_measure++) {
@@ -1875,7 +1769,7 @@ function GrooveWriter() {
 		document.getElementById("measureContainer").innerHTML = newHTML;
 
 		// change the Permutation options too
-		newHTML = HTMLforPermutationOptions(class_permutation_type, usingTriplets());
+		newHTML = HTMLforPermutationOptions(root.class_permutation_type, usingTriplets());
 		document.getElementById("PermutationOptions").innerHTML = newHTML;
 
 		if (wasStickingsVisable)
@@ -1898,7 +1792,7 @@ function GrooveWriter() {
 		unselectButton(document.getElementById("subdivision_" + oldDivision + "ths"));
 
 		// highlight the new div
-		selectButton(document.getElementById("subdivision_" + class_time_division + "ths"));
+		selectButton(document.getElementById("subdivision_" + root.class_time_division + "ths"));
 
 		// This may disable or enable the menu
 		setupPermutationMenu();
@@ -2050,7 +1944,7 @@ function GrooveWriter() {
 							</div>\
 						</span>\n');
 
-		let repeat = class_repeated_measures.get(baseindex - 1) || 1
+		let repeat = root.class_repeated_measures.get(baseindex - 1) || 1
 
 		newHTML += generateMeasureButtons(class_number_of_measures, baseindex, repeat);
 
