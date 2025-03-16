@@ -13,7 +13,7 @@ function undoCommand() {
         // the one we want to load is behind the head, since all changes go on the undo stack immediately
         // no need to pop, since it would just get added right back on anyways
         undoURL = undoStack[undoStack.length - 1];
-        editor.set_Default_notes(undoURL);
+        editor.updateFromURL(undoURL);
     }
 };
 
@@ -25,7 +25,7 @@ function redoCommand() {
     if (redoStack.length > 0) {
         var redoURL = redoStack.pop();
         addItemToUndoOrRedoStack(redoURL, undoStack); // add to undo stack
-        editor.set_Default_notes(redoURL);
+        editor.updateFromURL(redoURL);
     }
 };
 

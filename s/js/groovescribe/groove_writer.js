@@ -364,8 +364,6 @@ function GrooveWriter() {
 		// set the background and text color of the current subdivision
 		selectButton(document.getElementById("subdivision_" + root.class_notes_per_measure + "ths"));
 
-
-
 		// add html for the midi player
 		metronome = new Metronome();
 		
@@ -374,7 +372,7 @@ function GrooveWriter() {
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 
 		// load the groove from the URL data if it was passed in.
-		root.set_Default_notes(window.location.search);
+		root.updateFromURL(window.location.search);
 
 		midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
 			var midiURL;
@@ -994,13 +992,7 @@ function GrooveWriter() {
 		}
 	};
 
-	root.set_Default_notes = function (encodedURLData) {
-		var Division;
-		var Stickings;
-		var HH;
-		var Snare;
-		var Kick;
-		var stickings_set_from_URL = false;
+	root.updateFromURL = function (encodedURLData) {
 
 		var track = getTrackFromUrlString(encodedURLData, root.track, options.debugMode);
 
@@ -1029,15 +1021,11 @@ function GrooveWriter() {
 		if (track.showStickings)
 			stickingsShowHide(true, true, true);
 		document.getElementById("tuneTitle").value = track.title;
-
-
 		document.getElementById("tuneAuthor").value = track.author;
-
 		document.getElementById("tuneComments").value = track.comments;
 
 		// TODO
 		midiPlayer.setTempo(track.tempo);
-
 		midiPlayer.setSwing(track.swingPercent);
 
 		//metronome.setFrequency(myGrooveData.metronomeFrequency);
@@ -1046,7 +1034,7 @@ function GrooveWriter() {
 	}
 
 	root.loadNewGroove = function (encodedURLData) {
-		root.set_Default_notes(encodedURLData);
+		root.updateFromURL(encodedURLData);
 	};
 
 	function getABCDataWithLineEndings() {

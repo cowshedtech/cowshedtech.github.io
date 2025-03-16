@@ -16,7 +16,7 @@
 const getQueryVariableFromString = (key, defaultValue, queryString) => {
     try {
         const params = new URLSearchParams(queryString.slice(1));
-        const value = params.get(key.toLowerCase());
+        const value = params.get(key);
         return value ?? defaultValue;
     } catch (error) {
         console.warn('Failed to parse query string:', error);
