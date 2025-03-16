@@ -63,3 +63,115 @@ function shiftRepeatedMeasuresAfterIndex(measureIndex, direction) {
         }
     }
 }
+
+//
+// remove a measure from the page NB measureNum is indexed starting at 1, not 0
+closeMeasureButtonClick = function (measureNum) {
+    const noteData = {
+        stickings: "",
+        hh: "",
+        tom1: "",
+        tom4: "",
+        snare: "",
+        kick: ""
+    };
+
+    const measureStart = (measureNum - 1) * editor.class_notes_per_measure;
+    const measureEnd = measureNum * editor.class_notes_per_measure;
+    const totalNotes = editor.class_notes_per_measure * editor.class_number_of_measures;
+
+    for (let i = 0; i < totalNotes; i++) {
+        if (i < measureStart || i >= measureEnd) {
+            noteData.stickings += get_sticking_state(i, "URL");
+            noteData.hh += get_hh_state(i, "URL");
+            noteData.tom1 += get_tom_state(i, 1, "URL");
+            noteData.tom4 += get_tom_state(i, 4, "URL");
+            noteData.snare += get_snare_state(i, "URL");
+            noteData.kick += get_kick_state(i, "URL");
+        }
+    }
+
+    editor.class_repeated_measures.delete(measureNum - 1);
+    shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
+    editor.class_number_of_measures--;
+
+    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.class_number_of_measures);
+    changeDivisionWithNotes(
+        editor.class_time_division,
+        noteData.stickings,
+        noteData.hh,
+        noteData.tom1,
+        noteData.tom4,
+        noteData.snare,
+        noteData.kick
+    );
+
+    editor.updateSheetMusic();
+};
+
+
+//
+//
+function repeatMeasureIncButtonClick(measureNum) {
+    // Increment repeat count for the measure
+    const count = editor.class_repeated_measures.get(measureNum - 1) || 1;
+    editor.class_repeated_measures.set(measureNum - 1, count + 1);
+
+    // Collect all notes from the UI
+    const notes = {
+        stickings: '',
+        hh: '',
+        tom1: '',
+        tom4: '',
+        snare: '',
+        kick: ''
+    };
+    
+    const totalNotes = root.class_notes_per_measure * class_number_of_measures;
+    for (let i = 0; i < totalNotes; i++) {
+        notes.stickings += get_sticking_state(i, "URL");
+        notes.hh += get_hh_state(i, "URL");
+        notes.tom1 += get_tom_state(i, 1, "URL");
+        notes.tom4 += get_tom_state(i, 4, "URL");
+        notes.snare += get_snare_state(i, "URL");
+        notes.kick += get_kick_state(i, "URL");
+    }
+
+    // Update UI and sheet music
+    root.expandAuthoringViewWhenNecessary(root.class_notes_per_measure, class_number_of_measures);
+    changeDivisionWithNotes(root.class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
+    
+    // Scroll to add measure button if it exists
+    const addMeasureButton = document.getElementById("addMeasureButton");
+    addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
+
+    editor.updateSheetMusic();
+};
+
+
+//
+//
+function repeatMeasureDecButtonClick(measureNum) {
+    const count = editor.class_repeated_measures.get(measureNum - 1) || 1;
+    editor.class_repeated_measures.set(measureNum - 1, count - 1);
+
+    let uiStickings = "", uiHH = "", uiTom1 = "", uiTom4 = "", uiSnare = "", uiKick = "";
+    const topIndex = editor.class_notes_per_measure * editor.class_number_of_measures;
+
+    for (let i = 0; i < topIndex; i++) {
+        uiStickings += get_sticking_state(i, "URL");
+        uiHH += get_hh_state(i, "URL");
+        uiTom1 += get_tom_state(i, 1, "URL");
+        uiTom4 += get_tom_state(i, 4, "URL");
+        uiSnare += get_snare_state(i, "URL");
+        uiKick += get_kick_state(i, "URL");
+    }
+
+    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.class_number_of_measures);
+    changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+
+    const addMeasureButton = document.getElementById("addMeasureButton");
+    addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
+
+    editor.updateSheetMusic();
+};
