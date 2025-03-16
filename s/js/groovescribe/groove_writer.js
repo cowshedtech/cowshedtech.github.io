@@ -355,7 +355,7 @@ function GrooveWriter() {
 
 		// TODO
 		setupPermutationMenu();
-		root.setTimeSigLabel();
+		setTimeSigLabel();
 
 		// if Mode != "view" put into edit mode  (we default to view mode to prevent screen flicker)
 		if ("view" != getQueryVariableFromURL("Mode", "edit"))
@@ -822,77 +822,11 @@ function GrooveWriter() {
 		return getGSUrlStringFromGrooveData(myGrooveData, url_destination)
 	}
 
-	root.timeSigPopupOpen = function (type) {
-		var popup = document.getElementById("timeSigPopup");
-
-		if (popup)
-			popup.style.display = "block";
-
-	};
-
-	// turns on or off triplet 1/4 and 1/8 note selection based on the current time sig setting
-	root.setTimeDivisionSelectionOnOrOff = function () {
-
-		// check for incompatible odd time signature division  9/16 and 1/8 notes for instance
-		if ((8 * root.class_num_beats_per_measure / root.class_note_value_per_measure) % 1 != 0) {
-			addOrRemoveKeywordFromClassById("subdivision_8ths", "disabled", true);
-		} else {
-			addOrRemoveKeywordFromClassById("subdivision_8ths", "disabled", false);
-		}
-
-		if (root.class_note_value_per_measure != 4) {
-			// triplets are too complicated right now outside of x/4 time.
-			// disable them
-
-			addOrRemoveKeywordFromClassById("subdivision_12ths", "disabled", true);
-			addOrRemoveKeywordFromClassById("subdivision_24ths", "disabled", true);
-			addOrRemoveKeywordFromClassById("subdivision_48ths", "disabled", true);
-
-		} else {
-			addOrRemoveKeywordFromClassById("subdivision_12ths", "disabled", false);
-			addOrRemoveKeywordFromClassById("subdivision_24ths", "disabled", false);
-			addOrRemoveKeywordFromClassById("subdivision_48ths", "disabled", false);
-
-		}
-	};
+	
+	
 
 
-	root.setTimeSigLabel = function () {
-		// turn on/off special features that are only available in 4/4 time
-
-		// set the label
-		document.getElementById("timeSigLabel").innerHTML = '<sup>' + root.class_num_beats_per_measure + "</sup>/<sub>" + root.class_note_value_per_measure + "</sub>";
-	};
-
-	root.timeSigPopupClose = function (type, callback) {
-		var popup = document.getElementById("timeSigPopup");
-
-		if (popup)
-			popup.style.display = "none";
-
-		// ignore type "cancel"
-		if (type == "ok") {
-			var newTimeSigTop = document.getElementById("timeSigPopupTimeSigTop").value;
-			var newTimeSigBottom = document.getElementById("timeSigPopupTimeSigBottom").value;
-
-			if (usingTriplets() && newTimeSigBottom != 4) {
-				root.changeDivision(16);  // switch to a non triplet division since they are not supported in this time signature
-			}
-
-			root.class_num_beats_per_measure = newTimeSigTop;
-			root.class_note_value_per_measure = newTimeSigBottom;
-			var new_notes_per_measure = calc_notes_per_measure(root.class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
-			// If new_notes_per_measure is greater it will cause the changeDivision code to error
-			// as it tries to read the notes from the UI.   Setting it lower will allow the code to truncate
-			// the groove properly to something smaller rather than interpolating the groove into something weird
-			if (new_notes_per_measure < root.class_notes_per_measure)
-				root.class_notes_per_measure = new_notes_per_measure;
-			root.changeDivision(root.class_time_division);   // use this function because it will relayout everything
-		}
-		if (callback) {
-			callback();
-		}
-	};
+	
 
 	root.updateRangeLabel = function (event, idToUpdate) {
 		var element = document.getElementById(idToUpdate);
@@ -1068,43 +1002,43 @@ function GrooveWriter() {
 		var Kick;
 		var stickings_set_from_URL = false;
 
-		var myGrooveData = getGrooveDataFromUrlString(encodedURLData, root.track, options.debugMode);
+		var track = getGrooveDataFromUrlString(encodedURLData, root.track, options.debugMode);
 
-		root.class_num_beats_per_measure = myGrooveData.numBeats;     // TimeSigTop
-		root.class_note_value_per_measure = myGrooveData.noteValue;   // TimeSigBottom
-		root.class_repeated_measures = myGrooveData.repeatedMeasures;
-		options.highlightOn = myGrooveData.highlightOn;
+		root.class_num_beats_per_measure = track.numBeats;     // TimeSigTop
+		root.class_note_value_per_measure = track.noteValue;   // TimeSigBottom
+		root.class_repeated_measures = track.repeatedMeasures;
+		options.highlightOn = track.highlightOn;
 
-		if (myGrooveData.notesPerMeasure != root.class_notes_per_measure || root.class_number_of_measures != myGrooveData.numberOfMeasures) {
-			root.class_number_of_measures = myGrooveData.numberOfMeasures;
-			root.changeDivisionWithNotes(myGrooveData.timeDivision);
+		if (track.notesPerMeasure != root.class_notes_per_measure || root.class_number_of_measures != track.numberOfMeasures) {
+			root.class_number_of_measures = track.numberOfMeasures;
+			root.changeDivisionWithNotes(track.timeDivision);
 		}
 
 		root.expandAuthoringViewWhenNecessary(root.class_notes_per_measure, root.class_number_of_measures);
 
-		setNotesFromABCArray("Stickings", myGrooveData.sticking_array, root.class_number_of_measures);
-		setNotesFromABCArray("H", myGrooveData.hh_array, root.class_number_of_measures);
-		setNotesFromABCArray("T1", myGrooveData.toms_array[0], root.class_number_of_measures);
-		setNotesFromABCArray("T4", myGrooveData.toms_array[3], root.class_number_of_measures);
-		setNotesFromABCArray("S", myGrooveData.snare_array, root.class_number_of_measures);
-		setNotesFromABCArray("K", myGrooveData.kick_array, root.class_number_of_measures);
+		setNotesFromABCArray("Stickings", track.sticking_array, root.class_number_of_measures);
+		setNotesFromABCArray("H", track.hh_array, root.class_number_of_measures);
+		setNotesFromABCArray("T1", track.toms_array[0], root.class_number_of_measures);
+		setNotesFromABCArray("T4", track.toms_array[3], root.class_number_of_measures);
+		setNotesFromABCArray("S", track.snare_array, root.class_number_of_measures);
+		setNotesFromABCArray("K", track.kick_array, root.class_number_of_measures);
 
-		if (myGrooveData.showToms)
+		if (track.showToms)
 			showHideToms(true, true, true);
 
-		if (myGrooveData.showStickings)
+		if (track.showStickings)
 			stickingsShowHide(true, true, true);
-		document.getElementById("tuneTitle").value = myGrooveData.title;
+		document.getElementById("tuneTitle").value = track.title;
 
 
-		document.getElementById("tuneAuthor").value = myGrooveData.author;
+		document.getElementById("tuneAuthor").value = track.author;
 
-		document.getElementById("tuneComments").value = myGrooveData.comments;
+		document.getElementById("tuneComments").value = track.comments;
 
 		// TODO
-		midiPlayer.setTempo(myGrooveData.tempo);
+		midiPlayer.setTempo(track.tempo);
 
-		midiPlayer.setSwing(myGrooveData.swingPercent);
+		midiPlayer.setSwing(track.swingPercent);
 
 		//metronome.setFrequency(myGrooveData.metronomeFrequency);
 
@@ -1178,10 +1112,10 @@ function GrooveWriter() {
 		setupPermutationMenu();
 
 		// may turn on or off triplets and 1/4 or 1/8th notes based on time signature
-		root.setTimeDivisionSelectionOnOrOff();
+		setTimeDivisionSelectionOnOrOff();
 
 		// change the time label
-		root.setTimeSigLabel();
+		setTimeSigLabel();
 
 		// enable or disable swing
 		midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(newDivision));
