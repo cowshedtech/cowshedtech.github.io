@@ -57,11 +57,7 @@ function Track() {
 		this.title = "";
 		this.author = "";
 		this.comments = "";
-		//this.showLegend = false;
-		this.swingPercent = 0;
-		this.tempo = constant_DEFAULT_TEMPO;
 		this.kickStemsUp = true;
-		this.grooveDBAuthoring = options.grooveDBAuthoring;
 		this.repeatedMeasures = new Map();
 	};
 

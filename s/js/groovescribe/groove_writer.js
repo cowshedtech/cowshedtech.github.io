@@ -135,14 +135,10 @@ function GrooveWriter() {
 		myGrooveData.numberOfMeasures = root.class_number_of_measures;
 		myGrooveData.numBeats = root.class_num_beats_per_measure;
 		myGrooveData.noteValue = root.class_note_value_per_measure;
-		// myGrooveData.showStickings = isStickingsVisible();
-//		myGrooveData.showToms = isTomsVisible();
 		myGrooveData.title = document.getElementById("tuneTitle").value;
 		myGrooveData.author = document.getElementById("tuneAuthor").value;
 		myGrooveData.comments = document.getElementById("tuneComments").value;
 		options.showLegend = document.getElementById("showLegend").checked;
-		myGrooveData.swingPercent = midiPlayer.getSwing();
-		myGrooveData.tempo = midiPlayer.getTempo();
 		myGrooveData.kickStemsUp = true;
 		myGrooveData.repeatedMeasures = root.class_repeated_measures;
 

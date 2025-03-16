@@ -46,10 +46,10 @@
     if (myGrooveData.comments !== "")
         fullURL += "&Comments=" + encodeURIComponent(myGrooveData.comments);
 
-    fullURL += "&Tempo=" + myGrooveData.tempo;
+    fullURL += "&Tempo=" + midiPlayer.tempo;
 
-    if (myGrooveData.swingPercent > 0)
-        fullURL += "&Swing=" + myGrooveData.swingPercent;
+    if (midiPlayer.getSwing() > 0)
+        fullURL += "&Swing=" + midiPlayer.getSwing();
 
     if (!options.highlightOn)
         fullURL += "&Highlight=OFF";
@@ -119,9 +119,6 @@ function getTrackFromUrlString(encodedURLData, track, debugMode) {
     track.notesPerMeasure = calc_notes_per_measure(track.timeDivision, track.numBeats, track.noteValue);
 
     metronome.frequency = parseInt(getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10);
-
-    midiPlayer.setTempo(track.tempo);
-midiPlayer.setSwing(track.swingPercent);
 
     track.numberOfMeasures = parseInt(getQueryVariableFromString("measures", 1, encodedURLData), 10);
     if (track.numberOfMeasures < 1 || isNaN(track.numberOfMeasures))
@@ -206,13 +203,13 @@ midiPlayer.setSwing(track.swingPercent);
     track.comments = decodeURIComponent(track.comments);
     track.comments = track.comments.replace(/\+/g, " ");
 
-    track.tempo = parseInt(getQueryVariableFromString("tempo", constant_DEFAULT_TEMPO, encodedURLData), 10);
+    midiPlayer.setTempo(parseInt(getQueryVariableFromString("tempo", constant_DEFAULT_TEMPO, encodedURLData), 10));
     if (isNaN(track.tempo) || track.tempo < 20 || track.tempo > 400)
-        track.tempo = constant_DEFAULT_TEMPO;
+        midiPlayer.setTempo(constant_DEFAULT_TEMPO);
 
-    track.swingPercent = parseInt(getQueryVariableFromString("swing", 0, encodedURLData), 10);
-    if (isNaN(track.swingPercent) || track.swingPercent < 0 || track.swingPercent > 100)
-        track.swingPercent = 0;
+    midiPlayer.setSwing(parseInt(getQueryVariableFromString("swing", 0, encodedURLData), 10));
+    if (isNaN(midiPlayer.getSwing()) || midiPlayer.getSwing() < 0 || midiPlayer.getSwing() > 100)
+        midiPlayer.setSwing(0);
 
     return track;
 };

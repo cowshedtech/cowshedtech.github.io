@@ -185,8 +185,8 @@ if (typeof(GrooveDisplay) === "undefined") {
 
 			track.AddMidiPlayerToPage(midiPlayerTargetId, myGrooveData.notesPerMeasure, true);
 			track.expandOrRetractMIDI_playback(true, false); // make it small
-			track.setTempo(myGrooveData.tempo);
-			track.setSwing(myGrooveData.swingPercent);
+			// track.setTempo(myGrooveData.tempo);
+			// track.setSwing(myGrooveData.swingPercent);
 			track.oneTimeInitializeMidi();
 
 			root.GrooveDisplayUniqueCounter++;
@@ -249,8 +249,8 @@ if (typeof(GrooveDisplay) === "undefined") {
 
 				track.AddMidiPlayerToPage(midiPlayerTargetId, GrooveData.notesPerMeasure, true);
 				track.expandOrRetractMIDI_playback(true, expandPlayer); // make it small
-				track.setTempo(GrooveData.tempo);
-				track.setSwing(GrooveData.swingPercent);
+				// track.setTempo(GrooveData.tempo);
+				// track.setSwing(GrooveData.swingPercent);
 				track.setFrequencyDisplay(GrooveData.metronomeFrequency);
 				track.oneTimeInitializeMidi();
 			}

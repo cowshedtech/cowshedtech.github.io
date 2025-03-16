@@ -361,10 +361,12 @@ function create_MIDIURLFromGrooveData(myGrooveData, MIDI_type, metronomeSolo) {
     var midiTrack = new Midi.Track();
     midiFile.addTrack(midiTrack);
 
-    midiTrack.setTempo(myGrooveData.tempo);
+//    midiTrack.setTempo(myGrooveData.tempo);
     midiTrack.setInstrument(0, 0x13);
 
     var swing_percentage = myGrooveData.swingPercent / 100;
+    var swing_percentage = midiPlayer.getSwing() / 100;
+
 
     // the midi converter expects all the arrays to be 32 or 48 notes long.
     // Expand them

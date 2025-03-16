@@ -36,8 +36,8 @@
 
 		var DBString = "{{GrooveTab";
 
-		DBString += "\n|HasTempo=" + myGrooveData.tempo;
-		DBString += "\n|HasSwingPercent=" + myGrooveData.swingPercent;
+		DBString += "\n|HasTempo=" + midiPlayer.getTempo();
+		DBString += "\n|HasSwingPercent=" + midiPlayer.getSwing();
 		DBString += "\n|HasDivision=" + myGrooveData.notesPerMeasure;
 		DBString += "\n|HasMeasures=" + myGrooveData.numberOfMeasures;
 		DBString += "\n|HasNotesPerMeasure=" + notesPerMeasureInTab;

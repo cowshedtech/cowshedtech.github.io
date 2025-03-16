@@ -46,10 +46,10 @@ function getGSUrlStringFromGrooveData(myGrooveData, url_destination) {
     if (myGrooveData.comments !== "")
         fullURL += "&Comments=" + encodeURIComponent(myGrooveData.comments);
 
-    fullURL += "&Tempo=" + myGrooveData.tempo;
+    fullURL += "&Tempo=" + midiPlayer.getTempo()
 
-    if (myGrooveData.swingPercent > 0)
-        fullURL += "&Swing=" + myGrooveData.swingPercent;
+    if (midiPlayer.getSwing() > 0)
+        fullURL += "&Swing=" + midiPlayer.getSwing();
 
     // # of measures
     fullURL += "&Measures=" + myGrooveData.numberOfMeasures;
