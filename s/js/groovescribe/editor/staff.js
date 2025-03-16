@@ -434,3 +434,61 @@ function clearAllNotes() {
 
     editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 }
+
+
+// public function
+// function to create HTML for the music staff and notes.   We usually want more than one of these
+// baseIndex is the index for the css labels "staff-container1, staff-container2"
+// indexStartForNotes is the index for the note ids.
+function htmlForStaffContainer(baseindex, indexStartForNotes) {
+    var newHTML = ('');
+
+    if (baseindex == 1) // add new measure button
+        newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
+        
+    newHTML += ('<div class="staff-container" id="staff-container' + baseindex + '">')
+    newHTML += generateStickingContainerHTML(baseindex, indexStartForNotes, editor.class_notes_per_measure, editor.class_num_beats_per_measure, editor.class_note_value_per_measure);
+
+    newHTML += ('  <span class="notes-row-container">')
+    newHTML += generateLineLabels(baseindex); // Call the new function where the line labels are needed
+
+    newHTML += ('\				\
+                            <div class="music-line-container">\
+                                \
+                                <div class="notes-container">\
+                                <div class="staff-line-1"></div>\
+                                <div class="staff-line-2"></div>\
+                                <div class="staff-line-3"></div>\
+                                <div class="staff-line-4"></div>\
+                                <div class="staff-line-5"></div>\n');
+
+    // backgrounds for highlighting.  Evenly spaced cols of space
+    newHTML += ('\
+                                    <div class="background-highlight-container">\
+                                        <div class="opening_note_space"> </div>');
+    for (let i = indexStartForNotes; i < editor.class_notes_per_measure + indexStartForNotes; i++) {
+        newHTML += ('						<div id="bg-highlight' + i + '" class="bg-highlight" >\
+                                            </div>\n');
+
+        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(editor.class_notes_per_measure, editor.class_num_beats_per_measure, editor.class_note_value_per_measure) === 0 && i < editor.class_notes_per_measure + indexStartForNotes - 1) {
+            newHTML += ('<div class="space_between_note_groups"> </div> \n');
+        }
+    }
+    newHTML += ('<div class="end_note_space"></div>\n</div>\n');
+
+    newHTML += generateHiHatContainerHTML(indexStartForNotes, baseindex, editor.class_notes_per_measure, editor.class_num_beats_per_measure, editor.class_note_value_per_measure, indexStartForNotes);
+    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.class_notes_per_measure, editor.class_num_beats_per_measure, editor.class_note_value_per_measure, indexStartForNotes, 1);
+    newHTML += generateSnareContainerHTML(indexStartForNotes, baseindex, editor.class_notes_per_measure, editor.class_num_beats_per_measure, editor.class_note_value_per_measure, indexStartForNotes);
+    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.class_notes_per_measure, editor.class_num_beats_per_measure, editor.class_note_value_per_measure, indexStartForNotes, 4);
+    newHTML += generateKickContainerHTML(indexStartForNotes, baseindex, editor.class_notes_per_measure, editor.class_num_beats_per_measure, editor.class_note_value_per_measure, indexStartForNotes);
+    newHTML += ('\
+                            </div>\
+                        </div>\
+                    </span>\n');
+
+    let repeat = editor.class_repeated_measures.get(baseindex - 1) || 1
+
+    newHTML += generateMeasureButtons(editor.class_number_of_measures, baseindex, repeat);
+
+    return newHTML;
+}; // end function HTMLforStaffContainer
