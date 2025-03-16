@@ -46,16 +46,6 @@ function Track() {
 
 	root.isLegendVisable = false;
 
-	// integration with third party components
-	// root.noteCallback = null;  //function triggered when a note is played
-	// root.playEventCallback = null;  //triggered when the play button is pressed
-	// root.repeatCallback = null;  //triggered when a groove is going to be repeated
-	root.tempoChangeCallback = null;  //triggered when the tempo changes.  ARG1 is the new Tempo integer (needs to be very fast, it can get called a lot of times from the slider)
-
-	var class_empty_note_array = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
-
-	root.isContextMenuVisible = false; // a single context menu can be visible at a time.
-
 	root.grooveDataNew = function () {
 		this.notesPerMeasure = 16;
 		this.timeDivision = 16;
@@ -88,12 +78,4 @@ function Track() {
 	
 	this.abcToSVGCallback = new SVGLibCallback(this); // singleton
 
-
-	// set a URL for midi playback.
-	// useful for static content, so you don't have to override the loadMidiDataEvent callback
-	root.setGrooveData = function (grooveData) {
-		root.myGrooveData = grooveData;
-	};
-
-	
 } // end of class

@@ -46,3 +46,5 @@ function generateLineLabels(baseindex) {
         </div>
     `;
 }
+
+
