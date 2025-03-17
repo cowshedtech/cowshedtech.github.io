@@ -65,6 +65,7 @@ function helpMenuPopupClick(help_type) {
     action();
 }
 
+
 /**
  * Helper function to open a help window in a new tab and focus it
  * @param {string} url - The URL to open
