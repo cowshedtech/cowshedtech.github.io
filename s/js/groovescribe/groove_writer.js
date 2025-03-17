@@ -44,11 +44,8 @@ function GrooveWriter() {
 
 	var root = this;
 	editor = this;
-
 	options = new Options();
-
 	root.track = new Track();
-
 	abcToSVGCallback = new SVGLibCallback(root.track);
 
 	// public class vars
@@ -59,13 +56,8 @@ function GrooveWriter() {
 	root.class_notes_per_measure = calc_notes_per_measure(root.class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
 	root.class_repeated_measures = new Map();
 	
-
-	// set debugMode immediately so we can use it in index.html
-	options.debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
-	options.grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
-
 	// private vars in the scope of the class
-	root.class_app_title = "Groove Scribe";
+	root.constant_APP_TITLE = "Groove Scribe";
 	root.class_permutation_type = "none";
 	
 
@@ -262,8 +254,8 @@ function GrooveWriter() {
 
 		} else {
 			// open a new window just for printing   (new method)
-			var win = window.open("", root.class_app_title + " Print");
-			win.document.body.innerHTML = "<title>" + root.class_app_title + "</title>\n<center>\n";
+			var win = window.open("", root.constant_APP_TITLE + " Print");
+			win.document.body.innerHTML = "<title>" + root.constant_APP_TITLE + "</title>\n<center>\n";
 			win.document.body.innerHTML += document.getElementById("svgTarget").innerHTML;
 			win.document.body.innerHTML += "\n</center>";
 			win.print();
@@ -347,6 +339,10 @@ function GrooveWriter() {
 	// public function.
 	// This function initializes the data for the groove Scribe web page
 	root.runsOnPageLoad = function () {
+
+		// set debugMode immediately so we can use it in index.html
+		options.debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
+		options.grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
 
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 

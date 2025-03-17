@@ -243,7 +243,7 @@ function updateCurrentURL() {
     }
 
     if (!newTitle)
-        newTitle = editor.class_app_title;
+        newTitle = editor.constant_APP_TITLE;
 
     document.title = newTitle;
     try {
