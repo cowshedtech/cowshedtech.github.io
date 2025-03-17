@@ -466,21 +466,21 @@ function htmlForStaffContainer(baseindex, indexStartForNotes) {
     newHTML += ('\
                                     <div class="background-highlight-container">\
                                         <div class="opening_note_space"> </div>');
-    for (let i = indexStartForNotes; i < editor.class_notes_per_measure + indexStartForNotes; i++) {
+    for (let i = indexStartForNotes; i < editor.track.notesPerMeasure + indexStartForNotes; i++) {
         newHTML += ('						<div id="bg-highlight' + i + '" class="bg-highlight" >\
                                             </div>\n');
 
-        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(editor.class_notes_per_measure, editor.track.numBeats, editor.class_note_value_per_measure) === 0 && i < editor.class_notes_per_measure + indexStartForNotes - 1) {
+        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure) === 0 && i < editor.track.notesPerMeasure + indexStartForNotes - 1) {
             newHTML += ('<div class="space_between_note_groups"> </div> \n');
         }
     }
     newHTML += ('<div class="end_note_space"></div>\n</div>\n');
 
-    newHTML += generateHiHatContainerHTML(indexStartForNotes, baseindex, editor.class_notes_per_measure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes);
-    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.class_notes_per_measure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes, 1);
-    newHTML += generateSnareContainerHTML(indexStartForNotes, baseindex, editor.class_notes_per_measure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes);
-    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.class_notes_per_measure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes, 4);
-    newHTML += generateKickContainerHTML(indexStartForNotes, baseindex, editor.class_notes_per_measure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes);
+    newHTML += generateHiHatContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes);
+    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes, 1);
+    newHTML += generateSnareContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes);
+    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes, 4);
+    newHTML += generateKickContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes);
     newHTML += ('\
                             </div>\
                         </div>\
