@@ -1,5 +1,89 @@
+// Javascript for the Groove Scribe HTML application
+// Groove Scribe is for drummers and helps create sheet music with an easy to use WYSIWYG groove editor.
 //
-//
+// Functions for handling a staff in the clickable editor
+
+
+/**
+ * Creates HTML for a music staff container including note grids and labels.
+ * Each staff container represents one measure in the score.
+ * 
+ * @param {number} baseindex - Index for CSS labels (e.g., "staff-container1")
+ * @param {number} indexStartForNotes - Starting index for note IDs in this container
+ * @returns {string} HTML string containing the complete staff container
+ * @requires Functions:
+ * - generateLineLabels - Creates drum kit line labels
+ * - generateMeasureButtons - Creates measure control buttons
+ * @requires editor.track - Track object containing score state
+ */
+function htmlForStaffContainer(baseindex, indexStartForNotes) {
+    var newHTML = ('');
+
+    if (baseindex == 1) // add new measure button
+        newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
+        
+    newHTML += ('<div class="staff-container" id="staff-container' + baseindex + '">')
+    newHTML += generateStickingContainerHTML(baseindex, indexStartForNotes, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue);
+
+    newHTML += ('  <span class="notes-row-container">')
+    newHTML += generateLineLabels(baseindex); // Call the new function where the line labels are needed
+
+    newHTML += ('\				\
+                            <div class="music-line-container">\
+                                \
+                                <div class="notes-container">\
+                                <div class="staff-line-1"></div>\
+                                <div class="staff-line-2"></div>\
+                                <div class="staff-line-3"></div>\
+                                <div class="staff-line-4"></div>\
+                                <div class="staff-line-5"></div>\n');
+
+    // backgrounds for highlighting.  Evenly spaced cols of space
+    newHTML += ('\
+                                    <div class="background-highlight-container">\
+                                        <div class="opening_note_space"> </div>');
+    for (let i = indexStartForNotes; i < editor.track.notesPerMeasure + indexStartForNotes; i++) {
+        newHTML += ('						<div id="bg-highlight' + i + '" class="bg-highlight" >\
+                                            </div>\n');
+
+        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue) === 0 && i < editor.track.notesPerMeasure + indexStartForNotes - 1) {
+            newHTML += ('<div class="space_between_note_groups"> </div> \n');
+        }
+    }
+    newHTML += ('<div class="end_note_space"></div>\n</div>\n');
+
+    newHTML += generateHiHatContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
+    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes, 1);
+    newHTML += generateSnareContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
+    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes, 4);
+    newHTML += generateKickContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
+    newHTML += ('\
+                            </div>\
+                        </div>\
+                    </span>\n');
+
+    let repeat = editor.track.repeatedMeasures.get(baseindex - 1) || 1
+
+    newHTML += generateMeasureButtons(editor.track.numberOfMeasures, baseindex, repeat);
+
+    return newHTML;
+}; // end function HTMLforStaffContainer
+
+
+/**
+ * Generates HTML for measure control buttons including remove, repeat, duplicate, and add buttons.
+ * 
+ * @param {number} numberOfMeasures - Total number of measures in the score
+ * @param {number} baseindex - Index of the current measure (1-based)
+ * @param {number} repeat - Number of times this measure should be repeated
+ * @returns {string} HTML string containing the measure control buttons
+ * @requires Functions:
+ * - closeMeasureButtonClick - Handler for removing a measure
+ * - repeatMeasureIncButtonClick - Handler for incrementing measure repeats
+ * - repeatMeasureDecButtonClick - Handler for decrementing measure repeats
+ * - duplicateMeasureButtonClick - Handler for duplicating a measure
+ * - addMeasureMiddleButtonClick - Handler for adding a measure
+ */
 function generateMeasureButtons(numberOfMeasures, baseindex, repeat) {
     var buttonsHTML = '';
 
@@ -20,9 +104,15 @@ function generateMeasureButtons(numberOfMeasures, baseindex, repeat) {
     return buttonsHTML;
 }
 
-//
-//
-//
+/**
+ * Generates HTML for drum kit line labels (hi-hat, toms, snare, kick).
+ * Each label is clickable and includes both left and right click handlers.
+ * 
+ * @param {number} baseindex - Index of the current measure (1-based)
+ * @returns {string} HTML string containing the line labels
+ * @requires Functions:
+ * - noteLabelClick - Click handler for note labels
+ */
 function generateLineLabels(baseindex) {
     return `
 			<div class="line-labels">
@@ -35,38 +125,22 @@ function generateLineLabels(baseindex) {
 		`;
 }
 
-function generateLineLabels(baseindex) {
-    return `
-        <div class="line-labels">
-            <div class="hh-label" onClick="noteLabelClick(event, 'hh', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'hh', ${baseindex})">Hi-hat</div>
-            <div class="tom-label" id="tom1-label" onClick="noteLabelClick(event, 'tom1', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'tom1', ${baseindex})">Tom</div>
-            <div class="snare-label" onClick="noteLabelClick(event, 'snare', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'snare', ${baseindex})">Snare</div>
-            <div class="tom-label" id="tom4-label" onClick="noteLabelClick(event, 'tom4', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'tom4', ${baseindex})">Tom</div>
-            <div class="kick-label" onClick="noteLabelClick(event, 'kick', ${baseindex})" oncontextmenu="event.preventDefault(); noteLabelClick(event, 'kick', ${baseindex})">Kick</div>
-        </div>
-    `;
-}
 
-
-//
-//
-function shiftRepeatedMeasuresAfterIndex(measureIndex, direction) {
-    // Convert Map to array of entries and sort by measure index
-    const sortedEntries = [...editor.track.repeatedMeasures.entries()].sort((a, b) => a[0] - b[0]);
-    
-    // Process in reverse order to avoid overwriting
-    for (let i = sortedEntries.length - 1; i >= 0; i--) {
-        const [key, value] = sortedEntries[i];
-        if (key > measureIndex) {
-            editor.track.repeatedMeasures.set(key + direction, value);
-            editor.track.repeatedMeasures.delete(key);
-        }
-    }
-}
-
-//
-// remove a measure from the page NB measureNum is indexed starting at 1, not 0
-closeMeasureButtonClick = function (measureNum) {
+/**
+ * Removes a measure from the score and updates all necessary UI elements.
+ * Collects notes from all measures except the one being removed and rebuilds the score.
+ * 
+ * @param {number} measureNum - Index of the measure to remove (1-based)
+ * @requires Functions:
+ * - get_sticking_state - Gets sticking notation for a note
+ * - get_hh_state - Gets hi-hat state for a note
+ * - get_tom_state - Gets tom state for a note
+ * - get_snare_state - Gets snare state for a note
+ * - get_kick_state - Gets kick state for a note
+ * - shiftRepeatedMeasuresAfterIndex - Updates repeat counts after removal
+ * @requires editor.track - Track object containing score state
+ */
+function closeMeasureButtonClick(measureNum) {
     const noteData = {
         stickings: "",
         hh: "",
@@ -110,8 +184,19 @@ closeMeasureButtonClick = function (measureNum) {
 };
 
 
-//
-//
+/**
+ * Increments the repeat count for a measure and updates the score.
+ * Collects all current notes and rebuilds the score with the new repeat count.
+ * 
+ * @param {number} measureNum - Index of the measure to increment repeats for (1-based)
+ * @requires Functions:
+ * - get_sticking_state - Gets sticking notation for a note
+ * - get_hh_state - Gets hi-hat state for a note
+ * - get_tom_state - Gets tom state for a note
+ * - get_snare_state - Gets snare state for a note
+ * - get_kick_state - Gets kick state for a note
+ * @requires editor.track - Track object containing score state
+ */
 function repeatMeasureIncButtonClick(measureNum) {
     // Increment repeat count for the measure
     const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
@@ -149,8 +234,19 @@ function repeatMeasureIncButtonClick(measureNum) {
 };
 
 
-//
-//
+/**
+ * Decrements the repeat count for a measure and updates the score.
+ * Collects all current notes and rebuilds the score with the new repeat count.
+ * 
+ * @param {number} measureNum - Index of the measure to decrement repeats for (1-based)
+ * @requires Functions:
+ * - get_sticking_state - Gets sticking notation for a note
+ * - get_hh_state - Gets hi-hat state for a note
+ * - get_tom_state - Gets tom state for a note
+ * - get_snare_state - Gets snare state for a note
+ * - get_kick_state - Gets kick state for a note
+ * @requires editor.track - Track object containing score state
+ */
 function repeatMeasureDecButtonClick(measureNum) {
     const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
     editor.track.repeatedMeasures.set(measureNum - 1, count - 1);
@@ -176,9 +272,20 @@ function repeatMeasureDecButtonClick(measureNum) {
     editor.updateSheetMusic();
 };
 
-// add a measure to the page
-// currently always at the end of the measures
-// copy the notes from the last measure to the new measure
+/**
+ * Duplicates a measure, copying all its notes to create a new measure.
+ * The new measure is inserted after the source measure.
+ * 
+ * @param {number} measureNum - Index of the measure to duplicate (1-based)
+ * @requires Functions:
+ * - get_sticking_state - Gets sticking notation for a note
+ * - get_hh_state - Gets hi-hat state for a note
+ * - get_tom_state - Gets tom state for a note
+ * - get_snare_state - Gets snare state for a note
+ * - get_kick_state - Gets kick state for a note
+ * - shiftRepeatedMeasuresAfterIndex - Updates repeat counts after insertion
+ * @requires editor.track - Track object containing score state
+ */
 function duplicateMeasureButtonClick(measureNum) {
     // Helper function to collect notes for a given range
     function collectNotes(start, end, target) {
@@ -231,9 +338,19 @@ function duplicateMeasureButtonClick(measureNum) {
 
 
 
-// add a measure to the page
-// currently always at the end of the measures
-// copy the notes from the last measure to the new measure
+/**
+ * Adds a new empty measure at the end of the score.
+ * Collects all current notes and appends an empty measure.
+ * 
+ * @param {Event} event - The click event object
+ * @requires Functions:
+ * - get_sticking_state - Gets sticking notation for a note
+ * - get_hh_state - Gets hi-hat state for a note
+ * - get_tom_state - Gets tom state for a note
+ * - get_snare_state - Gets snare state for a note
+ * - get_kick_state - Gets kick state for a note
+ * @requires editor.track - Track object containing score state
+ */
 function addMeasureButtonClick(event) {
     const notes = {
         stickings: [],
@@ -294,9 +411,21 @@ function addMeasureButtonClick(event) {
 };
 
 
-//
-//
-function addMeasureMiddleButtonClick (measureNum) {
+/**
+ * Adds a new empty measure after the specified measure.
+ * Collects notes before and after the insertion point and adds an empty measure.
+ * 
+ * @param {number} measureNum - Index of the measure after which to add (1-based)
+ * @requires Functions:
+ * - get_sticking_state - Gets sticking notation for a note
+ * - get_hh_state - Gets hi-hat state for a note
+ * - get_tom_state - Gets tom state for a note
+ * - get_snare_state - Gets snare state for a note
+ * - get_kick_state - Gets kick state for a note
+ * - shiftRepeatedMeasuresAfterIndex - Updates repeat counts after insertion
+ * @requires editor.track - Track object containing score state
+ */
+function addMeasureMiddleButtonClick(measureNum) {
     var uiStickings = "";
     var uiHH = "";
     var uiTom1 = "";
@@ -356,10 +485,20 @@ function addMeasureMiddleButtonClick (measureNum) {
 };
 
 
-
-
-// add an empty measure to the front of the score
-// copy the notes from the first measure to the new measure
+/**
+ * Adds a new empty measure at start of our track
+ * Collects notes before and after the insertion point and adds an empty measure.
+ * 
+ * @param {number} measureNum - Index of the measure after which to add (1-based)
+ * @requires Functions:
+ * - get_sticking_state - Gets sticking notation for a note
+ * - get_hh_state - Gets hi-hat state for a note
+ * - get_tom_state - Gets tom state for a note
+ * - get_snare_state - Gets snare state for a note
+ * - get_kick_state - Gets kick state for a note
+ * - shiftRepeatedMeasuresAfterIndex - Updates repeat counts after insertion
+ * @requires editor.track - Track object containing score state
+ */
 function addMeasurePrevButtonClick (event) {
     var uiStickings = "";
     var uiHH = "";
@@ -401,15 +540,15 @@ function addMeasurePrevButtonClick (event) {
     editor.changeDivisionWithNotes(editor.track.timeDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
     editor.updateSheetMusic();
-
-    // if(numberOfMeasures === 5)
-    // 	window.alert("Please be aware that the Groove Scribe is not designed to write an entire musical score.\n" +
-    // 				"You can create as many measures as you want, but your browser may slow down as more measures are added.\n" +
-    // 				"There are also many notation features that would be useful for score writing that are not part of Groove Scribe");
 };
 
 
-// clear all the notes on all measures
+/**
+ * Clears all notes from all measures in the score.
+ * Resets the score to its initial empty state while preserving measure structure.
+ * 
+ * @requires editor.track - Track object containing score state
+ */
 function clearAllNotes() {
     editor.track.repeatedMeasures.clear();
     for (var i = 0; i < editor.track.numberOfMeasures * editor.track.notesPerMeasure; i++) {
@@ -436,59 +575,24 @@ function clearAllNotes() {
 }
 
 
-// public function
-// function to create HTML for the music staff and notes.   We usually want more than one of these
-// baseIndex is the index for the css labels "staff-container1, staff-container2"
-// indexStartForNotes is the index for the note ids.
-function htmlForStaffContainer(baseindex, indexStartForNotes) {
-    var newHTML = ('');
-
-    if (baseindex == 1) // add new measure button
-        newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
-        
-    newHTML += ('<div class="staff-container" id="staff-container' + baseindex + '">')
-    newHTML += generateStickingContainerHTML(baseindex, indexStartForNotes, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue);
-
-    newHTML += ('  <span class="notes-row-container">')
-    newHTML += generateLineLabels(baseindex); // Call the new function where the line labels are needed
-
-    newHTML += ('\				\
-                            <div class="music-line-container">\
-                                \
-                                <div class="notes-container">\
-                                <div class="staff-line-1"></div>\
-                                <div class="staff-line-2"></div>\
-                                <div class="staff-line-3"></div>\
-                                <div class="staff-line-4"></div>\
-                                <div class="staff-line-5"></div>\n');
-
-    // backgrounds for highlighting.  Evenly spaced cols of space
-    newHTML += ('\
-                                    <div class="background-highlight-container">\
-                                        <div class="opening_note_space"> </div>');
-    for (let i = indexStartForNotes; i < editor.track.notesPerMeasure + indexStartForNotes; i++) {
-        newHTML += ('						<div id="bg-highlight' + i + '" class="bg-highlight" >\
-                                            </div>\n');
-
-        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue) === 0 && i < editor.track.notesPerMeasure + indexStartForNotes - 1) {
-            newHTML += ('<div class="space_between_note_groups"> </div> \n');
+/**
+ * Shifts the repeated measures map entries after a given index.
+ * Used when adding or removing measures to maintain correct repeat counts.
+ * 
+ * @param {number} measureIndex - Index of the measure to start shifting from (0-based)
+ * @param {number} direction - Direction to shift (1 for right, -1 for left)
+ * @requires editor.track.repeatedMeasures - Map containing measure repeat counts
+ */
+function shiftRepeatedMeasuresAfterIndex(measureIndex, direction) {
+    // Convert Map to array of entries and sort by measure index
+    const sortedEntries = [...editor.track.repeatedMeasures.entries()].sort((a, b) => a[0] - b[0]);
+    
+    // Process in reverse order to avoid overwriting
+    for (let i = sortedEntries.length - 1; i >= 0; i--) {
+        const [key, value] = sortedEntries[i];
+        if (key > measureIndex) {
+            editor.track.repeatedMeasures.set(key + direction, value);
+            editor.track.repeatedMeasures.delete(key);
         }
     }
-    newHTML += ('<div class="end_note_space"></div>\n</div>\n');
-
-    newHTML += generateHiHatContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
-    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes, 1);
-    newHTML += generateSnareContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
-    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes, 4);
-    newHTML += generateKickContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
-    newHTML += ('\
-                            </div>\
-                        </div>\
-                    </span>\n');
-
-    let repeat = editor.track.repeatedMeasures.get(baseindex - 1) || 1
-
-    newHTML += generateMeasureButtons(editor.track.numberOfMeasures, baseindex, repeat);
-
-    return newHTML;
-}; // end function HTMLforStaffContainer
+}

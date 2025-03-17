@@ -49,20 +49,21 @@ class Options {
      * @requires getTagPosition - Function to get an element's position
      * @requires showContextMenu - Function to display the context menu
      */
-    optionsAnchorClick = function (event) {
+    optionsAnchorClick = (event) => {
+        const contextMenu = document.getElementById('optionsContextMenu');
+        if (!contextMenu) return;
 
-        var contextMenu = document.getElementById("optionsContextMenu");
-        if (contextMenu) {
-            var anchorPoint = document.getElementById("optionsAnchor");
+        const anchorPoint = document.getElementById('optionsAnchor');
+        if (anchorPoint) {
+            const anchorPos = getTagPosition(anchorPoint);
+            const MENU_OFFSET = 150;
 
-            if (anchorPoint) {
-                var anchorPos = getTagPosition(anchorPoint);
-                contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
-                contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
-            }
-            this.optionsMenuSetSelectedState()
-            showContextMenu(contextMenu);
+            contextMenu.style.top = `${anchorPos.y + anchorPoint.offsetHeight}px`;
+            contextMenu.style.left = `${anchorPos.x + anchorPoint.offsetWidth - MENU_OFFSET}px`;
         }
+
+        this.optionsMenuSetSelectedState();
+        showContextMenu(contextMenu);
     };
 
     /**
