@@ -447,7 +447,7 @@ function htmlForStaffContainer(baseindex, indexStartForNotes) {
         newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
         
     newHTML += ('<div class="staff-container" id="staff-container' + baseindex + '">')
-    newHTML += generateStickingContainerHTML(baseindex, indexStartForNotes, editor.class_notes_per_measure, editor.track.numBeats, editor.class_note_value_per_measure);
+    newHTML += generateStickingContainerHTML(baseindex, indexStartForNotes, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure);
 
     newHTML += ('  <span class="notes-row-container">')
     newHTML += generateLineLabels(baseindex); // Call the new function where the line labels are needed

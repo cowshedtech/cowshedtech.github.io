@@ -356,7 +356,7 @@ function GrooveWriter() {
 			root.swapViewEditMode(true);
 
 		// set the background and text color of the current subdivision
-		selectButton(document.getElementById("subdivision_" + root.class_notes_per_measure + "ths"));
+		selectButton(document.getElementById("subdivision_" + root.track.notesPerMeasure + "ths"));
 
 		// add html for the midi player
 		metronome = new Metronome();
@@ -1049,10 +1049,11 @@ function GrooveWriter() {
 
 		root.class_time_division = newDivision;
 		root.class_notes_per_measure = calc_notes_per_measure(root.class_time_division, root.track.numBeats, root.class_note_value_per_measure);
+		root.track.notesPerMeasure = calc_notes_per_measure(root.class_time_division, root.track.numBeats, root.class_note_value_per_measure);
 
 		var newHTML = "";
 		for (var cur_measure = 1; cur_measure <= root.track.numberOfMeasures; cur_measure++) {
-			newHTML += htmlForStaffContainer(cur_measure, (cur_measure - 1) * root.class_notes_per_measure);
+			newHTML += htmlForStaffContainer(cur_measure, (cur_measure - 1) * root.track.notesPerMeasure);
 		}
 
 		// rewrite the HTML for the HTML note grid

@@ -35,8 +35,8 @@ function timeSigPopupClose(type, callback) {
         // If new_notes_per_measure is greater it will cause the changeDivision code to error
         // as it tries to read the notes from the UI.   Setting it lower will allow the code to truncate
         // the groove properly to something smaller rather than interpolating the groove into something weird
-        if (new_notes_per_measure < editor.class_notes_per_measure)
-            editor.class_notes_per_measure = new_notes_per_measure;
+        if (new_notes_per_measure < editor.track.notesPerMeasure)
+            editor.track.notesPerMeasure = new_notes_per_measure;
         editor.changeDivision(editor.class_time_division);   // use this function because it will relayout everything
     }
     if (callback) {

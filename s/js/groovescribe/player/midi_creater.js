@@ -4,7 +4,7 @@
 	 * metronome_frequency: 0, 4, 8, 16   None, quarter notes, 8th notes, 16ths
 	 * num_notes_for_swing: how many notes are we using.   Since we need to know where the upstrokes are we need to know
 	 *                      what the proper division is.   It can change when we are doing permutations, otherwise it is what is the
-	 *                      class_notes_per_measure
+	 *                      track.notesPerMeasure
 	 *
 	 * The arrays passed in contain the ABC notation for a given note value or false for a rest.
 	 */
@@ -525,7 +525,7 @@ function createMidiUrlFromClickableUI(MIDI_type) {
 
             let repeat = editor.track.repeatedMeasures.has(0) ? editor.track.repeatedMeasures.get(0) : 1;
             for (let i = 0; i < repeat; i++) {
-                MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, editor.get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, editor.class_notes_per_measure * i));
+                MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, editor.get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, editor.track.notesPerMeasure * i));
                 muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, i);
 
                 let repeat = editor.track.repeatedMeasures.has(i) ? editor.track.repeatedMeasures.get(i) : 1;
