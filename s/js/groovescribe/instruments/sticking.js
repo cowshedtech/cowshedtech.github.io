@@ -1,6 +1,6 @@
 // Javascript for the Groove Scribe HTML application
 
-function set_sticking_state(id, new_state, make_sound, notesPerMeasure, class_time_division, class_note_value_per_measure) {
+function set_sticking_state(id, new_state, make_sound, notesPerMeasure, class_time_division, noteValuePerMeasure) {
 
     // turn both off
     document.getElementById("sticking_right" + id).style.color = constant_note_hidden_color_rgb;
@@ -24,7 +24,7 @@ function set_sticking_state(id, new_state, make_sound, notesPerMeasure, class_ti
             document.getElementById("sticking_both" + id).style.color = constant_sticking_both_on_color_rgb;
             break;
         case "count":
-            var count_state = figure_out_sticking_count_for_index(id, notesPerMeasure, class_time_division, class_note_value_per_measure);
+            var count_state = figure_out_sticking_count_for_index(id, notesPerMeasure, class_time_division, noteValuePerMeasure);
 
             document.getElementById("sticking_count" + id).style.color = constant_sticking_count_on_color_rgb;
             document.getElementById("sticking_count" + id).innerHTML = "" + count_state;
@@ -85,7 +85,7 @@ function get_sticking_state(id, returnType) {
 }
 
 
-function sticking_rotate_state(id, notesPerMeasure, class_time_division, class_note_value_per_measure) {
+function sticking_rotate_state(id, notesPerMeasure, class_time_division, noteValuePerMeasure) {
     var new_state = false;
     var sticking_state = get_sticking_state(id, "ABC");
 
@@ -104,7 +104,7 @@ function sticking_rotate_state(id, notesPerMeasure, class_time_division, class_n
         new_state = "off";
     }
 
-    set_sticking_state(id, new_state, true, notesPerMeasure, class_time_division, class_note_value_per_measure);
+    set_sticking_state(id, new_state, true, notesPerMeasure, class_time_division, noteValuePerMeasure);
 }
 
 function isStickingsVisible() {
@@ -122,7 +122,7 @@ function GetDefaultStickingsGroove(notes_per_measure, timeSigTop, timeSigBottom,
 };
 
 
-function generateStickingContainerHTML(baseindex, indexStartForNotes, notesPerMeasure, numBeats, class_note_value_per_measure) {
+function generateStickingContainerHTML(baseindex, indexStartForNotes, notesPerMeasure, numBeats, noteValuePerMeasure) {
     var newHTML = [];
 
     newHTML.push('<div class="stickings-row-container">');
@@ -143,7 +143,7 @@ function generateStickingContainerHTML(baseindex, indexStartForNotes, notesPerMe
         newHTML.push('       </div>');
 
         // add space between notes, except on the last note
-        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(notesPerMeasure, numBeats, class_note_value_per_measure) === 0 && i < notesPerMeasure + indexStartForNotes - 1) {
+        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(notesPerMeasure, numBeats, noteValuePerMeasure) === 0 && i < notesPerMeasure + indexStartForNotes - 1) {
             newHTML.push(' <div class="space_between_note_groups"> </div>');
         }
     }
@@ -181,9 +181,9 @@ function stickingsReverseRL() {
     for (var i = 0; i < editor.track.numberOfMeasures * editor.notesPerMeasure; i++) {
         var cur_state = get_sticking_state(i, "URL");
         if (cur_state === "R") {
-            set_sticking_state(i, "left", false, editor.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
+            set_sticking_state(i, "left", false, editor.notesPerMeasure, editor.class_time_division, editor.noteValuePerMeasure);
         } else if (cur_state === "L") {
-            set_sticking_state(i, "right", false, editor.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
+            set_sticking_state(i, "right", false, editor.notesPerMeasure, editor.class_time_division, editor.noteValuePerMeasure);
         }
     }
     editor.updateSheetMusic();

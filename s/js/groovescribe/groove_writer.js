@@ -53,22 +53,12 @@ function GrooveWriter() {
 	root.class_num_beats_per_measure = 4;     // TimeSigTop
 	root.class_note_value_per_measure = 4;     // TimeSigBottom
 
-
-	
 	// private vars in the scope of the class
 	root.class_permutation_type = "none";
 	
 
 	// functions below
 
-	//
-	//
-	//
-	// root.notesPerMeasure = function () {
-	// 	return root.track.notesPerMeasure;
-	// };
-
-	
 	// query the clickable UI and generate a 32 element array representing the notes of one measure
 	// note: the ui may have fewer notes, but we scale them to fit into the 32 elements proportionally
 	// If using triplets returns 48 notes.   Otherwise always 32.
