@@ -1,3 +1,5 @@
+var abc_obj2 = null;
+
 // callback class for abc generator library
 function SVGLibCallback(root) {
     // -- required methods
@@ -42,9 +44,9 @@ function SVGLibCallback(root) {
         if (type == "note" || type == "grace") {
             y = this.svg_highlight_y;
             h = this.svg_highlight_h;
-            root.abc_obj.out_svg('<rect style="fill: transparent;" class="abcr" id="abcNoteNum_' + root.trackID + "_" + root.abcNoteNumIndex + '" x="');
-            root.abc_obj.out_sxsy(x, '" y="', y);
-            root.abc_obj.out_svg('" width="' + w.toFixed(2) + '" height="' + h.toFixed(2) + '"/>\n');
+            abc_obj2.out_svg('<rect style="fill: transparent;" class="abcr" id="abcNoteNum_' + root.trackID + "_" + root.abcNoteNumIndex + '" x="');
+            abc_obj2.out_sxsy(x, '" y="', y);
+            abc_obj2.out_svg('" width="' + w.toFixed(2) + '" height="' + h.toFixed(2) + '"/>\n');
 
             //console.log("Type:"+type+ "\t abcNoteNumIndex:"+root.abcNoteNumIndex+ "\t X:"+x+ "\t Y:"+y+ "\t W:"+w+ "\t H:"+h);
 
@@ -66,18 +68,18 @@ function SVGLibCallback(root) {
 // converts incoming ABC notation source into an svg image.
 // returns an object with two items.   "svg" and "error_html"
 function renderABCtoSVG(root, abc_source) {
-    root.abc_obj = new Abc(root.abcToSVGCallback);
+    abc_obj2 = new Abc(abcToSVGCallback2);
     if (options.showLegend) 
         root.abcNoteNumIndex = -15; // subtract out the legend notes for a proper index.
     else
         root.abcNoteNumIndex = 0;
-        root.abcToSVGCallback.abc_svg_output = ''; // clear
-        root.abcToSVGCallback.abc_error_output = ''; // clear
+        abcToSVGCallback2.abc_svg_output = ''; // clear
+        abcToSVGCallback2.abc_error_output = ''; // clear
 
-    root.abc_obj.tosvg("SOURCE", abc_source);
+    abc_obj2.tosvg("SOURCE", abc_source);
     return {
-        svg: root.abcToSVGCallback.abc_svg_output,
-        error_html: root.abcToSVGCallback.abc_error_output
+        svg: abcToSVGCallback2.abc_svg_output,
+        error_html: abcToSVGCallback2.abc_error_output
     };
 };
 

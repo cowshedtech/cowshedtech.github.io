@@ -37,6 +37,7 @@ var metronome;
 // var track;
 var editor;
 var options;
+var abcToSVGCallback2;
 
 function GrooveWriter() {
 	"use strict";
@@ -48,6 +49,7 @@ function GrooveWriter() {
 
 	root.track = new Track();
 
+	abcToSVGCallback2 = new SVGLibCallback(root.track);
 
 	// public class vars
 	root.class_number_of_measures = 1;
