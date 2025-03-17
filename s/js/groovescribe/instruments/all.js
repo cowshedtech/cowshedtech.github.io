@@ -388,3 +388,47 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
     var num_notes = Snare_Array.length;
     return num_notes;
 }
+
+
+// creates a grooveData class from the clickable UI elements of the page
+//
+grooveDataFromClickableUI = function () {
+    var track = new editor.track.trackNew();
+
+    track.title = document.getElementById("tuneTitle").value;
+    track.author = document.getElementById("tuneAuthor").value;
+    track.comments = document.getElementById("tuneComments").value;
+    options.showLegend = document.getElementById("showLegend").checked;
+    track.kickStemsUp = true;
+
+    for (var i = 0; i < editor.track.numberOfMeasures; i++) {
+        var total_notes = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
+        track.sticking_array = [];
+        track.hh_array = [];
+        track.snare_array = [];
+        track.kick_array = [];
+        track.toms_array = [[], [], [], []];
+
+        // query the clickable UI and generate a arrays representing the notes of all measures
+        for (var i = 0; i < total_notes; i++) {
+
+            // only grab the stickings if they are visible
+            if (isStickingsVisible())
+                track.sticking_array.push(get_sticking_state(i, "ABC"));
+
+            track.hh_array.push(get_hh_state(i, "ABC"));
+            track.snare_array.push(get_snare_state(i, "ABC"));
+            track.kick_array.push(get_kick_state(i, "ABC"));
+
+            if (isTomsVisible()) {
+                track.toms_array[0].push(get_tom_state(i, 1, "ABC"));
+                track.toms_array[3].push(get_tom_state(i, 4, "ABC"));
+            } else {
+                track.toms_array[0].push(false);
+                track.toms_array[3].push(false);
+            }
+        }
+    }
+
+    return track;
+};

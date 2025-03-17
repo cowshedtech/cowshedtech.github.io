@@ -88,6 +88,6 @@ function getGSUrlStringFromGrooveData(track, url_destination) {
 // this will allow us to bookmark or reference a groove and handle undo/redo.
 //
 function get_GSURLForPage(url_destination) {
-    var track = editor.grooveDataFromClickableUI()
+    var track = grooveDataFromClickableUI()
     return getGSUrlStringFromGrooveData(track, url_destination)
 }

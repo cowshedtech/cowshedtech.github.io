@@ -45,7 +45,6 @@ function GrooveWriter() {
 	var root = this;
 	editor = this;
 	options = new Options();
-	//root.track = new Track();
 	root.track = new Track();
 	abcToSVGCallback = new SVGLibCallback(root.track);
 
@@ -64,50 +63,46 @@ function GrooveWriter() {
 
 	// creates a grooveData class from the clickable UI elements of the page
 	//
-	root.grooveDataFromClickableUI = function () {
-		var track = new root.track.trackNew();
+	// root.grooveDataFromClickableUI = function () {
+	// 	var track = new root.track.trackNew();
 
-		track.notesPerMeasure = root.track.notesPerMeasure;
-		//track.timeDivision = root.class_time_division;
-		track.numberOfMeasures = root.class_number_of_measures;
-		track.noteValue = root.track.noteValue;
-		track.title = document.getElementById("tuneTitle").value;
-		track.author = document.getElementById("tuneAuthor").value;
-		track.comments = document.getElementById("tuneComments").value;
-		options.showLegend = document.getElementById("showLegend").checked;
-		track.kickStemsUp = true;
+	// 	track.title = document.getElementById("tuneTitle").value;
+	// 	track.author = document.getElementById("tuneAuthor").value;
+	// 	track.comments = document.getElementById("tuneComments").value;
+	// 	options.showLegend = document.getElementById("showLegend").checked;
+	// 	track.kickStemsUp = true;
 
-		for (var i = 0; i < root.track.numberOfMeasures; i++) {
-			var total_notes = root.track.notesPerMeasure * root.track.numberOfMeasures;
-			track.sticking_array = [];
-			track.hh_array = [];
-			track.snare_array = [];
-			track.kick_array = [];
-			track.toms_array = [[], [], [], []];
+	// 	for (var i = 0; i < root.track.numberOfMeasures; i++) {
+	// 		var total_notes = root.track.notesPerMeasure * root.track.numberOfMeasures;
+	// 		track.sticking_array = [];
+	// 		track.hh_array = [];
+	// 		track.snare_array = [];
+	// 		track.kick_array = [];
+	// 		track.toms_array = [[], [], [], []];
 
-			// query the clickable UI and generate a arrays representing the notes of all measures
-			for (var i = 0; i < total_notes; i++) {
+	// 		// query the clickable UI and generate a arrays representing the notes of all measures
+	// 		for (var i = 0; i < total_notes; i++) {
 
-				// only grab the stickings if they are visible
-				if (isStickingsVisible())
-					track.sticking_array.push(get_sticking_state(i, "ABC"));
+	// 			// only grab the stickings if they are visible
+	// 			if (isStickingsVisible())
+	// 				track.sticking_array.push(get_sticking_state(i, "ABC"));
 
-				track.hh_array.push(get_hh_state(i, "ABC"));
-				track.snare_array.push(get_snare_state(i, "ABC"));
-				track.kick_array.push(get_kick_state(i, "ABC"));
+	// 			track.hh_array.push(get_hh_state(i, "ABC"));
+	// 			track.snare_array.push(get_snare_state(i, "ABC"));
+	// 			track.kick_array.push(get_kick_state(i, "ABC"));
 
-				if (isTomsVisible()) {
-					track.toms_array[0].push(get_tom_state(i, 1, "ABC"));
-					track.toms_array[3].push(get_tom_state(i, 4, "ABC"));
-				} else {
-					track.toms_array[0].push(false);
-					track.toms_array[3].push(false);
-				}
-			}
-		}
+	// 			if (isTomsVisible()) {
+	// 				track.toms_array[0].push(get_tom_state(i, 1, "ABC"));
+	// 				track.toms_array[3].push(get_tom_state(i, 4, "ABC"));
+	// 			} else {
+	// 				track.toms_array[0].push(false);
+	// 				track.toms_array[3].push(false);
+	// 			}
+	// 		}
+	// 	}
 
-		return track;
-	};
+	// 	return track;
+	// };
 
 	// called by the HTML when changes happen to forms that require the ABC to update
 	root.refresh_ABC = function () {
@@ -742,7 +737,7 @@ function GrooveWriter() {
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
 	//
 	root.get_FullURLForPage= function (url_destination) {
-		var track = root.grooveDataFromClickableUI()
+		var track = grooveDataFromClickableUI()
 		return getUrlStringFromGrooveData(track, url_destination)
 	}
 
@@ -750,7 +745,7 @@ function GrooveWriter() {
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
 	//
 	function get_GSURLForPage(url_destination) {
-		var track = root.grooveDataFromClickableUI()
+		var track = grooveDataFromClickableUI()
 		return getGSUrlStringFromGrooveData(track, url_destination)
 	}
 

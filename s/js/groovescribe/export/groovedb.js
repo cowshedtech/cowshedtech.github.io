@@ -21,7 +21,7 @@
 		if (!document.getElementById("GrooveDB_source") || document.getElementById("GrooveDB_source").style.display == 'none')
 			return; // nothing to update
 
-		var track = editor.grooveDataFromClickableUI();
+		var track = grooveDataFromClickableUI();
 
 		var notesPerMeasureInTab = calc_notes_per_measure((usingTriplets() ? 48 : 32), editor.track.numBeats, editor.track.noteValue);
 		var maxNotesInTab = track.numberOfMeasures * notesPerMeasureInTab;
