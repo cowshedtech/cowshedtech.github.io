@@ -245,7 +245,7 @@ function addMeasureButtonClick(event) {
     };
 
     // Get encoded notes from UI
-    const topIndex = editor.class_notes_per_measure * editor.track.numberOfMeasures;
+    const topIndex = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
     for (let i = 0; i < topIndex; i++) {
         notes.stickings.push(get_sticking_state(i, "URL"));
         notes.hh.push(get_hh_state(i, "URL"));
@@ -256,7 +256,7 @@ function addMeasureButtonClick(event) {
     }
 
     // Add empty measure
-    const emptyMeasure = Array(editor.class_notes_per_measure).fill('-');
+    const emptyMeasure = Array(editor.track.notesPerMeasure).fill('-');
     notes.stickings.push(...emptyMeasure);
     notes.hh.push(...emptyMeasure);
     notes.tom1.push(...emptyMeasure);
@@ -265,7 +265,7 @@ function addMeasureButtonClick(event) {
     notes.kick.push(...emptyMeasure);
 
     editor.track.numberOfMeasures++;
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
+    editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
 
     // Convert arrays to strings
     const noteStrings = {
@@ -306,7 +306,7 @@ function addMeasureMiddleButtonClick (measureNum) {
     var i;
 
     // get the encoded notes out of the UI from before measure we are going to repeat
-    var loop1End = (measureNum) * editor.class_notes_per_measure
+    var loop1End = (measureNum) * editor.track.notesPerMeasure
     for (i = 0; i < loop1End; i++) {
         uiStickings += get_sticking_state(i, "URL");
         uiHH += get_hh_state(i, "URL");
@@ -317,7 +317,7 @@ function addMeasureMiddleButtonClick (measureNum) {
     }
 
     // introduce our empty measure
-    for (i = 0; i < editor.class_notes_per_measure; i++) {
+    for (i = 0; i < editor.track.notesPerMeasure; i++) {
         uiStickings += "-";
         uiHH += "-";
         uiTom1 += "-";
@@ -327,8 +327,8 @@ function addMeasureMiddleButtonClick (measureNum) {
     }
 
     // get the encoded notes out of the UI for measures after measure to be repeated
-    var loop3Start = measureNum * editor.class_notes_per_measure
-    var loop3End = editor.class_notes_per_measure * editor.track.numberOfMeasures;
+    var loop3Start = measureNum * editor.track.notesPerMeasure
+    var loop3End = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
     for (i = loop3Start; i < loop3End; i++) {
         uiStickings += get_sticking_state(i, "URL");
         uiHH += get_hh_state(i, "URL");
@@ -343,7 +343,7 @@ function addMeasureMiddleButtonClick (measureNum) {
     // We need to move all the repeate measures after this measure up 1 
     shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
+    editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
 
     editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
@@ -370,7 +370,7 @@ function addMeasurePrevButtonClick (event) {
     var i;
 
     // Introduce an empty measure at the start
-    for (i = 0; i < editor.class_notes_per_measure; i++) {
+    for (i = 0; i < editor.track.notesPerMeasure; i++) {
         uiStickings += "-";
         uiHH += "-";
         uiTom1 += "-";
@@ -380,7 +380,7 @@ function addMeasurePrevButtonClick (event) {
     }
 
     // get the encoded notes out of the UI.
-    var topIndex = editor.class_notes_per_measure * editor.track.numberOfMeasures;
+    var topIndex = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
     for (i = 0; i < topIndex; i++) {
 
         uiStickings += get_sticking_state(i, "URL");
@@ -396,7 +396,7 @@ function addMeasurePrevButtonClick (event) {
     // We need to move all the repeate measures after this measure up 1 
     shiftRepeatedMeasuresAfterIndex(-1, 1);
 
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
+    editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
 
     editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
