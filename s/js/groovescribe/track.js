@@ -57,6 +57,10 @@ function Track() {
 		this.noteMappingArray = null;
 	};
 
+	// root.notesPerMeasure = function () {
+	// 	return calc_notes_per_measure(root.timeDivision, root.numBeats, root.noteValue)
+	// };
+
 	root.track = root.trackNew();
 
 } // end of class

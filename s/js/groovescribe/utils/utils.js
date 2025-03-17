@@ -143,7 +143,7 @@ function get_empty_note_array_in_32nds() {
 	var notes_per_4_beats = 32;
 	if (usingTriplets())
 		notes_per_4_beats = 48;
-	var num_notes = (editor.class_num_beats_per_measure * notes_per_4_beats) / editor.class_note_value_per_measure;
+	var num_notes = (editor.track.numBeats * notes_per_4_beats) / editor.class_note_value_per_measure;
 
 	return get_empty_note_array(num_notes);
 }

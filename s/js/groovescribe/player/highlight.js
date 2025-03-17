@@ -12,7 +12,7 @@ var class_cur_highlight_ids = {
 //
 //
 //
-function hilight_note(instrument, percent_complete, class_permutation_type, class_num_beats_per_measure, class_note_value_per_measure, numberOfMeasures, class_notes_per_measure, repeatedMeasures, usingTriplets) {
+function hilight_note(instrument, percent_complete, class_permutation_type, numBeats, class_note_value_per_measure, numberOfMeasures, class_notes_per_measure, repeatedMeasures, usingTriplets) {
 
     if (percent_complete < 0) {
         clear_all_highlights("clear");
@@ -28,10 +28,10 @@ function hilight_note(instrument, percent_complete, class_permutation_type, clas
     let totalRepeatMeasures = Array.from(repeatedMeasures.values()).reduce((acc, repeatedCounts) => acc + repeatedCounts - 1, 0);
     
     var notesPerMeasure = usingTriplets ? 48 : 32;
-    let notes = calc_notes_per_measure(notesPerMeasure, class_num_beats_per_measure, class_note_value_per_measure);        
+    let notes = calc_notes_per_measure(notesPerMeasure, numBeats, class_note_value_per_measure);        
     
     // Where does our note sit in the total score
-    var note_id_in_32 = Math.floor(percent_complete * calc_notes_per_measure(notesPerMeasure, class_num_beats_per_measure, class_note_value_per_measure) * (numberOfMeasures + totalRepeatMeasures));
+    var note_id_in_32 = Math.floor(percent_complete * calc_notes_per_measure(notesPerMeasure, numBeats, class_note_value_per_measure) * (numberOfMeasures + totalRepeatMeasures));
     
     // Which measure are we currently on taking account of repeated measures
     let cursor = 0;
@@ -47,7 +47,7 @@ function hilight_note(instrument, percent_complete, class_permutation_type, clas
     }
 
     let adjusted_note_id_in_32 = measure * notesPerMeasure + note_id_in_32 % notesPerMeasure;
-    var real_note_id = adjusted_note_id_in_32 / getNoteScaler(class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure);
+    var real_note_id = adjusted_note_id_in_32 / getNoteScaler(class_notes_per_measure, numBeats, class_note_value_per_measure);
 
     hilight_all_notes_on_same_beat(instrument, real_note_id, class_notes_per_measure, numberOfMeasures);
 }

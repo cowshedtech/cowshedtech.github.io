@@ -122,7 +122,7 @@ function GetDefaultStickingsGroove(notes_per_measure, timeSigTop, timeSigBottom,
 };
 
 
-function generateStickingContainerHTML(baseindex, indexStartForNotes, class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure) {
+function generateStickingContainerHTML(baseindex, indexStartForNotes, class_notes_per_measure, numBeats, class_note_value_per_measure) {
     var newHTML = [];
 
     newHTML.push('<div class="stickings-row-container">');
@@ -143,7 +143,7 @@ function generateStickingContainerHTML(baseindex, indexStartForNotes, class_note
         newHTML.push('       </div>');
 
         // add space between notes, except on the last note
-        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
+        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, numBeats, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
             newHTML.push(' <div class="space_between_note_groups"> </div>');
         }
     }

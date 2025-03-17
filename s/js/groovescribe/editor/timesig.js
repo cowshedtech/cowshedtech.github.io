@@ -2,7 +2,7 @@ function setTimeSigLabel() {
     // turn on/off special features that are only available in 4/4 time
 
     // set the label
-    document.getElementById("timeSigLabel").innerHTML = '<sup>' + editor.class_num_beats_per_measure + "</sup>/<sub>" + editor.class_note_value_per_measure + "</sub>";
+    document.getElementById("timeSigLabel").innerHTML = '<sup>' + editor.track.numBeats + "</sup>/<sub>" + editor.class_note_value_per_measure + "</sub>";
 };
 
 
@@ -29,9 +29,9 @@ function timeSigPopupClose(type, callback) {
             editor.changeDivision(16);  // switch to a non triplet division since they are not supported in this time signature
         }
 
-        editor.class_num_beats_per_measure = newTimeSigTop;
+        editor.track.numBeats = newTimeSigTop;
         editor.class_note_value_per_measure = newTimeSigBottom;
-        var new_notes_per_measure = calc_notes_per_measure(editor.class_time_division, editor.class_num_beats_per_measure, editor.class_note_value_per_measure);
+        var new_notes_per_measure = calc_notes_per_measure(editor.class_time_division, editor.track.numBeats, editor.class_note_value_per_measure);
         // If new_notes_per_measure is greater it will cause the changeDivision code to error
         // as it tries to read the notes from the UI.   Setting it lower will allow the code to truncate
         // the groove properly to something smaller rather than interpolating the groove into something weird
@@ -49,7 +49,7 @@ function timeSigPopupClose(type, callback) {
 function setTimeDivisionSelectionOnOrOff() {
 
     // check for incompatible odd time signature division  9/16 and 1/8 notes for instance
-    if ((8 * editor.class_num_beats_per_measure / editor.class_note_value_per_measure) % 1 != 0) {
+    if ((8 * editor.track.numBeats / editor.class_note_value_per_measure) % 1 != 0) {
         addOrRemoveKeywordFromClassById("subdivision_8ths", "disabled", true);
     } else {
         addOrRemoveKeywordFromClassById("subdivision_8ths", "disabled", false);

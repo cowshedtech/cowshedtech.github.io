@@ -163,7 +163,7 @@ function GetDefaultHHGroove(notes_per_measure, timeSigTop, timeSigBottom, numMea
 //
 //
 //
-function generateHiHatContainerHTML(indexStartForNotes, baseindex, class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure, indexStartForNotes) {
+function generateHiHatContainerHTML(indexStartForNotes, baseindex, class_notes_per_measure, numBeats, class_note_value_per_measure, indexStartForNotes) {
     let html = [];
     html.push('<div class="hi-hat-container">');
     html.push('<div class="opening_note_space"> </div>');
@@ -185,7 +185,7 @@ function generateHiHatContainerHTML(indexStartForNotes, baseindex, class_notes_p
             </div>
         `);
 
-        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, class_num_beats_per_measure, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
+        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, numBeats, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
             html.push('<div class="space_between_note_groups"> </div>');
         }
     }
