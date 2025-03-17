@@ -90,22 +90,25 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
 
 
 /**
+ * Decodes groove data and settings from a URL string and updates the provided objects
  * 
- * 
- **/
+ * @param {string} encodedURLData - URL string containing encoded groove parameters
+ * @param {Object} track - Track object to update with groove data
+ * @param {Object} options - Display and behavior options to update
+ * @param {Object} midiPlayer - MIDI player instance to update
+ * @param {Object} metronome - Metronome settings to update
+ * @param {boolean} debugMode - Whether to enable debug mode
+ * @returns {Object} Updated track object with decoded groove data
+ */
 function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, metronome, debugMode) {
-    var Stickings_string;
-    var HH_string;
-    var Snare_string;
-    var Kick_string;
-    var stickings_set_from_URL = false;
+    var kickString;
     var i;
 
     options.debugMode = parseInt(getQueryVariableFromString("Debug", debugMode, encodedURLData), 10);
     
-    Stickings_string = getQueryVariableFromString("Stickings", false, encodedURLData);
-    if (!Stickings_string) {
-        Stickings_string = GetDefaultStickingsGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+    var stickingsString = getQueryVariableFromString("Stickings", false, encodedURLData);
+    if (!stickingsString) {
+        stickingsString = GetDefaultStickingsGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
         options.showStickings = false;
     } else {
         options.showStickings = true;
@@ -143,28 +146,24 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
         });
     }
 
-    
-    
-    
-
-    HH_string = getQueryVariableFromString("H", false, encodedURLData);
-    if (!HH_string) {
+    var highhatString = getQueryVariableFromString("H", false, encodedURLData);
+    if (!highhatString) {
         getQueryVariableFromString("HH", false, encodedURLData);
-        if (!HH_string) {
-            HH_string = GetDefaultHHGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+        if (!highhatString) {
+            highhatString = GetDefaultHHGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
         }
     }
 
-    Snare_string = getQueryVariableFromString("S", false, encodedURLData);
-    if (!Snare_string) {
-        Snare_string = GetDefaultSnareGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+    var snareString = getQueryVariableFromString("S", false, encodedURLData);
+    if (!snareString) {
+        snareString = GetDefaultSnareGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
     }
 
-    Kick_string = getQueryVariableFromString("K", false, encodedURLData);
-    if (!Kick_string) {
+    var kickString = getQueryVariableFromString("K", false, encodedURLData);
+    if (!kickString) {
         getQueryVariableFromString("B", false, encodedURLData);
-        if (!Kick_string) {
-            Kick_string = GetDefaultKickGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+        if (!kickString) {
+            kickString = GetDefaultKickGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
         }
     }
 
@@ -182,10 +181,10 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
         track.toms_array[i] = noteArraysFromURLData("T" + (i + 1), Tom_string, track.notesPerMeasure, track.numberOfMeasures);
     }
 
-    track.sticking_array = noteArraysFromURLData("Stickings", Stickings_string, track.notesPerMeasure, track.numberOfMeasures);
-    track.hh_array = noteArraysFromURLData("H", HH_string, track.notesPerMeasure, track.numberOfMeasures);
-    track.snare_array = noteArraysFromURLData("S", Snare_string, track.notesPerMeasure, track.numberOfMeasures);
-    track.kick_array = noteArraysFromURLData("K", Kick_string, track.notesPerMeasure, track.numberOfMeasures);
+    track.sticking_array = noteArraysFromURLData("Stickings", stickingsString, track.notesPerMeasure, track.numberOfMeasures);
+    track.hh_array = noteArraysFromURLData("H", highhatString, track.notesPerMeasure, track.numberOfMeasures);
+    track.snare_array = noteArraysFromURLData("S", snareString, track.notesPerMeasure, track.numberOfMeasures);
+    track.kick_array = noteArraysFromURLData("K", kickString, track.notesPerMeasure, track.numberOfMeasures);
 
     track.title = getQueryVariableFromString("title", "", encodedURLData);
     track.title = decodeURIComponent(track.title);
