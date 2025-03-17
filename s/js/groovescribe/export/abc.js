@@ -1037,6 +1037,17 @@ function create_ABC_from_snare_HH_kick_arrays(sticking_array,
 // };
 
 
+// function getABCDataWithLineEndings() {
+// 	var myABC = document.getElementById("ABCsource").value;
+
+// 	// add proper line endings for windows
+// 	myABC = myABC.replace(/\r?\n/g, "\r\n");
+
+// 	return myABC;
+// }
+
+
+
 function generate_ABC(renderWidth) {
 	var Sticking_Array = get_empty_note_array_in_32nds();
 	var HH_Array = get_empty_note_array_in_32nds();

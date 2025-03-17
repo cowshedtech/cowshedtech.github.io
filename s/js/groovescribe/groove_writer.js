@@ -304,135 +304,7 @@ function GrooveWriter() {
 
 	
 
-	function setNotesFromABCArray(drumType, abcArray, numberOfMeasures) {
-		var setFunction;
-
-		// multiple measures of "how_many_notes"
-		var notesOnScreen = root.track.notesPerMeasure * numberOfMeasures;
-
-		var noteStringScaler = 1;
-		var displayScaler = 1;
-		if (abcArray.length > notesOnScreen && abcArray.length / notesOnScreen >= 2) {
-			// if we encounter a 16th note groove for an 8th note board, let's scale it	down
-			noteStringScaler = Math.ceil(abcArray.length / notesOnScreen);
-		} else if (abcArray.length < notesOnScreen && notesOnScreen / abcArray.length >= 2) {
-			// if we encounter a 8th note groove for an 16th note board, let's scale it up
-			displayScaler = Math.ceil(notesOnScreen / abcArray.length);
-		}
-
-		if (drumType == "Stickings") {
-			setFunction = set_sticking_state;
-		} else if (drumType == "H") {
-			setFunction = set_hh_state;
-		} else if (drumType == "T1") {
-			setFunction = set_tom1_state;
-		} else if (drumType == "T4") {
-			setFunction = set_tom4_state;
-		} else if (drumType == "S") {
-			setFunction = set_snare_state;
-		} else if (drumType == "K") {
-			setFunction = set_kick_state;
-		}
-
-		//  DisplayIndex is the index into the notes on the HTML page  starts at 1/32\n%%flatbeams
-		var displayIndex = 0;
-		var topDisplay = root.track.notesPerMeasure * root.track.numberOfMeasures;
-		for (var i = 0; i < abcArray.length && displayIndex < topDisplay; i += noteStringScaler, displayIndex += displayScaler) {
-
-			switch (abcArray[i]) {
-				case constant_ABC_STICK_R:
-					setFunction(displayIndex, "right", false);
-					break;
-				case constant_ABC_STICK_L:
-					setFunction(displayIndex, "left", false);
-					break;
-				case constant_ABC_STICK_BOTH:
-					setFunction(displayIndex, "both", false);
-					break;
-				case constant_ABC_STICK_COUNT:
-					setFunction(displayIndex, "count", false);
-					break;
-				case constant_ABC_STICK_OFF:
-					setFunction(displayIndex, "off", false);
-					break;
-				case constant_ABC_HH_Ride:
-					setFunction(displayIndex, "ride", false);
-					break;
-				case constant_ABC_HH_Ride_Bell:
-					setFunction(displayIndex, "ride_bell", false);
-					break;
-				case constant_ABC_HH_Cow_Bell:
-					setFunction(displayIndex, "cow_bell", false);
-					break;
-				case constant_ABC_HH_Crash:
-					setFunction(displayIndex, "crash", false);
-					break;
-				case constant_ABC_HH_Stacker:
-					setFunction(displayIndex, "stacker", false);
-					break;
-				case constant_ABC_HH_Metronome_Normal:
-					setFunction(displayIndex, "metronome_normal", false);
-					break;
-				case constant_ABC_HH_Metronome_Accent:
-					setFunction(displayIndex, "metronome_accent", false);
-					break;
-				case constant_ABC_HH_Open:
-					setFunction(displayIndex, "open", false);
-					break;
-				case constant_ABC_HH_Close:
-					setFunction(displayIndex, "close", false);
-					break;
-				case constant_ABC_HH_Accent:
-					setFunction(displayIndex, "accent", false);
-					break;
-				case constant_ABC_HH_Normal:
-					setFunction(displayIndex, "normal", false);
-					break;
-				case constant_ABC_T1_Normal:
-					setFunction(displayIndex, "normal", false);
-					break;
-				case constant_ABC_T4_Normal:
-					setFunction(displayIndex, "normal", false);
-					break;
-				case constant_ABC_SN_Ghost:
-					setFunction(displayIndex, "ghost", false);
-					break;
-				case constant_ABC_SN_Accent:
-					setFunction(displayIndex, "accent", false);
-					break;
-				case constant_ABC_SN_Normal:
-					setFunction(displayIndex, "normal", false);
-					break;
-				case constant_ABC_SN_Flam:
-					setFunction(displayIndex, "flam", false);
-					break;
-				case constant_ABC_SN_Drag:
-					setFunction(displayIndex, "drag", false);
-					break;
-				case constant_ABC_SN_XStick:
-					setFunction(displayIndex, "xstick", false);
-					break;
-				case constant_ABC_SN_Buzz:
-					setFunction(displayIndex, "buzz", false);
-					break;
-				case constant_ABC_KI_SandK:
-					setFunction(displayIndex, "kick_and_splash", false);
-					break;
-				case constant_ABC_KI_Splash:
-					setFunction(displayIndex, "splash", false);
-					break;
-				case constant_ABC_KI_Normal:
-					setFunction(displayIndex, "normal", false);
-					break;
-				case false:
-					setFunction(displayIndex, "off", false);
-					break;
-				default:
-					console.log("Bad note in setNotesFromABCArray: " + abcArray[i]);
-					break;
-			}
-		}
-	}
+	
 
 	// get a really long URL that encodes all of the notes and the rest of the state of the page.
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
@@ -654,18 +526,7 @@ function GrooveWriter() {
 		root.updateSheetMusic();
 	}
 
-	root.loadNewGroove = function (encodedURLData) {
-		root.updateFromURL(encodedURLData);
-	};
-
-	function getABCDataWithLineEndings() {
-		var myABC = document.getElementById("ABCsource").value;
-
-		// add proper line endings for windows
-		myABC = myABC.replace(/\r?\n/g, "\r\n");
-
-		return myABC;
-	}
+	
 
 	
 

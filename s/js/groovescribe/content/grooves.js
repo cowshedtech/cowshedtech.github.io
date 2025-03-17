@@ -60,7 +60,7 @@ if (typeof(grooves) === "undefined")
 				HTML += '<li class="grooveListHeaderLI">' + key + "</li>\n";
 				HTML += root.arrayAsHTMLList(arrayToPrint[key]);
 			} else {
-				HTML += '<li class="grooveListLI" onClick="myGrooveWriter.loadNewGroove(\'' + arrayToPrint[key] + '\')">' + key + '</li>\n';
+				HTML += '<li class="grooveListLI" onClick="myGrooveWriter.updateFromURL(\'' + arrayToPrint[key] + '\')">' + key + '</li>\n';
 			}
 		}
 		HTML += "</ul>\n";
