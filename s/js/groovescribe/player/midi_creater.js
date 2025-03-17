@@ -518,7 +518,7 @@ function createMidiUrlFromClickableUI(MIDI_type) {
         case "none":
         /* falls through */
         default:
-            if (editor.class_time_division < 16)
+            if (editor.track.timeDivision < 16)
                 num_notes_for_swing = 8 * editor.track.numBeats / editor.track.noteValue;
             else
                 num_notes_for_swing = 16 * editor.track.numBeats / editor.track.noteValue;

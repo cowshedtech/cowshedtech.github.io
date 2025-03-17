@@ -160,6 +160,6 @@ function count_active_notes_in_arrays(array_of_arrays, start_index, how_far_to_m
 //
 // is the division a triplet groove?   12, 24, or 48 notes
 function usingTriplets() {
-    if (isTripletDivision(editor.class_time_division)) return true;
+    if (isTripletDivision(editor.track.timeDivision)) return true;
     return false;
 }

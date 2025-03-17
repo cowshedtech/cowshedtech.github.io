@@ -1,6 +1,6 @@
 // Javascript for the Groove Scribe HTML application
 
-function set_sticking_state(id, new_state, make_sound, notesPerMeasure, class_time_division, noteValuePerMeasure) {
+function set_sticking_state(id, new_state, make_sound, notesPerMeasure, timeDivision, noteValuePerMeasure) {
 
     // turn both off
     document.getElementById("sticking_right" + id).style.color = constant_note_hidden_color_rgb;
@@ -24,7 +24,7 @@ function set_sticking_state(id, new_state, make_sound, notesPerMeasure, class_ti
             document.getElementById("sticking_both" + id).style.color = constant_sticking_both_on_color_rgb;
             break;
         case "count":
-            var count_state = figure_out_sticking_count_for_index(id, notesPerMeasure, class_time_division, noteValuePerMeasure);
+            var count_state = figure_out_sticking_count_for_index(id, notesPerMeasure, timeDivision, noteValuePerMeasure);
 
             document.getElementById("sticking_count" + id).style.color = constant_sticking_count_on_color_rgb;
             document.getElementById("sticking_count" + id).innerHTML = "" + count_state;
@@ -85,7 +85,7 @@ function get_sticking_state(id, returnType) {
 }
 
 
-function sticking_rotate_state(id, notesPerMeasure, class_time_division, noteValuePerMeasure) {
+function sticking_rotate_state(id, notesPerMeasure, timeDivision, noteValuePerMeasure) {
     var new_state = false;
     var sticking_state = get_sticking_state(id, "ABC");
 
@@ -104,7 +104,7 @@ function sticking_rotate_state(id, notesPerMeasure, class_time_division, noteVal
         new_state = "off";
     }
 
-    set_sticking_state(id, new_state, true, notesPerMeasure, class_time_division, noteValuePerMeasure);
+    set_sticking_state(id, new_state, true, notesPerMeasure, timeDivision, noteValuePerMeasure);
 }
 
 function isStickingsVisible() {
@@ -181,9 +181,9 @@ function stickingsReverseRL() {
     for (var i = 0; i < editor.track.numberOfMeasures * editor.notesPerMeasure; i++) {
         var cur_state = get_sticking_state(i, "URL");
         if (cur_state === "R") {
-            set_sticking_state(i, "left", false, editor.notesPerMeasure, editor.class_time_division, editor.noteValuePerMeasure);
+            set_sticking_state(i, "left", false, editor.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
         } else if (cur_state === "L") {
-            set_sticking_state(i, "right", false, editor.notesPerMeasure, editor.class_time_division, editor.noteValuePerMeasure);
+            set_sticking_state(i, "right", false, editor.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
         }
     }
     editor.updateSheetMusic();

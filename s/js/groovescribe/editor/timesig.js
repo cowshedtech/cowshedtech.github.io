@@ -31,13 +31,13 @@ function timeSigPopupClose(type, callback) {
 
         editor.track.numBeats = newTimeSigTop;
         editor.track.noteValue = newTimeSigBottom;
-        var new_notes_per_measure = calc_notes_per_measure(editor.class_time_division, editor.track.numBeats, editor.track.noteValue);
+        var new_notes_per_measure = calc_notes_per_measure(editor.track.timeDivision, editor.track.numBeats, editor.track.noteValue);
         // If new_notes_per_measure is greater it will cause the changeDivision code to error
         // as it tries to read the notes from the UI.   Setting it lower will allow the code to truncate
         // the groove properly to something smaller rather than interpolating the groove into something weird
         if (new_notes_per_measure < editor.track.notesPerMeasure)
             editor.track.notesPerMeasure = new_notes_per_measure;
-        editor.changeDivision(editor.class_time_division);   // use this function because it will relayout everything
+        editor.changeDivision(editor.track.timeDivision);   // use this function because it will relayout everything
     }
     if (callback) {
         callback();
