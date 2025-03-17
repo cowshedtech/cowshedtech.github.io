@@ -914,29 +914,29 @@ function snare_HH_kick_ABC_for_quads(sticking_array,
 // create ABC notation from a GrooveData class
 // returns a string of ABC Notation data
 
-function createABCFromGrooveData(myGrooveData, renderWidth) {
+function createABCFromGrooveData(track, renderWidth) {
 
-	var FullNoteStickingArray = scaleNoteArrayToFullSize(myGrooveData.sticking_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-	var FullNoteHHArray = scaleNoteArrayToFullSize(myGrooveData.hh_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-	var FullNoteSnareArray = scaleNoteArrayToFullSize(myGrooveData.snare_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-	var FullNoteKickArray = scaleNoteArrayToFullSize(myGrooveData.kick_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+	var FullNoteStickingArray = scaleNoteArrayToFullSize(track.sticking_array, track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
+	var FullNoteHHArray = scaleNoteArrayToFullSize(track.hh_array, track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
+	var FullNoteSnareArray = scaleNoteArrayToFullSize(track.snare_array, track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
+	var FullNoteKickArray = scaleNoteArrayToFullSize(track.kick_array, track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
 	var FullNoteTomsArray = [];
 
 	for(var i = 0; i < constant_NUMBER_OF_TOMS; i++) {
-		FullNoteTomsArray[i] = scaleNoteArrayToFullSize(myGrooveData.toms_array[i], myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+		FullNoteTomsArray[i] = scaleNoteArrayToFullSize(track.toms_array[i], track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
 	}
 
-	var is_triplet_division = isTripletDivisionFromNotesPerMeasure(myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+	var is_triplet_division = isTripletDivisionFromNotesPerMeasure(track.notesPerMeasure, track.numBeats, track.noteValue);
 
 	var fullABC = get_top_ABC_BoilerPlate(false,
-			myGrooveData.title,
-			myGrooveData.author,
-			myGrooveData.comments,
+			track.title,
+			track.author,
+			track.comments,
 			options.showLegend,
 			is_triplet_division,
-			myGrooveData.kickStemsUp,
-			myGrooveData.numBeats,
-			myGrooveData.noteValue,
+			track.kickStemsUp,
+			track.numBeats,
+			track.noteValue,
 			renderWidth,
 			editor.track.trackID
 		);
@@ -948,11 +948,11 @@ function createABCFromGrooveData(myGrooveData, renderWidth) {
 		FullNoteTomsArray,
 		"|\n",
 		FullNoteHHArray.length,
-		myGrooveData.timeDivision,
-		notesPerMeasureInFullSizeArray(is_triplet_division, myGrooveData.numBeats, myGrooveData.noteValue), // notes_per_measure, We scaled up to 48/32 above
-		myGrooveData.kickStemsUp,
-		myGrooveData.numBeats,
-		myGrooveData.noteValue);
+		track.timeDivision,
+		notesPerMeasureInFullSizeArray(is_triplet_division, track.numBeats, track.noteValue), // notes_per_measure, We scaled up to 48/32 above
+		track.kickStemsUp,
+		track.numBeats,
+		track.noteValue);
 
 	editor.track.note_mapping_array = create_note_mapping_array_for_highlighting(FullNoteHHArray,
 			FullNoteSnareArray,

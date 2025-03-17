@@ -139,30 +139,30 @@ if (typeof(GrooveDisplay) === "undefined") {
 		// shows the groove via SVG sheet music and a midi player
 		root.GrooveDBFormatPutGrooveInHTMLElement = function (HtmlTagId, GrooveDBTabIn) {
 			var track = new Track();
-			var myGrooveData = new track.grooveDataNew();
+			var track = new track.trackNew();
 
 			var combinedSnareTab = mergeDrumTabLines(GrooveDBTabIn.snareAccentTab, GrooveDBTabIn.snareOtherTab);
 			var combinedKickTab = mergeDrumTabLines(GrooveDBTabIn.kickTab, GrooveDBTabIn.footOtherTab);
 
-			if(GrooveDBTabIn.div !== undefined && !isNaN(GrooveDBTabIn.div)) myGrooveData.timeDivision = GrooveDBTabIn.div;
-			if(GrooveDBTabIn.tempo !== undefined && !isNaN(GrooveDBTabIn.tempo)) myGrooveData.tempo = GrooveDBTabIn.tempo;
-			if(GrooveDBTabIn.swingPercent !== undefined && !isNaN(GrooveDBTabIn.swingPercent)) myGrooveData.swingPercent = GrooveDBTabIn.swingPercent;
-			if(GrooveDBTabIn.measures !== undefined && !isNaN(GrooveDBTabIn.measures)) myGrooveData.numberOfMeasures = GrooveDBTabIn.measures;
-			if(GrooveDBTabIn.notesPerTabMeasure !== undefined && !isNaN(GrooveDBTabIn.notesPerTabMeasure)) myGrooveData.notesPerMeasure = GrooveDBTabIn.notesPerTabMeasure;
-			if(GrooveDBTabIn.stickingTab !== undefined) myGrooveData.sticking_array = track.noteArraysFromURLData("Stickings", GrooveDBTabIn.stickingTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
-			if(GrooveDBTabIn.hihatTab !== undefined) myGrooveData.hh_array = track.noteArraysFromURLData("H", GrooveDBTabIn.hihatTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
-			myGrooveData.snare_array = track.noteArraysFromURLData("S", combinedSnareTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
-			myGrooveData.kick_array = track.noteArraysFromURLData("K", combinedKickTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
-			if(GrooveDBTabIn.tom1Tab !== undefined) myGrooveData.toms_array[0] = track.noteArraysFromURLData("T1", GrooveDBTabIn.tom1Tab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
-			if(GrooveDBTabIn.tom4Tab !== undefined) myGrooveData.toms_array[3] = track.noteArraysFromURLData("T4", GrooveDBTabIn.tom4Tab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			if(GrooveDBTabIn.div !== undefined && !isNaN(GrooveDBTabIn.div)) track.timeDivision = GrooveDBTabIn.div;
+			if(GrooveDBTabIn.tempo !== undefined && !isNaN(GrooveDBTabIn.tempo)) track.tempo = GrooveDBTabIn.tempo;
+			if(GrooveDBTabIn.swingPercent !== undefined && !isNaN(GrooveDBTabIn.swingPercent)) track.swingPercent = GrooveDBTabIn.swingPercent;
+			if(GrooveDBTabIn.measures !== undefined && !isNaN(GrooveDBTabIn.measures)) track.numberOfMeasures = GrooveDBTabIn.measures;
+			if(GrooveDBTabIn.notesPerTabMeasure !== undefined && !isNaN(GrooveDBTabIn.notesPerTabMeasure)) track.notesPerMeasure = GrooveDBTabIn.notesPerTabMeasure;
+			if(GrooveDBTabIn.stickingTab !== undefined) track.sticking_array = track.noteArraysFromURLData("Stickings", GrooveDBTabIn.stickingTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			if(GrooveDBTabIn.hihatTab !== undefined) track.hh_array = track.noteArraysFromURLData("H", GrooveDBTabIn.hihatTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			track.snare_array = track.noteArraysFromURLData("S", combinedSnareTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			track.kick_array = track.noteArraysFromURLData("K", combinedKickTab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			if(GrooveDBTabIn.tom1Tab !== undefined) track.toms_array[0] = track.noteArraysFromURLData("T1", GrooveDBTabIn.tom1Tab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
+			if(GrooveDBTabIn.tom4Tab !== undefined) track.toms_array[3] = track.noteArraysFromURLData("T4", GrooveDBTabIn.tom4Tab, GrooveDBTabIn.notesPerTabMeasure, GrooveDBTabIn.measures);
 
 			if(GrooveDBTabIn.timeSignature !== undefined) {
 				var timeSig = parseTimeSignature(GrooveDBTabIn.timeSignature);
-				myGrooveData.numBeats = timeSig[0];
-				myGrooveData.noteValue = timeSig[1];
+				track.numBeats = timeSig[0];
+				track.noteValue = timeSig[1];
 			}
 
-			//console.log(myGrooveData);
+			//console.log(track);
 
 			var svgTargetId = "svgTarget" + root.GrooveDisplayUniqueCounter;
 			var midiPlayerTargetId = "midiPlayerTarget" + root.GrooveDisplayUniqueCounter;
@@ -175,18 +175,18 @@ if (typeof(GrooveDisplay) === "undefined") {
 			var svgTarget = document.getElementById(svgTargetId);
 			var renderWidth = svgTarget.offsetWidth - 100;
 
-			var abcNotation = createABCFromGrooveData(myGrooveData, renderWidth);
+			var abcNotation = createABCFromGrooveData(track, renderWidth);
 			var svgReturn = track.renderABCtoSVG(abcNotation);
 			//console.log(abcNotation);
 
 			svgTarget.innerHTML = svgReturn.svg;
 
-			track.setGrooveData(myGrooveData);
+			track.setGrooveData(track);
 
-			track.AddMidiPlayerToPage(midiPlayerTargetId, myGrooveData.notesPerMeasure, true);
+			track.AddMidiPlayerToPage(midiPlayerTargetId, track.notesPerMeasure, true);
 			track.expandOrRetractMIDI_playback(true, false); // make it small
-			// track.setTempo(myGrooveData.tempo);
-			// track.setSwing(myGrooveData.swingPercent);
+			// track.setTempo(track.tempo);
+			// track.setSwing(track.swingPercent);
 			track.oneTimeInitializeMidi();
 
 			root.GrooveDisplayUniqueCounter++;
@@ -217,7 +217,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 				'<div class="nonPrintable"><div id="' + midiPlayerTargetId + '"></div></div>\n';
 
 			// load the groove from the URL data if it was passed in.
-			var GrooveData = track.getTrackFromUrlString(GrooveDefinition, track.root.grooveDataNew());
+			var GrooveData = track.getTrackFromUrlString(GrooveDefinition, track.root.trackNew());
 			// console.log(GrooveData);
 
 			var layoutFunction = function() {

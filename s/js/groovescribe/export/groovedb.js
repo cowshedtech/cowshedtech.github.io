@@ -21,34 +21,34 @@
 		if (!document.getElementById("GrooveDB_source") || document.getElementById("GrooveDB_source").style.display == 'none')
 			return; // nothing to update
 
-		var myGrooveData = editor.grooveDataFromClickableUI();
+		var track = editor.grooveDataFromClickableUI();
 
 		var notesPerMeasureInTab = calc_notes_per_measure((usingTriplets() ? 48 : 32), editor.class_num_beats_per_measure, editor.class_note_value_per_measure);
-		var maxNotesInTab = myGrooveData.numberOfMeasures * notesPerMeasureInTab;
+		var maxNotesInTab = track.numberOfMeasures * notesPerMeasureInTab;
 
 		// scale up all the arrays to 48 or 32 notes so that they look normalized
 
-		myGrooveData.hh_array = scaleNoteArrayToFullSize(myGrooveData.hh_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-		myGrooveData.snare_array = scaleNoteArrayToFullSize(myGrooveData.snare_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-		myGrooveData.kick_array = scaleNoteArrayToFullSize(myGrooveData.kick_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-		myGrooveData.toms_array[0] = scaleNoteArrayToFullSize(myGrooveData.toms_array[0], myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-		myGrooveData.toms_array[3] = scaleNoteArrayToFullSize(myGrooveData.toms_array[3], myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+		track.hh_array = scaleNoteArrayToFullSize(track.hh_array, track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
+		track.snare_array = scaleNoteArrayToFullSize(track.snare_array, track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
+		track.kick_array = scaleNoteArrayToFullSize(track.kick_array, track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
+		track.toms_array[0] = scaleNoteArrayToFullSize(track.toms_array[0], track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
+		track.toms_array[3] = scaleNoteArrayToFullSize(track.toms_array[3], track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
 
 		var DBString = "{{GrooveTab";
 
 		DBString += "\n|HasTempo=" + midiPlayer.getTempo();
 		DBString += "\n|HasSwingPercent=" + midiPlayer.getSwing();
-		DBString += "\n|HasDivision=" + myGrooveData.notesPerMeasure;
-		DBString += "\n|HasMeasures=" + myGrooveData.numberOfMeasures;
+		DBString += "\n|HasDivision=" + track.notesPerMeasure;
+		DBString += "\n|HasMeasures=" + track.numberOfMeasures;
 		DBString += "\n|HasNotesPerMeasure=" + notesPerMeasureInTab;
-		DBString += "\n|HasTimeSignature=" + myGrooveData.numBeats + "/" + myGrooveData.noteValue;
-		DBString += "\n|HasHiHatTab=" + tabLineFromAbcNoteArray("H", myGrooveData.hh_array, true, true, maxNotesInTab, 0);
-		DBString += "\n|HasSnareAccentTab=" + tabLineFromAbcNoteArray("S", myGrooveData.snare_array, true, false, maxNotesInTab, 0);
-		DBString += "\n|HasSnareOtherTab=" + tabLineFromAbcNoteArray("S", myGrooveData.snare_array, false, true, maxNotesInTab, 0);
-		DBString += "\n|HasKickTab=" + tabLineFromAbcNoteArray("K", myGrooveData.kick_array, true, false, maxNotesInTab, 0);
-		DBString += "\n|HasFootOtherTab=" + tabLineFromAbcNoteArray("K", myGrooveData.kick_array, false, true, maxNotesInTab, 0);
-		DBString += "\n|HasTom1Tab=" + tabLineFromAbcNoteArray("T1", myGrooveData.toms_array[0], false, true, maxNotesInTab, 0);
-		DBString += "\n|HasTom4Tab=" + tabLineFromAbcNoteArray("T4", myGrooveData.toms_array[3], false, true, maxNotesInTab, 0);
+		DBString += "\n|HasTimeSignature=" + track.numBeats + "/" + track.noteValue;
+		DBString += "\n|HasHiHatTab=" + tabLineFromAbcNoteArray("H", track.hh_array, true, true, maxNotesInTab, 0);
+		DBString += "\n|HasSnareAccentTab=" + tabLineFromAbcNoteArray("S", track.snare_array, true, false, maxNotesInTab, 0);
+		DBString += "\n|HasSnareOtherTab=" + tabLineFromAbcNoteArray("S", track.snare_array, false, true, maxNotesInTab, 0);
+		DBString += "\n|HasKickTab=" + tabLineFromAbcNoteArray("K", track.kick_array, true, false, maxNotesInTab, 0);
+		DBString += "\n|HasFootOtherTab=" + tabLineFromAbcNoteArray("K", track.kick_array, false, true, maxNotesInTab, 0);
+		DBString += "\n|HasTom1Tab=" + tabLineFromAbcNoteArray("T1", track.toms_array[0], false, true, maxNotesInTab, 0);
+		DBString += "\n|HasTom4Tab=" + tabLineFromAbcNoteArray("T4", track.toms_array[3], false, true, maxNotesInTab, 0);
 		DBString += "\n|HasEditData=" + undoStack[undoStack.length - 1]
 
 		DBString += "\n}}";

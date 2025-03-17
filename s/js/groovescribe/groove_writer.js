@@ -128,50 +128,50 @@ function GrooveWriter() {
 	// creates a grooveData class from the clickable UI elements of the page
 	//
 	root.grooveDataFromClickableUI = function () {
-		var myGrooveData = new root.track.grooveDataNew();
+		var track = new root.track.trackNew();
 
-		myGrooveData.notesPerMeasure = root.class_notes_per_measure;
-		myGrooveData.timeDivision = root.class_time_division;
-		myGrooveData.numberOfMeasures = root.class_number_of_measures;
-		myGrooveData.numBeats = root.class_num_beats_per_measure;
-		myGrooveData.noteValue = root.class_note_value_per_measure;
-		myGrooveData.title = document.getElementById("tuneTitle").value;
-		myGrooveData.author = document.getElementById("tuneAuthor").value;
-		myGrooveData.comments = document.getElementById("tuneComments").value;
+		track.notesPerMeasure = root.class_notes_per_measure;
+		track.timeDivision = root.class_time_division;
+		track.numberOfMeasures = root.class_number_of_measures;
+		track.numBeats = root.class_num_beats_per_measure;
+		track.noteValue = root.class_note_value_per_measure;
+		track.title = document.getElementById("tuneTitle").value;
+		track.author = document.getElementById("tuneAuthor").value;
+		track.comments = document.getElementById("tuneComments").value;
 		options.showLegend = document.getElementById("showLegend").checked;
-		myGrooveData.kickStemsUp = true;
-		myGrooveData.repeatedMeasures = root.class_repeated_measures;
+		track.kickStemsUp = true;
+		track.repeatedMeasures = root.class_repeated_measures;
 
 		for (var i = 0; i < root.class_number_of_measures; i++) {
 			var total_notes = root.class_notes_per_measure * root.class_number_of_measures;
-			myGrooveData.sticking_array = [];
-			myGrooveData.hh_array = [];
-			myGrooveData.snare_array = [];
-			myGrooveData.kick_array = [];
-			myGrooveData.toms_array = [[], [], [], []];
+			track.sticking_array = [];
+			track.hh_array = [];
+			track.snare_array = [];
+			track.kick_array = [];
+			track.toms_array = [[], [], [], []];
 
 			// query the clickable UI and generate a arrays representing the notes of all measures
 			for (var i = 0; i < total_notes; i++) {
 
 				// only grab the stickings if they are visible
 				if (isStickingsVisible())
-					myGrooveData.sticking_array.push(get_sticking_state(i, "ABC"));
+					track.sticking_array.push(get_sticking_state(i, "ABC"));
 
-				myGrooveData.hh_array.push(get_hh_state(i, "ABC"));
-				myGrooveData.snare_array.push(get_snare_state(i, "ABC"));
-				myGrooveData.kick_array.push(get_kick_state(i, "ABC"));
+				track.hh_array.push(get_hh_state(i, "ABC"));
+				track.snare_array.push(get_snare_state(i, "ABC"));
+				track.kick_array.push(get_kick_state(i, "ABC"));
 
 				if (isTomsVisible()) {
-					myGrooveData.toms_array[0].push(get_tom_state(i, 1, "ABC"));
-					myGrooveData.toms_array[3].push(get_tom_state(i, 4, "ABC"));
+					track.toms_array[0].push(get_tom_state(i, 1, "ABC"));
+					track.toms_array[3].push(get_tom_state(i, 4, "ABC"));
 				} else {
-					myGrooveData.toms_array[0].push(false);
-					myGrooveData.toms_array[3].push(false);
+					track.toms_array[0].push(false);
+					track.toms_array[3].push(false);
 				}
 			}
 		}
 
-		return myGrooveData;
+		return track;
 	};
 
 	// called by the HTML when changes happen to forms that require the ABC to update
@@ -803,16 +803,16 @@ function GrooveWriter() {
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
 	//
 	root.get_FullURLForPage= function (url_destination) {
-		var myGrooveData = root.grooveDataFromClickableUI()
-		return getUrlStringFromGrooveData(myGrooveData, url_destination)
+		var track = root.grooveDataFromClickableUI()
+		return getUrlStringFromGrooveData(track, url_destination)
 	}
 
 	// get a really long URL that encodes all of the notes and the rest of the state of the page.
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
 	//
 	function get_GSURLForPage(url_destination) {
-		var myGrooveData = root.grooveDataFromClickableUI()
-		return getGSUrlStringFromGrooveData(myGrooveData, url_destination)
+		var track = root.grooveDataFromClickableUI()
+		return getGSUrlStringFromGrooveData(track, url_destination)
 	}
 
 	

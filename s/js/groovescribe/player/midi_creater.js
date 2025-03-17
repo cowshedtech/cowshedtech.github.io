@@ -355,38 +355,38 @@ function MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_A
 /**
  * 
  */    
-function create_MIDIURLFromGrooveData(myGrooveData, MIDI_type, metronomeSolo) {
+function create_MIDIURLFromGrooveData(track, MIDI_type, metronomeSolo) {
 
     var midiFile = new Midi.File();
     var midiTrack = new Midi.Track();
     midiFile.addTrack(midiTrack);
 
-//    midiTrack.setTempo(myGrooveData.tempo);
+//    midiTrack.setTempo(track.tempo);
     midiTrack.setInstrument(0, 0x13);
 
-    var swing_percentage = myGrooveData.swingPercent / 100;
+    var swing_percentage = track.swingPercent / 100;
     var swing_percentage = midiPlayer.getSwing() / 100;
 
 
     // the midi converter expects all the arrays to be 32 or 48 notes long.
     // Expand them
-    var FullNoteHHArray = scaleNoteArrayToFullSize(myGrooveData.hh_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-    var FullNoteSnareArray = scaleNoteArrayToFullSize(myGrooveData.snare_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
-    var FullNoteKickArray = scaleNoteArrayToFullSize(myGrooveData.kick_array, myGrooveData.numberOfMeasures, myGrooveData.notesPerMeasure, myGrooveData.numBeats, myGrooveData.noteValue);
+    var FullNoteHHArray = scaleNoteArrayToFullSize(track.hh_array, track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
+    var FullNoteSnareArray = scaleNoteArrayToFullSize(track.snare_array, track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
+    var FullNoteKickArray = scaleNoteArrayToFullSize(track.kick_array, track.numberOfMeasures, track.notesPerMeasure, track.numBeats, track.noteValue);
 
     // the midi functions expect just one measure at a time to work correctly
     // call once for each measure
-    var measure_notes = FullNoteHHArray.length / myGrooveData.numberOfMeasures;
-    for (var measureIndex = 0; measureIndex < myGrooveData.numberOfMeasures; measureIndex++) {
+    var measure_notes = FullNoteHHArray.length / track.numberOfMeasures;
+    for (var measureIndex = 0; measureIndex < track.numberOfMeasures; measureIndex++) {
 
         var FullNoteTomsArray = [];
         for (var i = 0; i < constant_NUMBER_OF_TOMS; i++) {
-            var orig_measure_notes = myGrooveData.notesPerMeasure;
-            FullNoteTomsArray[i] = scaleNoteArrayToFullSize(myGrooveData.toms_array[i].slice(orig_measure_notes * measureIndex, orig_measure_notes * (measureIndex + 1)),
+            var orig_measure_notes = track.notesPerMeasure;
+            FullNoteTomsArray[i] = scaleNoteArrayToFullSize(track.toms_array[i].slice(orig_measure_notes * measureIndex, orig_measure_notes * (measureIndex + 1)),
                 1,
-                myGrooveData.notesPerMeasure,
-                myGrooveData.numBeats,
-                myGrooveData.noteValue);
+                track.notesPerMeasure,
+                track.numBeats,
+                track.noteValue);
         }
 
         MIDI_from_HH_Snare_Kick_Arrays(midiTrack,
@@ -397,10 +397,10 @@ function create_MIDIURLFromGrooveData(myGrooveData, MIDI_type, metronomeSolo) {
             MIDI_type,
             metronome.frequency,
             measure_notes,
-            myGrooveData.timeDivision,
+            track.timeDivision,
             swing_percentage,
-            myGrooveData.numBeats,
-            myGrooveData.noteValue,
+            track.numBeats,
+            track.noteValue,
             metronomeSolo);
     }
 

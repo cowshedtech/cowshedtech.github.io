@@ -2,7 +2,7 @@
 // this will allow us to bookmark or reference a groove and handle undo/redo.
 //
 
-function getGSUrlStringFromGrooveData(myGrooveData, url_destination) {
+function getGSUrlStringFromGrooveData(track, url_destination) {
 
     var fullURL = "https://www.mikeslessons.com/groove/";
 
@@ -32,19 +32,19 @@ function getGSUrlStringFromGrooveData(myGrooveData, url_destination) {
     if (options.grooveDBAuthoring)
         fullURL += "GDB_Author=1&";
 
-    fullURL += 'TimeSig=' + myGrooveData.numBeats + '/' + myGrooveData.noteValue;
+    fullURL += 'TimeSig=' + track.numBeats + '/' + track.noteValue;
 
     // # of notes
-    fullURL += "&Div=" + myGrooveData.timeDivision;
+    fullURL += "&Div=" + track.timeDivision;
 
-    if (myGrooveData.title !== "")
-        fullURL += "&Title=" + encodeURIComponent(myGrooveData.title);
+    if (track.title !== "")
+        fullURL += "&Title=" + encodeURIComponent(track.title);
 
-    if (myGrooveData.author !== "")
-        fullURL += "&Author=" + encodeURIComponent(myGrooveData.author);
+    if (track.author !== "")
+        fullURL += "&Author=" + encodeURIComponent(track.author);
 
-    if (myGrooveData.comments !== "")
-        fullURL += "&Comments=" + encodeURIComponent(myGrooveData.comments);
+    if (track.comments !== "")
+        fullURL += "&Comments=" + encodeURIComponent(track.comments);
 
     fullURL += "&Tempo=" + midiPlayer.getTempo()
 
@@ -52,7 +52,7 @@ function getGSUrlStringFromGrooveData(myGrooveData, url_destination) {
         fullURL += "&Swing=" + midiPlayer.getSwing();
 
     // # of measures
-    fullURL += "&Measures=" + myGrooveData.numberOfMeasures;
+    fullURL += "&Measures=" + track.numberOfMeasures;
 
     // # metronome setting
     if (metronome.frequency !== 0) {
@@ -60,23 +60,23 @@ function getGSUrlStringFromGrooveData(myGrooveData, url_destination) {
     }
 
     // notes
-    var total_notes = myGrooveData.notesPerMeasure * myGrooveData.numberOfMeasures;
-    var HH = "&H=|" + tabLineFromAbcNoteArray('H', myGrooveData.hh_array, true, true, total_notes, myGrooveData.notesPerMeasure);
-    var Snare = "&S=|" + tabLineFromAbcNoteArray('S', myGrooveData.snare_array, true, true, total_notes, myGrooveData.notesPerMeasure);
-    var Kick = "&K=|" + tabLineFromAbcNoteArray('K', myGrooveData.kick_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+    var total_notes = track.notesPerMeasure * track.numberOfMeasures;
+    var HH = "&H=|" + tabLineFromAbcNoteArray('H', track.hh_array, true, true, total_notes, track.notesPerMeasure);
+    var Snare = "&S=|" + tabLineFromAbcNoteArray('S', track.snare_array, true, true, total_notes, track.notesPerMeasure);
+    var Kick = "&K=|" + tabLineFromAbcNoteArray('K', track.kick_array, true, true, total_notes, track.notesPerMeasure);
 
     fullURL += HH + Snare + Kick;
 
     // only add if we need them.  // they are long and ugly. :)
     if (options.tomsVisible) {
-        var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', myGrooveData.toms_array[0], true, true, total_notes, myGrooveData.notesPerMeasure);
-        var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', myGrooveData.toms_array[3], true, true, total_notes, myGrooveData.notesPerMeasure);
+        var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', track.toms_array[0], true, true, total_notes, track.notesPerMeasure);
+        var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', track.toms_array[3], true, true, total_notes, track.notesPerMeasure);
         fullURL += Tom1 + Tom4;
     }
 
     // only add if we need them.  // they are long and ugly. :)
     if (options.showStickings) {
-        var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', myGrooveData.sticking_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+        var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', track.sticking_array, true, true, total_notes, track.notesPerMeasure);
         fullURL += Stickings;
     }
 
@@ -88,6 +88,6 @@ function getGSUrlStringFromGrooveData(myGrooveData, url_destination) {
 // this will allow us to bookmark or reference a groove and handle undo/redo.
 //
 function get_GSURLForPage(url_destination) {
-    var myGrooveData = editor.grooveDataFromClickableUI()
-    return getGSUrlStringFromGrooveData(myGrooveData, url_destination)
+    var track = editor.grooveDataFromClickableUI()
+    return getGSUrlStringFromGrooveData(track, url_destination)
 }

@@ -2,7 +2,7 @@
 // this will allow us to bookmark or reference a groove and handle undo/redo.
 //
 
- function getUrlStringFromGrooveData(myGrooveData, url_destination) {
+ function getUrlStringFromGrooveData(track, url_destination) {
 
     var fullURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
 
@@ -32,19 +32,19 @@
     if (options.grooveDBAuthoring)
         fullURL += "GDB_Author=1&";
 
-    fullURL += 'TimeSig=' + myGrooveData.numBeats + '/' + myGrooveData.noteValue;
+    fullURL += 'TimeSig=' + track.numBeats + '/' + track.noteValue;
 
     // # of notes
-    fullURL += "&Div=" + myGrooveData.timeDivision;
+    fullURL += "&Div=" + track.timeDivision;
 
-    if (myGrooveData.title !== "")
-        fullURL += "&Title=" + encodeURIComponent(myGrooveData.title);
+    if (track.title !== "")
+        fullURL += "&Title=" + encodeURIComponent(track.title);
 
-    if (myGrooveData.author !== "")
-        fullURL += "&Author=" + encodeURIComponent(myGrooveData.author);
+    if (track.author !== "")
+        fullURL += "&Author=" + encodeURIComponent(track.author);
 
-    if (myGrooveData.comments !== "")
-        fullURL += "&Comments=" + encodeURIComponent(myGrooveData.comments);
+    if (track.comments !== "")
+        fullURL += "&Comments=" + encodeURIComponent(track.comments);
 
     fullURL += "&Tempo=" + midiPlayer.tempo;
 
@@ -55,18 +55,18 @@
         fullURL += "&Highlight=OFF";
 
     // # of measures
-    fullURL += "&Measures=" + myGrooveData.numberOfMeasures;
+    fullURL += "&Measures=" + track.numberOfMeasures;
 
-    // if (myGrooveData.repeatedMeasures.size > 0) {
+    // if (track.repeatedMeasures.size > 0) {
     // 	let content = "";
-    // 	for (let measure of myGrooveData.repeatedMeasures.keys()) {
+    // 	for (let measure of track.repeatedMeasures.keys()) {
     // 		if (content.length > 0) content += ","
-    // 		content += measure + 'x' + myGrooveData.repeatedMeasures.get(measure)
+    // 		content += measure + 'x' + track.repeatedMeasures.get(measure)
     // 	}
     // 	fullURL += "&rMeasures=" + content;
     // }
-    if (myGrooveData.repeatedMeasures.size > 0) {
-        const content = Array.from(myGrooveData.repeatedMeasures.entries())
+    if (track.repeatedMeasures.size > 0) {
+        const content = Array.from(track.repeatedMeasures.entries())
             .map(([key, value]) => `${key}x${value}`)
             .join(",");
         fullURL += "&rMeasures=" + content;
@@ -78,23 +78,23 @@
     }
 
     // notes
-    var total_notes = myGrooveData.notesPerMeasure * myGrooveData.numberOfMeasures;
-    var HH = "&H=|" + tabLineFromAbcNoteArray('H', myGrooveData.hh_array, true, true, total_notes, myGrooveData.notesPerMeasure);
-    var Snare = "&S=|" + tabLineFromAbcNoteArray('S', myGrooveData.snare_array, true, true, total_notes, myGrooveData.notesPerMeasure);
-    var Kick = "&K=|" + tabLineFromAbcNoteArray('K', myGrooveData.kick_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+    var total_notes = track.notesPerMeasure * track.numberOfMeasures;
+    var HH = "&H=|" + tabLineFromAbcNoteArray('H', track.hh_array, true, true, total_notes, track.notesPerMeasure);
+    var Snare = "&S=|" + tabLineFromAbcNoteArray('S', track.snare_array, true, true, total_notes, track.notesPerMeasure);
+    var Kick = "&K=|" + tabLineFromAbcNoteArray('K', track.kick_array, true, true, total_notes, track.notesPerMeasure);
 
     fullURL += HH + Snare + Kick;
 
     // only add if we need them.  // they are long and ugly. :)
     if (options.tomsVisible) {
-        var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', myGrooveData.toms_array[0], true, true, total_notes, myGrooveData.notesPerMeasure);
-        var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', myGrooveData.toms_array[3], true, true, total_notes, myGrooveData.notesPerMeasure);
+        var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', track.toms_array[0], true, true, total_notes, track.notesPerMeasure);
+        var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', track.toms_array[3], true, true, total_notes, track.notesPerMeasure);
         fullURL += Tom1 + Tom4;
     }
 
     // only add if we need them.  // they are long and ugly. :)
     if (options.showStickings) {
-        var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', myGrooveData.sticking_array, true, true, total_notes, myGrooveData.notesPerMeasure);
+        var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', track.sticking_array, true, true, total_notes, track.notesPerMeasure);
         fullURL += Stickings;
     }
 
