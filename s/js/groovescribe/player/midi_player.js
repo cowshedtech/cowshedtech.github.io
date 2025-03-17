@@ -782,7 +782,7 @@ class MIDIPlayer {
 
     // open a new tab with GrooveScribe with the current groove
 	loadFullScreenGrooveScribe() {
-		var fullURL = getUrlStringFromGrooveData(root.track, 'fullGrooveScribe')
+		var fullURL = getUrlStringFromGrooveData(root.track, options, midiPlayer, metronome, 'fullGrooveScribe')
 
 		var win = window.open(fullURL, '_blank');
 		win.focus();

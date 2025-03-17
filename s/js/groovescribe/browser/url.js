@@ -1,80 +1,67 @@
-// get a really long URL that encodes all of the notes and the rest of the state of the page.
-// this will allow us to bookmark or reference a groove and handle undo/redo.
+// Javascript for the Groove Scribe HTML application
+// Groove Scribe is for drummers and helps create sheet music with an easy to use WYSIWYG groove editor.
+//
+// Functions for mapping between the browser URL and groove data
 //
 
- function getUrlStringFromGrooveData(track, url_destination) {
+
+/**
+ * Generates a URL string encoding all groove data and settings
+ * @param {Object} track - The track object containing groove data
+ * @param {Object} options - Display and behavior options
+ * @param {Object} midiPlayer - MIDI player instance
+ * @param {Object} metronome - Metronome settings
+ * @param {string} url_destination - Target page type ('display' or 'fullGrooveScribe')
+ * @returns {string} URL containing encoded groove data
+ */
+function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_destination) {
 
     var fullURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
 
-    if (!url_destination) {
-        // then assume it is the groove writer display.  Do nothing
-    } else if (url_destination == "display") {
-        // asking for the "groove_display" page
-        if (fullURL.includes('index.html'))
-            fullURL = fullURL.replace('index.html', 'GrooveEmbed.html');
-        else if (fullURL.includes('/gscribe'))
-            fullURL = fullURL.replace('/gscribe', '/groove/GrooveEmbed.html');
-        else
-            fullURL += 'GrooveEmbed.html';
-    } else if (url_destination == "fullGrooveScribe") {
-        // asking for the full GrooveScribe link
-        fullURL = 'https://www.mikeslessons.com/gscribe';
+    switch (url_destination) {
+        case 'display':
+            // Transform current URL to embed version
+            fullURL = fullURL
+                .replace(/index\.html$/, 'GrooveEmbed.html')
+                .replace(/\/gscribe$/, '/groove/GrooveEmbed.html');
+            if (!fullURL.endsWith('GrooveEmbed.html')) {
+                fullURL += 'GrooveEmbed.html';
+            }
+            break;
+            
+        case 'fullGrooveScribe':
+            fullURL = 'https://www.mikeslessons.com/gscribe';
+            break;
+            
+        default: // groove writer display
+            break;
     }
 
     fullURL += '?';
 
-    if (options.debugMode)
-        fullURL += "Debug=1&";
-
-    if (options.viewMode)
-        fullURL += "Mode=view&";
-
-    if (options.grooveDBAuthoring)
-        fullURL += "GDB_Author=1&";
+    if (options && options.debugMode) fullURL += "Debug=1&";
+    if (options && options.viewMode) fullURL += "Mode=view&";
+    if (options && options.grooveDBAuthoring) fullURL += "GDB_Author=1&";
+    if (options && !options.highlightOn) fullURL += "&Highlight=OFF";
 
     fullURL += 'TimeSig=' + track.numBeats + '/' + track.noteValue;
-
-    // # of notes
     fullURL += "&Div=" + track.timeDivision;
 
-    if (track.title !== "")
-        fullURL += "&Title=" + encodeURIComponent(track.title);
+    if (track.title !== "") fullURL += "&Title=" + encodeURIComponent(track.title);
+    if (track.author !== "") fullURL += "&Author=" + encodeURIComponent(track.author);
+    if (track.comments !== "") fullURL += "&Comments=" + encodeURIComponent(track.comments);
 
-    if (track.author !== "")
-        fullURL += "&Author=" + encodeURIComponent(track.author);
+    if (midiPlayer && midiPlayer.tempo) fullURL += "&Tempo=" + midiPlayer.tempo;
+    if (midiPlayer && midiPlayer.getSwing() > 0) fullURL += "&Swing=" + midiPlayer.getSwing();
+    if (metronome && metronome.frequency !== 0) fullURL += "&MetronomeFreq=" + metronome.frequency;
 
-    if (track.comments !== "")
-        fullURL += "&Comments=" + encodeURIComponent(track.comments);
-
-    fullURL += "&Tempo=" + midiPlayer.tempo;
-
-    if (midiPlayer.getSwing() > 0)
-        fullURL += "&Swing=" + midiPlayer.getSwing();
-
-    if (!options.highlightOn)
-        fullURL += "&Highlight=OFF";
-
-    // # of measures
     fullURL += "&Measures=" + track.numberOfMeasures;
 
-    // if (track.repeatedMeasures.size > 0) {
-    // 	let content = "";
-    // 	for (let measure of track.repeatedMeasures.keys()) {
-    // 		if (content.length > 0) content += ","
-    // 		content += measure + 'x' + track.repeatedMeasures.get(measure)
-    // 	}
-    // 	fullURL += "&rMeasures=" + content;
-    // }
     if (track.repeatedMeasures.size > 0) {
         const content = Array.from(track.repeatedMeasures.entries())
             .map(([key, value]) => `${key}x${value}`)
             .join(",");
         fullURL += "&rMeasures=" + content;
-    }
-
-    // # metronome setting
-    if (metronome.frequency !== 0) {
-        fullURL += "&MetronomeFreq=" + metronome.frequency;
     }
 
     // notes
@@ -101,6 +88,11 @@
     return fullURL;
 }
 
+
+/**
+ * 
+ * 
+ **/
 function getTrackFromUrlString(encodedURLData, track, debugMode) {
     var Stickings_string;
     var HH_string;

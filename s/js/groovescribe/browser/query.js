@@ -1,40 +1,8 @@
 // Javascript for the Groove Scribe HTML application
 // Groove Scribe is for drummers and helps create sheet music with an easy to use WYSIWYG groove editor.
 //
-// Functions for reading and manipulating the browser query
+// Functions for reading and manipulating a browser query
 //
-
-/**
- * Extracts a query parameter value from a URL string
- * @param {string} key - The parameter key to search for
- * @param {string} defaultValue - Value to return if parameter not found
- * @param {string} queryString - The URL query string to parse
- * @returns {string} The parameter value or default value
- * @example
- * getQueryVariableFromString('page', '1', '?page=2&sort=desc');
- */
-const getQueryVariableFromString = (key, defaultValue, queryString) => {
-    try {
-        const params = new URLSearchParams(queryString.slice(1));
-        const value = params.get(key);
-        return value ?? defaultValue;
-    } catch (error) {
-        console.warn('Failed to parse query string:', error);
-        return defaultValue;
-    }
-};
-
-
-/**
- * Gets a query parameter value from the current URL
- * @param {string} key - The parameter key to search for
- * @param {string} defaultValue - Value to return if parameter not found
- * @returns {string} The parameter value or default value
- * @example
- * const page = getQueryVariableFromURL('page', '1');
- */
-const getQueryVariableFromURL = (key, defaultValue) => 
-    getQueryVariableFromString(key, defaultValue, window.location.search);
 
 
 /**
@@ -113,6 +81,42 @@ const getBrowserInfo = () => {
         return 'windows';
     }
 };
+
+
+/**
+ * Extracts a query parameter value from a URL string
+ * @param {string} key - The parameter key to search for
+ * @param {string} defaultValue - Value to return if parameter not found
+ * @param {string} queryString - The URL query string to parse
+ * @returns {string} The parameter value or default value
+ * @example
+ * getQueryVariableFromString('page', '1', '?page=2&sort=desc');
+ */
+const getQueryVariableFromString = (key, defaultValue, queryString) => {
+    try {
+        const params = new URLSearchParams(queryString.slice(1));
+        const value = params.get(key);
+        return value ?? defaultValue;
+    } catch (error) {
+        console.warn('Failed to parse query string:', error);
+        return defaultValue;
+    }
+};
+
+
+/**
+ * Gets a query parameter value from the current URL
+ * @param {string} key - The parameter key to search for
+ * @param {string} defaultValue - Value to return if parameter not found
+ * @returns {string} The parameter value or default value
+ * @example
+ * const page = getQueryVariableFromURL('page', '1');
+ */
+const getQueryVariableFromURL = (key, defaultValue) => 
+    getQueryVariableFromString(key, defaultValue, window.location.search);
+
+
+
 
 
 /**

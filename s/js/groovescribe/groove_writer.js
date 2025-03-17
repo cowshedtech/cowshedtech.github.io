@@ -311,7 +311,7 @@ function GrooveWriter() {
 	//
 	root.get_FullURLForPage= function (url_destination) {
 		var track = grooveDataFromClickableUI()
-		return getUrlStringFromGrooveData(track, url_destination)
+		return getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_destination)
 	}
 	
 
