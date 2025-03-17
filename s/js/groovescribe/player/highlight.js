@@ -12,7 +12,7 @@ var class_cur_highlight_ids = {
 //
 //
 //
-function hilight_note(instrument, percent_complete, class_permutation_type, numBeats, class_note_value_per_measure, numberOfMeasures, class_notes_per_measure, repeatedMeasures, usingTriplets) {
+function hilight_note(instrument, percent_complete, class_permutation_type, numBeats, class_note_value_per_measure, numberOfMeasures, notesPerMeasure, repeatedMeasures, usingTriplets) {
 
     if (percent_complete < 0) {
         clear_all_highlights("clear");
@@ -47,19 +47,19 @@ function hilight_note(instrument, percent_complete, class_permutation_type, numB
     }
 
     let adjusted_note_id_in_32 = measure * notesPerMeasure + note_id_in_32 % notesPerMeasure;
-    var real_note_id = adjusted_note_id_in_32 / getNoteScaler(class_notes_per_measure, numBeats, class_note_value_per_measure);
+    var real_note_id = adjusted_note_id_in_32 / getNoteScaler(notesPerMeasure, numBeats, class_note_value_per_measure);
 
-    hilight_all_notes_on_same_beat(instrument, real_note_id, class_notes_per_measure, numberOfMeasures);
+    hilight_all_notes_on_same_beat(instrument, real_note_id, notesPerMeasure, numberOfMeasures);
 }
 
 
 //
 //
 //
-function hilight_all_notes_on_same_beat(instrument, id, class_notes_per_measure, numberOfMeasures) {
+function hilight_all_notes_on_same_beat(instrument, id, notesPerMeasure, numberOfMeasures) {
 
     id = Math.floor(id);
-    if (id < 0 || id >= class_notes_per_measure * numberOfMeasures)
+    if (id < 0 || id >= notesPerMeasure * numberOfMeasures)
         return;
 
     if (class_cur_highlight_ids.all_notes === id)

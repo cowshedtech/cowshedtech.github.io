@@ -205,11 +205,11 @@ function GetDefaultSnareGroove(notes_per_measure, timeSigTop, timeSigBottom, num
 //
 	//
 	//
-	function generateSnareContainerHTML(indexStartForNotes, baseindex, class_notes_per_measure, numBeats, class_note_value_per_measure, indexStartForNotes ) {
+	function generateSnareContainerHTML(indexStartForNotes, baseindex, notesPerMeasure, numBeats, class_note_value_per_measure, indexStartForNotes ) {
 		let newHTML = ('\
 			<div class="snare-container">\
 				<div class="opening_note_space"> </div> ');
-		for (let i = indexStartForNotes; i < class_notes_per_measure + indexStartForNotes; i++) {
+		for (let i = indexStartForNotes; i < notesPerMeasure + indexStartForNotes; i++) {
 			const snareId = `snare${i}`;
 			const snareGhostId = `snare_ghost${i}`;
 			const snareCircleId = `snare_circle${i}`;
@@ -233,7 +233,7 @@ function GetDefaultSnareGroove(notes_per_measure, timeSigTop, timeSigBottom, num
 				</div>
 			`;
 
-			if ((i - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, numBeats, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
+			if ((i - (indexStartForNotes - 1)) % noteGroupingSize(notesPerMeasure, numBeats, class_note_value_per_measure) === 0 && i < notesPerMeasure + indexStartForNotes - 1) {
 				newHTML += '<div class="space_between_note_groups"> </div>';
 			}
 		}

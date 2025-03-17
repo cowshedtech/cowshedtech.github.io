@@ -121,19 +121,19 @@ function GetDefaultTomGroove(notes_per_measure, timeSigTop, timeSigBottom, numMe
 //
 //
 //
-function generateTomContainerHTML(indexStartForNotes, baseindex, class_notes_per_measure, numBeats, class_note_value_per_measure, indexStartForNotes, tomNumber) {
+function generateTomContainerHTML(indexStartForNotes, baseindex, notesPerMeasure, numBeats, class_note_value_per_measure, indexStartForNotes, tomNumber) {
     let newHTML = []; // Use an array to build the HTML
     newHTML.push('<div class="toms-container" id="tom' + tomNumber + '-container">');
     newHTML.push('<div class="opening_note_space"> </div>');
 
-    for (let i = indexStartForNotes; i < class_notes_per_measure + indexStartForNotes; i++) {
+    for (let i = indexStartForNotes; i < notesPerMeasure + indexStartForNotes; i++) {
         newHTML.push(`
             <div id="tom${tomNumber}-${i}" class="tom" onClick="noteLeftClick(event, 'tom${tomNumber}', ${i})" oncontextmenu="event.preventDefault(); noteRightClick(event, 'tom${tomNumber}', ${i})" onmouseenter="noteOnMouseEnter(event, 'tom${tomNumber}', ${i})">
                 <div class="tom_circle note_part" id="tom_circle${tomNumber}-${i}"></div>
             </div>
         `);
 
-        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(class_notes_per_measure, numBeats, class_note_value_per_measure) === 0 && i < class_notes_per_measure + indexStartForNotes - 1) {
+        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(notesPerMeasure, numBeats, class_note_value_per_measure) === 0 && i < notesPerMeasure + indexStartForNotes - 1) {
             newHTML.push('<div class="space_between_note_groups"> </div>');
         }
     }

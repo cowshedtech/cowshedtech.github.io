@@ -669,7 +669,7 @@ function setupPermutationMenu() {
 
 function get_kick16th_permutation_array(section) {
     console.log("get_kick16th_permutation_array");
-    console.log("class_notes_per_measure: " + class_notes_per_measure);
+    console.log("editor.track.notesPerMeasure: " + editor.track.notesPerMeasure);
     if (usingTriplets()) {
         return get_kick16th_triplets_permutation_array(section);
     }
@@ -875,7 +875,7 @@ function get_numberOfActivePermutationSections() {
 
 function get_kick16th_permutation_array(section) {
 		console.log("get_kick16th_permutation_array");
-		console.log("class_notes_per_measure: " + class_notes_per_measure);
+		console.log("editor.track.notesPerMeasure: " + editor.track.notesPerMeasure);
 		if (usingTriplets()) {
 			return get_kick16th_triplets_permutation_array(section);
 		}
@@ -1234,7 +1234,7 @@ function get_kick16th_permutation_array(section) {
 
     function get_kick16th_permutation_array(section) {
 		console.log("get_kick16th_permutation_array");
-		console.log("root.class_notes_per_measure: " + root.class_notes_per_measure);
+		console.log("root.editor.track.notesPerMeasure: " + root.editor.track.notesPerMeasure);
 		if (usingTriplets()) {
 			return get_kick16th_triplets_permutation_array(section);
 		}
