@@ -76,7 +76,7 @@ closeMeasureButtonClick = function (measureNum) {
         kick: ""
     };
 
-    const measureStart = (measureNum - 1) * editor.class_notes_per_measure;
+    const measureStart = (measureNum - 1) * editor.track.notesPerMeasure;
     const measureEnd = measureNum * editor.track.notesPerMeasure;
     const totalNotes = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
 
@@ -95,7 +95,7 @@ closeMeasureButtonClick = function (measureNum) {
     shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
     editor.track.numberOfMeasures--;
 
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
+    editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
     editor.changeDivisionWithNotes(
         editor.class_time_division,
         noteData.stickings,
@@ -127,7 +127,7 @@ function repeatMeasureIncButtonClick(measureNum) {
         kick: ''
     };
     
-    const totalNotes = editor.class_notes_per_measure * editor.track.numberOfMeasures;
+    const totalNotes = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
     for (let i = 0; i < totalNotes; i++) {
         notes.stickings += get_sticking_state(i, "URL");
         notes.hh += get_hh_state(i, "URL");
