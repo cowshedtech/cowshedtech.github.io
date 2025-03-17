@@ -49,7 +49,6 @@ function GrooveWriter() {
 	abcToSVGCallback = new SVGLibCallback(root.track);
 
 	// public class vars
-	root.class_number_of_measures = 1;
 	root.class_time_division = parseInt(getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
 	root.class_num_beats_per_measure = 4;     // TimeSigTop
 	root.class_note_value_per_measure = 4;     // TimeSigBottom
@@ -61,13 +60,6 @@ function GrooveWriter() {
 	
 
 	// functions below
-
-	//
-	//
-	//
-	root.numberOfMeasures = function () {
-		return root.class_number_of_measures;
-	};
 
 	//
 	//
