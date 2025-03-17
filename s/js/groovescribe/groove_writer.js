@@ -52,12 +52,7 @@ function GrooveWriter() {
 	root.class_time_division = parseInt(getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
 	root.class_num_beats_per_measure = 4;     // TimeSigTop
 	root.class_note_value_per_measure = 4;     // TimeSigBottom
-	// root.class_notes_per_measure =  calc_notes_per_measure(root.class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
 
-	// root.class_time_division; 
-	// root.class_num_beats_per_measure; 
-	// root.class_note_value_per_measure; 
-	// root.class_notes_per_measure;
 
 	
 	// private vars in the scope of the class
@@ -69,10 +64,9 @@ function GrooveWriter() {
 	//
 	//
 	//
-	root.notesPerMeasure = function () {
-		// return root.class_notes_per_measure;
-		return root.track.notesPerMeasure;
-	};
+	// root.notesPerMeasure = function () {
+	// 	return root.track.notesPerMeasure;
+	// };
 
 	
 	// query the clickable UI and generate a 32 element array representing the notes of one measure
@@ -1048,7 +1042,6 @@ function GrooveWriter() {
 		var wasTomsVisable = isTomsVisible();
 
 		root.class_time_division = newDivision;
-		// root.class_notes_per_measure = calc_notes_per_measure(root.class_time_division, root.track.numBeats, root.class_note_value_per_measure);
 		root.track.notesPerMeasure = calc_notes_per_measure(root.class_time_division, root.track.numBeats, root.class_note_value_per_measure);
 
 		var newHTML = "";
