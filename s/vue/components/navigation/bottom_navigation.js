@@ -28,7 +28,7 @@ export default {
       <i class="fa fa-print fa-2x"></i>
     </BottomNavigationButton>
     
-    <BottomNavigationButton button-class=" grooveDB_hidden shareSaveButton" button-id="shareButton" button-text="SHARE" click-handler="event.preventDefault(); myGrooveWriter.show_FullURLPopup();">
+    <BottomNavigationButton button-class=" grooveDB_hidden shareSaveButton" button-id="shareButton" button-text="SHARE" click-handler="event.preventDefault(); show_FullURLPopup();">
       <i class="fa fa-share fa-2x"></i>
     </BottomNavigationButton>
     
