@@ -67,7 +67,7 @@ function GrooveWriter() {
 	// Return value is the number of notes.
 	root.get32NoteArrayFromClickableUI = function(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, startIndexForClickableUI) {
 
-		var scaler = getNoteScaler(root.track.notesPerMeasure, root.track.numBeats, root.class_note_value_per_measure); // fill proportionally
+		var scaler = getNoteScaler(root.track.notesPerMeasure, root.track.numBeats, root.track.noteValue); // fill proportionally
 
 		// fill in the arrays from the clickable UI
 		for (var i = 0; i < root.track.notesPerMeasure; i++) {
@@ -109,7 +109,7 @@ function GrooveWriter() {
 		track.timeDivision = root.class_time_division;
 		track.numberOfMeasures = root.class_number_of_measures;
 		// track.numBeats = root.class_num_beats_per_measure;
-		track.noteValue = root.class_note_value_per_measure;
+		track.noteValue = root.track.noteValue;
 		track.title = document.getElementById("tuneTitle").value;
 		track.author = document.getElementById("tuneAuthor").value;
 		track.comments = document.getElementById("tuneComments").value;
@@ -326,8 +326,8 @@ function GrooveWriter() {
 
 		// root.class_time_division = parseInt(getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
 		// root.class_num_beats_per_measure = 4;     // TimeSigTop
-		// root.class_note_value_per_measure = 4;     // TimeSigBottom
-		// root.track.notesPerMeasure = calc_notes_per_measure(root.class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
+		// root.track.noteValue = 4;     // TimeSigBottom
+		// root.track.notesPerMeasure = calc_notes_per_measure(root.class_time_division, root.class_num_beats_per_measure, root.track.noteValue);
 
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 
@@ -357,7 +357,7 @@ function GrooveWriter() {
 
 			if (playStarting && metronome.countInActive) {
 
-				midiURL = buildMIDICountInTrack(root.track.numBeats, root.class_note_value_per_measure, midiPlayer.getTempo());
+				midiURL = buildMIDICountInTrack(root.track.numBeats, root.track.noteValue, midiPlayer.getTempo());
 				midiPlayer.noteHasChanged();
 				metronome.countInIsPlaying = true;
 			} else {
@@ -380,7 +380,7 @@ function GrooveWriter() {
 				root.metronomeAutoSpeedUpTempoUpdate();
 			}
 
-			if (options.highlightOn) hilight_note(note_type, percent_complete, root.class_permutation_type, root.track.numBeats, root.class_note_value_per_measure, root.track.numberOfMeasures, root.track.notesPerMeasure, root.track.repeatedMeasures, usingTriplets());
+			if (options.highlightOn) hilight_note(note_type, percent_complete, root.class_permutation_type, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures, root.track.notesPerMeasure, root.track.repeatedMeasures, usingTriplets());
 		};
 
 		midiPlayer.initialise();
@@ -1032,7 +1032,7 @@ function GrooveWriter() {
 		var wasTomsVisable = isTomsVisible();
 
 		root.class_time_division = newDivision;
-		root.track.notesPerMeasure = calc_notes_per_measure(root.class_time_division, root.track.numBeats, root.class_note_value_per_measure);
+		root.track.notesPerMeasure = calc_notes_per_measure(root.class_time_division, root.track.numBeats, root.track.noteValue);
 
 		var newHTML = "";
 		for (var cur_measure = 1; cur_measure <= root.track.numberOfMeasures; cur_measure++) {
@@ -1113,15 +1113,15 @@ function GrooveWriter() {
 		}
 
 		var isNewDivisionTriplets = isTripletDivision(newDivision);
-		var new_notes_per_measure = calc_notes_per_measure((isNewDivisionTriplets ? 48 : 32), root.track.numBeats, root.class_note_value_per_measure);
+		var new_notes_per_measure = calc_notes_per_measure((isNewDivisionTriplets ? 48 : 32), root.track.numBeats, root.track.noteValue);
 
 		// check for incompatible odd time signature division   9/8 and 1/4notes for instance or 9/16 and 1/8notes
-		if ((newDivision * root.track.numBeats / root.class_note_value_per_measure) % 1 != 0) {
-			alert("1/" + newDivision + " notes are disabled in " + root.track.numBeats + "/" + root.class_note_value_per_measure + " time.  This combination would result in a half note.");
+		if ((newDivision * root.track.numBeats / root.track.noteValue) % 1 != 0) {
+			alert("1/" + newDivision + " notes are disabled in " + root.track.numBeats + "/" + root.track.noteValue + " time.  This combination would result in a half note.");
 			return;
 		}
-		if (isNewDivisionTriplets && root.class_note_value_per_measure != 4) {
-			alert("Triplets are disabled in " + root.track.numBeats + "/" + root.class_note_value_per_measure + " time.  Use x/4 time for triplets.");
+		if (isNewDivisionTriplets && root.track.noteValue != 4) {
+			alert("Triplets are disabled in " + root.track.numBeats + "/" + root.track.noteValue + " time.  Use x/4 time for triplets.");
 			return;
 		}
 
@@ -1141,16 +1141,16 @@ function GrooveWriter() {
 			// override the hi-hat if we are going to a higher division.
 			// otherwise the notes get lost in translation (not enough)
 			//if (newDivision > root.track.notesPerMeasure)
-			//	uiHH = root.track.GetDefaultHHGroove(new_notes_per_measure, root.track.numBeats, root.class_note_value_per_measure, root.track.numberOfMeasures);
+			//	uiHH = root.track.GetDefaultHHGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
 		} else {
 			// changing from or changing to a triplet division
 			// triplets don't scale well, so use defaults when we change
-			uiStickings = GetDefaultStickingsGroove(new_notes_per_measure, root.track.numBeats, root.class_note_value_per_measure, root.track.numberOfMeasures);
-			uiHH = GetDefaultHHGroove(new_notes_per_measure, root.track.numBeats, root.class_note_value_per_measure, root.track.numberOfMeasures);
-			uiTom1 = GetDefaultTom1Groove(new_notes_per_measure, root.track.numBeats, root.class_note_value_per_measure, root.track.numberOfMeasures);
-			uiTom4 = GetDefaultTom4Groove(new_notes_per_measure, root.track.numBeats, root.class_note_value_per_measure, root.track.numberOfMeasures);
-			uiSnare = GetDefaultSnareGroove(new_notes_per_measure, root.track.numBeats, root.class_note_value_per_measure, root.track.numberOfMeasures);
-			uiKick = GetDefaultKickGroove(new_notes_per_measure, root.track.numBeats, root.class_note_value_per_measure, root.track.numberOfMeasures);
+			uiStickings = GetDefaultStickingsGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
+			uiHH = GetDefaultHHGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
+			uiTom1 = GetDefaultTom1Groove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
+			uiTom4 = GetDefaultTom4Groove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
+			uiSnare = GetDefaultSnareGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
+			uiKick = GetDefaultKickGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
 
 			// reset the metronome click, since it has different options
 			metronome.resetOptionsMenuOffsetClick();

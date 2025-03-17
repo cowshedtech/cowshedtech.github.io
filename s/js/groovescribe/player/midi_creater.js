@@ -490,7 +490,7 @@ function createMidiUrlFromClickableUI(MIDI_type) {
                     Kick_Array = filter_kick_array_for_permutation(Kick_Array);
                     new_kick_array = merge_kick_arrays(new_kick_array, Kick_Array);
 
-                    MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, new_kick_array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, editor.track.numBeats, editor.class_note_value_per_measure, metronome.getSolo());
+                    MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, new_kick_array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, editor.track.numBeats, editor.track.noteValue, metronome.getSolo());
                 }
             }
             break;
@@ -510,7 +510,7 @@ function createMidiUrlFromClickableUI(MIDI_type) {
                         new_snare_array = get_snare_permutation_array(i);
 
 
-                    MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, new_snare_array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, editor.track.numBeats, editor.class_note_value_per_measure, metronome.getSolo());
+                    MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, new_snare_array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, editor.track.numBeats, editor.track.noteValue, metronome.getSolo());
                 }
             }
             break;
@@ -519,9 +519,9 @@ function createMidiUrlFromClickableUI(MIDI_type) {
         /* falls through */
         default:
             if (editor.class_time_division < 16)
-                num_notes_for_swing = 8 * editor.track.numBeats / editor.class_note_value_per_measure;
+                num_notes_for_swing = 8 * editor.track.numBeats / editor.track.noteValue;
             else
-                num_notes_for_swing = 16 * editor.track.numBeats / editor.class_note_value_per_measure;
+                num_notes_for_swing = 16 * editor.track.numBeats / editor.track.noteValue;
 
             let repeat = editor.track.repeatedMeasures.has(0) ? editor.track.repeatedMeasures.get(0) : 1;
             for (let i = 0; i < repeat; i++) {
@@ -530,7 +530,7 @@ function createMidiUrlFromClickableUI(MIDI_type) {
 
                 let repeat = editor.track.repeatedMeasures.has(i) ? editor.track.repeatedMeasures.get(i) : 1;
                 for (let i = 0; i < repeat; i++) {
-                    MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, editor.track.numBeats, editor.class_note_value_per_measure, metronome.getSolo());
+                    MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, editor.track.numBeats, editor.track.noteValue, metronome.getSolo());
                 }
             }
             break;

@@ -588,7 +588,7 @@ function get_permutation_post_ABC(section, usingTriplets) {
 // // the user has clicked on the permutation menu
 // root.permutationAnchorClick = function (event) {
 
-//     if (class_num_beats_per_measure != 4 || class_note_value_per_measure != 4)
+//     if (class_num_beats_per_measure != 4 || track.noteValue != 4)
 //         return;   // permutations disabled except in 4/4 time
 
 //     var contextMenu = document.getElementById("permutationContextMenu");
@@ -608,7 +608,7 @@ function get_permutation_post_ABC(section, usingTriplets) {
 
 function setupPermutationMenu() {
 
-    if (editor.class_num_beats_per_measure == 4 && editor.class_note_value_per_measure == 4) {
+    if (editor.class_num_beats_per_measure == 4 && editor.track.noteValue == 4) {
 
         addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", true);
 
