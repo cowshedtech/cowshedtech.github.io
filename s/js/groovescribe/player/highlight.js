@@ -96,7 +96,7 @@ function clear_all_highlights(instrument) {
 
 // create an array that can be used for note mapping
 // it is just an array of true/false that specifies weather a note can appear at that index
-function create_note_mapping_array_for_highlighting(HH_array, snare_array, kick_array, toms_array, num_notes) {
+function create_noteMappingArray_for_highlighting(HH_array, snare_array, kick_array, toms_array, num_notes) {
     var mapping_array = new Array(num_notes).fill(false); // create large empty array and initialize to false
 
     for (var i = 0; i < num_notes; i++) {
@@ -183,9 +183,9 @@ function highlightNoteInABCSVGByIndex(trackID, noteToHighlight) {
 
 // cross index the percent complete with the myGrooveData note arrays to find the nth note
 // Then highlight the note
-function highlightNoteInABCSVGFromPercentComplete(trackID, note_mapping_array, percentComplete, numberOfMeasures, repeatedMeasures) {
+function highlightNoteInABCSVGFromPercentComplete(trackID, noteMappingArray, percentComplete, numberOfMeasures, repeatedMeasures) {
 
-    if (note_mapping_array === null) return
+    if (noteMappingArray === null) return
         
     // How many measures do we have when we include repeats
     let totalMeasures = numberOfMeasures + Array.from(repeatedMeasures.values()).reduce((sum, repeats) => sum + (repeats - 1), 0);
@@ -200,7 +200,7 @@ function highlightNoteInABCSVGFromPercentComplete(trackID, note_mapping_array, p
     let adjusted_note_id_in_32 = measure * 32 + curNoteIndexNew % 32;
     
     // Now figure out which actual note we are on in abc
-    var real_note_index = getRealNoteIndex(adjusted_note_id_in_32, note_mapping_array);
+    var real_note_index = getRealNoteIndex(adjusted_note_id_in_32, noteMappingArray);
     
     // now the real_note_index should map to the correct abc note, highlight italics
     highlightNoteInABCSVGByIndex(trackID, real_note_index);	
