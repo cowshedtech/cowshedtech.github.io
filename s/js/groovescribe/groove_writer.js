@@ -51,13 +51,13 @@ function GrooveWriter() {
 	// private vars in the scope of the class
 	root.class_permutation_type = "none";
 	
-	// public function.
+	// set debugMode immediately so we can use it in index.html
+	options.debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
+	options.grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
+
+
 	// This function initializes the data for the groove Scribe web page
 	root.runsOnPageLoad = function () {
-
-		// set debugMode immediately so we can use it in index.html
-		options.debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
-		options.grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
 
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 
@@ -68,13 +68,14 @@ function GrooveWriter() {
 		// if Mode != "view" put into edit mode  (we default to view mode to prevent screen flicker)
 		if ("view" != getQueryVariableFromURL("Mode", "edit"))
 			root.swapViewEditMode(true);
-
+		
 		// set the background and text color of the current subdivision
 		selectButton(document.getElementById("subdivision_" + root.track.notesPerMeasure + "ths"));
 
-		// add html for the midi player
+		// initialise our metronome
 		metronome = new Metronome();
 		
+		// initialise our midi player
 		midiPlayer = new MIDIPlayer(root.track.trackID);
 		midiPlayer.AddMidiPlayerToPage(root.track, "midiPlayer", root.track.timeDivision);
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
@@ -118,7 +119,7 @@ function GrooveWriter() {
 		// enable or disable swing
 		midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(root.track.notesPerMeasure));
 
-		window.onresize = root.refresh_ABC;
+		window.onresize = root.updateSheetMusic();
 
 		root.browserInfo = getBrowserInfo();
 		if (root.browserInfo.browser == "MSIE" && root.browserInfo.version < 10) {
@@ -201,20 +202,6 @@ function GrooveWriter() {
 			root.track.setTempo(root.track.getTempo() + tempoDiffInt);
 	};
 
-
-	// functions below
-
-	root.MIDISaveAs = function () {
-		var midi_url = createMidiUrlFromClickableUI("general_MIDI");
-
-		// save as
-		document.location = midi_url;
-	};
-
-	// called by the HTML when changes happen to forms that require the ABC to update
-	root.refresh_ABC = function () {
-		root.updateSheetMusic();
-	};
 
 	// this is called by a bunch of places anytime we modify the musical notes on the page
 	// this will recreate the ABC code and will then use the ABC to rerender the sheet music

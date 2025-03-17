@@ -7,7 +7,7 @@ export default {
   methods: {
     downloadSVG() { SVGSaveAs() },
     downloadPNG() { PNGSaveAs() },
-    downloadMIDI() { myGrooveWriter.MIDISaveAs() }
+    downloadMIDI() { MIDISaveAs() }
   },
   template: `
 	<div class="noteContextMenu">
