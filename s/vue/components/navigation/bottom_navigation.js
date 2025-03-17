@@ -24,7 +24,7 @@ export default {
       <span class="bottomButtonIcon"><i class="fa fa-download fa-2x"></i></span>
     </BottomNavigationButton>
     
-    <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="printButton" button-text="PRINT" click-handler="myGrooveWriter.printMusic();">
+    <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="printButton" button-text="PRINT" click-handler="printMusic();">
       <i class="fa fa-print fa-2x"></i>
     </BottomNavigationButton>
     

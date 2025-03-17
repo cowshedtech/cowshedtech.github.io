@@ -61,49 +61,6 @@ function GrooveWriter() {
 		document.location = midi_url;
 	};
 
-	// creates a grooveData class from the clickable UI elements of the page
-	//
-	// root.grooveDataFromClickableUI = function () {
-	// 	var track = new root.track.trackNew();
-
-	// 	track.title = document.getElementById("tuneTitle").value;
-	// 	track.author = document.getElementById("tuneAuthor").value;
-	// 	track.comments = document.getElementById("tuneComments").value;
-	// 	options.showLegend = document.getElementById("showLegend").checked;
-	// 	track.kickStemsUp = true;
-
-	// 	for (var i = 0; i < root.track.numberOfMeasures; i++) {
-	// 		var total_notes = root.track.notesPerMeasure * root.track.numberOfMeasures;
-	// 		track.sticking_array = [];
-	// 		track.hh_array = [];
-	// 		track.snare_array = [];
-	// 		track.kick_array = [];
-	// 		track.toms_array = [[], [], [], []];
-
-	// 		// query the clickable UI and generate a arrays representing the notes of all measures
-	// 		for (var i = 0; i < total_notes; i++) {
-
-	// 			// only grab the stickings if they are visible
-	// 			if (isStickingsVisible())
-	// 				track.sticking_array.push(get_sticking_state(i, "ABC"));
-
-	// 			track.hh_array.push(get_hh_state(i, "ABC"));
-	// 			track.snare_array.push(get_snare_state(i, "ABC"));
-	// 			track.kick_array.push(get_kick_state(i, "ABC"));
-
-	// 			if (isTomsVisible()) {
-	// 				track.toms_array[0].push(get_tom_state(i, 1, "ABC"));
-	// 				track.toms_array[3].push(get_tom_state(i, 4, "ABC"));
-	// 			} else {
-	// 				track.toms_array[0].push(false);
-	// 				track.toms_array[3].push(false);
-	// 			}
-	// 		}
-	// 	}
-
-	// 	return track;
-	// };
-
 	// called by the HTML when changes happen to forms that require the ABC to update
 	root.refresh_ABC = function () {
 		root.updateSheetMusic();
@@ -130,21 +87,10 @@ function GrooveWriter() {
 		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
 		updateCurrentURL();
 
-		root.displayNewSVG();
+		displayNewSVG();
 	}
 
-	// called by generate_ABC to remake the sheet music on the page
-	root.displayNewSVG = function () {
-		var svgTarget = document.getElementById("svgTarget"),
-			diverr = document.getElementById("diverr");
-
-		var abc_source = document.getElementById("ABCsource").value;
-		var svg_return = renderABCtoSVG(root.track, abc_source);
-
-		diverr.innerHTML = svg_return.error_html;
-		svgTarget.innerHTML = svg_return.svg;
-
-	};
+	
 
 	
 
@@ -174,31 +120,7 @@ function GrooveWriter() {
 	};
 
 
-	root.printMusic = function () {
-
-		var oldMethod = true;
-
-		if ((root.browserInfo.browser == "Chrome" && root.browserInfo.platform == "windows")) {
-			oldMethod = false;
-		}
-
-		if (oldMethod) {
-			// css media queries wiil hide all but the music
-			// force a print
-
-			window.print();
-
-		} else {
-			// open a new window just for printing   (new method)
-			var win = window.open("", root.constant_APP_TITLE + " Print");
-			win.document.body.innerHTML = "<title>" + root.constant_APP_TITLE + "</title>\n<center>\n";
-			win.document.body.innerHTML += document.getElementById("svgTarget").innerHTML;
-			win.document.body.innerHTML += "\n</center>";
-			win.print();
-		}
-
-	};
-
+	
 	root.setupWriterHotKeys = function () {
 
 		document.addEventListener("keydown", function (e) {
