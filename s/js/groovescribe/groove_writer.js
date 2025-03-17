@@ -45,51 +45,15 @@ function GrooveWriter() {
 	var root = this;
 	editor = this;
 	options = new Options();
+	//root.track = new Track();
 	root.track = new Track();
 	abcToSVGCallback = new SVGLibCallback(root.track);
-
-	// public class vars
-	root.class_time_division = parseInt(getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
 
 	// private vars in the scope of the class
 	root.class_permutation_type = "none";
 	
 
 	// functions below
-
-	// query the clickable UI and generate a 32 element array representing the notes of one measure
-	// note: the ui may have fewer notes, but we scale them to fit into the 32 elements proportionally
-	// If using triplets returns 48 notes.   Otherwise always 32.
-	//
-	// (note: Only one measure, not all the notes on the page if multiple measures are present)
-	// Return value is the number of notes.
-	root.get32NoteArrayFromClickableUI = function(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, startIndexForClickableUI) {
-
-		var scaler = getNoteScaler(root.track.notesPerMeasure, root.track.numBeats, root.track.noteValue); // fill proportionally
-
-		// fill in the arrays from the clickable UI
-		for (var i = 0; i < root.track.notesPerMeasure; i++) {
-			var array_index = (i) * scaler;
-
-			// only grab the stickings if they are visible
-			if (isStickingsVisible())
-				Sticking_Array[array_index] = get_sticking_state(i + startIndexForClickableUI, "ABC");
-
-			HH_Array[array_index] = get_hh_state(i + startIndexForClickableUI, "ABC");
-
-			if (isTomsVisible()) {
-				Toms_Array[0][array_index] = get_tom_state(i + startIndexForClickableUI, 1, "ABC");
-				Toms_Array[3][array_index] = get_tom_state(i + startIndexForClickableUI, 4, "ABC");
-			}
-
-			Snare_Array[array_index] = get_snare_state(i + startIndexForClickableUI, "ABC");
-
-			Kick_Array[array_index] = get_kick_state(i + startIndexForClickableUI, "ABC");
-		}
-
-		var num_notes = Snare_Array.length;
-		return num_notes;
-	}
 
 	root.MIDISaveAs = function () {
 		var midi_url = createMidiUrlFromClickableUI("general_MIDI");
@@ -104,7 +68,7 @@ function GrooveWriter() {
 		var track = new root.track.trackNew();
 
 		track.notesPerMeasure = root.track.notesPerMeasure;
-		track.timeDivision = root.class_time_division;
+		//track.timeDivision = root.class_time_division;
 		track.numberOfMeasures = root.class_number_of_measures;
 		track.noteValue = root.track.noteValue;
 		track.title = document.getElementById("tuneTitle").value;
@@ -338,7 +302,7 @@ function GrooveWriter() {
 		metronome = new Metronome();
 		
 		midiPlayer = new MIDIPlayer(root.track.trackID);
-		midiPlayer.AddMidiPlayerToPage(root.track, "midiPlayer", root.class_time_division);
+		midiPlayer.AddMidiPlayerToPage(root.track, "midiPlayer", root.track.timeDivision);
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 
 		// load the groove from the URL data if it was passed in.
@@ -1016,12 +980,12 @@ function GrooveWriter() {
 	// OMG this needs to be refactored really bad.   There is a GrooveData struct from groove utils that
 	//      would make this whole thing much easier.  :(
 	root.changeDivisionWithNotes = function(newDivision, Stickings, HH, Tom1, Tom4, Snare, Kick) {
-		var oldDivision = root.class_time_division;
+		var oldDivision = root.track.timeDivision;
 		var wasStickingsVisable = isStickingsVisible();
 		var wasTomsVisable = isTomsVisible();
 
-		root.class_time_division = newDivision;
-		root.track.notesPerMeasure = calc_notes_per_measure(root.class_time_division, root.track.numBeats, root.track.noteValue);
+		root.track.timeDivision = newDivision;
+		root.track.notesPerMeasure = calc_notes_per_measure(root.track.timeDivision, root.track.numBeats, root.track.noteValue);
 
 		var newHTML = "";
 		for (var cur_measure = 1; cur_measure <= root.track.numberOfMeasures; cur_measure++) {
@@ -1055,7 +1019,7 @@ function GrooveWriter() {
 		unselectButton(document.getElementById("subdivision_" + oldDivision + "ths"));
 
 		// highlight the new div
-		selectButton(document.getElementById("subdivision_" + root.class_time_division + "ths"));
+		selectButton(document.getElementById("subdivision_" + root.track.timeDivision + "ths"));
 
 		// This may disable or enable the menu
 		setupPermutationMenu();

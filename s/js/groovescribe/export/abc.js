@@ -1048,7 +1048,7 @@ function generate_ABC(renderWidth) {
 		new_snare_array,
 		post_abc,
 		num_sections;
-	var num_notes = editor.get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
+	var num_notes = get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
 
 	// abc header boilerplate
 	var tuneTitle = document.getElementById("tuneTitle").value;
@@ -1138,7 +1138,7 @@ function generate_ABC(renderWidth) {
 					Snare_Array = get_empty_note_array_in_32nds();
 					Kick_Array = get_empty_note_array_in_32nds();
 
-					editor.get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, editor.class_notes_per_measure * i);
+					get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, editor.class_notes_per_measure * i);
 				}
 
 				if ((i + 1) == editor.track.numberOfMeasures) {

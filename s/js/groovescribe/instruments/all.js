@@ -353,3 +353,38 @@ function muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Ar
             fill_array_with_value_false(Toms_Array[i], Toms_Array[i].length);
     }
 }
+
+
+// query the clickable UI and generate a 32 element array representing the notes of one measure
+// note: the ui may have fewer notes, but we scale them to fit into the 32 elements proportionally
+// If using triplets returns 48 notes.   Otherwise always 32.
+//
+// (note: Only one measure, not all the notes on the page if multiple measures are present)
+// Return value is the number of notes.
+function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, startIndexForClickableUI) {
+
+    var scaler = getNoteScaler(editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue); // fill proportionally
+
+    // fill in the arrays from the clickable UI
+    for (var i = 0; i < editor.track.notesPerMeasure; i++) {
+        var array_index = (i) * scaler;
+
+        // only grab the stickings if they are visible
+        if (isStickingsVisible())
+            Sticking_Array[array_index] = get_sticking_state(i + startIndexForClickableUI, "ABC");
+
+        HH_Array[array_index] = get_hh_state(i + startIndexForClickableUI, "ABC");
+
+        if (isTomsVisible()) {
+            Toms_Array[0][array_index] = get_tom_state(i + startIndexForClickableUI, 1, "ABC");
+            Toms_Array[3][array_index] = get_tom_state(i + startIndexForClickableUI, 4, "ABC");
+        }
+
+        Snare_Array[array_index] = get_snare_state(i + startIndexForClickableUI, "ABC");
+
+        Kick_Array[array_index] = get_kick_state(i + startIndexForClickableUI, "ABC");
+    }
+
+    var num_notes = Snare_Array.length;
+    return num_notes;
+}

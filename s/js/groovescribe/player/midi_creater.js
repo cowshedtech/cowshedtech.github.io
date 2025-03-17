@@ -458,7 +458,7 @@ function createMidiUrlFromClickableUI(MIDI_type) {
         num_notes_for_swing = 16;
 
     // just the first measure
-    var num_notes = editor.get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
+    var num_notes = get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
     muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
 
     var midiFile = new Midi.File();
@@ -525,7 +525,7 @@ function createMidiUrlFromClickableUI(MIDI_type) {
 
             let repeat = editor.track.repeatedMeasures.has(0) ? editor.track.repeatedMeasures.get(0) : 1;
             for (let i = 0; i < repeat; i++) {
-                MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, editor.get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, editor.track.notesPerMeasure * i));
+                MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, editor.track.notesPerMeasure * i));
                 muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, i);
 
                 let repeat = editor.track.repeatedMeasures.has(i) ? editor.track.repeatedMeasures.get(i) : 1;

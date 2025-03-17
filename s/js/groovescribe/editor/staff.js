@@ -97,7 +97,7 @@ closeMeasureButtonClick = function (measureNum) {
 
     editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
     editor.changeDivisionWithNotes(
-        editor.class_time_division,
+        editor.track.timeDivision,
         noteData.stickings,
         noteData.hh,
         noteData.tom1,
@@ -139,7 +139,7 @@ function repeatMeasureIncButtonClick(measureNum) {
 
     // Update UI and sheet music
     editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
-    editor.changeDivisionWithNotes(editor.class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
+    editor.changeDivisionWithNotes(editor.track.timeDivision, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
     
     // Scroll to add measure button if it exists
     const addMeasureButton = document.getElementById("addMeasureButton");
@@ -168,7 +168,7 @@ function repeatMeasureDecButtonClick(measureNum) {
     }
 
     editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
-    editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+    editor.changeDivisionWithNotes(editor.track.timeDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
     const addMeasureButton = document.getElementById("addMeasureButton");
     addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
@@ -220,7 +220,7 @@ function duplicateMeasureButtonClick(measureNum) {
 
     // Update UI and sheet music
     editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
-    editor.changeDivisionWithNotes(editor.class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
+    editor.changeDivisionWithNotes(editor.track.timeDivision, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
 
     // Scroll to add measure button if it exists
     const addMeasureButton = document.getElementById("addMeasureButton");
@@ -277,7 +277,7 @@ function addMeasureButtonClick(event) {
         kick: notes.kick.join('')
     };
 
-    editor.changeDivisionWithNotes(editor.class_time_division, 
+    editor.changeDivisionWithNotes(editor.track.timeDivision, 
         noteStrings.stickings, 
         noteStrings.hh, 
         noteStrings.tom1, 
@@ -345,7 +345,7 @@ function addMeasureMiddleButtonClick (measureNum) {
 
     editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
 
-    editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+    editor.changeDivisionWithNotes(editor.track.timeDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
     // reference the button and scroll it into view
     var add_measure_button = document.getElementById("addMeasureButton");
@@ -398,7 +398,7 @@ function addMeasurePrevButtonClick (event) {
 
     editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
 
-    editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+    editor.changeDivisionWithNotes(editor.track.timeDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
     editor.updateSheetMusic();
 
@@ -413,7 +413,7 @@ function addMeasurePrevButtonClick (event) {
 function clearAllNotes() {
     editor.track.repeatedMeasures.clear();
     for (var i = 0; i < editor.track.numberOfMeasures * editor.track.notesPerMeasure; i++) {
-        set_sticking_state(i, 'off', editor.track.notesPerMeasure, editor.class_time_division, editor.track.noteValue);
+        set_sticking_state(i, 'off', editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
         set_hh_state(i, 'off');
         set_tom1_state(i, 'off');
         set_tom4_state(i, 'off');
@@ -432,7 +432,7 @@ function clearAllNotes() {
     var uiKick = "";
     var i;
 
-    editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+    editor.changeDivisionWithNotes(editor.track.timeDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 }
 
 
