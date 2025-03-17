@@ -413,7 +413,7 @@ function addMeasurePrevButtonClick (event) {
 function clearAllNotes() {
     editor.track.repeatedMeasures.clear();
     for (var i = 0; i < editor.track.numberOfMeasures * editor.track.notesPerMeasure; i++) {
-        set_sticking_state(i, 'off', editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
+        set_sticking_state(i, 'off', editor.track.notesPerMeasure, editor.class_time_division, editor.track.noteValue);
         set_hh_state(i, 'off');
         set_tom1_state(i, 'off');
         set_tom4_state(i, 'off');
@@ -447,7 +447,7 @@ function htmlForStaffContainer(baseindex, indexStartForNotes) {
         newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
         
     newHTML += ('<div class="staff-container" id="staff-container' + baseindex + '">')
-    newHTML += generateStickingContainerHTML(baseindex, indexStartForNotes, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure);
+    newHTML += generateStickingContainerHTML(baseindex, indexStartForNotes, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue);
 
     newHTML += ('  <span class="notes-row-container">')
     newHTML += generateLineLabels(baseindex); // Call the new function where the line labels are needed
@@ -470,17 +470,17 @@ function htmlForStaffContainer(baseindex, indexStartForNotes) {
         newHTML += ('						<div id="bg-highlight' + i + '" class="bg-highlight" >\
                                             </div>\n');
 
-        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure) === 0 && i < editor.track.notesPerMeasure + indexStartForNotes - 1) {
+        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue) === 0 && i < editor.track.notesPerMeasure + indexStartForNotes - 1) {
             newHTML += ('<div class="space_between_note_groups"> </div> \n');
         }
     }
     newHTML += ('<div class="end_note_space"></div>\n</div>\n');
 
-    newHTML += generateHiHatContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes);
-    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes, 1);
-    newHTML += generateSnareContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes);
-    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes, 4);
-    newHTML += generateKickContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.class_note_value_per_measure, indexStartForNotes);
+    newHTML += generateHiHatContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
+    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes, 1);
+    newHTML += generateSnareContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
+    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes, 4);
+    newHTML += generateKickContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
     newHTML += ('\
                             </div>\
                         </div>\

@@ -1062,7 +1062,7 @@ function generate_ABC(renderWidth) {
 		case "kick_16ths": // use the hh & snare from the user
 			numSections = get_numSectionsFor_permutation_array();
 
-			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, editor.track.numBeats, editor.class_note_value_per_measure, renderWidth, editor.track.trackID);
+			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, editor.track.numBeats, editor.track.noteValue, renderWidth, editor.track.trackID);
 			editor.track.noteMappingArray = [];
 
 			// compute sections with different kick patterns
@@ -1082,7 +1082,7 @@ function generate_ABC(renderWidth) {
 					post_abc = get_permutation_post_ABC(i, usingTriplets());
 
 					fullABC += get_permutation_pre_ABC(i,  usingTriplets());
-					fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, new_kick_array, Toms_Array, post_abc, num_notes, editor.class_time_division, num_notes, true, editor.track.numBeats, editor.class_note_value_per_measure);
+					fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, new_kick_array, Toms_Array, post_abc, num_notes, editor.class_time_division, num_notes, true, editor.track.numBeats, editor.track.noteValue);
 					editor.track.noteMappingArray = editor.track.noteMappingArray.concat(create_noteMappingArray_for_highlighting(HH_Array, Snare_Array, new_kick_array, Toms_Array, num_notes));
 				}
 			}
@@ -1091,7 +1091,7 @@ function generate_ABC(renderWidth) {
 		case "snare_16ths": // use the hh & kick from the user
 			numSections = get_numSectionsFor_permutation_array();
 
-			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, editor.track.numBeats, editor.class_note_value_per_measure, renderWidth, editor.track.trackID);
+			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, editor.track.numBeats, editor.track.noteValue, renderWidth, editor.track.trackID);
 			editor.track.noteMappingArray = [];
 
 			//compute 16 sections with different snare patterns
@@ -1108,7 +1108,7 @@ function generate_ABC(renderWidth) {
 					post_abc = get_permutation_post_ABC(i, usingTriplets());
 
 					fullABC += get_permutation_post_ABC(i, usingTriplets());
-					fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, new_snare_array, Kick_Array, Toms_Array, post_abc, num_notes, editor.class_time_division, num_notes, true, editor.track.numBeats, editor.class_note_value_per_measure);
+					fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, new_snare_array, Kick_Array, Toms_Array, post_abc, num_notes, editor.class_time_division, num_notes, true, editor.track.numBeats, editor.track.noteValue);
 					editor.track.noteMappingArray = editor.track.noteMappingArray.concat(create_noteMappingArray_for_highlighting(HH_Array, new_snare_array, Kick_Array, Toms_Array, num_notes));
 				}
 			}
@@ -1117,7 +1117,7 @@ function generate_ABC(renderWidth) {
 		case "none":
 		/* falls through */
 		default:
-			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), true, editor.track.numBeats, editor.class_note_value_per_measure, renderWidth, editor.track.trackID);
+			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), true, editor.track.numBeats, editor.track.noteValue, renderWidth, editor.track.trackID);
 			editor.track.noteMappingArray = [];
 
 			var numberOfMeasuresPerLine = 2;
@@ -1151,7 +1151,7 @@ function generate_ABC(renderWidth) {
 					// continuation measure
 					addon_abc = "\\\n";
 				}
-				fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, addon_abc, num_notes, editor.class_time_division, num_notes, true, editor.track.numBeats, editor.class_note_value_per_measure);
+				fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, addon_abc, num_notes, editor.class_time_division, num_notes, true, editor.track.numBeats, editor.track.noteValue);
 				editor.track.noteMappingArray = editor.track.noteMappingArray.concat(create_noteMappingArray_for_highlighting(HH_Array, Snare_Array, Kick_Array, Toms_Array, num_notes));
 				editor.track.numberOfMeasures = editor.track.numberOfMeasures;
 				// editor.track.repeatedMeasures = editor.class_repeated_measures;

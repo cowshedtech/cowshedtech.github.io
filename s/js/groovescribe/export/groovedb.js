@@ -23,7 +23,7 @@
 
 		var track = editor.grooveDataFromClickableUI();
 
-		var notesPerMeasureInTab = calc_notes_per_measure((usingTriplets() ? 48 : 32), editor.track.numBeats, editor.class_note_value_per_measure);
+		var notesPerMeasureInTab = calc_notes_per_measure((usingTriplets() ? 48 : 32), editor.track.numBeats, editor.track.noteValue);
 		var maxNotesInTab = track.numberOfMeasures * notesPerMeasureInTab;
 
 		// scale up all the arrays to 48 or 32 notes so that they look normalized

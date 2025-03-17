@@ -124,16 +124,16 @@ function noteLabelPopupClick(instrument, action) {
         } else if (instrument == "stickings") {
             switch (action) {
                 case "all_right":
-                    set_sticking_state(i, "right", i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
+                    set_sticking_state(i, "right", i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.track.noteValue);
                     break;
                 case "all_left":
-                    set_sticking_state(i, "left", i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
+                    set_sticking_state(i, "left", i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.track.noteValue);
                     break;
                 case "alternate":
-                    set_sticking_state(i, (i % 2 === 0 ? "right" : "left"), i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
+                    set_sticking_state(i, (i % 2 === 0 ? "right" : "left"), i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.track.noteValue);
                     break;
                 case "all_count":
-                    set_sticking_state(i, "count", i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
+                    set_sticking_state(i, "count", i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.track.noteValue);
                     break;
                 default:
                     console.log("Bad sticking case in noteLabelPopupClick");
@@ -155,7 +155,7 @@ function noteLabelPopupClick(instrument, action) {
             set_snare_state(i, "ghost", i == startIndex);
 
         } else if (instrument == "kick" && action == "hh_foot_nums_on") {
-            var num_notes_per_count = editor.class_time_division / editor.class_note_value_per_measure
+            var num_notes_per_count = editor.class_time_division / editor.track.noteValue
             var cur_state = get_kick_state(i, "ABC");
             var kick_is_on = false;
             if (cur_state == constant_ABC_KI_SandK || cur_state == constant_ABC_KI_Normal)
@@ -163,7 +163,7 @@ function noteLabelPopupClick(instrument, action) {
             set_kick_state(i, (i % num_notes_per_count === 0 ? (kick_is_on ? "kick_and_splash" : "splash") : (kick_is_on ? "normal" : "off")), i == (startIndex));
 
         } else if (instrument == "kick" && action == "hh_foot_ands_on") {
-            var num_notes_per_count = editor.class_time_division / editor.class_note_value_per_measure
+            var num_notes_per_count = editor.class_time_division / editor.track.noteValue
             var cur_state = get_kick_state(i, "ABC");
             var kick_is_on = false;
             if (cur_state == constant_ABC_KI_SandK || cur_state == constant_ABC_KI_Normal)
@@ -263,7 +263,7 @@ function noteLeftClick(event, type, id) {
                 set_kick_state(id, is_kick_on(id) ? "off" : "normal", true);
                 break;
             case "sticking":
-                sticking_rotate_state(id, editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
+                sticking_rotate_state(id, editor.track.notesPerMeasure, editor.class_time_division, editor.track.noteValue);
                 break;
             default:
                 console.log("Bad case in noteLeftClick: " + type);
@@ -281,7 +281,7 @@ function notePopupClick(type, new_setting) {
 
     switch (type) {
         case "sticking":
-            set_sticking_state(id, new_setting, true, editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
+            set_sticking_state(id, new_setting, true, editor.track.notesPerMeasure, editor.class_time_division, editor.track.noteValue);
             break;
         case "hh":
             set_hh_state(id, new_setting, true);
