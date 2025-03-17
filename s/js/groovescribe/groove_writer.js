@@ -326,7 +326,7 @@ function GrooveWriter() {
 
 	root.updateFromURL = function (encodedURLData) {
 
-		var track = getTrackFromUrlString(encodedURLData, root.track, options.debugMode);
+		var track = getGrooveDataFromUrlString(encodedURLData, root.track, options, midiPlayer, metronome, options.debugMode);
 
 		if (track.notesPerMeasure != root.track.notesPerMeasure || root.track.numberOfMeasures != track.numberOfMeasures) {
 			root.track.numberOfMeasures = track.numberOfMeasures;

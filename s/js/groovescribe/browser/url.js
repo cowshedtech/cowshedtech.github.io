@@ -93,7 +93,7 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
  * 
  * 
  **/
-function getTrackFromUrlString(encodedURLData, track, debugMode) {
+function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, metronome, debugMode) {
     var Stickings_string;
     var HH_string;
     var Snare_string;
@@ -102,6 +102,23 @@ function getTrackFromUrlString(encodedURLData, track, debugMode) {
     var i;
 
     options.debugMode = parseInt(getQueryVariableFromString("Debug", debugMode, encodedURLData), 10);
+    
+    Stickings_string = getQueryVariableFromString("Stickings", false, encodedURLData);
+    if (!Stickings_string) {
+        Stickings_string = GetDefaultStickingsGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+        options.showStickings = false;
+    } else {
+        options.showStickings = true;
+    }
+
+    let highlight = getQueryVariableFromString("Highlight", "ON", encodedURLData);
+    if (highlight && highlight.length > 0) {
+        if (highlight.toUpperCase() == "OFF") {
+            options.highlightOn = false
+        } else {
+            options.highlightOn = true
+        }			
+    }
 
     var timeSigArray = parseTimeSigString(getQueryVariableFromString("TimeSig", "4/4", encodedURLData));
     track.numBeats = timeSigArray[0];
@@ -110,7 +127,7 @@ function getTrackFromUrlString(encodedURLData, track, debugMode) {
     track.timeDivision = parseInt(getQueryVariableFromString("Div", 16, encodedURLData), 10);
     track.notesPerMeasure = calc_notes_per_measure(track.timeDivision, track.numBeats, track.noteValue);
 
-    metronome.frequency = parseInt(getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10);
+    if (metronome) metronome.frequency = parseInt(getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10);
 
     track.numberOfMeasures = parseInt(getQueryVariableFromString("measures", 1, encodedURLData), 10);
     if (track.numberOfMeasures < 1 || isNaN(track.numberOfMeasures))
@@ -126,22 +143,9 @@ function getTrackFromUrlString(encodedURLData, track, debugMode) {
         });
     }
 
-    let highlight = getQueryVariableFromString("Highlight", "ON", encodedURLData);
-    if (highlight && highlight.length > 0) {
-        if (highlight.toUpperCase() == "OFF") {
-            options.highlightOn = false
-        } else {
-            options.highlightOn = true
-        }			
-    }
     
-    Stickings_string = getQueryVariableFromString("Stickings", false, encodedURLData);
-    if (!Stickings_string) {
-        Stickings_string = GetDefaultStickingsGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
-        options.showStickings = false;
-    } else {
-        options.showStickings = true;
-    }
+    
+    
 
     HH_string = getQueryVariableFromString("H", false, encodedURLData);
     if (!HH_string) {
