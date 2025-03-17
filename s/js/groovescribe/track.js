@@ -54,7 +54,6 @@ function Track() {
 		this.author = "";
 		this.comments = "";
 		this.kickStemsUp = true;
-		this.repeatedMeasures = new Map();
 		this.noteMappingArray = null;
 	};
 

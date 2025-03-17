@@ -53,7 +53,6 @@ function GrooveWriter() {
 	root.class_num_beats_per_measure = 4;     // TimeSigTop
 	root.class_note_value_per_measure = 4;     // TimeSigBottom
 	root.class_notes_per_measure = calc_notes_per_measure(root.class_time_division, root.class_num_beats_per_measure, root.class_note_value_per_measure);
-	root.class_repeated_measures = new Map();
 	
 	// private vars in the scope of the class
 	root.class_permutation_type = "none";
@@ -125,7 +124,6 @@ function GrooveWriter() {
 		track.comments = document.getElementById("tuneComments").value;
 		options.showLegend = document.getElementById("showLegend").checked;
 		track.kickStemsUp = true;
-		track.repeatedMeasures = root.class_repeated_measures;
 
 		for (var i = 0; i < root.track.numberOfMeasures; i++) {
 			var total_notes = root.class_notes_per_measure * root.track.numberOfMeasures;
@@ -386,7 +384,7 @@ function GrooveWriter() {
 				root.metronomeAutoSpeedUpTempoUpdate();
 			}
 
-			if (options.highlightOn) hilight_note(note_type, percent_complete, root.class_permutation_type, root.class_num_beats_per_measure, root.class_note_value_per_measure, root.track.numberOfMeasures, root.class_notes_per_measure, root.class_repeated_measures, usingTriplets());
+			if (options.highlightOn) hilight_note(note_type, percent_complete, root.class_permutation_type, root.class_num_beats_per_measure, root.class_note_value_per_measure, root.track.numberOfMeasures, root.class_notes_per_measure, root.track.repeatedMeasures, usingTriplets());
 		};
 
 		midiPlayer.initialise();
@@ -982,7 +980,6 @@ function GrooveWriter() {
 
 		root.class_num_beats_per_measure = track.numBeats;     // TimeSigTop
 		root.class_note_value_per_measure = track.noteValue;   // TimeSigBottom
-		root.class_repeated_measures = track.repeatedMeasures;
 
 		if (track.notesPerMeasure != root.class_notes_per_measure || root.track.numberOfMeasures != track.numberOfMeasures) {
 			root.track.numberOfMeasures = track.numberOfMeasures;

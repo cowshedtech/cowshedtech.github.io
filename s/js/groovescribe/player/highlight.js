@@ -12,7 +12,7 @@ var class_cur_highlight_ids = {
 //
 //
 //
-function hilight_note(instrument, percent_complete, class_permutation_type, class_num_beats_per_measure, class_note_value_per_measure, numberOfMeasures, class_notes_per_measure, class_repeated_measures, usingTriplets) {
+function hilight_note(instrument, percent_complete, class_permutation_type, class_num_beats_per_measure, class_note_value_per_measure, numberOfMeasures, class_notes_per_measure, repeatedMeasures, usingTriplets) {
 
     if (percent_complete < 0) {
         clear_all_highlights("clear");
@@ -25,7 +25,7 @@ function hilight_note(instrument, percent_complete, class_permutation_type, clas
     }
 
     // How many extra measures are there due to repeats
-    let totalRepeatMeasures = Array.from(class_repeated_measures.values()).reduce((acc, repeatedCounts) => acc + repeatedCounts - 1, 0);
+    let totalRepeatMeasures = Array.from(repeatedMeasures.values()).reduce((acc, repeatedCounts) => acc + repeatedCounts - 1, 0);
     
     var notesPerMeasure = usingTriplets ? 48 : 32;
     let notes = calc_notes_per_measure(notesPerMeasure, class_num_beats_per_measure, class_note_value_per_measure);        
@@ -37,7 +37,7 @@ function hilight_note(instrument, percent_complete, class_permutation_type, clas
     let cursor = 0;
     let measure = 0;
     for (let i = 0; i < numberOfMeasures; i++) {
-        let repeats = class_repeated_measures.get(i) || 1; 
+        let repeats = repeatedMeasures.get(i) || 1; 
         let nextCursor = cursor + notes * repeats - 1; // Calculate next cursor position once
         if (note_id_in_32 > cursor && note_id_in_32 < nextCursor) {
             measure = i;        

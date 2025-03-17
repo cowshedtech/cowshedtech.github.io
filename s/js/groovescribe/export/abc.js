@@ -1154,7 +1154,7 @@ function generate_ABC(renderWidth) {
 				fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, addon_abc, num_notes, editor.class_time_division, num_notes, true, editor.class_num_beats_per_measure, editor.class_note_value_per_measure);
 				editor.track.noteMappingArray = editor.track.noteMappingArray.concat(create_noteMappingArray_for_highlighting(HH_Array, Snare_Array, Kick_Array, Toms_Array, num_notes));
 				editor.track.numberOfMeasures = editor.track.numberOfMeasures;
-				editor.track.repeatedMeasures = editor.class_repeated_measures;
+				// editor.track.repeatedMeasures = editor.class_repeated_measures;
 			}
 
 			break;

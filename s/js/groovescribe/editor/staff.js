@@ -52,14 +52,14 @@ function generateLineLabels(baseindex) {
 //
 function shiftRepeatedMeasuresAfterIndex(measureIndex, direction) {
     // Convert Map to array of entries and sort by measure index
-    const sortedEntries = [...editor.class_repeated_measures.entries()].sort((a, b) => a[0] - b[0]);
+    const sortedEntries = [...editor.track.repeatedMeasures.entries()].sort((a, b) => a[0] - b[0]);
     
     // Process in reverse order to avoid overwriting
     for (let i = sortedEntries.length - 1; i >= 0; i--) {
         const [key, value] = sortedEntries[i];
         if (key > measureIndex) {
-            editor.class_repeated_measures.set(key + direction, value);
-            editor.class_repeated_measures.delete(key);
+            editor.track.repeatedMeasures.set(key + direction, value);
+            editor.track.repeatedMeasures.delete(key);
         }
     }
 }
@@ -91,7 +91,7 @@ closeMeasureButtonClick = function (measureNum) {
         }
     }
 
-    editor.class_repeated_measures.delete(measureNum - 1);
+    editor.track.repeatedMeasures.delete(measureNum - 1);
     shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
     editor.track.numberOfMeasures--;
 
@@ -114,8 +114,8 @@ closeMeasureButtonClick = function (measureNum) {
 //
 function repeatMeasureIncButtonClick(measureNum) {
     // Increment repeat count for the measure
-    const count = editor.class_repeated_measures.get(measureNum - 1) || 1;
-    editor.class_repeated_measures.set(measureNum - 1, count + 1);
+    const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
+    editor.track.repeatedMeasures.set(measureNum - 1, count + 1);
 
     // Collect all notes from the UI
     const notes = {
@@ -152,8 +152,8 @@ function repeatMeasureIncButtonClick(measureNum) {
 //
 //
 function repeatMeasureDecButtonClick(measureNum) {
-    const count = editor.class_repeated_measures.get(measureNum - 1) || 1;
-    editor.class_repeated_measures.set(measureNum - 1, count - 1);
+    const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
+    editor.track.repeatedMeasures.set(measureNum - 1, count - 1);
 
     let uiStickings = "", uiHH = "", uiTom1 = "", uiTom4 = "", uiSnare = "", uiKick = "";
     const topIndex = editor.class_notes_per_measure * editor.track.numberOfMeasures;
@@ -216,7 +216,7 @@ function duplicateMeasureButtonClick(measureNum) {
     // Update measure count and repeated measures
     editor.track.numberOfMeasures++;
     shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
-    editor.class_repeated_measures.set(measureNum, editor.class_repeated_measures.get(measureNum - 1) || 1);
+    editor.track.repeatedMeasures.set(measureNum, editor.track.repeatedMeasures.get(measureNum - 1) || 1);
 
     // Update UI and sheet music
     editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
@@ -411,7 +411,7 @@ function addMeasurePrevButtonClick (event) {
 
 // clear all the notes on all measures
 function clearAllNotes() {
-    editor.class_repeated_measures.clear();
+    editor.track.repeatedMeasures.clear();
     for (var i = 0; i < editor.track.numberOfMeasures * editor.class_notes_per_measure; i++) {
         set_sticking_state(i, 'off', editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
         set_hh_state(i, 'off');
@@ -486,7 +486,7 @@ function htmlForStaffContainer(baseindex, indexStartForNotes) {
                         </div>\
                     </span>\n');
 
-    let repeat = editor.class_repeated_measures.get(baseindex - 1) || 1
+    let repeat = editor.track.repeatedMeasures.get(baseindex - 1) || 1
 
     newHTML += generateMeasureButtons(editor.track.numberOfMeasures, baseindex, repeat);
 
