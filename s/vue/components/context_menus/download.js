@@ -5,8 +5,8 @@ export default {
     }
   },
   methods: {
-    downloadSVG() { myGrooveWriter.SVGSaveAs() },
-    downloadPNG() { myGrooveWriter.PNGSaveAs() },
+    downloadSVG() { SVGSaveAs() },
+    downloadPNG() { PNGSaveAs() },
     downloadMIDI() { myGrooveWriter.MIDISaveAs() }
   },
   template: `

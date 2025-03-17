@@ -51,149 +51,6 @@ function GrooveWriter() {
 	// private vars in the scope of the class
 	root.class_permutation_type = "none";
 	
-
-	// functions below
-
-	root.MIDISaveAs = function () {
-		var midi_url = createMidiUrlFromClickableUI("general_MIDI");
-
-		// save as
-		document.location = midi_url;
-	};
-
-	// called by the HTML when changes happen to forms that require the ABC to update
-	root.refresh_ABC = function () {
-		root.updateSheetMusic();
-	};
-
-	// this is called by a bunch of places anytime we modify the musical notes on the page
-	// this will recreate the ABC code and will then use the ABC to rerender the sheet music
-	// on the page.
-	root.updateSheetMusic = function () {
-		var renderWidth = 600;
-		var svgTarget = document.getElementById("svgTarget");
-		if (svgTarget) {
-			renderWidth = svgTarget.offsetWidth - 100;
-			renderWidth = Math.floor(renderWidth * 0.8);  // reduce width by 20% (This actually makes the notes bigger, because we scale up everything to max width)
-		}
-
-		var fullABC = generate_ABC(renderWidth);
-
-		document.getElementById("ABCsource").value = fullABC;
-		updateGrooveDBSource();
-
-		midiPlayer.noteHasChanged();
-
-		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
-		updateCurrentURL();
-
-		displayNewSVG();
-	}
-
-	
-
-	
-
-	root.PNGSaveAs = function () {
-		Pablo.support.image.png(function (acceptable) {
-			if (acceptable) {
-				downloadImages('png');
-			} else {
-				alert("Sorry, this browser can't export PNG images");
-			}
-		});
-	}
-
-	root.SVGSaveAs = function () {
-		downloadImages('svg');
-	};
-
-	root.ShowHideABCResults = function () {
-		var ABCResults = document.getElementById("ABC_Results");
-
-		if (ABCResults.style.display == "block")
-			ABCResults.style.display = "none";
-		else
-			ABCResults.style.display = "block";
-
-		return false; // don't follow the link
-	};
-
-
-	
-	root.setupWriterHotKeys = function () {
-
-		document.addEventListener("keydown", function (e) {
-
-			// only accept the event if it not going to an INPUT field   (allow for range types)
-			if (e.target.type == "range" || (e.target.tagName.toUpperCase() != "INPUT" && e.target.tagName.toUpperCase() != "TEXTAREA")) {
-				switch (e.which) {
-					case 90: // ctrl-z
-						if (e.ctrlKey) {
-							// ctrl-z
-							root.undoCommand();
-							return false;
-						}
-						break;
-
-					case 89: // ctrl-y
-						if (e.ctrlKey) {
-							// ctrl-y
-							redoCommand();
-							return false;
-						}
-						break;
-
-					case 37: // left arrow
-						// left arrow
-						root.track.downTempo();
-						return false;
-					//break;
-
-					case 39: // right arrow
-						// right arrow
-						root.track.upTempo();
-						return false;
-					//break;
-
-					default:
-						/* DEBUG
-						else if(e.ctrlKey && e.which !=17 && e.target.type != "text") {
-						alert("Key is: " + e.which);
-						}
-						 */
-						break;
-				}
-			}
-			return true; // let the default handler deal with the keypress
-		});
-	};
-
-	root.swapViewEditMode = function (dontUpdateURL) {
-		var view_edit_button = document.getElementById("view-edit-switch");
-
-		if (options.viewMode) {
-
-			showHideCSS_ClassDisplay(".edit-block", true, true, "block"); // show
-
-			if (view_edit_button)
-				view_edit_button.innerHTML = "Switch to VIEW mode";
-			options.viewMode = false;
-
-			if (!dontUpdateURL)
-				updateCurrentURL();
-		} else {
-
-			showHideCSS_ClassDisplay(".edit-block", true, false, "block"); // hide
-
-			if (view_edit_button)
-				view_edit_button.innerHTML = "Switch to EDIT mode";
-			options.viewMode = true;
-			if (!dontUpdateURL)
-				updateCurrentURL();
-		}
-	};
-
 	// public function.
 	// This function initializes the data for the groove Scribe web page
 	root.runsOnPageLoad = function () {
@@ -343,6 +200,120 @@ function GrooveWriter() {
 		if (tempoDiffInt > 0)
 			root.track.setTempo(root.track.getTempo() + tempoDiffInt);
 	};
+
+
+	// functions below
+
+	root.MIDISaveAs = function () {
+		var midi_url = createMidiUrlFromClickableUI("general_MIDI");
+
+		// save as
+		document.location = midi_url;
+	};
+
+	// called by the HTML when changes happen to forms that require the ABC to update
+	root.refresh_ABC = function () {
+		root.updateSheetMusic();
+	};
+
+	// this is called by a bunch of places anytime we modify the musical notes on the page
+	// this will recreate the ABC code and will then use the ABC to rerender the sheet music
+	// on the page.
+	root.updateSheetMusic = function () {
+		var renderWidth = 600;
+		var svgTarget = document.getElementById("svgTarget");
+		if (svgTarget) {
+			renderWidth = svgTarget.offsetWidth - 100;
+			renderWidth = Math.floor(renderWidth * 0.8);  // reduce width by 20% (This actually makes the notes bigger, because we scale up everything to max width)
+		}
+
+		var fullABC = generate_ABC(renderWidth);
+
+		document.getElementById("ABCsource").value = fullABC;
+		updateGrooveDBSource();
+
+		midiPlayer.noteHasChanged();
+
+		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
+		updateCurrentURL();
+
+		displayNewSVG();
+	}
+
+	
+	root.setupWriterHotKeys = function () {
+
+		document.addEventListener("keydown", function (e) {
+
+			// only accept the event if it not going to an INPUT field   (allow for range types)
+			if (e.target.type == "range" || (e.target.tagName.toUpperCase() != "INPUT" && e.target.tagName.toUpperCase() != "TEXTAREA")) {
+				switch (e.which) {
+					case 90: // ctrl-z
+						if (e.ctrlKey) {
+							// ctrl-z
+							root.undoCommand();
+							return false;
+						}
+						break;
+
+					case 89: // ctrl-y
+						if (e.ctrlKey) {
+							// ctrl-y
+							redoCommand();
+							return false;
+						}
+						break;
+
+					case 37: // left arrow
+						// left arrow
+						root.track.downTempo();
+						return false;
+					//break;
+
+					case 39: // right arrow
+						// right arrow
+						root.track.upTempo();
+						return false;
+					//break;
+
+					default:
+						/* DEBUG
+						else if(e.ctrlKey && e.which !=17 && e.target.type != "text") {
+						alert("Key is: " + e.which);
+						}
+						 */
+						break;
+				}
+			}
+			return true; // let the default handler deal with the keypress
+		});
+	};
+
+	root.swapViewEditMode = function (dontUpdateURL) {
+		var view_edit_button = document.getElementById("view-edit-switch");
+
+		if (options.viewMode) {
+
+			showHideCSS_ClassDisplay(".edit-block", true, true, "block"); // show
+
+			if (view_edit_button)
+				view_edit_button.innerHTML = "Switch to VIEW mode";
+			options.viewMode = false;
+
+			if (!dontUpdateURL)
+				updateCurrentURL();
+		} else {
+
+			showHideCSS_ClassDisplay(".edit-block", true, false, "block"); // hide
+
+			if (view_edit_button)
+				view_edit_button.innerHTML = "Switch to EDIT mode";
+			options.viewMode = true;
+			if (!dontUpdateURL)
+				updateCurrentURL();
+		}
+	};
+
 
 	// takes a string of notes encoded in a serialized string and sets the notes on or off
 	// uses drum tab format adapted from wikipedia: http://en.wikipedia.org/wiki/Drum_tablature

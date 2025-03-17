@@ -1162,3 +1162,15 @@ function generate_ABC(renderWidth) {
 
 	return fullABC;
 }
+
+
+// root.ShowHideABCResults = function () {
+// 	var ABCResults = document.getElementById("ABC_Results");
+
+// 	if (ABCResults.style.display == "block")
+// 		ABCResults.style.display = "none";
+// 	else
+// 		ABCResults.style.display = "block";
+
+// 	return false; // don't follow the link
+// };
