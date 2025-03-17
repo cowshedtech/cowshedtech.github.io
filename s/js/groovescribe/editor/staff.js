@@ -138,7 +138,7 @@ function repeatMeasureIncButtonClick(measureNum) {
     }
 
     // Update UI and sheet music
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
+    editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
     editor.changeDivisionWithNotes(editor.class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
     
     // Scroll to add measure button if it exists
@@ -156,7 +156,7 @@ function repeatMeasureDecButtonClick(measureNum) {
     editor.track.repeatedMeasures.set(measureNum - 1, count - 1);
 
     let uiStickings = "", uiHH = "", uiTom1 = "", uiTom4 = "", uiSnare = "", uiKick = "";
-    const topIndex = editor.class_notes_per_measure * editor.track.numberOfMeasures;
+    const topIndex = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
 
     for (let i = 0; i < topIndex; i++) {
         uiStickings += get_sticking_state(i, "URL");
@@ -167,7 +167,7 @@ function repeatMeasureDecButtonClick(measureNum) {
         uiKick += get_kick_state(i, "URL");
     }
 
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
+    editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
     editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
     const addMeasureButton = document.getElementById("addMeasureButton");
@@ -202,16 +202,16 @@ function duplicateMeasureButtonClick(measureNum) {
     };
 
     // Collect notes before the measure to be duplicated
-    collectNotes(0, (measureNum - 1) * editor.class_notes_per_measure, notes);
+    collectNotes(0, (measureNum - 1) * editor.track.notesPerMeasure, notes);
 
     // Collect notes for the measure to be duplicated (twice)
-    const measureStart = (measureNum - 1) * editor.class_notes_per_measure;
-    const measureEnd = measureStart + editor.class_notes_per_measure;
+    const measureStart = (measureNum - 1) * editor.track.notesPerMeasure;
+    const measureEnd = measureStart + editor.track.notesPerMeasure;
     collectNotes(measureStart, measureEnd, notes);
     collectNotes(measureStart, measureEnd, notes);
 
     // Collect notes after the measure to be duplicated
-    collectNotes(measureNum * editor.class_notes_per_measure, editor.class_notes_per_measure * editor.track.numberOfMeasures, notes);
+    collectNotes(measureNum * editor.track.notesPerMeasure, editor.track.notesPerMeasure * editor.track.numberOfMeasures, notes);
 
     // Update measure count and repeated measures
     editor.track.numberOfMeasures++;
@@ -219,7 +219,7 @@ function duplicateMeasureButtonClick(measureNum) {
     editor.track.repeatedMeasures.set(measureNum, editor.track.repeatedMeasures.get(measureNum - 1) || 1);
 
     // Update UI and sheet music
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
+    editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
     editor.changeDivisionWithNotes(editor.class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
 
     // Scroll to add measure button if it exists
