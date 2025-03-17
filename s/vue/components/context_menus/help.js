@@ -12,7 +12,7 @@ export default {
   },
   methods: {
     handleMenuClick(action) {
-    	myGrooveWriter.helpMenuPopupClick(action);
+    	helpMenuPopupClick(action);
     }
   },
   template: `
