@@ -116,24 +116,24 @@ function noteLabelPopupClick(instrument, action) {
     // start at the first note of the measure we want to effect.   Only fill in the
     // notes for that measure
     // the last boolean in the setFunction should only be true on the first call (plays a sound)
-    var startIndex = editor.class_notes_per_measure * (measureForNoteLabelClick - 1);
-    for (var i = startIndex; i - startIndex < editor.class_notes_per_measure; i++) {
+    var startIndex = editor.track.notesPerMeasure * (measureForNoteLabelClick - 1);
+    for (var i = startIndex; i - startIndex < editor.track.notesPerMeasure; i++) {
         if (action == "all_off") {
             setFunction(i, "off", i == startIndex);
 
         } else if (instrument == "stickings") {
             switch (action) {
                 case "all_right":
-                    set_sticking_state(i, "right", i == startIndex, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+                    set_sticking_state(i, "right", i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
                     break;
                 case "all_left":
-                    set_sticking_state(i, "left", i == startIndex, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+                    set_sticking_state(i, "left", i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
                     break;
                 case "alternate":
-                    set_sticking_state(i, (i % 2 === 0 ? "right" : "left"), i == startIndex, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+                    set_sticking_state(i, (i % 2 === 0 ? "right" : "left"), i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
                     break;
                 case "all_count":
-                    set_sticking_state(i, "count", i == startIndex, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+                    set_sticking_state(i, "count", i == startIndex, editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
                     break;
                 default:
                     console.log("Bad sticking case in noteLabelPopupClick");

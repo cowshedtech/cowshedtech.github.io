@@ -412,8 +412,8 @@ function addMeasurePrevButtonClick (event) {
 // clear all the notes on all measures
 function clearAllNotes() {
     editor.track.repeatedMeasures.clear();
-    for (var i = 0; i < editor.track.numberOfMeasures * editor.class_notes_per_measure; i++) {
-        set_sticking_state(i, 'off', editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
+    for (var i = 0; i < editor.track.numberOfMeasures * editor.track.notesPerMeasure; i++) {
+        set_sticking_state(i, 'off', editor.track.notesPerMeasure, editor.class_time_division, editor.class_note_value_per_measure);
         set_hh_state(i, 'off');
         set_tom1_state(i, 'off');
         set_tom4_state(i, 'off');
