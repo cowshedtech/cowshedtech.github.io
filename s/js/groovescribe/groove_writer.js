@@ -50,8 +50,6 @@ function GrooveWriter() {
 
 	// public class vars
 	root.class_time_division = parseInt(getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
-	root.class_num_beats_per_measure = 4;     // TimeSigTop
-	root.class_note_value_per_measure = 4;     // TimeSigBottom
 
 	// private vars in the scope of the class
 	root.class_permutation_type = "none";
@@ -108,7 +106,6 @@ function GrooveWriter() {
 		track.notesPerMeasure = root.track.notesPerMeasure;
 		track.timeDivision = root.class_time_division;
 		track.numberOfMeasures = root.class_number_of_measures;
-		// track.numBeats = root.class_num_beats_per_measure;
 		track.noteValue = root.track.noteValue;
 		track.title = document.getElementById("tuneTitle").value;
 		track.author = document.getElementById("tuneAuthor").value;
@@ -323,11 +320,6 @@ function GrooveWriter() {
 		// set debugMode immediately so we can use it in index.html
 		options.debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
 		options.grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
-
-		// root.class_time_division = parseInt(getQueryVariableFromURL("Div", "16"), 10); // default to 16ths
-		// root.class_num_beats_per_measure = 4;     // TimeSigTop
-		// root.track.noteValue = 4;     // TimeSigBottom
-		// root.track.notesPerMeasure = calc_notes_per_measure(root.class_time_division, root.class_num_beats_per_measure, root.track.noteValue);
 
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 
@@ -973,9 +965,6 @@ function GrooveWriter() {
 	root.updateFromURL = function (encodedURLData) {
 
 		var track = getTrackFromUrlString(encodedURLData, root.track, options.debugMode);
-
-		// root.class_num_beats_per_measure = track.numBeats;     // TimeSigTop
-		root.class_note_value_per_measure = track.noteValue;   // TimeSigBottom
 
 		if (track.notesPerMeasure != root.track.notesPerMeasure || root.track.numberOfMeasures != track.numberOfMeasures) {
 			root.track.numberOfMeasures = track.numberOfMeasures;
