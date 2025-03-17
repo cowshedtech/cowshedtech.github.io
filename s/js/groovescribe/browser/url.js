@@ -28,11 +28,11 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
                 fullURL += 'GrooveEmbed.html';
             }
             break;
-            
+
         case 'fullGrooveScribe':
             fullURL = 'https://www.mikeslessons.com/gscribe';
             break;
-            
+
         default: // groove writer display
             break;
     }
@@ -101,11 +101,9 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
  * @returns {Object} Updated track object with decoded groove data
  */
 function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, metronome, debugMode) {
-    var kickString;
-    var i;
 
     options.debugMode = parseInt(getQueryVariableFromString("Debug", debugMode, encodedURLData), 10);
-    
+
     var stickingsString = getQueryVariableFromString("Stickings", false, encodedURLData);
     if (!stickingsString) {
         stickingsString = GetDefaultStickingsGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
@@ -120,7 +118,7 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
             options.highlightOn = false
         } else {
             options.highlightOn = true
-        }			
+        }
     }
 
     var timeSigArray = parseTimeSigString(getQueryVariableFromString("TimeSig", "4/4", encodedURLData));
@@ -141,7 +139,7 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     let repeatedMeasures = getQueryVariableFromString("rMeasures", 1, encodedURLData);
     if (repeatedMeasures && repeatedMeasures.length > 0) {
         repeatedMeasures.split(",").forEach(element => {
-        let [key, value] = element.split('x');
+            let [key, value] = element.split('x');
             track.repeatedMeasures.set(Number(key), Number(value));
         });
     }
@@ -210,24 +208,35 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
 };
 
 
-// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
+/**
+ * Updates the browser's URL and page title to reflect the current groove state.
+ * This enables proper page reloads, history navigation, link sharing, and bookmarking.
+ * 
+ * Side effects:
+ * - Updates the GrooveScribe external link href
+ * - Adds the current URL to the undo stack
+ * - Updates the page title with tune and author information
+ * - Updates browser history state
+ * - In debug mode, displays the URL search parameters at the bottom of the page
+ * 
+ * @requires editor - Global editor instance with get_FullURLForPage and constant_APP_TITLE
+ * @requires options - Global options object with debugMode setting
+ * @requires linkGrooveScribe - Optional global link element for external GrooveScribe URL
+ */
 function updateCurrentURL() {
     // Update temporary link out to GS
     var newURLGS = get_GSURLForPage();
     if (linkGrooveScribe)
         linkGrooveScribe.href = newURLGS;
     // Update temporary link out to GS
-    var linkGrooveScrib
 
     var newURL = editor.get_FullURLForPage();
-
     var newTitle = false;
 
     addFullURLToUndoStack(newURL);
 
     var title = document.getElementById("tuneTitle").value.trim();
-    if (title !== "")
-        newTitle = title;
+    if (title !== "") newTitle = title;
 
     var author = document.getElementById("tuneAuthor").value.trim();
     if (author !== "") {
@@ -237,8 +246,7 @@ function updateCurrentURL() {
             newTitle = "Groove by " + author;
     }
 
-    if (!newTitle)
-        newTitle = editor.constant_APP_TITLE;
+    if (!newTitle) newTitle = constant_APP_TITLE;
 
     document.title = newTitle;
     try {
