@@ -77,8 +77,8 @@ closeMeasureButtonClick = function (measureNum) {
     };
 
     const measureStart = (measureNum - 1) * editor.class_notes_per_measure;
-    const measureEnd = measureNum * editor.class_notes_per_measure;
-    const totalNotes = editor.class_notes_per_measure * editor.track.numberOfMeasures;
+    const measureEnd = measureNum * editor.track.notesPerMeasure;
+    const totalNotes = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
 
     for (let i = 0; i < totalNotes; i++) {
         if (i < measureStart || i >= measureEnd) {
