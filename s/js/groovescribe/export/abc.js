@@ -1128,7 +1128,7 @@ function generate_ABC(renderWidth) {
 				numberOfMeasuresPerLine = 1;
 			}
 
-			for (i = 0; i < editor.numberOfMeasures(); i++) {
+			for (i = 0; i < editor.track.numberOfMeasures; i++) {
 
 				// we already go the array states above, don't get it again.
 				if (i > 0) {
@@ -1141,7 +1141,7 @@ function generate_ABC(renderWidth) {
 					editor.get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, editor.class_notes_per_measure * i);
 				}
 
-				if ((i + 1) == editor.numberOfMeasures()) {
+				if ((i + 1) == editor.track.numberOfMeasures) {
 					// last measure
 					addon_abc = "|\n";
 				} else if (((i + 1) % numberOfMeasuresPerLine) === 0) {
@@ -1153,7 +1153,7 @@ function generate_ABC(renderWidth) {
 				}
 				fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, addon_abc, num_notes, editor.class_time_division, num_notes, true, editor.class_num_beats_per_measure, editor.class_note_value_per_measure);
 				editor.track.noteMappingArray = editor.track.noteMappingArray.concat(create_noteMappingArray_for_highlighting(HH_Array, Snare_Array, Kick_Array, Toms_Array, num_notes));
-				editor.track.numberOfMeasures = editor.numberOfMeasures()
+				editor.track.numberOfMeasures = editor.track.numberOfMeasures;
 				editor.track.repeatedMeasures = editor.class_repeated_measures;
 			}
 

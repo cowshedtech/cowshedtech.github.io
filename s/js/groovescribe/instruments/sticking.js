@@ -178,7 +178,7 @@ function stickingsAnchorClick(event) {
 
 // Swap Right and Left stickings if any are shown
 function stickingsReverseRL() {
-    for (var i = 0; i < editor.class_number_of_measures * editor.class_notes_per_measure; i++) {
+    for (var i = 0; i < editor.track.numberOfMeasures * editor.class_notes_per_measure; i++) {
         var cur_state = get_sticking_state(i, "URL");
         if (cur_state === "R") {
             set_sticking_state(i, "left", false, editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);

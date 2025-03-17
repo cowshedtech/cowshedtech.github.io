@@ -1,11 +1,11 @@
 //
 //
-function generateMeasureButtons(class_number_of_measures, baseindex, repeat) {
+function generateMeasureButtons(numberOfMeasures, baseindex, repeat) {
     var buttonsHTML = '';
 
     buttonsHTML += '<div style="display: inline-block;vertical-align: top; margin-top: 15px; margin-left: 15px; margin-right: 15px">'
 
-    if (editor.class_number_of_measures > 1)
+    if (numberOfMeasures > 1)
         buttonsHTML += '<div title="Remove Measure" id="closeMeasureButton' + baseindex + '" onClick="closeMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-times-circle"></i></div>';
     else
         buttonsHTML += '<div class="closeMeasureButton"><i class="fa"></i></div>';
@@ -14,7 +14,7 @@ function generateMeasureButtons(class_number_of_measures, baseindex, repeat) {
     buttonsHTML += '<span style="color: var(--highlight-color-on-white);">' + repeat + '</span>';
     buttonsHTML += '<div title="Repeat Measure" id="repeateMeasureDecButton' + baseindex + '" onClick="repeatMeasureDecButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa">↓</i></div>';
     buttonsHTML += '<div title="Duplicate Measure" id="duplicateMeasureButton' + baseindex + '" onClick="duplicateMeasureButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-rotate-left"></i></div>';
-    buttonsHTML += '<div title="Add Measure" id="addMeasureMiddleButton' + baseindex + '" onClick="myGrooveWriter.addMeasureMiddleButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-plus"></i></div>';
+    buttonsHTML += '<div title="Add Measure" id="addMeasureMiddleButton' + baseindex + '" onClick="addMeasureMiddleButtonClick(' + baseindex + ')" class="closeMeasureButton"><i class="fa fa-plus"></i></div>';
     buttonsHTML += '</div>'
 
     return buttonsHTML;
@@ -78,7 +78,7 @@ closeMeasureButtonClick = function (measureNum) {
 
     const measureStart = (measureNum - 1) * editor.class_notes_per_measure;
     const measureEnd = measureNum * editor.class_notes_per_measure;
-    const totalNotes = editor.class_notes_per_measure * editor.class_number_of_measures;
+    const totalNotes = editor.class_notes_per_measure * editor.track.numberOfMeasures;
 
     for (let i = 0; i < totalNotes; i++) {
         if (i < measureStart || i >= measureEnd) {
@@ -93,9 +93,9 @@ closeMeasureButtonClick = function (measureNum) {
 
     editor.class_repeated_measures.delete(measureNum - 1);
     shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
-    editor.class_number_of_measures--;
+    editor.track.numberOfMeasures--;
 
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.class_number_of_measures);
+    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
     editor.changeDivisionWithNotes(
         editor.class_time_division,
         noteData.stickings,
@@ -127,7 +127,7 @@ function repeatMeasureIncButtonClick(measureNum) {
         kick: ''
     };
     
-    const totalNotes = editor.class_notes_per_measure * editor.class_number_of_measures;
+    const totalNotes = editor.class_notes_per_measure * editor.track.numberOfMeasures;
     for (let i = 0; i < totalNotes; i++) {
         notes.stickings += get_sticking_state(i, "URL");
         notes.hh += get_hh_state(i, "URL");
@@ -138,7 +138,7 @@ function repeatMeasureIncButtonClick(measureNum) {
     }
 
     // Update UI and sheet music
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.class_number_of_measures);
+    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
     editor.changeDivisionWithNotes(editor.class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
     
     // Scroll to add measure button if it exists
@@ -156,7 +156,7 @@ function repeatMeasureDecButtonClick(measureNum) {
     editor.class_repeated_measures.set(measureNum - 1, count - 1);
 
     let uiStickings = "", uiHH = "", uiTom1 = "", uiTom4 = "", uiSnare = "", uiKick = "";
-    const topIndex = editor.class_notes_per_measure * editor.class_number_of_measures;
+    const topIndex = editor.class_notes_per_measure * editor.track.numberOfMeasures;
 
     for (let i = 0; i < topIndex; i++) {
         uiStickings += get_sticking_state(i, "URL");
@@ -167,7 +167,7 @@ function repeatMeasureDecButtonClick(measureNum) {
         uiKick += get_kick_state(i, "URL");
     }
 
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.class_number_of_measures);
+    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
     editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
     const addMeasureButton = document.getElementById("addMeasureButton");
@@ -211,15 +211,15 @@ function duplicateMeasureButtonClick(measureNum) {
     collectNotes(measureStart, measureEnd, notes);
 
     // Collect notes after the measure to be duplicated
-    collectNotes(measureNum * editor.class_notes_per_measure, editor.class_notes_per_measure * editor.class_number_of_measures, notes);
+    collectNotes(measureNum * editor.class_notes_per_measure, editor.class_notes_per_measure * editor.track.numberOfMeasures, notes);
 
     // Update measure count and repeated measures
-    editor.class_number_of_measures++;
+    editor.track.numberOfMeasures++;
     shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
     editor.class_repeated_measures.set(measureNum, editor.class_repeated_measures.get(measureNum - 1) || 1);
 
     // Update UI and sheet music
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.class_number_of_measures);
+    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
     editor.changeDivisionWithNotes(editor.class_time_division, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
 
     // Scroll to add measure button if it exists
@@ -245,7 +245,7 @@ function addMeasureButtonClick(event) {
     };
 
     // Get encoded notes from UI
-    const topIndex = editor.class_notes_per_measure * editor.class_number_of_measures;
+    const topIndex = editor.class_notes_per_measure * editor.track.numberOfMeasures;
     for (let i = 0; i < topIndex; i++) {
         notes.stickings.push(get_sticking_state(i, "URL"));
         notes.hh.push(get_hh_state(i, "URL"));
@@ -264,8 +264,8 @@ function addMeasureButtonClick(event) {
     notes.snare.push(...emptyMeasure);
     notes.kick.push(...emptyMeasure);
 
-    editor.class_number_of_measures++;
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.class_number_of_measures);
+    editor.track.numberOfMeasures++;
+    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
 
     // Convert arrays to strings
     const noteStrings = {
@@ -328,7 +328,7 @@ function addMeasureMiddleButtonClick (measureNum) {
 
     // get the encoded notes out of the UI for measures after measure to be repeated
     var loop3Start = measureNum * editor.class_notes_per_measure
-    var loop3End = editor.class_notes_per_measure * editor.class_number_of_measures;
+    var loop3End = editor.class_notes_per_measure * editor.track.numberOfMeasures;
     for (i = loop3Start; i < loop3End; i++) {
         uiStickings += get_sticking_state(i, "URL");
         uiHH += get_hh_state(i, "URL");
@@ -338,12 +338,12 @@ function addMeasureMiddleButtonClick (measureNum) {
         uiKick += get_kick_state(i, "URL");
     }
 
-    editor.class_number_of_measures++;
+    editor.track.numberOfMeasures++;
 
     // We need to move all the repeate measures after this measure up 1 
     shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.class_number_of_measures);
+    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
 
     editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
@@ -380,7 +380,7 @@ function addMeasurePrevButtonClick (event) {
     }
 
     // get the encoded notes out of the UI.
-    var topIndex = editor.class_notes_per_measure * editor.class_number_of_measures;
+    var topIndex = editor.class_notes_per_measure * editor.track.numberOfMeasures;
     for (i = 0; i < topIndex; i++) {
 
         uiStickings += get_sticking_state(i, "URL");
@@ -391,18 +391,18 @@ function addMeasurePrevButtonClick (event) {
         uiKick += get_kick_state(i, "URL");
     }
 
-    editor.class_number_of_measures++;
+    editor.track.numberOfMeasures++;
 
     // We need to move all the repeate measures after this measure up 1 
     shiftRepeatedMeasuresAfterIndex(-1, 1);
 
-    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.class_number_of_measures);
+    editor.expandAuthoringViewWhenNecessary(editor.class_notes_per_measure, editor.track.numberOfMeasures);
 
     editor.changeDivisionWithNotes(editor.class_time_division, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
     editor.updateSheetMusic();
 
-    // if(class_number_of_measures === 5)
+    // if(numberOfMeasures === 5)
     // 	window.alert("Please be aware that the Groove Scribe is not designed to write an entire musical score.\n" +
     // 				"You can create as many measures as you want, but your browser may slow down as more measures are added.\n" +
     // 				"There are also many notation features that would be useful for score writing that are not part of Groove Scribe");
@@ -412,7 +412,7 @@ function addMeasurePrevButtonClick (event) {
 // clear all the notes on all measures
 function clearAllNotes() {
     editor.class_repeated_measures.clear();
-    for (var i = 0; i < editor.class_number_of_measures * editor.class_notes_per_measure; i++) {
+    for (var i = 0; i < editor.track.numberOfMeasures * editor.class_notes_per_measure; i++) {
         set_sticking_state(i, 'off', editor.class_notes_per_measure, editor.class_time_division, editor.class_note_value_per_measure);
         set_hh_state(i, 'off');
         set_tom1_state(i, 'off');
@@ -420,7 +420,7 @@ function clearAllNotes() {
         set_snare_state(i, 'off');
         set_kick_state(i, 'off');
     }
-    editor.class_number_of_measures = 1;
+    editor.track.numberOfMeasures = 1;
 
     editor.updateSheetMusic();
 
@@ -488,7 +488,7 @@ function htmlForStaffContainer(baseindex, indexStartForNotes) {
 
     let repeat = editor.class_repeated_measures.get(baseindex - 1) || 1
 
-    newHTML += generateMeasureButtons(editor.class_number_of_measures, baseindex, repeat);
+    newHTML += generateMeasureButtons(editor.track.numberOfMeasures, baseindex, repeat);
 
     return newHTML;
 }; // end function HTMLforStaffContainer
