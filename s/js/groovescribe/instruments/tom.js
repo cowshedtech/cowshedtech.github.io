@@ -155,8 +155,8 @@ function isTomsVisible() {
 }
 
 function showHideToms(force, showElseHide, dontRefreshScreen) {
-    var OnElseOff = showHideCSS_ClassVisibility(".toms-container", force, showElseHide);
-    showHideCSS_ClassVisibility(".tom-label", force, showElseHide);
+    var OnElseOff = toggleVisibilityByClass(".toms-container", force, showElseHide);
+    toggleVisibilityByClass(".tom-label", force, showElseHide);
     if (OnElseOff)
         addOrRemoveKeywordFromClassById("showHideTomsButton", "ClickToHide", true);
     else

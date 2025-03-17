@@ -192,8 +192,8 @@ function stickingsReverseRL() {
 
 function stickingsShowHide(force, showElseHide, dontRefreshScreen) {
 
-    var OnElseOff = showHideCSS_ClassDisplay(".stickings-container", force, showElseHide, "block");
-    showHideCSS_ClassDisplay(".stickings-label", force, showElseHide, "block");
+    var OnElseOff = toggleDisplayByClass(".stickings-container", force, showElseHide, "block");
+    toggleDisplayByClass(".stickings-label", force, showElseHide, "block");
     if (OnElseOff) {
         addOrRemoveKeywordFromClassById("stickingsButton", "ClickToHide", true);
     } else {

@@ -137,10 +137,16 @@ const getTagPosition = (element) => {
 };
 
 
-//
-//
-//
-function showHideCSS_ClassDisplay(className, force, showElseHide, showState) {
+/**
+ * Toggles the visibility of elements matching a CSS class selector by changing their display property.
+ * 
+ * @param {string} className - CSS selector for target elements (e.g., '.my-class' or '#my-id')
+ * @param {boolean} force - If true, forces the display state instead of toggling
+ * @param {boolean} showElseHide - When forcing, true shows elements, false hides them
+ * @param {string} showState - The display value to use when showing elements (e.g., 'block', 'flex')
+ * @returns {boolean} The new display state (true if elements are shown, false if hidden)
+ */
+function toggleDisplayByClass(className, force, showElseHide, showState) {
     const elements = document.querySelectorAll(className);
 
     if (!elements.length) return false;
@@ -155,10 +161,15 @@ function showHideCSS_ClassDisplay(className, force, showElseHide, showState) {
 }
 
 
-//
-//
-//
-function showHideCSS_ClassVisibility(className, force, showElseHide) {
+/**
+ * Toggles the CSS visibility property of elements matching a CSS class selector.
+ * Unlike display:none, visibility:hidden preserves the element's space in the layout.
+ * 
+ * @param {string} className - CSS selector for target elements (e.g., '.my-class' or '#my-id')
+ * @param {boolean} force - If true, forces the visibility state instead of toggling
+ * @param {boolean} showElseHide - When forcing, true makes elements visible, false hides them
+ */
+function toggleVisibilityByClass(className, force, showElseHide) {
     const elements = document.querySelectorAll(className);
 
     elements.forEach(element => {
@@ -170,9 +181,15 @@ function showHideCSS_ClassVisibility(className, force, showElseHide) {
     });
 }
 
-//
-//
-//
+
+/**
+ * Checks if an element is fully visible within the viewport, accounting for an 80px top offset.
+ * Uses the element's bounding rectangle to determine if it fits within the window dimensions.
+ * 
+ * @param {HTMLElement} element - The DOM element to check
+ * @returns {boolean} True if the element is fully visible in the viewport (accounting for top offset),
+ *                   false otherwise
+ */
 function isElementOnScreen(element) {
     var rect = element.getBoundingClientRect();
 

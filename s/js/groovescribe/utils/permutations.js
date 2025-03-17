@@ -628,8 +628,8 @@ function setupPermutationMenu() {
 
 //     switch (perm_type) {
 //         case "kick_16ths":
-//             showHideCSS_ClassVisibility(".kick-container", true, false); // hide it
-//             showHideCSS_ClassVisibility(".snare-container", true, true); // show it
+//             toggleVisibilityByClass(".kick-container", true, false); // hide it
+//             toggleVisibilityByClass(".snare-container", true, true); // show it
 //             while (class_number_of_measures > 1) {
 //                 root.closeMeasureButtonClick(2);
 //             }
@@ -639,8 +639,8 @@ function setupPermutationMenu() {
 //             break;
 
 //         case "snare_16ths":
-//             showHideCSS_ClassVisibility(".kick-container", true, true); // show it
-//             showHideCSS_ClassVisibility(".snare-container", true, false); // hide it
+//             toggleVisibilityByClass(".kick-container", true, true); // show it
+//             toggleVisibilityByClass(".snare-container", true, false); // hide it
 //             while (class_number_of_measures > 1) {
 //                 root.closeMeasureButtonClick(2);
 //             }
@@ -652,8 +652,8 @@ function setupPermutationMenu() {
 //         case "none":
 //         /* falls through */
 //         default:
-//             showHideCSS_ClassVisibility(".kick-container", true, true); // show it
-//             showHideCSS_ClassVisibility(".snare-container", true, true); // show it
+//             toggleVisibilityByClass(".kick-container", true, true); // show it
+//             toggleVisibilityByClass(".snare-container", true, true); // show it
 //             class_permutation_type = "none";
 
 //             unselectButton(document.getElementById("permutationAnchor"));

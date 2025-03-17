@@ -281,7 +281,7 @@ function GrooveWriter() {
 
 		if (options.viewMode) {
 
-			showHideCSS_ClassDisplay(".edit-block", true, true, "block"); // show
+			toggleDisplayByClass(".edit-block", true, true, "block"); // show
 
 			if (view_edit_button)
 				view_edit_button.innerHTML = "Switch to VIEW mode";
@@ -291,7 +291,7 @@ function GrooveWriter() {
 				updateCurrentURL();
 		} else {
 
-			showHideCSS_ClassDisplay(".edit-block", true, false, "block"); // hide
+			toggleDisplayByClass(".edit-block", true, false, "block"); // hide
 
 			if (view_edit_button)
 				view_edit_button.innerHTML = "Switch to EDIT mode";
