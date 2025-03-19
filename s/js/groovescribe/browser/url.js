@@ -103,6 +103,7 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
 function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, metronome, debugMode) {
 
     options.debugMode = parseInt(getQueryVariableFromString("Debug", debugMode, encodedURLData), 10);
+    options.viewMode = ("view" === getQueryVariableFromURL("Mode", "edit"));
 
     var stickingsString = getQueryVariableFromString("Stickings", false, encodedURLData);
     if (!stickingsString) {

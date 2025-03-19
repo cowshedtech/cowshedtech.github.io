@@ -17,7 +17,7 @@ export default {
 
             <script>
                 if (!options.grooveDBAuthoring) {
-                    document.write('<span class="left-button" onclick="myGrooveWriter.swapViewEditMode();"><span class="left-button-content"><span id="view-edit-switch" >Switch to EDIT mode</span></span></span>');
+                    document.write('<span class="left-button" onclick="myGrooveWriter.updateViewEdit();"><span class="left-button-content"><span id="view-edit-switch" >Switch to EDIT mode</span></span></span>');
                 }
             </script>
 

@@ -393,7 +393,8 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
 // creates a grooveData class from the clickable UI elements of the page
 //
 grooveDataFromClickableUI = function () {
-    var track = new editor.track.trackNew();
+    //var track = new editor.track.trackNew();
+    track = editor.track;
 
     track.title = document.getElementById("tuneTitle").value;
     track.author = document.getElementById("tuneAuthor").value;

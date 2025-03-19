@@ -17,57 +17,81 @@
  * @requires editor.track - Track object containing score state
  */
 function htmlForStaffContainer(baseindex, indexStartForNotes) {
-    var newHTML = ('');
+    const { notesPerMeasure, numBeats, noteValue } = editor.track;
+    const parts = [];
 
-    if (baseindex == 1) // add new measure button
-        newHTML += '<span id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)"><i class="fa fa-plus"></i></span>';
-        
-    newHTML += ('<div class="staff-container" id="staff-container' + baseindex + '">')
-    newHTML += generateStickingContainerHTML(baseindex, indexStartForNotes, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue);
+    // Add measure button for first staff
+    if (baseindex === 1) {
+        parts.push(`<span id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)">
+            <i class="fa fa-plus"></i>
+        </span>`);
+    }
 
-    newHTML += ('  <span class="notes-row-container">')
-    newHTML += generateLineLabels(baseindex); // Call the new function where the line labels are needed
+    // Staff container start
+    parts.push(`<div class="staff-container" id="staff-container${baseindex}">`);
 
-    newHTML += ('\				\
-                            <div class="music-line-container">\
-                                \
-                                <div class="notes-container">\
-                                <div class="staff-line-1"></div>\
-                                <div class="staff-line-2"></div>\
-                                <div class="staff-line-3"></div>\
-                                <div class="staff-line-4"></div>\
-                                <div class="staff-line-5"></div>\n');
+    // Add sticking container
+    parts.push(generateStickingContainerHTML(baseindex, indexStartForNotes, notesPerMeasure, numBeats, noteValue));
 
-    // backgrounds for highlighting.  Evenly spaced cols of space
-    newHTML += ('\
-                                    <div class="background-highlight-container">\
-                                        <div class="opening_note_space"> </div>');
-    for (let i = indexStartForNotes; i < editor.track.notesPerMeasure + indexStartForNotes; i++) {
-        newHTML += ('						<div id="bg-highlight' + i + '" class="bg-highlight" >\
-                                            </div>\n');
+    // Notes row container with line labels
+    parts.push(`
+        <span class="notes-row-container">
+            ${generateLineLabels(baseindex)}
+            <div class="music-line-container">
+                <div class="notes-container">
+                    ${Array(5).fill().map((_, i) => `<div class="staff-line-${i + 1}"></div>`).join('\n')}
+    `);
 
-        if ((i - (indexStartForNotes - 1)) % noteGroupingSize(editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue) === 0 && i < editor.track.notesPerMeasure + indexStartForNotes - 1) {
-            newHTML += ('<div class="space_between_note_groups"> </div> \n');
+    // Background highlights
+    parts.push(`
+        <div class="background-highlight-container">
+            <div class="opening_note_space"></div>
+            ${generateBackgroundHighlights(indexStartForNotes, notesPerMeasure, numBeats, noteValue)}
+            <div class="end_note_space"></div>
+        </div>
+    `);
+
+    // Generate instrument containers
+    const instruments = [
+        { fn: generateHiHatContainerHTML, args: [] },
+        { fn: generateTomContainerHTML, args: [1] },
+        { fn: generateSnareContainerHTML, args: [] },
+        { fn: generateTomContainerHTML, args: [4] },
+        { fn: generateKickContainerHTML, args: [] }
+    ];
+
+    parts.push(instruments.map(({ fn, args }) => 
+        fn(indexStartForNotes, baseindex, notesPerMeasure, numBeats, noteValue, indexStartForNotes, ...args)
+    ).join(''));
+
+    // Close containers
+    parts.push('</div></div></span>');
+
+    // Add measure buttons
+    const repeat = editor.track.repeatedMeasures.get(baseindex - 1) || 1;
+    parts.push(generateMeasureButtons(editor.track.numberOfMeasures, baseindex, repeat));
+
+    return parts.join('\n');
+}
+
+/**
+ * Helper function to generate background highlights for notes
+ * @private
+ */
+function generateBackgroundHighlights(indexStartForNotes, notesPerMeasure, numBeats, noteValue) {
+    const highlights = [];
+    for (let i = indexStartForNotes; i < notesPerMeasure + indexStartForNotes; i++) {
+        highlights.push(`<div id="bg-highlight${i}" class="bg-highlight"></div>`);
+
+        const shouldAddSpace = (i - (indexStartForNotes - 1)) % noteGroupingSize(notesPerMeasure, numBeats, noteValue) === 0 
+            && i < notesPerMeasure + indexStartForNotes - 1;
+
+        if (shouldAddSpace) {
+            highlights.push('<div class="space_between_note_groups"></div>');
         }
     }
-    newHTML += ('<div class="end_note_space"></div>\n</div>\n');
-
-    newHTML += generateHiHatContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
-    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes, 1);
-    newHTML += generateSnareContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
-    newHTML += generateTomContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes, 4);
-    newHTML += generateKickContainerHTML(indexStartForNotes, baseindex, editor.track.notesPerMeasure, editor.track.numBeats, editor.track.noteValue, indexStartForNotes);
-    newHTML += ('\
-                            </div>\
-                        </div>\
-                    </span>\n');
-
-    let repeat = editor.track.repeatedMeasures.get(baseindex - 1) || 1
-
-    newHTML += generateMeasureButtons(editor.track.numberOfMeasures, baseindex, repeat);
-
-    return newHTML;
-}; // end function HTMLforStaffContainer
+    return highlights.join('\n');
+}
 
 
 /**

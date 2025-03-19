@@ -61,27 +61,32 @@ function GrooveWriter() {
 
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 
+		// if Mode != "view" put into edit mode  (we default to view mode to prevent screen flicker)
+		// if ("view" != getQueryVariableFromURL("Mode", "edit"))
+		// 	root.updateViewEdit(true);
+
+		// initialise our metronome
+		metronome = new Metronome();
+	
+ 		// initialise our midi player
+		midiPlayer = new MIDIPlayer(root.track.trackID);
+		midiPlayer.AddMidiPlayerToPage(root.track, "midiPlayer", root.track.timeDivision);
+		midiPlayer.eventCallbacks = new midiEventCallbackClass();
+	
+		// load the groove from the URL data if it was passed in.
+		root.updateFromURL(window.location.search);
+
 		// TODO
 		setupPermutationMenu();
 		setTimeSigLabel();
 
 		// if Mode != "view" put into edit mode  (we default to view mode to prevent screen flicker)
-		if ("view" != getQueryVariableFromURL("Mode", "edit"))
-			root.swapViewEditMode(true);
+		// if ("view" != getQueryVariableFromURL("Mode", "edit"))
+		root.updateViewEdit(true);
 		
 		// set the background and text color of the current subdivision
 		selectButton(document.getElementById("subdivision_" + root.track.notesPerMeasure + "ths"));
 
-		// initialise our metronome
-		metronome = new Metronome();
-		
-		// initialise our midi player
-		midiPlayer = new MIDIPlayer(root.track.trackID);
-		midiPlayer.AddMidiPlayerToPage(root.track, "midiPlayer", root.track.timeDivision);
-		midiPlayer.eventCallbacks = new midiEventCallbackClass();
-
-		// load the groove from the URL data if it was passed in.
-		root.updateFromURL(window.location.search);
 
 		midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
 			var midiURL;
@@ -276,20 +281,10 @@ function GrooveWriter() {
 		});
 	};
 
-	root.swapViewEditMode = function (dontUpdateURL) {
+	root.updateViewEdit = function (dontUpdateURL) {
 		var view_edit_button = document.getElementById("view-edit-switch");
 
 		if (options.viewMode) {
-
-			toggleDisplayByClass(".edit-block", true, true, "block"); // show
-
-			if (view_edit_button)
-				view_edit_button.innerHTML = "Switch to VIEW mode";
-			options.viewMode = false;
-
-			if (!dontUpdateURL)
-				updateCurrentURL();
-		} else {
 
 			toggleDisplayByClass(".edit-block", true, false, "block"); // hide
 
@@ -298,6 +293,16 @@ function GrooveWriter() {
 			options.viewMode = true;
 			if (!dontUpdateURL)
 				updateCurrentURL();
+			
+		} else {
+			toggleDisplayByClass(".edit-block", true, true, "block"); // show
+
+			if (view_edit_button)
+				view_edit_button.innerHTML = "Switch to VIEW mode";
+			options.viewMode = false;
+
+			if (!dontUpdateURL)
+				updateCurrentURL();			
 		}
 	};
 
@@ -328,8 +333,9 @@ function GrooveWriter() {
 
 		var track = getGrooveDataFromUrlString(encodedURLData, root.track, options, midiPlayer, metronome, options.debugMode);
 
-		if (track.notesPerMeasure != root.track.notesPerMeasure || root.track.numberOfMeasures != track.numberOfMeasures) {
+		if (track.notesPerMeasure != root.track.notesPerMeasure || track.numberOfMeasures != root.track.numberOfMeasures) {
 			root.track.numberOfMeasures = track.numberOfMeasures;
+			root.track.notesPerMeasure = track.notesPerMeasure;
 			root.changeDivisionWithNotes(track.timeDivision);
 		}
 

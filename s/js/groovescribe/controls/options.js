@@ -25,7 +25,7 @@ class Options {
     showLegend;
 
     /** @type {boolean} Whether the editor is in view-only mode */
-    viewMode = true;
+    viewMode = false;
 
     /** @type {boolean} Whether debug mode is enabled */
     debugMode;

@@ -1,3 +1,20 @@
+// Javascript for the Groove Scribe HTML application
+// Groove Scribe is for drummers and helps create sheet music with an easy to use WYSIWYG groove editor.
+//
+// Functions for handling a staff in the clickable editor
+
+
+/**
+ * Updates the time signature label in the UI.
+ * Displays the current time signature as a fraction with the number of beats
+ * on top and the note value on the bottom.
+ * 
+ * @requires DOM elements:
+ * - #timeSigLabel - The element to display the time signature
+ * @requires editor.track - Track object containing:
+ * - numBeats - Number of beats per measure
+ * - noteValue - Note value that gets one beat
+ */
 function setTimeSigLabel() {
     // turn on/off special features that are only available in 4/4 time
 
@@ -6,6 +23,13 @@ function setTimeSigLabel() {
 };
 
 
+/**
+ * Opens the time signature popup dialog.
+ * 
+ * @param {string} type - The type of popup action (unused in current implementation)
+ * @requires DOM elements:
+ * - #timeSigPopup - The popup dialog element
+ */
 function timeSigPopupOpen(type) {
     var popup = document.getElementById("timeSigPopup");
 
@@ -14,6 +38,21 @@ function timeSigPopupOpen(type) {
 
 };
 
+/**
+ * Closes the time signature popup dialog and handles the user's input.
+ * If type is 'ok', updates the time signature and recalculates the measure layout.
+ * 
+ * @param {string} type - The type of close action ('ok' or 'cancel')
+ * @param {Function} [callback] - Optional callback function to execute after closing
+ * @requires DOM elements:
+ * - #timeSigPopup - The popup dialog element
+ * - #timeSigPopupTimeSigTop - Input for number of beats
+ * - #timeSigPopupTimeSigBottom - Input for note value
+ * @requires Functions:
+ * - usingTriplets - Checks if triplets are currently in use
+ * - calc_notes_per_measure - Calculates notes per measure based on time signature
+ * @requires editor.track - Track object containing time signature state
+ */
 function timeSigPopupClose(type, callback) {
     var popup = document.getElementById("timeSigPopup");
 
@@ -45,7 +84,23 @@ function timeSigPopupClose(type, callback) {
 };
 
 
-// turns on or off triplet 1/4 and 1/8 note selection based on the current time sig setting
+/**
+ * Enables or disables time division selections based on the current time signature.
+ * Handles compatibility between time signatures and different note divisions:
+ * - Disables 8th notes for incompatible time signatures
+ * - Disables triplets for time signatures not in x/4 time
+ * 
+ * @requires Functions:
+ * - addOrRemoveKeywordFromClassById - Toggles CSS classes on elements
+ * @requires DOM elements:
+ * - #subdivision_8ths - 8th note subdivision selector
+ * - #subdivision_12ths - Triplet quarter note subdivision selector
+ * - #subdivision_24ths - Triplet 8th note subdivision selector
+ * - #subdivision_48ths - Triplet 16th note subdivision selector
+ * @requires editor.track - Track object containing:
+ * - numBeats - Number of beats per measure
+ * - noteValue - Note value that gets one beat
+ */
 function setTimeDivisionSelectionOnOrOff() {
 
     // check for incompatible odd time signature division  9/16 and 1/8 notes for instance
