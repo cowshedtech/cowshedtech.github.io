@@ -522,27 +522,14 @@ function createMidiUrlFromClickableUI(MIDI_type) {
                 num_notes_for_swing = 8 * editor.track.numBeats / editor.track.noteValue;
             else
                 num_notes_for_swing = 16 * editor.track.numBeats / editor.track.noteValue;
-
-            // let repeat = editor.track.repeatedMeasures.has(0) ? editor.track.repeatedMeasures.get(0) : 1;
-            // for (let i = 0; i < repeat; i++) {
-            //     MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, editor.track.notesPerMeasure * i));
-            //     muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, i);
-
-            //     let repeat = editor.track.repeatedMeasures.has(i) ? editor.track.repeatedMeasures.get(i) : 1;
-            //     for (let i = 0; i < repeat; i++) {
-            //         MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, editor.track.numBeats, editor.track.noteValue, metronome.getSolo());
-            //     }
-            // }
-            // break;\
-
-
+            
             let repeat = editor.track.repeatedMeasures.has(0) ? editor.track.repeatedMeasures.get(0) : 1;
             for (let i = 0; i < repeat; i++) {
                 MIDI_from_HH_Snare_Kick_Arrays(midiTrack, HH_Array, Snare_Array, Kick_Array, Toms_Array, MIDI_type, metronome.getFrequency(), num_notes, num_notes_for_swing, swing_percentage, editor.track.numBeats, editor.track.num_notes, metronome.getSolo());
             }
 
             for (i = 1; i < editor.track.numberOfMeasures; i++) {
-
+e
                 // reset arrays
                 Sticking_Array = get_empty_note_array_in_32nds();
                 HH_Array = get_empty_note_array_in_32nds();
