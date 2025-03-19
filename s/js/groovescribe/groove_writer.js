@@ -61,10 +61,6 @@ function GrooveWriter() {
 
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 
-		// if Mode != "view" put into edit mode  (we default to view mode to prevent screen flicker)
-		// if ("view" != getQueryVariableFromURL("Mode", "edit"))
-		// 	root.updateViewEdit(true);
-
 		// initialise our metronome
 		metronome = new Metronome();
 	
@@ -333,11 +329,11 @@ function GrooveWriter() {
 
 		var track = getGrooveDataFromUrlString(encodedURLData, root.track, options, midiPlayer, metronome, options.debugMode);
 
-		if (track.notesPerMeasure != root.track.notesPerMeasure || track.numberOfMeasures != root.track.numberOfMeasures) {
-			root.track.numberOfMeasures = track.numberOfMeasures;
-			root.track.notesPerMeasure = track.notesPerMeasure;
+		// if (track.notesPerMeasure != root.track.notesPerMeasure || track.numberOfMeasures != root.track.numberOfMeasures) {
+		// 	root.track.numberOfMeasures = track.numberOfMeasures;
+		// 	root.track.notesPerMeasure = track.notesPerMeasure;
 			root.changeDivisionWithNotes(track.timeDivision);
-		}
+		// }
 
 		root.expandAuthoringViewWhenNecessary(root.track.notesPerMeasure, root.track.numberOfMeasures);
 
