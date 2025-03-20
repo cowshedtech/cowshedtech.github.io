@@ -370,7 +370,7 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
         var array_index = (i) * scaler;
 
         // only grab the stickings if they are visible
-        if (isStickingsVisible())
+        if (options.showStickings)
             Sticking_Array[array_index] = get_sticking_state(i + startIndexForClickableUI, "ABC");
 
         HH_Array[array_index] = get_hh_state(i + startIndexForClickableUI, "ABC");
@@ -414,7 +414,7 @@ grooveDataFromClickableUI = function () {
         for (var i = 0; i < total_notes; i++) {
 
             // only grab the stickings if they are visible
-            if (isStickingsVisible())
+            if (options.showStickings)
                 track.sticking_array.push(get_sticking_state(i, "ABC"));
 
             track.hh_array.push(get_hh_state(i, "ABC"));

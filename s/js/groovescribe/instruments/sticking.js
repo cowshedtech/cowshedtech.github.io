@@ -194,11 +194,18 @@ function stickingsShowHide(force, showElseHide, dontRefreshScreen) {
 
     var OnElseOff = toggleDisplayByClass(".stickings-container", force, showElseHide, "block");
     toggleDisplayByClass(".stickings-label", force, showElseHide, "block");
-    if (OnElseOff) {
-        addOrRemoveKeywordFromClassById("stickingsButton", "ClickToHide", true);
+
+    if (force) {
+        options.showStickings = showElseHide
     } else {
-        addOrRemoveKeywordFromClassById("stickingsButton", "ClickToHide", false);
+        options.showStickings = !options.showStickings
     }
+
+    // if (OnElseOff) {
+    //     addOrRemoveKeywordFromClassById("stickingsButton", "ClickToHide", true);
+    // } else {
+    //     addOrRemoveKeywordFromClassById("stickingsButton", "ClickToHide", false);
+    // }
 
     if (!dontRefreshScreen) {
         editor.updateSheetMusic();

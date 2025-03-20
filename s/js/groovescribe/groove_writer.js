@@ -370,7 +370,7 @@ function GrooveWriter() {
 	//      would make this whole thing much easier.  :(
 	root.changeDivisionWithNotes = function(newDivision, Stickings, HH, Tom1, Tom4, Snare, Kick) {
 		var oldDivision = root.track.timeDivision;
-		var wasStickingsVisable = isStickingsVisible();
+		var wasStickingsVisable = options.showStickings;
 		// var wasTomsVisable = isTomsVisible();
 		var wasTomsVisable = options.tomsVisible;
 
