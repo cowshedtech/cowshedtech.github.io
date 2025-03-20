@@ -197,12 +197,14 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     track.comments = decodeURIComponent(track.comments);
     track.comments = track.comments.replace(/\+/g, " ");
 
-    midiPlayer.setTempo(parseInt(getQueryVariableFromString("tempo", constant_DEFAULT_TEMPO, encodedURLData), 10));
-    if (isNaN(track.tempo) || track.tempo < 20 || track.tempo > 400)
+    midiPlayer.setTempo(parseInt(getQueryVariableFromString("Tempo", constant_DEFAULT_TEMPO, encodedURLData), 10));
+    tempo = midiPlayer.getTempo();
+    if (isNaN(tempo) || tempo < 20 || tempo > 400)
         midiPlayer.setTempo(constant_DEFAULT_TEMPO);
 
-    midiPlayer.setSwing(parseInt(getQueryVariableFromString("swing", 0, encodedURLData), 10));
-    if (isNaN(midiPlayer.getSwing()) || midiPlayer.getSwing() < 0 || midiPlayer.getSwing() > 100)
+    midiPlayer.setSwing(parseInt(getQueryVariableFromString("Swing", 0, encodedURLData), 10));
+    swing = midiPlayer.getSwing();
+    if (isNaN(swing) || swing < 0 || swing > 100)
         midiPlayer.setSwing(0);
 
     return track;
