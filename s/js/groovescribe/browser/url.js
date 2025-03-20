@@ -167,11 +167,12 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     }
 
     // Get the Toms
+    options.tomsVisible = false;
     for (i = 0; i < 4; i++) {
         // toms are named T1, T2, T3, T4
         var Tom_string = getQueryVariableFromString("T" + (i + 1), false, encodedURLData);
         if (!Tom_string) {
-            Tom_string = GetDefaultTomGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+            Tom_string = GetDefaultTomGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);            
         } else {
             options.tomsVisible = true;
         }

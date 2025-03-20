@@ -157,13 +157,20 @@ function isTomsVisible() {
 function showHideToms(force, showElseHide, dontRefreshScreen) {
     var OnElseOff = toggleVisibilityByClass(".toms-container", force, showElseHide);
     toggleVisibilityByClass(".tom-label", force, showElseHide);
-    if (OnElseOff)
-        addOrRemoveKeywordFromClassById("showHideTomsButton", "ClickToHide", true);
-    else
-        addOrRemoveKeywordFromClassById("showHideTomsButton", "ClickToHide", false);
+    
+    if (force) {
+        options.tomsVisible = showElseHide
+    } else {
+        options.tomsVisible = !options.tomsVisible
+    }
+
+    // if (OnElseOff)
+    //     addOrRemoveKeywordFromClassById("showHideTomsButton", "ClickToHide", true);
+    // else
+    //     addOrRemoveKeywordFromClassById("showHideTomsButton", "ClickToHide", false);
 
     if (!dontRefreshScreen)
         editor.updateSheetMusic();
-
+    
     return false; // don't follow the link
 };

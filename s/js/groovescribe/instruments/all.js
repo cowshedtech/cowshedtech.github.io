@@ -375,7 +375,7 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
 
         HH_Array[array_index] = get_hh_state(i + startIndexForClickableUI, "ABC");
 
-        if (isTomsVisible()) {
+        if (options.tomsVisible) {
             Toms_Array[0][array_index] = get_tom_state(i + startIndexForClickableUI, 1, "ABC");
             Toms_Array[3][array_index] = get_tom_state(i + startIndexForClickableUI, 4, "ABC");
         }
@@ -421,7 +421,7 @@ grooveDataFromClickableUI = function () {
             track.snare_array.push(get_snare_state(i, "ABC"));
             track.kick_array.push(get_kick_state(i, "ABC"));
 
-            if (isTomsVisible()) {
+            if (options.tomsVisible) {
                 track.toms_array[0].push(get_tom_state(i, 1, "ABC"));
                 track.toms_array[3].push(get_tom_state(i, 4, "ABC"));
             } else {

@@ -16,10 +16,10 @@ class Options {
     highlightOn;
 
     /** @type {boolean} Whether tom drums are visible in the editor */
-    tomsVisible;
+    tomsVisible = false;
 
     /** @type {boolean} Whether sticking notations are shown */
-    showStickings;
+    showStickings = false;
 
     /** @type {boolean} Whether the legend is displayed */
     showLegend;

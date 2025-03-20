@@ -371,7 +371,8 @@ function GrooveWriter() {
 	root.changeDivisionWithNotes = function(newDivision, Stickings, HH, Tom1, Tom4, Snare, Kick) {
 		var oldDivision = root.track.timeDivision;
 		var wasStickingsVisable = isStickingsVisible();
-		var wasTomsVisable = isTomsVisible();
+		// var wasTomsVisable = isTomsVisible();
+		var wasTomsVisable = options.tomsVisible;
 
 		root.track.timeDivision = newDivision;
 		root.track.notesPerMeasure = calc_notes_per_measure(root.track.timeDivision, root.track.numBeats, root.track.noteValue);
