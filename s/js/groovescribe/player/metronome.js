@@ -25,7 +25,7 @@ class Metronome {
         this.setButton(frequency);
 
         // TODO!!
-        //root.updateCurrentURL();
+        editor.updateCurrentURL();
     }
 
     /**

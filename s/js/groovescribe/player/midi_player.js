@@ -361,31 +361,23 @@ class MIDIPlayer {
     //
     //
     doesDivisionSupportSwing(division) {
-
-		if (isTripletDivision(division) || division == 4)
-			return false;
-
+		if (isTripletDivision(division) || division == 4) return false;
 		return true;
 	};
 
 
     //
-    // used to update the on screen swing display
-	// also the onClick handler for the swing slider
-	swingUpdateText(swingAmount) {
-
+    //
+    //
+    swingEnabled(trueElseFalse) {
+		midiPlayer.swingIsEnabled = trueElseFalse;
 		if (midiPlayer.swingIsEnabled === false) {
-			document.getElementById('swingOutput' + this.containerIndex).innerHTML = "N/A";
+			midiPlayer.setSwing(0);
 		} else {
-			document.getElementById('swingOutput' + this.containerIndex).innerHTML = "" + swingAmount + "%";
-			// TODO
-            // midiPlayer.swingPercent = swingAmount;
-			midiPlayer.noteHasChanged();
+			midiPlayer.swingUpdateText(midiPlayer.getSwing()); // remove N/A label
 		}
-
 	};
-    
-    
+
     //
     //
     //
@@ -404,7 +396,7 @@ class MIDIPlayer {
 
 		return (swing);
 	};
-
+ 
 	
     //
     //
@@ -413,26 +405,12 @@ class MIDIPlayer {
 		if (midiPlayer.swingIsEnabled === false)
 			swingAmount = 0;
 
-		midiPlayer.setSwingSlider(swingAmount);
-
-		midiPlayer.swingUpdateText(swingAmount);  // update the output
+		midiPlayer.swingUpdateText(swingAmount)
+        midiPlayer.setSwingSlider(swingAmount)
+        midiPlayer.noteHasChanged();
+        midiPlayer.swingChangeCallback();
 	};
 
-        
-    //
-    //
-    //
-    swingEnabled(trueElseFalse) {
-
-		midiPlayer.swingIsEnabled = trueElseFalse;
-
-		if (midiPlayer.swingIsEnabled === false) {
-			midiPlayer.setSwing(0);
-		} else {
-			midiPlayer.swingUpdateText(midiPlayer.getSwing()); // remove N/A label
-		}
-	};
-    
     //
     //
     //
@@ -441,11 +419,25 @@ class MIDIPlayer {
 		if (midiPlayer.swingIsEnabled === false) {
 			midiPlayer.setSwingSlider(0);
 		} else {
-			midiPlayer.swingUpdateText(event.target.value);
-			midiPlayer.updateRangeSlider('swingInput' + this.containerIndex);
+			midiPlayer.swingUpdateText(event.target.value)
+            midiPlayer.setSwingSlider(event.target.value)
+            midiPlayer.noteHasChanged();
 		}
+        midiPlayer.swingChangeCallback();
 	};    
-    
+
+            
+    //
+    // used to update the on screen swing display
+    // also the onClick handler for the swing slider
+    swingUpdateText(swingAmount) {
+        if (midiPlayer.swingIsEnabled === false) {
+            document.getElementById('swingOutput' + this.containerIndex).innerHTML = "N/A";
+        } else {
+            document.getElementById('swingOutput' + this.containerIndex).innerHTML = "" + swingAmount + "%";            
+        }
+    };
+            
     //
     //
     //
@@ -453,6 +445,25 @@ class MIDIPlayer {
 		document.getElementById("swingInput" + this.containerIndex).value = newSetting;
 		midiPlayer.updateRangeSlider('swingInput' + this.containerIndex);
 	};
+
+     // called every time the tempo changes, which can be a lot of times due to the range slider
+	// update the main URL with the tempo, but only do it every third of a second at the most
+	swingChangeCallbackTimeout = null;
+	swingChangeCallback() {
+
+		// if there is a timeout running clear it
+		if (this.swingChangeCallbackTimeout != null)
+			window.clearTimeout(this.swingChangeCallbackTimeout);
+
+		// set a new timeout
+		this.swingChangeCallbackTimeout = window.setTimeout(function () {
+			this.swingChangeCallbackTimeout = null
+            // TODO
+			// update the Main URL to show the new tempo
+			updateCurrentURL();
+		}, 300);
+	}
+
 
 
     //
@@ -500,7 +511,7 @@ class MIDIPlayer {
 			this.tempoChangeCallbackTimeout = null
             // TODO
 			// update the Main URL to show the new tempo
-			// root.updateCurrentURL();
+			updateCurrentURL();
 		}, 300);
 	}
 

@@ -51,7 +51,7 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
     if (track.author !== "") fullURL += "&Author=" + encodeURIComponent(track.author);
     if (track.comments !== "") fullURL += "&Comments=" + encodeURIComponent(track.comments);
 
-    if (midiPlayer && midiPlayer.tempo) fullURL += "&Tempo=" + midiPlayer.tempo;
+    if (midiPlayer && midiPlayer.getTempo()) fullURL += "&Tempo=" + midiPlayer.getTempo();
     if (midiPlayer && midiPlayer.getSwing() > 0) fullURL += "&Swing=" + midiPlayer.getSwing();
     if (metronome && metronome.frequency !== 0) fullURL += "&MetronomeFreq=" + metronome.frequency;
 
