@@ -28,13 +28,9 @@ export default {
     },
     beforeUnmount() {
         // Cleanup event handler
-        if (this.removeHandler) {
-            this.removeHandler()
-        }
+        if (this.removeHandler) this.removeHandler() 
     },
     template: `
-    <div id="TopNav" class="fullWidthEle">
-        <span id="upperLeft">
             <span id="metronomeContainer">
                 <span id="metronomeLabel">METRONOME:</span>
                 <span 
@@ -50,7 +46,5 @@ export default {
                     @click="handleOptions"
                 >Options</span>
             </span>
-        </span>        
-    </div>    
   `
   }
