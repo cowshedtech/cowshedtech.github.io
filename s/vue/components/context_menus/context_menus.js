@@ -22,7 +22,7 @@ import Stickings from './stickings.js'
 import Download from './download.js'
 import TimeSignature from './time_signature.js'
 import Share from './share.js'
-import MetronomeSpeed from '../metronome/metronome_speed.js'
+import MetronomeSpeed from '../metronome/vue/menu_speed.js'
 import Grooves from './grooves.js'
 
 export default {

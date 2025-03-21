@@ -200,43 +200,43 @@ class Metronome {
 
     /**
      * 
-     */    
-    setButton(metronomeInterval) {
+    //  */    
+    // setButton(metronomeInterval) {
 
-		var id = "";
-		switch (metronomeInterval) {
-			case 4:
-				id = "metronome4ths";
-				break;
-			case 8:
-				id = "metronome8ths";
-				break;
-			case 16:
-				id = "metronome16ths";
-				break;
-			case 0:
-			/* falls through */
-			default:
-				id = "metronomeOff";
-				if (this.getSolo()) {
-					// turn off solo if we are turning off the metronome
-					this.optionsMenuPopupClick("Solo");
-				}
-				break;
-		}
+	// 	var id = "";
+	// 	switch (metronomeInterval) {
+	// 		case 4:
+	// 			id = "metronome4ths";
+	// 			break;
+	// 		case 8:
+	// 			id = "metronome8ths";
+	// 			break;
+	// 		case 16:
+	// 			id = "metronome16ths";
+	// 			break;
+	// 		case 0:
+	// 		/* falls through */
+	// 		default:
+	// 			id = "metronomeOff";
+	// 			if (this.getSolo()) {
+	// 				// turn off solo if we are turning off the metronome
+	// 				this.optionsMenuPopupClick("Solo");
+	// 			}
+	// 			break;
+	// 	}
 
-		// clear other buttons
-		var myElements = document.querySelectorAll(".metronomeButton");
-		for (var i = 0; i < myElements.length; i++) {
-			var thisButton = myElements[i];
-			// remove active status
-			unselectButton(thisButton);
-		}
+	// 	// clear other buttons
+	// 	var myElements = document.querySelectorAll(".metronomeButton");
+	// 	for (var i = 0; i < myElements.length; i++) {
+	// 		var thisButton = myElements[i];
+	// 		// remove active status
+	// 		unselectButton(thisButton);
+	// 	}
 
-		selectButton(document.getElementById(id));
+	// 	selectButton(document.getElementById(id));
 
-		this.eventCallbacks.changed();
-	};
+	// 	this.eventCallbacks.changed();
+	// };
 
 	
 	// the user has clicked on the metronome options button

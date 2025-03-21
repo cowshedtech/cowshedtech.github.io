@@ -1,4 +1,4 @@
-import MetronomeNavigation from '../metronome/main_menu.js'
+import MetronomeNavigation from '../metronome/vue/menu_main.js'
 
 export default {
     data() {
