@@ -61,8 +61,12 @@ function GrooveWriter() {
 
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 
-		// initialise our metronome
+		// initialise our metronome with event handler for changes to metronome value
 		metronome = new Metronome();
+		metronome.eventCallbacks = new metronomeEventCallbackClass();
+		metronome.eventCallbacks.changed = function () {
+			updateCurrentURL();      
+		};
 	
  		// initialise our midi player
 		midiPlayer = new MIDIPlayer(root.track.trackID);

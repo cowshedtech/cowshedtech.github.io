@@ -684,8 +684,6 @@ class MIDIPlayer {
     callback(data) {
         var percentComplete = (data.now / data.end);
         
-        console.log(`callback percentComplete[${percentComplete}] data.now[${data.now}] [${data.end}]`)
-
         // midiPlayer.eventCallbacks.percentProgress(midiPlayer.eventCallbacks.classRoot, percentComplete * 100);
 
         if (midiPlayer.lastMidiTimeUpdate && midiPlayer.lastMidiTimeUpdate < (data.now + 800)) {

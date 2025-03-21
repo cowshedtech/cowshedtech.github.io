@@ -11,11 +11,17 @@ class Metronome {
 	countInActive = false;
 	countInIsPlaying = false;
 	
+    eventCallbacks;
 
     /**
      * 
      */    
     constructor(containerIndex) { }    
+
+
+    //
+    //
+    //    
 
     /**
      * 
@@ -23,9 +29,7 @@ class Metronome {
     setFrequency(frequency) {
         this.frequency = frequency;
         this.setButton(frequency);
-
-        // TODO!!
-        editor.updateCurrentURL();
+        this.eventCallbacks.changed();          
     }
 
     /**
@@ -194,7 +198,7 @@ class Metronome {
 				id = "metronomeOff";
 				if (this.getSolo()) {
 					// turn off solo if we are turning off the metronome
-					root.optionsMenuPopupClick("Solo");
+					this.optionsMenuPopupClick("Solo");
 				}
 				break;
 		}
@@ -414,3 +418,6 @@ function addInlineMetronomeSVG() {
         'C73.25,69.678,72.61,70.625,71.58,70.625z M50.714,70.625H26.57c-1.031,0-1.669-0.994-1.416-1.994L39.59,11.5' +
         'c0.253-1,1.303-1.812,2.334-1.812h14.431c1.032,0,2.081,0.725,2.331,1.725l7.854,31.421L50.714,70.625z"></path></svg>'
 }
+
+
+function metronomeEventCallbackClass() { };
