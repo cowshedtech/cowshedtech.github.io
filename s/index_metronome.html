@@ -10,6 +10,9 @@
 
 		<title>Groove Scribe - Metronome</title>
 
+		<link rel="stylesheet" type="text/css" href="css/groove_writer_orange.css">
+		<link rel="stylesheet" type="text/css" href="css/groove_display_orange.css">
+		<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>		
 				
 		<script src="./js/groovescribe/player/metronome.js"></script>
 		<script src="./js/groovescribe/browser/dom.js"></script>
@@ -33,20 +36,21 @@
 		<!-- Mount our vue app -->
 		<script type="module">
 			import { createApp } from 'vue'
-			import Main from './vue/main_metronome.js'	  
+			import Main from './vue//standalone/main_metronome.js'	  
 			createApp(Main).mount('#vue-app')
 		</script>	
 		
 		<script type="text/javascript">
+
+			var metronome = new Metronome();
 			window.addEventListener('load', () => {
 				'use strict';
-				// initialise our metronome with event handler for changes to metronome value
-				var metronome = new Metronome();
-				metronome.eventCallbacks = new metronomeEventCallbackClass();
-				metronome.eventCallbacks.changed = function () {
-					console.log(`metronome changed`)
-				};
-				metronome.setFrequency(10);
+				// initialise our metronome with event handler for changes to metronome value				
+				// metronome.eventCallbacks = new metronomeEventCallbackClass();
+				// metronome.eventCallbacks.changed = function () {
+				// 	console.log(`metronome changed`)
+				// };
+				// metronome.setFrequency(10);
 			});			
 		</script>
 	

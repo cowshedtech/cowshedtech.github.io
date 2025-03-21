@@ -1,19 +1,19 @@
+import MetronomeNavigation from './metronome_navigation_new.js'
+
 export default {
     data() {
       return { }
     },
     props: { },
+    components: {
+        MetronomeNavigation
+    },
     template: `
     <div id="TopNav" class="fullWidthEle">
         <span id="logoTextUpperLeft"><img src="images/GScribe_Logo_word_stack.svg"></span>
         <span id="upperLeft">
             <span id="metronomeContainer">
-                <span id="metronomeLabel"> METRONOME:</span>
-                <span class="metronomeButton" id="metronomeOff" onclick="metronome.setFrequency(0);">OFF</span>
-                <span class="metronomeButton" id="metronome4ths" onclick="metronome.setFrequency(4);">4th</span>
-                <span class="metronomeButton" id="metronome8ths" onclick="metronome.setFrequency(8);">8th</span>
-                <span class="metronomeButton" id="metronome16ths" onclick="metronome.setFrequency(16);">16th</span>
-                <span class="metronomeButton Options grooveDB_hidden" id="metronomeOptionsAnchor" onclick="metronome.optionsAnchorClick(event);">Options</span>
+                <MetronomeNavigation></MetronomeNavigation>
                 <a id="linkGrooveScribe" href="https://www.mikeslessons.com/groove/"><span id="metronomeLabel">&nbsp;&nbsp;&nbsp;&nbsp;(GrooveScribe Link)</span></a>
             </span>
         </span>

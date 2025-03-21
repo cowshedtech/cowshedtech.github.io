@@ -45,6 +45,7 @@ function GrooveWriter() {
 	var root = this;
 	editor = this;
 	options = new Options();
+	metronome = new Metronome();
 	root.track = new Track();
 	abcToSVGCallback = new SVGLibCallback(root.track);
 
@@ -62,12 +63,17 @@ function GrooveWriter() {
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 
 		// initialise our metronome with event handler for changes to metronome value
-		metronome = new Metronome();
-		metronome.eventCallbacks = new metronomeEventCallbackClass();
-		metronome.eventCallbacks.changed = function () {
-			if (midiPlayer) midiPlayer.noteHasChanged();
+		
+		// metronome.eventCallbacks = new metronomeEventCallbackClass();
+		// metronome.eventCallbacks.changed = function () {
+		// 	if (midiPlayer) midiPlayer.noteHasChanged();
+		// 	updateCurrentURL();      
+		// };
+
+		metronome?.addChangeHandler(() => {
+            if (midiPlayer) midiPlayer.noteHasChanged();
 			updateCurrentURL();      
-		};
+        })
 	
  		// initialise our midi player
 		midiPlayer = new MIDIPlayer(root.track.trackID);

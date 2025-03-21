@@ -11,27 +11,53 @@ class Metronome {
 	countInActive = false;
 	countInIsPlaying = false;
 	
-    eventCallbacks;
+    #changeHandlers = [];
 
     /**
-     * 
-     */    
-    constructor(containerIndex) { }    
-
-    /**
-     * 
-     */    
-    getFrequency() {
-        return this.#frequency
+     * Adds a new change event handler
+     * @param {Function} handler - The callback function to be called when changes occur
+     * @returns {Function} - A function to remove this handler
+     */
+    addChangeHandler(handler) {
+        this.#changeHandlers.push(handler);
+        return () => this.removeChangeHandler(handler);
     }
 
     /**
-     * 
-    */    
+     * Removes a change event handler
+     * @param {Function} handler - The callback function to remove
+     */
+    removeChangeHandler(handler) {
+        const index = this.#changeHandlers.indexOf(handler);
+        if (index !== -1) {
+            this.#changeHandlers.splice(index, 1);
+        }
+    }
+
+    /**
+     * Notifies all registered handlers of a change
+     */
+    #notifyHandlers() {
+        this.#changeHandlers.forEach(handler => handler());
+    }
+
+    constructor(containerIndex) { }
+
+    /**
+     * Gets the current frequency
+     * @returns {number} The current frequency
+     */
+    getFrequency() {
+        return this.#frequency;
+    }
+
+    /**
+     * Sets a new frequency and notifies handlers
+     * @param {number} newFrequency - The new frequency to set
+     */
     setFrequency(newFrequency) {
         this.#frequency = newFrequency;
-        this.setButton(newFrequency);
-        this.eventCallbacks.changed();
+        this.#notifyHandlers();
     }
 
 
@@ -47,7 +73,7 @@ class Metronome {
      */    
     setSolo(trueElseFalse) {
         this.#solo = trueElseFalse;
-        this.eventCallbacks.changed();
+        this.#notifyHandlers();
     };
 
 
@@ -56,24 +82,28 @@ class Metronome {
     //
 
     /**
-     * 
+     * Gets the current offset click start value
+     * @returns {string} The current offset click start value
      */    
     getOffsetClickStart() {
         return this.offsetClickStart;
     };
     
     /**
-     * 
+     * Gets whether the offset click start is set to rotate
+     * @returns {boolean} True if the offset click start is set to rotate, false otherwise
      */    
     getOffsetClickStartIsRotating() {
         return this.offsetClickStart == 'ROTATE';
     };
     
     /**
-     * 
+     * Sets the offset click start value and notifies handlers
+     * @param {string} value - The new offset click start value
      */    
     setOffsetClickStart(value) {
         this.offsetClickStart = value;
+        this.#notifyHandlers();
     };
 
     /**
@@ -164,7 +194,6 @@ class Metronome {
             this.#frequency = 4;
 
         midiPlayer.setFrequencyDisplay(this.#frequency);
-        // midiPlayer.noteHasChanged();
         this.eventCallbacks.changed();
     };
 
@@ -206,18 +235,10 @@ class Metronome {
 
 		selectButton(document.getElementById(id));
 
-		// midiPlayer.noteHasChanged(); // pretty likely the case
-        this.eventCallbacks.changed();
+		this.eventCallbacks.changed();
 	};
 
-	// root.setFrequency = function (newFrequency) {
-	// 	root.class_metronome_#frequency = newFrequency;
-	// 	root.setButton(newFrequency);
-
-	// 	// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
-	// 	root.updateCurrentURL();
-	// };
-
+	
 	// the user has clicked on the metronome options button
 	optionsAnchorClick(event) {
 
@@ -272,8 +293,7 @@ class Metronome {
 					this.setSolo(false);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
 				}
-				// midiPlayer.noteHasChanged();
-                this.eventCallbacks.changed();
+				this.eventCallbacks.changed();
 				break;
 
 			case "SpeedUp":
@@ -360,8 +380,7 @@ class Metronome {
 			addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuOffTheOne", "menuChecked", false);
 		}
 
-		// midiPlayer.noteHasChanged();
-        this.eventCallbacks.changed();
+		this.eventCallbacks.changed();
 		this.optionsMenuSetSelectedState();
 	};
 
