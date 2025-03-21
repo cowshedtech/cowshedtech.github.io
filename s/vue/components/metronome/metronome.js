@@ -73,6 +73,9 @@ class Metronome {
      */    
     setSolo(trueElseFalse) {
         this.#solo = trueElseFalse;
+        if (this.#solo && this.getFrequency() === 0)
+            this.setFrequency(4);
+
         this.#notifyHandlers();
     };
 
@@ -282,19 +285,19 @@ class Metronome {
     optionsMenuPopupClick(option_type) {
 
 		switch (option_type) {
-			case "Solo":
-				var current = this.getSolo();
-				if (!current) {
-					this.setSolo(true);
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", true);
-					if (this.getFrequency() === 0)
-						this.setFrequency(4);
-				} else {
-					this.setSolo(false);
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
-				}
-				this.eventCallbacks.changed();
-				break;
+			// case "Solo":
+			// 	var current = this.getSolo();
+			// 	if (!current) {
+			// 		this.setSolo(true);
+			// 		addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", true);
+			// 		if (this.getFrequency() === 0)
+			// 			this.setFrequency(4);
+			// 	} else {
+			// 		this.setSolo(false);
+			// 		addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
+			// 	}
+			// 	this.eventCallbacks.changed();
+			// 	break;
 
 			case "SpeedUp":
 				if (this.autoSpeedUpActive) {
