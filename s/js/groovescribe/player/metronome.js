@@ -2,11 +2,11 @@
 
 class Metronome {
 
-    solo = false;
+    #frequency = 0;
+    #solo = false;
     offsetClickStart = "1";
     offsetClickStartRotation = 0;
-    frequency = 0;
-
+    
     autoSpeedUpActive = false;
 	countInActive = false;
 	countInIsPlaying = false;
@@ -18,44 +18,36 @@ class Metronome {
      */    
     constructor(containerIndex) { }    
 
-
-    //
-    //
-    //    
-
-    /**
-     * 
-     */    
-    setFrequency(frequency) {
-        this.frequency = frequency;
-        this.setButton(frequency);
-        this.eventCallbacks.changed();          
-    }
-
     /**
      * 
      */    
     getFrequency() {
-        return this.frequency
+        return this.#frequency
     }
 
+    /**
+     * 
+    */    
+    setFrequency(newFrequency) {
+        this.#frequency = newFrequency;
+        this.setButton(newFrequency);
+        this.eventCallbacks.changed();
+    }
 
-    //
-    //
-    //
 
     /**
      * 
      */    
     getSolo() {
-        return this.solo;
+        return this.#solo;
     };
     
     /**
      * 
      */    
     setSolo(trueElseFalse) {
-        this.solo = trueElseFalse;
+        this.#solo = trueElseFalse;
+        this.eventCallbacks.changed();
     };
 
 
@@ -166,13 +158,14 @@ class Metronome {
      * 
      */    
     miniMenuClick() {
-        if (this.frequency > 0)
-            this.frequency = 0;
+        if (this.#frequency > 0)
+            this.#frequency = 0;
         else
-            this.frequency = 4;
+            this.#frequency = 4;
 
-        midiPlayer.setFrequencyDisplay(this.frequency);
-        midiPlayer.noteHasChanged();
+        midiPlayer.setFrequencyDisplay(this.#frequency);
+        // midiPlayer.noteHasChanged();
+        this.eventCallbacks.changed();
     };
 
 
@@ -213,11 +206,12 @@ class Metronome {
 
 		selectButton(document.getElementById(id));
 
-		midiPlayer.noteHasChanged(); // pretty likely the case
+		// midiPlayer.noteHasChanged(); // pretty likely the case
+        this.eventCallbacks.changed();
 	};
 
 	// root.setFrequency = function (newFrequency) {
-	// 	root.class_metronome_frequency = newFrequency;
+	// 	root.class_metronome_#frequency = newFrequency;
 	// 	root.setButton(newFrequency);
 
 	// 	// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
@@ -278,7 +272,8 @@ class Metronome {
 					this.setSolo(false);
 					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
 				}
-				midiPlayer.noteHasChanged();
+				// midiPlayer.noteHasChanged();
+                this.eventCallbacks.changed();
 				break;
 
 			case "SpeedUp":
@@ -365,7 +360,8 @@ class Metronome {
 			addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuOffTheOne", "menuChecked", false);
 		}
 
-		midiPlayer.noteHasChanged();
+		// midiPlayer.noteHasChanged();
+        this.eventCallbacks.changed();
 		this.optionsMenuSetSelectedState();
 	};
 

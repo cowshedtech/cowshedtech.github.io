@@ -53,7 +53,7 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
 
     if (midiPlayer && midiPlayer.getTempo()) fullURL += "&Tempo=" + midiPlayer.getTempo();
     if (midiPlayer && midiPlayer.getSwing() > 0) fullURL += "&Swing=" + midiPlayer.getSwing();
-    if (metronome && metronome.frequency !== 0) fullURL += "&MetronomeFreq=" + metronome.frequency;
+    if (metronome && metronome.getFrequency() !== 0) fullURL += "&MetronomeFreq=" + metronome.getFrequency();
 
     fullURL += "&Measures=" + track.numberOfMeasures;
 
@@ -129,7 +129,7 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     track.timeDivision = parseInt(getQueryVariableFromString("Div", 16, encodedURLData), 10);
     track.notesPerMeasure = calc_notes_per_measure(track.timeDivision, track.numBeats, track.noteValue);
 
-    if (metronome) metronome.frequency = parseInt(getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10);
+    if (metronome) metronome.setFrequency(parseInt(getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10));
 
     track.numberOfMeasures = parseInt(getQueryVariableFromString("measures", 1, encodedURLData), 10);
     if (track.numberOfMeasures < 1 || isNaN(track.numberOfMeasures))

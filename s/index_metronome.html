@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+	<!-- HTML for the Groove Writer part of the Groove Scribe HTML application -->
+	<!--Copyright 2015-2020 Lou Montulli, Mike Johnston  GPL V2.0 Please See LICENSE.txt for more details -->
+
+    <head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Groove Scribe allows drummers to easily create grooves, listen, share, print sheet music, and more.">
+
+		<title>Groove Scribe - Metronome</title>
+
+				
+		<script src="./js/groovescribe/player/metronome.js"></script>
+		<script src="./js/groovescribe/browser/dom.js"></script>
+
+		<!-- Script for vue framework -->
+		<script type="importmap">
+			{
+				"imports": {
+				"vue": "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.js"
+				}
+			}
+		</script>
+		
+    </head>
+    <body>
+
+		<div id="GrooveWriter">    
+			<div id="vue-app"></div>    			
+		</div>
+
+		<!-- Mount our vue app -->
+		<script type="module">
+			import { createApp } from 'vue'
+			import Main from './vue/main_metronome.js'	  
+			createApp(Main).mount('#vue-app')
+		</script>	
+		
+		<script type="text/javascript">
+			window.addEventListener('load', () => {
+				'use strict';
+				// initialise our metronome with event handler for changes to metronome value
+				var metronome = new Metronome();
+				metronome.eventCallbacks = new metronomeEventCallbackClass();
+				metronome.eventCallbacks.changed = function () {
+					console.log(`metronome changed`)
+				};
+				metronome.setFrequency(10);
+			});			
+		</script>
+	
+    </body>
+</html>

@@ -65,6 +65,7 @@ function GrooveWriter() {
 		metronome = new Metronome();
 		metronome.eventCallbacks = new metronomeEventCallbackClass();
 		metronome.eventCallbacks.changed = function () {
+			if (midiPlayer) midiPlayer.noteHasChanged();
 			updateCurrentURL();      
 		};
 	
