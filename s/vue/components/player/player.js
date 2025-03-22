@@ -4,11 +4,22 @@
 // This is our MIDI player wrapper integrating MIDI.js into Groove Scribe
 //
 
+/**
+ * @readonly
+ * @enum {string}
+ */
+const PlayerState = {
+    UNINITIALISED: 'uninitialised',
+    STOPPED: 'Stopped',
+    PLAYING: 'Playing',
+    PAUSED: 'Paused'
+};
+
 
 class MIDIPlayer {
     
-    initialised = false;
-    #state = 'Uninitialised';
+    #initialised = false;
+    #state = PlayerState.UNINITIALISED;
     
     totalPlayTimeMsecs = 0;  // Culmative play time
     currentStartTime = 0;  // Start time of most recent play
@@ -17,7 +28,6 @@ class MIDIPlayer {
     totalNotes = 0;
     totalRepeats = 0;
     
-    isPaused = false;
     shouldRepeat = true;
     
     eventCallbacks;
@@ -43,8 +53,8 @@ class MIDIPlayer {
      */    
     initialise() {
 
-        if (this.initialised) return;            
-        this.initialised = true;        
+        if (this.#initialised) return;            
+        this.#initialised = true;        
 
         let parent = this;
 
@@ -56,7 +66,7 @@ class MIDIPlayer {
                 
                 // Successfully loaded MIDI plugin so lets init our MIDI play button
                 // parent._updatePlayButtonState(parent.containerIndex, 'Stopped');
-                parent.setState('Stopped');
+                parent.setState(PlayerState.STOPPED);
                 document.getElementById("midiPlayImage" + parent.containerIndex).onclick = function (event) {
                     midiPlayer.startOrStop();
                 }; 
@@ -224,7 +234,7 @@ class MIDIPlayer {
     play() {
         if (MIDI.Player.playing) return;
         
-        if (this.isPaused && false === this.doesMidiDataNeedRefresh()) {
+        if (this.getState() === PlayerState.PAUSED && false === this.doesMidiDataNeedRefresh()) {
             this.currentStartTime = new Date();
             this.lastUpdateTime = 0;
             MIDI.Player.resume();
@@ -238,10 +248,7 @@ class MIDIPlayer {
             MIDI.Player.start();
         }
         
-        //this._updatePlayButtonState(this.containerIndex, 'Playing');
-        this.setState('Playing');
-        
-        this.isPaused = false;
+        this.setState(PlayerState.PLAYING);
     };
 
 
@@ -249,12 +256,10 @@ class MIDIPlayer {
      * Pauses  MIDI playback and resets player state
      */
     pause() {
-        if (this.isPaused === true) return
-        this.isPaused = true;
+        if (this.getState() === PlayerState.PAUSED) return
                 
         MIDI.Player.pause();
-        //this._updatePlayButtonState(this.containerIndex, 'Paused');
-        parent.setState('Paused');
+        this.setState(PlayerState.PAUSED);
         this.eventCallbacks.notePlaying("clear", -1);
         clearHighlightNoteInABCSVG(this.containerIndex);        
     };
@@ -264,14 +269,14 @@ class MIDIPlayer {
      * Stop 
      */    
     stop() {
-        if (!MIDI.Player.playing && !this.isPaused) return;
+        if (!MIDI.Player.playing && this.getState() !== PlayerState.PAUSED) return;
 
         // Reset player state
-        this.isPaused = false;
+        this.setState(PlayerState.STOPPED);
         MIDI.Player.stop();
     
         //this._updatePlayButtonState(this.containerIndex, 'Stopped');
-        this.setState('Stopped');
+        this.setState(PlayerState.STOPPED);
 
         this.eventCallbacks.notePlaying("clear", -1);
         clearHighlightNoteInABCSVG(this.containerIndex);
