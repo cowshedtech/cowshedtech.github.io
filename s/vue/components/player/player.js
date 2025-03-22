@@ -318,7 +318,7 @@ class MIDIPlayer {
         const rootElement = document.getElementById(HTML_Id_to_attach_to);
         if (!rootElement) return;
         
-        rootElement.innerHTML = this._HTMLForMidiPlayer(expandable);
+        //rootElement.innerHTML = this._HTMLForMidiPlayer(expandable);
         
         const uniqueIndex = this.containerIndex
         
@@ -596,71 +596,71 @@ class MIDIPlayer {
     //
     //
     //
-    _HTMLForMidiPlayer(expandable) {
-        const touchClass = isTouchDevice() ? ' touch' : '';
+    // _HTMLForMidiPlayer(expandable) {
+    //     const touchClass = isTouchDevice() ? ' touch' : '';
 
-        // Build the base player controls
-        const baseControls = `
-            <div id="playerControl${this.containerIndex}" class="playerControl">
-                <div class="playerControlsRow" id="playerControlsRow${this.containerIndex}">
-                    <span title="Play/Pause" class="midiPlayImage" id="midiPlayImage${this.containerIndex}"></span>
-                    <span class="MIDIPlayTime" id="MIDIPlayTime${this.containerIndex}">${midiPlayer.playTime}</span>`;
+    //     // Build the base player controls
+    //     const baseControls = `
+    //         <div id="playerControl${this.containerIndex}" class="playerControl">
+    //             <div class="playerControlsRow" id="playerControlsRow${this.containerIndex}">
+    //                 <span title="Play/Pause" class="midiPlayImage" id="midiPlayImage${this.containerIndex}"></span>
+    //                 <span class="MIDIPlayTime" id="MIDIPlayTime${this.containerIndex}">${midiPlayer.playTime}</span>`;
 
-        // Optional metronome controls
-        const metronomeControls = expandable ? `
-                    <span title="Metronome controls" class="midiMetronomeMenu" id="midiMetronomeMenu${this.containerIndex}">
-                        ${addInlineMetronomeSVG()}
-                    </span>` : '';
+    //     // Optional metronome controls
+    //     const metronomeControls = expandable ? `
+    //                 <span title="Metronome controls" class="midiMetronomeMenu" id="midiMetronomeMenu${this.containerIndex}">
+    //                     ${addInlineMetronomeSVG()}
+    //                 </span>` : '';
 
-        // Tempo and swing controls
-        const tempoAndSwingControls = `
-                    <span class="tempoAndProgress" id="tempoAndProgress${this.containerIndex}">
-                        <div class="tempoRow">
-                            <span class="tempoLabel">BPM</span>
-                            <input type="text" 
-                                   for="tempo" 
-                                   class="tempoTextField" 
-                                   pattern="\\d+" 
-                                   id="tempoTextField${this.containerIndex}" 
-                                   value="80">
-                            <input type="range" 
-                                   min="30" 
-                                   max="300" 
-                                   value="90" 
-                                   class="tempoInput${touchClass}" 
-                                   id="tempoInput${this.containerIndex}" 
-                                   list="tempoSettings">
-                        </div>
-                        <div class="swingRow">
-                            <span class="swingLabel">SWING</span>
-                            <span for="swingAmount" 
-                                  class="swingOutput" 
-                                  id="swingOutput${this.containerIndex}">0% swing</span>
-                            <input type="range" 
-                                   min="0" 
-                                   max="50" 
-                                   value="0" 
-                                   class="swingInput${touchClass}" 
-                                   id="swingInput${this.containerIndex}" 
-                                   list="swingSettings" 
-                                   step="5">
-                        </div>
-                    </span>`;
+    //     // Tempo and swing controls
+    //     const tempoAndSwingControls = `
+    //                 <span class="tempoAndProgress" id="tempoAndProgress${this.containerIndex}">
+    //                     <div class="tempoRow">
+    //                         <span class="tempoLabel">BPM</span>
+    //                         <input type="text" 
+    //                                for="tempo" 
+    //                                class="tempoTextField" 
+    //                                pattern="\\d+" 
+    //                                id="tempoTextField${this.containerIndex}" 
+    //                                value="80">
+    //                         <input type="range" 
+    //                                min="30" 
+    //                                max="300" 
+    //                                value="90" 
+    //                                class="tempoInput${touchClass}" 
+    //                                id="tempoInput${this.containerIndex}" 
+    //                                list="tempoSettings">
+    //                     </div>
+    //                     <div class="swingRow">
+    //                         <span class="swingLabel">SWING</span>
+    //                         <span for="swingAmount" 
+    //                               class="swingOutput" 
+    //                               id="swingOutput${this.containerIndex}">0% swing</span>
+    //                         <input type="range" 
+    //                                min="0" 
+    //                                max="50" 
+    //                                value="0" 
+    //                                class="swingInput${touchClass}" 
+    //                                id="swingInput${this.containerIndex}" 
+    //                                list="swingSettings" 
+    //                                step="5">
+    //                     </div>
+    //                 </span>`;
 
-        // Optional expand controls
-        const expandControls = expandable ? `
-                    <span title="Expand full screen in GrooveScribe" 
-                          class="midiGSLogo" 
-                          id="midiGSLogo${this.containerIndex}">
-                        ${addInLineGScribeLogoLoneGSVG()}
-                    </span>
-                    <span title="Expand/Retract player" 
-                          class="midiExpandImage" 
-                          id="midiExpandImage${this.containerIndex}"></span>` : '';
+    //     // Optional expand controls
+    //     const expandControls = expandable ? `
+    //                 <span title="Expand full screen in GrooveScribe" 
+    //                       class="midiGSLogo" 
+    //                       id="midiGSLogo${this.containerIndex}">
+    //                     ${addInLineGScribeLogoLoneGSVG()}
+    //                 </span>
+    //                 <span title="Expand/Retract player" 
+    //                       class="midiExpandImage" 
+    //                       id="midiExpandImage${this.containerIndex}"></span>` : '';
 
-        // Combine all components
-        return `${baseControls}${metronomeControls}${tempoAndSwingControls}${expandControls}</div>`;
-    }
+    //     // Combine all components
+    //     return `${baseControls}${metronomeControls}${tempoAndSwingControls}${expandControls}</div>`;
+    // }
 
 
     //
