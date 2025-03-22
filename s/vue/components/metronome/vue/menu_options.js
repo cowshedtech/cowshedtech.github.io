@@ -21,13 +21,15 @@ export default {
           id: 'SpeedUp',
           title: 'Increase the tempo automatically',
           label: 'Auto speed up',
-          checked: metronome ? metronome.autoSpeedUpActive : false
+          handler: (checked) => metronome.setAutoSpeedUpActive(checked),
+          checked: metronome ? metronome.isAutoSpeedUpActive() : false
         },
         {
           id: 'CountIn',
           title: 'One measure of metronome count in at the start',
           label: 'Count it in',
-          checked: metronome ? metronome.countInActive : false
+          handler: (checked) => metronome.setCountInActive(checked),
+          checked: metronome ? metronome.getCountInActive() : false
         },
         {
           id: 'OffTheOne',
@@ -45,7 +47,8 @@ export default {
      * @param {MetronomeOption['id']} optionId - The ID of the clicked option
      */
     handleOptionClick(optionId) {
-      this.options.find(option => option.id === optionId).handler(!this.options[0].checked)
+      let option = this.options.find(option => option.id === optionId)
+      option.handler(!option.checked)
     }
   },
   computed: {
@@ -73,8 +76,8 @@ export default {
     // Subscribe to metronome changes
     this.removeHandler = metronome?.addChangeHandler(() => {
       this.options[0].checked = metronome ? metronome.getSolo() : false
-      this.options[1].checked = metronome ? metronome.autoSpeedUpActive : false
-      this.options[2].checked = metronome ? metronome.countInActive : false
+      this.options[1].checked = metronome ? metronome.isAutoSpeedUpActive() : false
+      this.options[2].checked = metronome ? metronome.getCountInActive() : false
       // this.options[3].checked = metronome ? metronome.isOffsetClick() : false
     })
   },

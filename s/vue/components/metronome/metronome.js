@@ -4,14 +4,16 @@ class Metronome {
 
     #frequency = 0;
     #solo = false;
-    offsetClickStart = "1";
-    offsetClickStartRotation = 0;
+    #offsetClickStart = "1";
+    #offsetClickStartRotation = 0;
     
-    autoSpeedUpActive = false;
-	countInActive = false;
-	countInIsPlaying = false;
+    #autoSpeedUpActive = false;
+    #countInActive = false;
+    #countInIsPlaying = false;
 	
     #changeHandlers = [];
+
+    constructor(containerIndex) { }
 
     /**
      * Adds a new change event handler
@@ -29,9 +31,7 @@ class Metronome {
      */
     removeChangeHandler(handler) {
         const index = this.#changeHandlers.indexOf(handler);
-        if (index !== -1) {
-            this.#changeHandlers.splice(index, 1);
-        }
+        if (index !== -1) this.#changeHandlers.splice(index, 1);
     }
 
     /**
@@ -40,8 +40,6 @@ class Metronome {
     #notifyHandlers() {
         this.#changeHandlers.forEach(handler => handler());
     }
-
-    constructor(containerIndex) { }
 
     /**
      * Gets the current frequency
@@ -79,10 +77,55 @@ class Metronome {
         this.#notifyHandlers();
     };
 
+    /**
+     * Gets the current frequency
+     * @returns {number} The current frequency
+     */
+    isAutoSpeedUpActive() {
+        return this.#autoSpeedUpActive;
+    }
 
-    //
-    //
-    //
+    /**
+     * Sets a new frequency and notifies handlers
+     * @param {number} newFrequency - The new frequency to set
+     */
+    setAutoSpeedUpActive(active) {
+        this.#autoSpeedUpActive = active;
+        this.#notifyHandlers();
+    }
+
+    /**
+     * Gets the current frequency
+     * @returns {number} The current frequency
+     */
+    getCountInActive() {
+        return this.#countInActive;
+    }
+
+    /**
+     * Sets a new frequency and notifies handlers
+     * @param {number} newFrequency - The new frequency to set
+     */
+    setCountInActive(active) {
+        this.#countInActive = active;
+        this.#notifyHandlers();
+    }
+
+    /**
+     * Gets the current frequency
+     * @returns {number} The current frequency
+     */
+    isCountInPlaying() {
+        return this.#countInIsPlaying;
+    }
+
+    /**
+     * Sets a new frequency and notifies handlers
+     * @param {number} newFrequency - The new frequency to set
+     */
+    setCountInIsPlaying(active) {
+        this.#countInIsPlaying = active;
+    }
 
     /**
      * Gets the current offset click start value
@@ -129,7 +172,7 @@ class Metronome {
     getOptionsOffsetClickStartRotation(isTriplets) {
         if (this.getOffsetClickStartIsRotating()) {
             // constrain the rotation
-            if (isTriplets && metronome.offsetClickStartRotation > 2)
+            if (isTriplets && this.offsetClickStartRotation > 2)
                 this.offsetClickStartRotation = 0;
             else if (this.offsetClickStartRotation > 3)
                 this.offsetClickStartRotation = 0;
@@ -167,81 +210,6 @@ class Metronome {
     //
     //
 
-    /**
-     * 
-     */    
-    setFrequencyDisplay(newFrequency) {
-        var mm = document.getElementById('midiMetronomeMenu' + root.trackID);
-    
-        if (mm) {
-            mm.className = mm.className.replace(" selected", "");
-    
-            if (newFrequency > 0) {
-                mm.className += " selected";
-            }
-        }
-    };
-
-    
-    ///
-    //
-    //
-
-    /**
-     * 
-     */    
-    miniMenuClick() {
-        if (this.#frequency > 0)
-            this.#frequency = 0;
-        else
-            this.#frequency = 4;
-
-        midiPlayer.setFrequencyDisplay(this.#frequency);
-        this.eventCallbacks.changed();
-    };
-
-
-    /**
-     * 
-    //  */    
-    // setButton(metronomeInterval) {
-
-	// 	var id = "";
-	// 	switch (metronomeInterval) {
-	// 		case 4:
-	// 			id = "metronome4ths";
-	// 			break;
-	// 		case 8:
-	// 			id = "metronome8ths";
-	// 			break;
-	// 		case 16:
-	// 			id = "metronome16ths";
-	// 			break;
-	// 		case 0:
-	// 		/* falls through */
-	// 		default:
-	// 			id = "metronomeOff";
-	// 			if (this.getSolo()) {
-	// 				// turn off solo if we are turning off the metronome
-	// 				this.optionsMenuPopupClick("Solo");
-	// 			}
-	// 			break;
-	// 	}
-
-	// 	// clear other buttons
-	// 	var myElements = document.querySelectorAll(".metronomeButton");
-	// 	for (var i = 0; i < myElements.length; i++) {
-	// 		var thisButton = myElements[i];
-	// 		// remove active status
-	// 		unselectButton(thisButton);
-	// 	}
-
-	// 	selectButton(document.getElementById(id));
-
-	// 	this.eventCallbacks.changed();
-	// };
-
-	
 	// the user has clicked on the metronome options button
 	optionsAnchorClick(event) {
 
@@ -260,99 +228,6 @@ class Metronome {
 		}
 	};
 
-
-    // figure out if the metronome options menu should be selected and change the UI
-    /**
-     * 
-     */    
-    optionsMenuSetSelectedState() {
-
-        if (this.getSolo() ||
-            this.autoSpeedUpActive ||
-            this.getOffsetClickStart() != "1") {
-            // make menu look active
-            addOrRemoveKeywordFromClassById("metronomeOptionsAnchor", "selected", true)
-        } else {
-            // inactive
-            addOrRemoveKeywordFromClassById("metronomeOptionsAnchor", "selected", false)
-        }
-    };
-
-
-    /**
-     * 
-     */    
-    optionsMenuPopupClick(option_type) {
-
-		switch (option_type) {
-			// case "Solo":
-			// 	var current = this.getSolo();
-			// 	if (!current) {
-			// 		this.setSolo(true);
-			// 		addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", true);
-			// 		if (this.getFrequency() === 0)
-			// 			this.setFrequency(4);
-			// 	} else {
-			// 		this.setSolo(false);
-			// 		addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSolo", "menuChecked", false);
-			// 	}
-			// 	this.eventCallbacks.changed();
-			// 	break;
-
-			case "SpeedUp":
-				if (this.autoSpeedUpActive) {
-					// just turn it off if it is on, don't show the configurator
-					this.autoSpeedUpActive = false;
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSpeedUp", "menuChecked", false);
-				} else {
-					this.autoSpeedUpActive = true;
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuSpeedUp", "menuChecked", true);
-					this.showAutoSpeedupConfiguration();
-				}
-				break;
-
-			case "CountIn":
-				if (this.countInActive) {
-					// just turn it off if it is on, don't show the configurator
-					this.countInActive = false;
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", false);
-				} else {
-					this.countInActive = true;
-					addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuCountIn", "menuChecked", true);
-				}
-				break;
-
-			case "OffTheOne":
-				// bring up the next menu to be clicked
-				var contextMenu;
-
-				if (usingTriplets())
-					contextMenu = document.getElementById("metronomeOptionsOffsetClickForTripletsContextMenu");
-				else
-					contextMenu = document.getElementById("metronomeOptionsOffsetClickContextMenu");
-				if (contextMenu) {
-					var anchorPoint = document.getElementById("metronomeOptionsContextMenuOffTheOne");
-
-					if (anchorPoint) {
-						var anchorPos = getTagPosition(anchorPoint);
-						contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
-						contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
-					}
-					showContextMenu(contextMenu);
-				}
-				break;
-
-			case "Dropper":
-
-				break;
-
-			default:
-				console.log("bad case in optionsMenuPopupClick()");
-				break;
-		}
-
-		metronome.optionsMenuSetSelectedState();
-	};
 
 
     /**
@@ -384,7 +259,7 @@ class Metronome {
 		}
 
 		this.eventCallbacks.changed();
-		this.optionsMenuSetSelectedState();
+		// this.optionsMenuSetSelectedState();
 	};
 
 	/**
@@ -419,11 +294,6 @@ class Metronome {
 			popup.style.display = "none";
 	};
 }
-
-
-
-
-
 
 
 function addInlineMetronomeSVG() {

@@ -98,15 +98,15 @@ function GrooveWriter() {
 		midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
 			var midiURL;
 
-			if (playStarting && metronome.countInActive) {
+			if (playStarting && metronome.getCountInActive()) {
 
 				midiURL = buildMIDICountInTrack(root.track.numBeats, root.track.noteValue, midiPlayer.getTempo());
 				midiPlayer.noteHasChanged();
-				metronome.countInIsPlaying = true;
+				metronome.setCountInIsPlaying(true);
 			} else {
 				if (metronome.countInIsPlaying) {
 					// we saved the state above so that we could reset the Offset click start, otherwise it starts on the 'e'
-					metronome.countInIsPlaying = false;
+					metronome.setCountInIsPlaying(false);
 					metronome.resetOptionsOffsetClickStartRotation();
 				}
 				midiURL = createMidiUrlFromClickableUI("our_MIDI");
@@ -117,7 +117,7 @@ function GrooveWriter() {
 		};
 
 		midiPlayer.eventCallbacks.notePlaying = function (note_type, percent_complete) {
-			if (note_type == "complete" && metronome.autoSpeedUpActive) {
+			if (note_type == "complete" && metronome.isAutoSpeedUpActive()) {
 				// reload with new tempo
 				midiPlayer.noteHasChanged();
 				root.metronomeAutoSpeedUpTempoUpdate();
