@@ -3,17 +3,20 @@ export default {
     return {
       containerIndex: midiPlayer?.containerIndex || 1,
       touchClass: '',
-      playTime: '0:00'
+      playTime: '0:00',
+      state: 'Stopped'
     }
   },
   props: { },
   methods: {
     updateStats() {
-     const playTimeThisPlay = midiPlayer.getPlayTimeThisPlay();
-     const minutes = playTimeThisPlay.getUTCMinutes();
-     const seconds = playTimeThisPlay.getSeconds();
-     const playTimeThisPlay_string = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-     this.playTime = playTimeThisPlay_string;
+      if (!midiPlayer) return
+      
+      const playTimeThisPlay = midiPlayer.getPlayTimeThisPlay();
+      const minutes = playTimeThisPlay.getUTCMinutes();
+      const seconds = playTimeThisPlay.getSeconds();
+      this.playTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      this.state = midiPlayer.getState();
     }
   },
   mounted() {
@@ -31,7 +34,7 @@ export default {
     <div id="midiPlayer" class="fullWidthEle"><!-- space for the midiplayer to be attached by the javascript -->
       <div :id="'playerControl' + containerIndex" class="playerControl">
           <div :id="'playerControlsRow' + containerIndex" class="playerControlsRow">
-              <span title="Play/Pause" class="midiPlayImage" :id="'midiPlayImage' + containerIndex"></span>
+              <span title="Play/Pause" :class="['midiPlayImage', state]" :id="'midiPlayImage' + containerIndex"></span>
               <span class="MIDIPlayTime" :id="'MIDIPlayTime' + containerIndex">{{ playTime }}</span>
                 <span class="tempoAndProgress" :id="'tempoAndProgress' + containerIndex">
                     <div class="tempoRow">
