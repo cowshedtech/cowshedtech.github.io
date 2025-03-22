@@ -156,25 +156,6 @@ class MIDIPlayer {
     /**
      * update the midi play timer on the player. Keeps track of how long we have been playing.
      */    
-    updateTotalPlayTime() {
-        const totalPlayTime = document.getElementById("totalPlayTime");
-        if (totalPlayTime) {
-
-            const totalTime = this.getPlayTimeTotal();
-            const hours = totalTime.getUTCHours();
-            const minutes = totalTime.getUTCMinutes().toString().padStart(2, '0');
-            const seconds = totalTime.getSeconds().toString().padStart(2, '0');
-            
-            const timeString = hours > 0 ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
-            
-            // totalPlayTime.innerHTML = `Total Play Time: <span class="totalTimeNum">${timeString}</span> notes: <span class="totalTimeNum">${this.totalNotes}</span> repetitions: <span class="totalTimeNum">${this.totalRepeats}</span>`;
-        }
-
-    };
-
-    /**
-     * update the midi play timer on the player. Keeps track of how long we have been playing.
-     */    
     updatePlayTimeThisPlay() {
         const playTimeThisPlay = this.getPlayTimeThisPlay();
         const minutes = playTimeThisPlay.getUTCMinutes();
@@ -190,7 +171,6 @@ class MIDIPlayer {
      */    
     updatePlayTime() {
         this.updatePlayTimeThisPlay();
-        // this.updateTotalPlayTime();
     }
 
 
