@@ -138,20 +138,29 @@ class MIDIPlayer {
     /**
      * calculate how long the midi has been playing total (since the last play/pause press)
      */
-    getPlayTime() {
-        const now = new Date();
-        const playTimeDiff = new Date(now - this.currentStartTime);
+    getPlayTimeThisPlay() {
+        return new Date(new Date() - this.currentStartTime);
+    };
 
+    getPlayTimeTotal() {
+        if (!this.lastUpdateTime) {
+            this.lastUpdateTime = this.currentStartTime;
+        }
+        
+        const deltaTime = new Date() - this.lastUpdateTime;
+        this.totalPlayTimeMsecs += deltaTime;
+        this.lastUpdateTime = new Date();
+        return new Date(this.totalPlayTimeMsecs);
+    }; 
+
+    /**
+     * update the midi play timer on the player. Keeps track of how long we have been playing.
+     */    
+    updateTotalPlayTime() {
         const totalPlayTime = document.getElementById("totalPlayTime");
         if (totalPlayTime) {
-            if (!this.lastUpdateTime) {
-                this.lastUpdateTime = this.currentStartTime;
-            }
-            
-            const deltaTime = now - this.lastUpdateTime;
-            this.totalPlayTimeMsecs += deltaTime;
-            
-            const totalTime = new Date(this.totalPlayTimeMsecs);
+
+            const totalTime = this.getPlayTimeTotal();
             const hours = totalTime.getUTCHours();
             const minutes = totalTime.getUTCMinutes().toString().padStart(2, '0');
             const seconds = totalTime.getSeconds().toString().padStart(2, '0');
@@ -161,23 +170,28 @@ class MIDIPlayer {
             totalPlayTime.innerHTML = `Total Play Time: <span class="totalTimeNum">${timeString}</span> notes: <span class="totalTimeNum">${this.totalNotes}</span> repetitions: <span class="totalTimeNum">${this.totalRepeats}</span>`;
         }
 
-        this.lastUpdateTime = now;
-        return playTimeDiff;
     };
 
+    /**
+     * update the midi play timer on the player. Keeps track of how long we have been playing.
+     */    
+    updatePlayTimeThisPlay() {
+        const playTimeThisPlay = this.getPlayTimeThisPlay();
+        const minutes = playTimeThisPlay.getUTCMinutes();
+        const seconds = playTimeThisPlay.getSeconds();
+        const playTimeThisPlay_string = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+        const midiPlayTime = document.getElementById(`MIDIPlayTime${this.containerIndex}`);
+        if (midiPlayTime) midiPlayTime.innerHTML = playTimeThisPlay_string;        
+    };
 
     /**
      * update the midi play timer on the player. Keeps track of how long we have been playing.
      */    
     updatePlayTime() {
-        const totalTime = this.getPlayTime();
-        const minutes = totalTime.getUTCMinutes();
-        const seconds = totalTime.getSeconds();
-        const time_string = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-        const midiPlayTime = document.getElementById(`MIDIPlayTime${this.containerIndex}`);
-        if (midiPlayTime) midiPlayTime.innerHTML = time_string;        
-    };
+        this.updatePlayTimeThisPlay();
+        this.updateTotalPlayTime();
+    }
 
 
     //
@@ -715,6 +729,7 @@ class MIDIPlayer {
 
         if (midiPlayer.lastMidiTimeUpdate && midiPlayer.lastMidiTimeUpdate < (data.now + 800)) {
             midiPlayer.updatePlayTime();
+            midiPlayer.#notifyHandlers();
             midiPlayer.lastMidiTimeUpdate = data.now;
         }
 

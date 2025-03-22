@@ -47,6 +47,7 @@ function GrooveWriter() {
 	options = new Options();
 	metronome = new Metronome();
 	root.track = new Track();
+	midiPlayer = new MIDIPlayer(root.track.trackID);
 	abcToSVGCallback = new SVGLibCallback(root.track);
 
 	// private vars in the scope of the class
@@ -76,7 +77,6 @@ function GrooveWriter() {
         })
 	
  		// initialise our midi player
-		midiPlayer = new MIDIPlayer(root.track.trackID);
 		midiPlayer.AddMidiPlayerToPage(root.track, "midiPlayer", root.track.timeDivision);
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 	
@@ -191,7 +191,7 @@ function GrooveWriter() {
 				return; // don't increase any more after we have gone up the total amount
 			}
 		}
-		var totalMidiPlayTime = midiPlayer.getPlayTime();
+		var totalMidiPlayTime = midiPlayer.getPlayTimeThisPlay();
 		var timeDiffMilliseconds = totalMidiPlayTime.getTime() - class_our_last_midi_tempo_increase_time.getTime();
 		var tempoDiffFloat = (totalTempoIncreaseAmount) * (timeDiffMilliseconds / (tempoIncreaseInterval * 1000));
 
