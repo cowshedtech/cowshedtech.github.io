@@ -167,7 +167,7 @@ class MIDIPlayer {
             
             const timeString = hours > 0 ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
             
-            totalPlayTime.innerHTML = `Total Play Time: <span class="totalTimeNum">${timeString}</span> notes: <span class="totalTimeNum">${this.totalNotes}</span> repetitions: <span class="totalTimeNum">${this.totalRepeats}</span>`;
+            // totalPlayTime.innerHTML = `Total Play Time: <span class="totalTimeNum">${timeString}</span> notes: <span class="totalTimeNum">${this.totalNotes}</span> repetitions: <span class="totalTimeNum">${this.totalRepeats}</span>`;
         }
 
     };
@@ -190,7 +190,7 @@ class MIDIPlayer {
      */    
     updatePlayTime() {
         this.updatePlayTimeThisPlay();
-        this.updateTotalPlayTime();
+        // this.updateTotalPlayTime();
     }
 
 
