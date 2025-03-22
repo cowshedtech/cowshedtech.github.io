@@ -153,27 +153,6 @@ class MIDIPlayer {
         return new Date(this.totalPlayTimeMsecs);
     }; 
 
-    /**
-     * update the midi play timer on the player. Keeps track of how long we have been playing.
-     */    
-    updatePlayTimeThisPlay() {
-        const playTimeThisPlay = this.getPlayTimeThisPlay();
-        const minutes = playTimeThisPlay.getUTCMinutes();
-        const seconds = playTimeThisPlay.getSeconds();
-        const playTimeThisPlay_string = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-
-        const midiPlayTime = document.getElementById(`MIDIPlayTime${this.containerIndex}`);
-        if (midiPlayTime) midiPlayTime.innerHTML = playTimeThisPlay_string;        
-    };
-
-    /**
-     * update the midi play timer on the player. Keeps track of how long we have been playing.
-     */    
-    updatePlayTime() {
-        this.updatePlayTimeThisPlay();
-    }
-
-
     //
     // Play and stop functions
     //
@@ -708,7 +687,6 @@ class MIDIPlayer {
         // midiPlayer.eventCallbacks.percentProgress(midiPlayer.eventCallbacks.classRoot, percentComplete * 100);
 
         if (midiPlayer.lastMidiTimeUpdate && midiPlayer.lastMidiTimeUpdate < (data.now + 800)) {
-            midiPlayer.updatePlayTime();
             midiPlayer.#notifyHandlers();
             midiPlayer.lastMidiTimeUpdate = data.now;
         }

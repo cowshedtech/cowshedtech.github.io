@@ -2,22 +2,37 @@ export default {
   data() {
     return {
       containerIndex: midiPlayer?.containerIndex || 1,
-      touchClass: ''
-    }
-  },
-  mounted() {
-    // Update containerIndex if midiPlayer is initialized after component mount
-    if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
-      this.containerIndex = midiPlayer.containerIndex
+      touchClass: '',
+      playTime: '0:00'
     }
   },
   props: { },
+  methods: {
+    updateStats() {
+     const playTimeThisPlay = midiPlayer.getPlayTimeThisPlay();
+     const minutes = playTimeThisPlay.getUTCMinutes();
+     const seconds = playTimeThisPlay.getSeconds();
+     const playTimeThisPlay_string = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+     this.playTime = playTimeThisPlay_string;
+    }
+  },
+  mounted() {
+    if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
+      this.containerIndex = midiPlayer.containerIndex
+    }
+    this.removeHandler = midiPlayer?.addChangeHandler(() => {
+        this.updateStats()
+    })
+  },
+  beforeUnmount() {
+      if (this.removeHandler) this.removeHandler() 
+  },
   template: `
     <div id="midiPlayer" class="fullWidthEle"><!-- space for the midiplayer to be attached by the javascript -->
       <div :id="'playerControl' + containerIndex" class="playerControl">
           <div :id="'playerControlsRow' + containerIndex" class="playerControlsRow">
               <span title="Play/Pause" class="midiPlayImage" :id="'midiPlayImage' + containerIndex"></span>
-              <span class="MIDIPlayTime" :id="'MIDIPlayTime' + containerIndex">00:00</span>
+              <span class="MIDIPlayTime" :id="'MIDIPlayTime' + containerIndex">{{ playTime }}</span>
                 <span class="tempoAndProgress" :id="'tempoAndProgress' + containerIndex">
                     <div class="tempoRow">
                         <span class="tempoLabel">BPM</span>
