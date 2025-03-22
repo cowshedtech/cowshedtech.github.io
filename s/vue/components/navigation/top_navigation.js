@@ -1,4 +1,5 @@
 import MetronomeNavigation from '../metronome/vue/menu_main.js'
+import RightNavigation from './right_navigation.js'
 
 export default {
     data() {
@@ -6,7 +7,8 @@ export default {
     },
     props: { },
     components: {
-        MetronomeNavigation
+        MetronomeNavigation,
+        RightNavigation
     },
     template: `
     <div id="TopNav" class="fullWidthEle">
@@ -17,13 +19,7 @@ export default {
                 <a id="linkGrooveScribe" href="https://www.mikeslessons.com/groove/"><span id="metronomeLabel">&nbsp;&nbsp;&nbsp;&nbsp;(GrooveScribe Link)</span></a>
             </span>
         </span>
-        <span id="upperRight">
-            
-            <span class="rightButtons" id="optionsAnchor" onclick="options.optionsAnchorClick(event);"><i class="fa fa-bars"></i> Options</span>
-            <span class="rightButtons grooveDB_hidden" id="permutationAnchor" onclick="permutationAnchorClick(event);"><i class="fa fa-bars"></i> Permutations</span>
-            <span class="rightButtons" id="groovesAnchor" onclick="myGrooveWriter.groovesAnchorClick(event);"><i class="fa fa-bars"></i> Grooves</span>
-            <span class="rightButtons" id="helpAnchor" onclick="helpAnchorClick(event);"><i class="fa fa-bars"></i> Help</span>
-        </span>
+        <RightNavigation></RightNavigation>
     </div>    
   `
   }
