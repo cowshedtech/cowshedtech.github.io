@@ -26,6 +26,8 @@ class MIDIPlayer {
 
     swingIsEnabled = true;
 
+    #changeHandlers = [];
+
     /**
      * 
      */    
@@ -60,6 +62,31 @@ class MIDIPlayer {
         });
     };
 
+    /**
+     * Adds a new change event handler
+     * @param {Function} handler - The callback function to be called when changes occur
+     * @returns {Function} - A function to remove this handler
+     */
+    addChangeHandler(handler) {
+        this.#changeHandlers.push(handler);
+        return () => this.removeChangeHandler(handler);
+    }
+
+    /**
+     * Removes a change event handler
+     * @param {Function} handler - The callback function to remove
+     */
+    removeChangeHandler(handler) {
+        const index = this.#changeHandlers.indexOf(handler);
+        if (index !== -1) this.#changeHandlers.splice(index, 1);
+    }
+
+    /**
+     * Notifies all registered handlers of a change
+     */
+    #notifyHandlers() {
+        this.#changeHandlers.forEach(handler => handler());
+    }
 
     /**
      * 

@@ -5,7 +5,7 @@ import ContextMenus from './components/context_menus/context_menus.js'
 import MetronomeOptionsMenu from './components/metronome/vue/menu_options.js'
 import MetronomeOptionsOffsetClickMenu from './components/metronome/vue/menu_options_offset_click.js'
 import MetronomeOptionsSpeedMenu from './components/metronome/vue/menu_options_speed.js'
-import MidiPlayer from './components/player/vue/display.js'
+import MidiPlayer from './components/player/vue/controls.js'
 
 export default {
   data() {
