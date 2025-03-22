@@ -4,7 +4,7 @@ export default {
       containerIndex: midiPlayer?.containerIndex || 1,
       touchClass: '',
       playTime: '0:00',
-      state: 'Stopped'
+      state: ''
     }
   },
   props: { },

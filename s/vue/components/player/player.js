@@ -8,7 +8,7 @@
 class MIDIPlayer {
     
     initialised = false;
-    #state = 'Stopped';
+    #state = 'Uninitialised';
     
     totalPlayTimeMsecs = 0;  // Culmative play time
     currentStartTime = 0;  // Start time of most recent play
