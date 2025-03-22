@@ -147,3 +147,15 @@ function get_empty_note_array_in_32nds() {
 
 	return get_empty_note_array(num_notes);
 }
+
+/**
+     * Format milliseconds into a duration string
+     * @param {number} ms - Milliseconds
+     * @returns {string} Formatted duration string
+     */
+function formatDuration(ms) {
+	const hours = ms.getUTCHours();
+	const minutes = ms.getUTCMinutes().toString().padStart(2, '0');
+	const seconds = ms.getSeconds().toString().padStart(2, '0');
+	return hours > 0 ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
+}
