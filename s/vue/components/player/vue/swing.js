@@ -21,7 +21,7 @@ export default {
         if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
             this.containerIndex = midiPlayer.containerIndex
         }
-        this.removeSubscriber = midiPlayer?.subscribe(EventTypes.SWING, () => {
+        this.removeSubscriber = midiPlayer?.subscribe(EventTypes.PARAMETERS_UPDATE, () => {
             this.update()
         })
     },

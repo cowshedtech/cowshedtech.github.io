@@ -18,6 +18,7 @@ const PlayerState = {
 const EventTypes = {
     TEMPO: 'tempo',
     SWING: 'swing',
+    PARAMETERS_UPDATE: 'parametersUpdate',
     PLAY_STATE: 'playState',
     REPEAT: 'repeat',
     PLAY_PROGRESS: 'playProgress'
@@ -423,8 +424,7 @@ class MIDIPlayer {
 
         this.#swing = swingAmount
 		midiPlayer.noteHasChanged();
-        this.#notifySubscribers(EventTypes.SWING, { swingAmount });
-        midiPlayer.changeCallback();
+        this.#notifySubscribers(EventTypes.PARAMETERS_UPDATE, { swingAmount });       
 	};
 
 
@@ -446,29 +446,10 @@ class MIDIPlayer {
 		if (newTempo < 19 && newTempo > 281) return;
 
         this.#tempo = newTempo;
-        this.#notifySubscribers(EventTypes.TEMPO, { newTempo });   
-        midiPlayer.noteHasChanged();
-        this.changeCallback(this.#tempo);
+        this.#notifySubscribers(EventTypes.PARAMETERS_UPDATE, { newTempo });   
+        midiPlayer.noteHasChanged();        
 	};
 
-    
-    /*
-    * called every time the tempo changes, which can be a lot of times due to the range slider
-	* update the main URL with the tempo, but only do it every third of a second at the most
-    */ 
-	changeCallbackTimeout = null;
-	changeCallback(newTempo) {
-
-		// if there is a timeout running clear it
-		if (this.changeCallbackTimeout != null)
-			window.clearTimeout(this.changeCallbackTimeout);
-
-		// set a new timeout
-		this.changeCallbackTimeout = window.setTimeout(function () {
-			this.changeCallbackTimeout = null
-            updateCurrentURL();
-		}, 300);
-	}
 
     //
     //

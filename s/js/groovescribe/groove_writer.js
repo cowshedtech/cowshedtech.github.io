@@ -38,6 +38,7 @@ var metronome;
 var editor;
 var options;
 var abcToSVGCallback;
+	
 
 function GrooveWriter() {
 	"use strict";
@@ -49,6 +50,7 @@ function GrooveWriter() {
 	root.track = new Track();
 	midiPlayer = new MIDIPlayer(root.track.trackID);
 	abcToSVGCallback = new SVGLibCallback(root.track);
+	var changeCallbackTimeout = null;	
 
 	// private vars in the scope of the class
 	root.class_permutation_type = "none";
@@ -65,12 +67,6 @@ function GrooveWriter() {
 
 		// initialise our metronome with event handler for changes to metronome value
 		
-		// metronome.eventCallbacks = new metronomeEventCallbackClass();
-		// metronome.eventCallbacks.changed = function () {
-		// 	if (midiPlayer) midiPlayer.noteHasChanged();
-		// 	updateCurrentURL();      
-		// };
-
 		metronome?.addChangeHandler(() => {
             if (midiPlayer) midiPlayer.noteHasChanged();
 			updateCurrentURL();      
@@ -79,7 +75,18 @@ function GrooveWriter() {
  		// initialise our midi player
 		midiPlayer.AddMidiPlayerToPage(root.track, "midiPlayer", root.track.timeDivision);
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
-	
+		midiPlayer?.subscribe(EventTypes.PARAMETERS_UPDATE, () => {
+			// if there is a timeout running clear it
+			if (this.changeCallbackTimeout != null)
+				window.clearTimeout(this.changeCallbackTimeout);
+
+			// set a new timeout
+			this.changeCallbackTimeout = window.setTimeout(function () {
+				this.changeCallbackTimeout = null
+				updateCurrentURL();
+			}, 300);
+		})
+		
 		// load the groove from the URL data if it was passed in.
 		root.updateFromURL(window.location.search);
 
