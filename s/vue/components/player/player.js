@@ -19,6 +19,8 @@ const PlayerState = {
 class MIDIPlayer {
     
     #initialised = false;
+    containerIndex = 0;    
+    
     #state = PlayerState.UNINITIALISED;
     
     #totalPlayTimeMsecs = 0;  // Culmative play time
@@ -27,19 +29,13 @@ class MIDIPlayer {
     #lastMidiTimeUpdate = 0;
     totalNotes = 0;
     totalRepeats = 0;
-    
     #shouldRepeat = true;
+    #swingIsEnabled = true;
     
     eventCallbacks;
+    #changeHandlers = [];
     noteHasChangedSinceLastDataLoad = false;
 
-    containerIndex = 0;
-
-    #swingIsEnabled = true;
-
-    #changeHandlers = [];
-
-    
     /**
      * 
      */    
@@ -170,9 +166,9 @@ class MIDIPlayer {
         return new Date(new Date() - this.#currentStartTime);
     };
 
-    //
-    //
-    //
+     /**
+     * calculate how long the midi has been playing for all plays total (since player initialised)
+     */   
     getPlayTimeTotal() {
         if (!this.#lastUpdateTime) {
             this.#lastUpdateTime = this.#currentStartTime;
@@ -235,12 +231,14 @@ class MIDIPlayer {
         if (MIDI.Player.playing) return;
         
         if (this.getState() === PlayerState.PAUSED && false === this.doesMidiDataNeedRefresh()) {
-            this.#currentStartTime = new Date();
+            // this.#currentStartTime = new Date();
+            this.resetStartTime();
             this.#lastUpdateTime = 0;
             MIDI.Player.resume();
         } else {
             MIDI.Player.ctx.resume();
-            this.#currentStartTime = new Date();
+            // this.#currentStartTime = new Date();
+            this.resetStartTime();
             this.#lastUpdateTime = 0;
             this.eventCallbacks.loadMidiDataEvent(true);
             MIDI.Player.stop();
@@ -274,10 +272,7 @@ class MIDIPlayer {
         // Reset player state
         this.setState(PlayerState.STOPPED);
         MIDI.Player.stop();
-    
-        //this._updatePlayButtonState(this.containerIndex, 'Stopped');
-        this.setState(PlayerState.STOPPED);
-
+            
         this.eventCallbacks.notePlaying("clear", -1);
         clearHighlightNoteInABCSVG(this.containerIndex);
         metronome.resetOptionsOffsetClickStartRotation();
