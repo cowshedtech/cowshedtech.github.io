@@ -423,7 +423,7 @@ class MIDIPlayer {
 			swingAmount = 0;
 
         this.#swing = swingAmount
-		midiPlayer.noteHasChanged();
+		this.noteHasChanged();
         this.#notifySubscribers(EventTypes.PARAMETERS_UPDATE, { swingAmount });       
 	};
 
@@ -447,7 +447,7 @@ class MIDIPlayer {
 
         this.#tempo = newTempo;
         this.#notifySubscribers(EventTypes.PARAMETERS_UPDATE, { newTempo });   
-        midiPlayer.noteHasChanged();        
+        this.noteHasChanged();        
 	};
 
 
@@ -455,18 +455,18 @@ class MIDIPlayer {
     //
     //
     upTempo() {
-		var tempo = midiPlayer.getTempo();
+		var tempo = this.getTempo();
 		tempo++;
-		midiPlayer.setTempo(tempo);
+		this.setTempo(tempo);
 	};
 
 	//
     //
     //
     downTempo() {
-		var tempo = midiPlayer.getTempo();
+		var tempo = this.getTempo();
 		tempo--;
-		midiPlayer.setTempo(tempo);
+		this.setTempo(tempo);
 	};
 
 
