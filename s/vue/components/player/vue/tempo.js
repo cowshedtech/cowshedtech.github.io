@@ -2,13 +2,18 @@ export default {
     data() {
         return {
             containerIndex: midiPlayer?.containerIndex || 1,
-            touchClass: ''
+            touchClass: '',
+            tempo: midiPlayer ? midiPlayer.getTempo() : 80
         }
     },
     props: {},
     methods: {
         updateStats() {
             if (!midiPlayer) return
+            this.tempo = midiPlayer ? midiPlayer.getTempo() : 80
+        },
+        handleTempoChange(event) {
+            midiPlayer.setTempo(event.target.value)
         }
     },
     mounted() {
@@ -30,14 +35,16 @@ export default {
                 class="tempoTextField" 
                 pattern="\\d+" 
                 :id="'tempoTextField' + containerIndex" 
-                value="80">
+                v-model="tempo"
+                @change="handleTempoChange">
         <input type="range" 
                 min="30" 
                 max="300" 
-                value="90" 
                 :class="'tempoInput' + touchClass" 
                 :id="'tempoInput' + containerIndex" 
-                list="tempoSettings">
+                list="tempoSettings"
+                v-model="tempo"
+                @change="handleTempoChange">
     </div>
 `
 }

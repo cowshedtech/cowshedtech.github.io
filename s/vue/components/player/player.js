@@ -22,6 +22,7 @@ class MIDIPlayer {
     containerIndex = 0;    
     
     #state = PlayerState.UNINITIALISED;
+    #tempo = 80
     
     #totalPlayTimeMsecs = 0;  // Culmative play time
     #currentStartTime = 0;  // Start time of most recent play
@@ -272,7 +273,7 @@ class MIDIPlayer {
         // Reset player state
         this.setState(PlayerState.STOPPED);
         MIDI.Player.stop();
-            
+    
         this.eventCallbacks.notePlaying("clear", -1);
         clearHighlightNoteInABCSVG(this.containerIndex);
         metronome.resetOptionsOffsetClickStartRotation();
@@ -327,16 +328,6 @@ class MIDIPlayer {
         
         // Define event listeners configuration
         const eventListeners = [
-            {
-                id: `tempoInput${uniqueIndex}`,
-                event: isIE10 ? 'click' : 'input',
-                handler: midiPlayer.tempoUpdateFromSlider
-            },
-            {
-                id: `tempoTextField${uniqueIndex}`,
-                event: 'change',
-                handler: midiPlayer.tempoUpdateFromTextField
-            },
             {
                 id: `swingInput${uniqueIndex}`,
                 event: isIE10 ? 'click' : 'input',
@@ -498,23 +489,22 @@ class MIDIPlayer {
     //
     //
     getTempo() {
-		var tempoInput = document.getElementById("tempoInput" + this.containerIndex);
-		var tempo = constant_DEFAULT_TEMPO;
+		// var tempoInput = document.getElementById("tempoInput" + this.containerIndex);
+		// var tempo = constant_DEFAULT_TEMPO;
 
-		if (tempoInput) {
-			tempo = parseInt(tempoInput.value, 10);
-			if (tempo < 19 && tempo > 281)
-				tempo = constant_DEFAULT_TEMPO;
-		}
+		// if (tempoInput) {
+		// 	tempo = parseInt(tempoInput.value, 10);
+		// 	if (tempo < 19 && tempo > 281)
+		// 		tempo = constant_DEFAULT_TEMPO;
+		// }
 
-		return tempo;
+		return this.#tempo;
 	};
 
     // update the tempo string display
 	// called by the oninput handler everytime the range slider changes
 	tempoUpdate(tempo) {
-		document.getElementById('tempoTextField' + this.containerIndex).value = "" + tempo;
-
+		// document.getElementById('tempoTextField' + this.containerIndex).value = "" + tempo;
 		midiPlayer.updateRangeSlider('tempoInput' + this.containerIndex);
 		midiPlayer.noteHasChanged();
         
@@ -539,22 +529,22 @@ class MIDIPlayer {
 		}, 300);
 	}
 
-	//
-    //
-    //
-    tempoUpdateFromTextField(event) {
-		var newTempo = event.target.value;
+	// //
+    // //
+    // //
+    // tempoUpdateFromTextField(event) {
+	// 	var newTempo = event.target.value;
 
-		document.getElementById("tempoInput" + this.containerIndex).value = newTempo;
-		midiPlayer.tempoUpdate(newTempo);
-	};
+	// 	document.getElementById("tempoInput" + this.containerIndex).value = newTempo;
+	// 	midiPlayer.tempoUpdate(newTempo);
+	// };
 
-	//
-    //
-    //
-    tempoUpdateFromSlider(event) {
-		midiPlayer.tempoUpdate(event.target.value);
-	};
+	// //
+    // //
+    // //
+    // tempoUpdateFromSlider(event) {
+	// 	midiPlayer.tempoUpdate(event.target.value);
+	// };
 
     
 
@@ -565,7 +555,9 @@ class MIDIPlayer {
 		if (newTempo < 19 && newTempo > 281)
 			return;
 
-		document.getElementById("tempoInput" + this.containerIndex).value = newTempo;
+        this.#tempo = newTempo;
+
+		//document.getElementById("tempoInput" + this.containerIndex).value = newTempo;
 		midiPlayer.tempoUpdate(newTempo);
 	};
 
@@ -574,9 +566,7 @@ class MIDIPlayer {
     //
     upTempo() {
 		var tempo = midiPlayer.getTempo();
-
 		tempo++;
-
 		midiPlayer.setTempo(tempo);
 	};
 
@@ -585,9 +575,7 @@ class MIDIPlayer {
     //
     downTempo() {
 		var tempo = midiPlayer.getTempo();
-
 		tempo--;
-
 		midiPlayer.setTempo(tempo);
 	};
 
