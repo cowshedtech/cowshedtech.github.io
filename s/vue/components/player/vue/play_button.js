@@ -19,12 +19,12 @@ export default {
     if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
       this.containerIndex = midiPlayer.containerIndex
     }
-    this.removeHandler = midiPlayer?.addChangeHandler(() => {
+    this.removeSubscriber = midiPlayer?.subscribe(EventTypes.PLAY_STATE, () => {
       this.updateState()
     })
   },
   beforeUnmount() {
-    if (this.removeHandler) this.removeHandler()
+    if (this.removeSubscriber) this.removeSubscriber()
   },
   template: `
     <span 

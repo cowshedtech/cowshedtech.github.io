@@ -21,12 +21,13 @@ export default {
         if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
             this.containerIndex = midiPlayer.containerIndex
         }
-        this.removeHandler = midiPlayer?.addChangeHandler(() => {
+        this.removeSubscriber = midiPlayer?.subscribe(EventTypes.TEMPO, () => {
             this.update()
         })
+        updateRangeSlider('tempoInput' + this.containerIndex)
     },
     beforeUnmount() {
-        if (this.removeHandler) this.removeHandler()
+        if (this.removeSubscriber) this.removeSubscriber()
     },
     template: `
     <div class="tempoRow">

@@ -15,6 +15,13 @@ const PlayerState = {
     PAUSED: 'Paused'
 };
 
+const EventTypes = {
+    TEMPO: 'tempo',
+    SWING: 'swing',
+    PLAY_STATE: 'playState',
+    REPEAT: 'repeat',
+    PLAY_PROGRESS: 'playProgress'
+};
 
 class MIDIPlayer {
     
@@ -38,6 +45,12 @@ class MIDIPlayer {
     eventCallbacks;
     #changeHandlers = [];
     noteHasChangedSinceLastDataLoad = false;
+
+    // Replace single array with a map of event types to handlers
+    #eventHandlers = new Map();
+
+    // Event types enum/constants
+    
 
     /**
      * 
@@ -70,31 +83,33 @@ class MIDIPlayer {
         });
     };
 
-    /**
-     * Adds a new change event handler
-     * @param {Function} handler - The callback function to be called when changes occur
-     * @returns {Function} - A function to remove this handler
-     */
-    addChangeHandler(handler) {
-        this.#changeHandlers.push(handler);
-        return () => this.removeChangeHandler(handler);
+    // Subscribe to specific event type
+    subscribe(eventType, handler) {
+        if (!this.#eventHandlers.has(eventType)) {
+            this.#eventHandlers.set(eventType, new Set());
+        }
+        this.#eventHandlers.get(eventType).add(handler);
+
+        // Return unsubscribe function
+        return () => this.unsubscribe(eventType, handler);
     }
 
-    /**
-     * Removes a change event handler
-     * @param {Function} handler - The callback function to remove
-     */
-    removeChangeHandler(handler) {
-        const index = this.#changeHandlers.indexOf(handler);
-        if (index !== -1) this.#changeHandlers.splice(index, 1);
+    // Unsubscribe from specific event type
+    unsubscribe(eventType, handler) {
+        const handlers = this.#eventHandlers.get(eventType);
+        if (handlers) {
+            handlers.delete(handler);
+        }
     }
 
-    /**
-     * Notifies all registered handlers of a change
-     */
-    #notifyHandlers() {
-        this.#changeHandlers.forEach(handler => handler());
+    // Notify subscribers of specific event type
+    #notifySubscribers(eventType, data) {
+        const handlers = this.#eventHandlers.get(eventType);
+        if (handlers) {
+            handlers.forEach(handler => handler(data));
+        }
     }
+
 
     /**
      * 
@@ -137,7 +152,7 @@ class MIDIPlayer {
     setState(newState) {
         if (newState !== this.#state) {
             this.#state = newState;
-            this.#notifyHandlers();
+            this.#notifySubscribers(EventTypes.PLAY_STATE, { isPlaying: this.isPlaying });
         }
     }
     
@@ -408,7 +423,7 @@ class MIDIPlayer {
 
         this.#swing = swingAmount
 		midiPlayer.noteHasChanged();
-        midiPlayer.#notifyHandlers();
+        this.#notifySubscribers(EventTypes.SWING, { swingAmount });
         midiPlayer.swingChangeCallback();
 	};
 
@@ -452,7 +467,7 @@ class MIDIPlayer {
 		if (newTempo < 19 && newTempo > 281) return;
 
         this.#tempo = newTempo;
-		midiPlayer.#notifyHandlers();
+        this.#notifySubscribers(EventTypes.TEMPO, { newTempo });   
         midiPlayer.noteHasChanged();
         this.tempoChangeCallback(this.#tempo);
 	};
@@ -611,10 +626,11 @@ class MIDIPlayer {
     callback(data) {
         var percentComplete = (data.now / data.end);
         
+        let parent = this;
         // midiPlayer.eventCallbacks.percentProgress(midiPlayer.eventCallbacks.classRoot, percentComplete * 100);
 
         if (midiPlayer.#lastMidiTimeUpdate && midiPlayer.#lastMidiTimeUpdate < (data.now + 800)) {
-            midiPlayer.#notifyHandlers();
+            midiPlayer.#notifySubscribers(EventTypes.PLAY_PROGRESS);
             midiPlayer.#lastMidiTimeUpdate = data.now;
         }
 
@@ -687,6 +703,8 @@ class MIDIPlayer {
 		var win = window.open(fullURL, '_blank');
 		win.focus();
 	};
+
+
 }
 
 

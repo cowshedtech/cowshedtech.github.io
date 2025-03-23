@@ -36,12 +36,12 @@ export default {
     }
   },
   mounted() {
-    this.removeHandler = midiPlayer?.addChangeHandler(() => {
+    this.removeSubscriber = midiPlayer?.subscribe(EventTypes.PLAY_PROGRESS, () => {
         this.updateStats()
     })
   },
   beforeUnmount() {
-      if (this.removeHandler) this.removeHandler() 
+    if (this.removeSubscriber) this.removeSubscriber()
   },
   template: `
    <div id="totalPlayTime">

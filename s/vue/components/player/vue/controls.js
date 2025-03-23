@@ -20,12 +20,6 @@ export default {
     if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
       this.containerIndex = midiPlayer.containerIndex
     }
-    this.removeHandler = midiPlayer?.addChangeHandler(() => {
-      this.updateStats()
-    })
-  },
-  beforeUnmount() {
-    if (this.removeHandler) this.removeHandler()
   },
   components: {
     PlayButton, Timer, Tempo, Swing

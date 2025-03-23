@@ -20,12 +20,12 @@ export default {
     if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
       this.containerIndex = midiPlayer.containerIndex
     }
-    this.removeHandler = midiPlayer?.addChangeHandler(() => {
+    this.removeSubscriber = midiPlayer?.subscribe(EventTypes.PLAY_PROGRESS, () => {
         this.updateStats()
     })
   },
   beforeUnmount() {
-      if (this.removeHandler) this.removeHandler() 
+    if (this.removeSubscriber) this.removeSubscriber()
   },
   template: `
     <span class="MIDIPlayTime" :id="'MIDIPlayTime' + containerIndex">{{ playTime }}</span>    

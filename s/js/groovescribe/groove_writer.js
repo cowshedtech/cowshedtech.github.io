@@ -129,7 +129,7 @@ function GrooveWriter() {
 		midiPlayer.initialise();
 
 		// enable or disable swing
-		midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(root.track.notesPerMeasure));
+		// midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(root.track.notesPerMeasure));
 
 		window.onresize = root.updateSheetMusic();
 
@@ -432,7 +432,7 @@ function GrooveWriter() {
 		setTimeSigLabel();
 
 		// enable or disable swing
-		midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(newDivision));
+		// midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(newDivision));
 	}
 
 	root.expandAuthoringViewWhenNecessary = function (numNotesPerMeasure, numberOfMeasures) {
