@@ -17,6 +17,9 @@ export default {
       const seconds = playTimeThisPlay.getSeconds();
       this.playTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
       this.state = midiPlayer.getState();
+    },
+    togglePlayPause() {
+      midiPlayer.startOrStop();
     }
   },
   mounted() {
@@ -34,7 +37,12 @@ export default {
     <div id="midiPlayer" class="fullWidthEle"><!-- space for the midiplayer to be attached by the javascript -->
       <div :id="'playerControl' + containerIndex" class="playerControl">
           <div :id="'playerControlsRow' + containerIndex" class="playerControlsRow">
-              <span title="Play/Pause" :class="['midiPlayImage', state]" :id="'midiPlayImage' + containerIndex"></span>
+              <span 
+                  title="Play/Pause" 
+                  :class="['midiPlayImage', state]" 
+                  :id="'midiPlayImage' + containerIndex"
+                  @click="togglePlayPause"
+              ></span>
               <span class="MIDIPlayTime" :id="'MIDIPlayTime' + containerIndex">{{ playTime }}</span>
                 <span class="tempoAndProgress" :id="'tempoAndProgress' + containerIndex">
                     <div class="tempoRow">

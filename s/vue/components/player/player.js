@@ -21,21 +21,21 @@ class MIDIPlayer {
     #initialised = false;
     #state = PlayerState.UNINITIALISED;
     
-    totalPlayTimeMsecs = 0;  // Culmative play time
-    currentStartTime = 0;  // Start time of most recent play
-    lastUpdateTime = 0;
-    lastMidiTimeUpdate = 0;
+    #totalPlayTimeMsecs = 0;  // Culmative play time
+    #currentStartTime = 0;  // Start time of most recent play
+    #lastUpdateTime = 0;
+    #lastMidiTimeUpdate = 0;
     totalNotes = 0;
     totalRepeats = 0;
     
-    shouldRepeat = true;
+    #shouldRepeat = true;
     
     eventCallbacks;
     noteHasChangedSinceLastDataLoad = false;
 
     containerIndex = 0;
 
-    swingIsEnabled = true;
+    #swingIsEnabled = true;
 
     #changeHandlers = [];
 
@@ -65,11 +65,7 @@ class MIDIPlayer {
                 MIDI.programChange(9, 127); // use "Gunshot" instrument because I don't know how to create new ones
                 
                 // Successfully loaded MIDI plugin so lets init our MIDI play button
-                // parent._updatePlayButtonState(parent.containerIndex, 'Stopped');
                 parent.setState(PlayerState.STOPPED);
-                document.getElementById("midiPlayImage" + parent.containerIndex).onclick = function (event) {
-                    midiPlayer.startOrStop();
-                }; 
                 setupHotKeys(); // spacebar to play
             }
         });
@@ -162,7 +158,7 @@ class MIDIPlayer {
      * Reset the 
      */
     resetStartTime() {
-        this.currentStartTime = new Date();
+        this.#currentStartTime = new Date();
     };
 
 
@@ -170,18 +166,18 @@ class MIDIPlayer {
      * calculate how long the midi has been playing total (since the last play/pause press)
      */
     getPlayTimeThisPlay() {
-        return new Date(new Date() - this.currentStartTime);
+        return new Date(new Date() - this.#currentStartTime);
     };
 
     getPlayTimeTotal() {
-        if (!this.lastUpdateTime) {
-            this.lastUpdateTime = this.currentStartTime;
+        if (!this.#lastUpdateTime) {
+            this.#lastUpdateTime = this.#currentStartTime;
         }
         
-        const deltaTime = new Date() - this.lastUpdateTime;
-        this.totalPlayTimeMsecs += deltaTime;
-        this.lastUpdateTime = new Date();
-        return new Date(this.totalPlayTimeMsecs);
+        const deltaTime = new Date() - this.#lastUpdateTime;
+        this.#totalPlayTimeMsecs += deltaTime;
+        this.#lastUpdateTime = new Date();
+        return new Date(this.#totalPlayTimeMsecs);
     }; 
 
     //
@@ -235,16 +231,16 @@ class MIDIPlayer {
         if (MIDI.Player.playing) return;
         
         if (this.getState() === PlayerState.PAUSED && false === this.doesMidiDataNeedRefresh()) {
-            this.currentStartTime = new Date();
-            this.lastUpdateTime = 0;
+            this.#currentStartTime = new Date();
+            this.#lastUpdateTime = 0;
             MIDI.Player.resume();
         } else {
             MIDI.Player.ctx.resume();
-            this.currentStartTime = new Date();
-            this.lastUpdateTime = 0;
+            this.#currentStartTime = new Date();
+            this.#lastUpdateTime = 0;
             this.eventCallbacks.loadMidiDataEvent(true);
             MIDI.Player.stop();
-            MIDI.Player.loop(this.shouldRepeat); // set the loop parameter
+            MIDI.Player.loop(this.#shouldRepeat); // set the loop parameter
             MIDI.Player.start();
         }
         
@@ -304,11 +300,11 @@ class MIDIPlayer {
      * Toggles MIDI playback repeat mode
      */
     repeatToggle() {
-        this.shouldRepeat = !this.shouldRepeat; // Toggle repeat state
+        this.#shouldRepeat = !this.#shouldRepeat; // Toggle repeat state
         
         // Update MIDI player and UI
-        MIDI.Player.loop(this.shouldRepeat);
-        if (this.shouldRepeat)
+        MIDI.Player.loop(this.#shouldRepeat);
+        if (this.#shouldRepeat)
             document.getElementById("midiRepeatImage" + this.containerIndex).src = midiPlayer.getImageLocation() + "repeat.png";
         else
             document.getElementById("midiRepeatImage" + this.containerIndex).src = midiPlayer.getImageLocation() + "grey_repeat.png";
@@ -399,8 +395,8 @@ class MIDIPlayer {
     //
     //
     swingEnabled(trueElseFalse) {
-		midiPlayer.swingIsEnabled = trueElseFalse;
-		if (midiPlayer.swingIsEnabled === false) {
+		midiPlayer.#swingIsEnabled = trueElseFalse;
+		if (midiPlayer.#swingIsEnabled === false) {
 			midiPlayer.setSwing(0);
 		} else {
 			midiPlayer.swingUpdateText(midiPlayer.getSwing()); // remove N/A label
@@ -413,7 +409,7 @@ class MIDIPlayer {
     getSwing() {
 		var swing = 0;
 
-		if (midiPlayer.swingIsEnabled) {
+		if (midiPlayer.#swingIsEnabled) {
 			var swingInput = document.getElementById("swingInput" + this.containerIndex);
 
 			if (swingInput) {
@@ -431,7 +427,7 @@ class MIDIPlayer {
     //
     //
     setSwing(swingAmount) {
-		if (midiPlayer.swingIsEnabled === false)
+		if (midiPlayer.#swingIsEnabled === false)
 			swingAmount = 0;
 
 		midiPlayer.swingUpdateText(swingAmount)
@@ -445,7 +441,7 @@ class MIDIPlayer {
     //
     swingUpdateEvent(event) {
 
-		if (midiPlayer.swingIsEnabled === false) {
+		if (midiPlayer.#swingIsEnabled === false) {
 			midiPlayer.setSwingSlider(0);
 		} else {
 			midiPlayer.swingUpdateText(event.target.value)
@@ -460,7 +456,7 @@ class MIDIPlayer {
     // used to update the on screen swing display
     // also the onClick handler for the swing slider
     swingUpdateText(swingAmount) {
-        if (midiPlayer.swingIsEnabled === false) {
+        if (midiPlayer.#swingIsEnabled === false) {
             document.getElementById('swingOutput' + this.containerIndex).innerHTML = "N/A";
         } else {
             document.getElementById('swingOutput' + this.containerIndex).innerHTML = "" + swingAmount + "%";            
@@ -715,23 +711,23 @@ class MIDIPlayer {
         
         // midiPlayer.eventCallbacks.percentProgress(midiPlayer.eventCallbacks.classRoot, percentComplete * 100);
 
-        if (midiPlayer.lastMidiTimeUpdate && midiPlayer.lastMidiTimeUpdate < (data.now + 800)) {
+        if (midiPlayer.#lastMidiTimeUpdate && midiPlayer.#lastMidiTimeUpdate < (data.now + 800)) {
             midiPlayer.#notifyHandlers();
-            midiPlayer.lastMidiTimeUpdate = data.now;
+            midiPlayer.#lastMidiTimeUpdate = data.now;
         }
 
         if (data.now < 16) {
             // this is considered the start.   It doesn't come in at zero for some reason
             // The second note should always be at least 16 ms behind the first
             //class_midi_note_num = 0;
-            midiPlayer.lastMidiTimeUpdate = -1;
+            midiPlayer.#lastMidiTimeUpdate = -1;
         }
         if (data.now == data.end) {
 
             // at the end of a song
             midiPlayer.eventCallbacks.notePlaying("complete", 1);
 
-            if (midiPlayer.shouldRepeat) {
+            if (midiPlayer.#shouldRepeat) {
 
                 midiPlayer.totalRepeats++;
 
