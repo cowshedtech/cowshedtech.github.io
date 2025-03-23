@@ -419,34 +419,13 @@ class MIDIPlayer {
             swingAmount = 0;
             
         if (midiPlayer.#swingIsEnabled === false)
-			this.#swing = 0;
+			swingAmount = 0;
 
         this.#swing = swingAmount
 		midiPlayer.noteHasChanged();
         this.#notifySubscribers(EventTypes.SWING, { swingAmount });
-        midiPlayer.swingChangeCallback();
+        midiPlayer.changeCallback();
 	};
-
-    
-            
-     // called every time the tempo changes, which can be a lot of times due to the range slider
-	// update the main URL with the tempo, but only do it every third of a second at the most
-	swingChangeCallbackTimeout = null;
-	swingChangeCallback() {
-
-		// if there is a timeout running clear it
-		if (this.swingChangeCallbackTimeout != null)
-			window.clearTimeout(this.swingChangeCallbackTimeout);
-
-		// set a new timeout
-		this.swingChangeCallbackTimeout = window.setTimeout(function () {
-			this.swingChangeCallbackTimeout = null
-            // TODO
-			// update the Main URL to show the new tempo
-			updateCurrentURL();
-		}, 300);
-	}
-
 
 
     //
@@ -469,7 +448,7 @@ class MIDIPlayer {
         this.#tempo = newTempo;
         this.#notifySubscribers(EventTypes.TEMPO, { newTempo });   
         midiPlayer.noteHasChanged();
-        this.tempoChangeCallback(this.#tempo);
+        this.changeCallback(this.#tempo);
 	};
 
     
@@ -477,16 +456,16 @@ class MIDIPlayer {
     * called every time the tempo changes, which can be a lot of times due to the range slider
 	* update the main URL with the tempo, but only do it every third of a second at the most
     */ 
-	tempoChangeCallbackTimeout = null;
-	tempoChangeCallback(newTempo) {
+	changeCallbackTimeout = null;
+	changeCallback(newTempo) {
 
 		// if there is a timeout running clear it
-		if (this.tempoChangeCallbackTimeout != null)
-			window.clearTimeout(this.tempoChangeCallbackTimeout);
+		if (this.changeCallbackTimeout != null)
+			window.clearTimeout(this.changeCallbackTimeout);
 
 		// set a new timeout
-		this.tempoChangeCallbackTimeout = window.setTimeout(function () {
-			this.tempoChangeCallbackTimeout = null
+		this.changeCallbackTimeout = window.setTimeout(function () {
+			this.changeCallbackTimeout = null
             updateCurrentURL();
 		}, 300);
 	}

@@ -7,10 +7,6 @@ export default {
   },
   props: { },
   methods: {
-    /**
-     * Get initial stats when no player exists
-     * @returns {PlayerStats}
-     */
     getInitialStats() {
       return {
         formattedTime: '00:00',
@@ -19,10 +15,6 @@ export default {
         playTimeTotal: 0
       }
     },
-
-    /**
-     * Update component stats from player
-     */
     updateStats() {
       if (!midiPlayer) return
 

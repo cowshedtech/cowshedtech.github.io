@@ -6,16 +6,10 @@ import Swing from './swing.js'
 export default {
   data() {
     return {
-      containerIndex: midiPlayer?.containerIndex || 1,
-      touchClass: ''      
+      containerIndex: midiPlayer?.containerIndex || 1
     }
   },
   props: {},
-  methods: {
-    updateStats() {
-      if (!midiPlayer) return      
-    }    
-  },
   mounted() {
     if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
       this.containerIndex = midiPlayer.containerIndex
