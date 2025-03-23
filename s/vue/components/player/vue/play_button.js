@@ -1,5 +1,3 @@
-import Timer from './timer.js'
-
 export default {
   data() {
     return {
@@ -27,9 +25,6 @@ export default {
   },
   beforeUnmount() {
     if (this.removeHandler) this.removeHandler()
-  },
-  components: {
-    Timer
   },
   template: `
     <span 
