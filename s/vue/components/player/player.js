@@ -489,15 +489,6 @@ class MIDIPlayer {
     //
     //
     getTempo() {
-		// var tempoInput = document.getElementById("tempoInput" + this.containerIndex);
-		// var tempo = constant_DEFAULT_TEMPO;
-
-		// if (tempoInput) {
-		// 	tempo = parseInt(tempoInput.value, 10);
-		// 	if (tempo < 19 && tempo > 281)
-		// 		tempo = constant_DEFAULT_TEMPO;
-		// }
-
 		return this.#tempo;
 	};
 
@@ -505,29 +496,9 @@ class MIDIPlayer {
 	// called by the oninput handler everytime the range slider changes
 	tempoUpdate(tempo) {
 		// document.getElementById('tempoTextField' + this.containerIndex).value = "" + tempo;
-		midiPlayer.updateRangeSlider('tempoInput' + this.containerIndex);
-		midiPlayer.noteHasChanged();
-        
-        this.tempoChangeCallback(tempo);
 	};
 
-    // called every time the tempo changes, which can be a lot of times due to the range slider
-	// update the main URL with the tempo, but only do it every third of a second at the most
-	tempoChangeCallbackTimeout = null;
-	tempoChangeCallback(newTempo) {
-
-		// if there is a timeout running clear it
-		if (this.tempoChangeCallbackTimeout != null)
-			window.clearTimeout(this.tempoChangeCallbackTimeout);
-
-		// set a new timeout
-		this.tempoChangeCallbackTimeout = window.setTimeout(function () {
-			this.tempoChangeCallbackTimeout = null
-            // TODO
-			// update the Main URL to show the new tempo
-			updateCurrentURL();
-		}, 300);
-	}
+    
 
 	// //
     // //
@@ -558,8 +529,29 @@ class MIDIPlayer {
         this.#tempo = newTempo;
 
 		//document.getElementById("tempoInput" + this.containerIndex).value = newTempo;
-		midiPlayer.tempoUpdate(newTempo);
+		// midiPlayer.tempoUpdate(newTempo);
+        midiPlayer.updateRangeSlider('tempoInput' + this.containerIndex);
+        midiPlayer.noteHasChanged();
+        this.tempoChangeCallback(this.#tempo);
 	};
+
+    // called every time the tempo changes, which can be a lot of times due to the range slider
+	// update the main URL with the tempo, but only do it every third of a second at the most
+	tempoChangeCallbackTimeout = null;
+	tempoChangeCallback(newTempo) {
+
+		// if there is a timeout running clear it
+		if (this.tempoChangeCallbackTimeout != null)
+			window.clearTimeout(this.tempoChangeCallbackTimeout);
+
+		// set a new timeout
+		this.tempoChangeCallbackTimeout = window.setTimeout(function () {
+			this.tempoChangeCallbackTimeout = null
+            // TODO
+			// update the Main URL to show the new tempo
+			updateCurrentURL();
+		}, 300);
+	}
 
     //
     //
