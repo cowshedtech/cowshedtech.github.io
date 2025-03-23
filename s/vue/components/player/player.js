@@ -359,7 +359,7 @@ class MIDIPlayer {
         });
 
         // Enable or disable swing
-        midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(division));
+        midiPlayer.setSwingEnabled(midiPlayer.doesDivisionSupportSwing(division));
     }
 
 
@@ -379,7 +379,7 @@ class MIDIPlayer {
     //
     //
     //
-    swingEnabled(trueElseFalse) {
+    setSwingEnabled(trueElseFalse) {
 		midiPlayer.#swingIsEnabled = trueElseFalse;
 		if (midiPlayer.#swingIsEnabled === false) {
 			midiPlayer.setSwing(0);
