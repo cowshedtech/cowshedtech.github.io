@@ -23,6 +23,7 @@ class MIDIPlayer {
     
     #state = PlayerState.UNINITIALISED;
     #tempo = 80
+    #swing = 0
     
     #totalPlayTimeMsecs = 0;  // Culmative play time
     #currentStartTime = 0;  // Start time of most recent play
@@ -328,11 +329,11 @@ class MIDIPlayer {
         
         // Define event listeners configuration
         const eventListeners = [
-            {
-                id: `swingInput${uniqueIndex}`,
-                event: isIE10 ? 'click' : 'input',
-                handler: midiPlayer.swingUpdateEvent
-            },
+            // {
+            //     id: `swingInput${uniqueIndex}`,
+            //     event: isIE10 ? 'click' : 'input',
+            //     handler: midiPlayer.swingUpdateEvent
+            // },
             {
                 id: `midiRepeatImage${uniqueIndex}`,
                 event: 'click',
@@ -389,7 +390,7 @@ class MIDIPlayer {
 		if (midiPlayer.#swingIsEnabled === false) {
 			midiPlayer.setSwing(0);
 		} else {
-			midiPlayer.swingUpdateText(midiPlayer.getSwing()); // remove N/A label
+			// midiPlayer.swingUpdateText(midiPlayer.getSwing()); // remove N/A label
 		}
 	};
 
@@ -397,19 +398,20 @@ class MIDIPlayer {
     //
     //
     getSwing() {
-		var swing = 0;
+		// var swing = 0;
 
-		if (midiPlayer.#swingIsEnabled) {
-			var swingInput = document.getElementById("swingInput" + this.containerIndex);
+		// if (midiPlayer.#swingIsEnabled) {
+		// 	var swingInput = document.getElementById("swingInput" + this.containerIndex);
 
-			if (swingInput) {
-				swing = parseInt(swingInput.value, 10);
-				if (swing < 0 || swing > 60)
-					swing = 0;
-			}
-		}
+		// 	if (swingInput) {
+		// 		swing = parseInt(swingInput.value, 10);
+		// 		if (swing < 0 || swing > 60)
+		// 			swing = 0;
+		// 	}
+		// }
 
-		return (swing);
+		// return (swing);
+        return this.#swing
 	};
  
 	
@@ -417,41 +419,46 @@ class MIDIPlayer {
     //
     //
     setSwing(swingAmount) {
-		if (midiPlayer.#swingIsEnabled === false)
-			swingAmount = 0;
+		if (swingAmount < 0 || swingAmount > 60)
+            swingAmount = 0;
+            
+        if (midiPlayer.#swingIsEnabled === false)
+			this.#swing = 0;
 
-		midiPlayer.swingUpdateText(swingAmount)
-        midiPlayer.setSwingSlider(swingAmount)
+        this.#swing = swingAmount
+		// midiPlayer.swingUpdateText(this.#swing)
+        // midiPlayer.setSwingSlider(this.#swing)
         midiPlayer.noteHasChanged();
+        midiPlayer.#notifyHandlers();
         midiPlayer.swingChangeCallback();
 	};
 
     //
     //
     //
-    swingUpdateEvent(event) {
+    // swingUpdateEvent(event) {
 
-		if (midiPlayer.#swingIsEnabled === false) {
-			midiPlayer.setSwingSlider(0);
-		} else {
-			midiPlayer.swingUpdateText(event.target.value)
-            midiPlayer.setSwingSlider(event.target.value)
-            midiPlayer.noteHasChanged();
-		}
-        midiPlayer.swingChangeCallback();
-	};    
+	// 	if (midiPlayer.#swingIsEnabled === false) {
+	// 		midiPlayer.setSwingSlider(0);
+	// 	} else {
+	// 		midiPlayer.swingUpdateText(event.target.value)
+    //         midiPlayer.setSwingSlider(event.target.value)
+    //         midiPlayer.noteHasChanged();
+	// 	}
+    //     midiPlayer.swingChangeCallback();
+	// };    
 
             
     //
     // used to update the on screen swing display
     // also the onClick handler for the swing slider
-    swingUpdateText(swingAmount) {
-        if (midiPlayer.#swingIsEnabled === false) {
-            document.getElementById('swingOutput' + this.containerIndex).innerHTML = "N/A";
-        } else {
-            document.getElementById('swingOutput' + this.containerIndex).innerHTML = "" + swingAmount + "%";            
-        }
-    };
+    // swingUpdateText(swingAmount) {
+    //     if (midiPlayer.#swingIsEnabled === false) {
+    //         document.getElementById('swingOutput' + this.containerIndex).innerHTML = "N/A";
+    //     } else {
+    //         document.getElementById('swingOutput' + this.containerIndex).innerHTML = "" + swingAmount + "%";            
+    //     }
+    // };
             
     //
     //
