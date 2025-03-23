@@ -150,7 +150,7 @@ class MIDIPlayer {
      * Return data representing when we started the most recent play
      */
     getStartTime() {
-        return ;
+        return this.#currentStartTime;
     };
 
     
@@ -166,9 +166,13 @@ class MIDIPlayer {
      * calculate how long the midi has been playing total (since the last play/pause press)
      */
     getPlayTimeThisPlay() {
+        if (!this.#currentStartTime) this.resetStartTime();
         return new Date(new Date() - this.#currentStartTime);
     };
 
+    //
+    //
+    //
     getPlayTimeTotal() {
         if (!this.#lastUpdateTime) {
             this.#lastUpdateTime = this.#currentStartTime;

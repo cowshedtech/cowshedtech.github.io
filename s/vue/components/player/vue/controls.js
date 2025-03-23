@@ -1,3 +1,6 @@
+import Timer from './timer.js'
+import PlayButton from './play_button.js'
+
 export default {
   data() {
     return {
@@ -7,11 +10,11 @@ export default {
       state: ''
     }
   },
-  props: { },
+  props: {},
   methods: {
     updateStats() {
       if (!midiPlayer) return
-      
+
       const playTimeThisPlay = midiPlayer.getPlayTimeThisPlay();
       const minutes = playTimeThisPlay.getUTCMinutes();
       const seconds = playTimeThisPlay.getSeconds();
@@ -27,23 +30,21 @@ export default {
       this.containerIndex = midiPlayer.containerIndex
     }
     this.removeHandler = midiPlayer?.addChangeHandler(() => {
-        this.updateStats()
+      this.updateStats()
     })
   },
   beforeUnmount() {
-      if (this.removeHandler) this.removeHandler() 
+    if (this.removeHandler) this.removeHandler()
+  },
+  components: {
+    Timer, PlayButton
   },
   template: `
     <div id="midiPlayer" class="fullWidthEle"><!-- space for the midiplayer to be attached by the javascript -->
       <div :id="'playerControl' + containerIndex" class="playerControl">
           <div :id="'playerControlsRow' + containerIndex" class="playerControlsRow">
-              <span 
-                  title="Play/Pause" 
-                  :class="['midiPlayImage', state]" 
-                  :id="'midiPlayImage' + containerIndex"
-                  @click="togglePlayPause"
-              ></span>
-              <span class="MIDIPlayTime" :id="'MIDIPlayTime' + containerIndex">{{ playTime }}</span>
+              <PlayButton></PlayButton>
+              <Timer></Timer>
                 <span class="tempoAndProgress" :id="'tempoAndProgress' + containerIndex">
                     <div class="tempoRow">
                         <span class="tempoLabel">BPM</span>
