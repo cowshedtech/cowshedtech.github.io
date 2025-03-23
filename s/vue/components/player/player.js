@@ -323,9 +323,9 @@ class MIDIPlayer {
         // Update MIDI player and UI
         MIDI.Player.loop(this.#shouldRepeat);
         if (this.#shouldRepeat)
-            document.getElementById("midiRepeatImage" + this.containerIndex).src = midiPlayer.getImageLocation() + "repeat.png";
+            document.getElementById("midiRepeatImage" + this.containerIndex).src = this.getImageLocation() + "repeat.png";
         else
-            document.getElementById("midiRepeatImage" + this.containerIndex).src = midiPlayer.getImageLocation() + "grey_repeat.png";
+            document.getElementById("midiRepeatImage" + this.containerIndex).src = this.getImageLocation() + "grey_repeat.png";
     }
 
 
@@ -347,12 +347,12 @@ class MIDIPlayer {
             {
                 id: `midiRepeatImage${uniqueIndex}`,
                 event: 'click',
-                handler: midiPlayer.repeatToggle
+                handler: this.repeatToggle
             },
             {
                 id: `midiExpandImage${uniqueIndex}`,
                 event: 'click',
-                handler: midiPlayer.expandOrRetractMIDI_playback
+                handler: this.expandOrRetractMIDI_playback
             },
             {
                 id: `midiGSLogo${uniqueIndex}`,
@@ -375,7 +375,7 @@ class MIDIPlayer {
         });
 
         // Enable or disable swing
-        midiPlayer.setSwingEnabled(midiPlayer.doesDivisionSupportSwing(division));
+        this.setSwingEnabled(this.doesDivisionSupportSwing(division));
     }
 
 
@@ -396,11 +396,11 @@ class MIDIPlayer {
     //
     //
     setSwingEnabled(trueElseFalse) {
-		midiPlayer.#swingIsEnabled = trueElseFalse;
-		if (midiPlayer.#swingIsEnabled === false) {
-			midiPlayer.setSwing(0);
+		this.#swingIsEnabled = trueElseFalse;
+		if (this.#swingIsEnabled === false) {
+			this.setSwing(0);
 		} else {
-			// midiPlayer.swingUpdateText(midiPlayer.getSwing()); // remove N/A label
+			// this.swingUpdateText(this.getSwing()); // remove N/A label
 		}
 	};
 
@@ -419,7 +419,7 @@ class MIDIPlayer {
 		if (swingAmount < 0 || swingAmount > 60)
             swingAmount = 0;
             
-        if (midiPlayer.#swingIsEnabled === false)
+        if (this.#swingIsEnabled === false)
 			swingAmount = 0;
 
         this.#swing = swingAmount
@@ -485,7 +485,7 @@ class MIDIPlayer {
     //         <div id="playerControl${this.containerIndex}" class="playerControl">
     //             <div class="playerControlsRow" id="playerControlsRow${this.containerIndex}">
     //                 <span title="Play/Pause" class="midiPlayImage" id="midiPlayImage${this.containerIndex}"></span>
-    //                 <span class="MIDIPlayTime" id="MIDIPlayTime${this.containerIndex}">${midiPlayer.playTime}</span>`;
+    //                 <span class="MIDIPlayTime" id="MIDIPlayTime${this.containerIndex}">${this.playTime}</span>`;
 
     //     // Optional metronome controls
     //     const metronomeControls = expandable ? `
@@ -587,7 +587,7 @@ class MIDIPlayer {
         var percentComplete = (data.now / data.end);
         
         let parent = this;
-        // midiPlayer.eventCallbacks.percentProgress(midiPlayer.eventCallbacks.classRoot, percentComplete * 100);
+        // this.eventCallbacks.percentProgress(this.eventCallbacks.classRoot, percentComplete * 100);
 
         if (midiPlayer.#lastMidiTimeUpdate && midiPlayer.#lastMidiTimeUpdate < (data.now + 800)) {
             midiPlayer.#notifySubscribers(EventTypes.PLAY_PROGRESS);
