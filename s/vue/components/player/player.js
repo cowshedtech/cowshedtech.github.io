@@ -492,51 +492,23 @@ class MIDIPlayer {
 		return this.#tempo;
 	};
 
-    // update the tempo string display
-	// called by the oninput handler everytime the range slider changes
-	tempoUpdate(tempo) {
-		// document.getElementById('tempoTextField' + this.containerIndex).value = "" + tempo;
-	};
-
-    
-
-	// //
-    // //
-    // //
-    // tempoUpdateFromTextField(event) {
-	// 	var newTempo = event.target.value;
-
-	// 	document.getElementById("tempoInput" + this.containerIndex).value = newTempo;
-	// 	midiPlayer.tempoUpdate(newTempo);
-	// };
-
-	// //
-    // //
-    // //
-    // tempoUpdateFromSlider(event) {
-	// 	midiPlayer.tempoUpdate(event.target.value);
-	// };
-
-    
-
     //
     //
     //
     setTempo(newTempo) {
-		if (newTempo < 19 && newTempo > 281)
-			return;
+		if (newTempo < 19 && newTempo > 281) return;
 
         this.#tempo = newTempo;
-
-		//document.getElementById("tempoInput" + this.containerIndex).value = newTempo;
-		// midiPlayer.tempoUpdate(newTempo);
-        midiPlayer.updateRangeSlider('tempoInput' + this.containerIndex);
+		midiPlayer.#notifyHandlers();
         midiPlayer.noteHasChanged();
         this.tempoChangeCallback(this.#tempo);
 	};
 
-    // called every time the tempo changes, which can be a lot of times due to the range slider
-	// update the main URL with the tempo, but only do it every third of a second at the most
+    
+    /*
+    * called every time the tempo changes, which can be a lot of times due to the range slider
+	* update the main URL with the tempo, but only do it every third of a second at the most
+    */ 
 	tempoChangeCallbackTimeout = null;
 	tempoChangeCallback(newTempo) {
 
@@ -547,9 +519,7 @@ class MIDIPlayer {
 		// set a new timeout
 		this.tempoChangeCallbackTimeout = window.setTimeout(function () {
 			this.tempoChangeCallbackTimeout = null
-            // TODO
-			// update the Main URL to show the new tempo
-			updateCurrentURL();
+            updateCurrentURL();
 		}, 300);
 	}
 
