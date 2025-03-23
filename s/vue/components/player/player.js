@@ -9,18 +9,15 @@
  * @enum {string}
  */
 const PlayerState = {
-    UNINITIALISED: 'uninitialised',
+    UNINITIALISED: 'Uninitialised',
     STOPPED: 'Stopped',
     PLAYING: 'Playing',
     PAUSED: 'Paused'
 };
 
 const EventTypes = {
-    TEMPO: 'tempo',
-    SWING: 'swing',
     PARAMETERS_UPDATE: 'parametersUpdate',
     PLAY_STATE: 'playState',
-    REPEAT: 'repeat',
     PLAY_PROGRESS: 'playProgress'
 };
 
@@ -44,13 +41,8 @@ class MIDIPlayer {
     
     
     eventCallbacks;
-    #changeHandlers = [];
-    noteHasChangedSinceLastDataLoad = false;
-
-    // Replace single array with a map of event types to handlers
     #eventHandlers = new Map();
-
-    // Event types enum/constants
+    noteHasChangedSinceLastDataLoad = false;
     
 
     /**
@@ -83,34 +75,7 @@ class MIDIPlayer {
             }
         });
     };
-
-    // Subscribe to specific event type
-    subscribe(eventType, handler) {
-        if (!this.#eventHandlers.has(eventType)) {
-            this.#eventHandlers.set(eventType, new Set());
-        }
-        this.#eventHandlers.get(eventType).add(handler);
-
-        // Return unsubscribe function
-        return () => this.unsubscribe(eventType, handler);
-    }
-
-    // Unsubscribe from specific event type
-    unsubscribe(eventType, handler) {
-        const handlers = this.#eventHandlers.get(eventType);
-        if (handlers) {
-            handlers.delete(handler);
-        }
-    }
-
-    // Notify subscribers of specific event type
-    #notifySubscribers(eventType, data) {
-        const handlers = this.#eventHandlers.get(eventType);
-        if (handlers) {
-            handlers.forEach(handler => handler(data));
-        }
-    }
-
+    
 
     /**
      * 
@@ -126,6 +91,47 @@ class MIDIPlayer {
     getImageLocation() {
         return getGrooveUtilsBaseLocation() + "../../images/";
     };
+
+    //
+    //
+    //
+
+    /**
+     * Subscribe to specific event type
+     */
+    subscribe(eventType, handler) {
+        if (!this.#eventHandlers.has(eventType)) {
+            this.#eventHandlers.set(eventType, new Set());
+        }
+        this.#eventHandlers.get(eventType).add(handler);
+
+        // Return unsubscribe function
+        return () => this.unsubscribe(eventType, handler);
+    }
+
+    /**
+     * Unsubscribe from specific event type
+     */
+    unsubscribe(eventType, handler) {
+        const handlers = this.#eventHandlers.get(eventType);
+        if (handlers) {
+            handlers.delete(handler);
+        }
+    }
+
+    /**
+     * Notify subscribers of specific event type
+     */
+    #notifySubscribers(eventType, data) {
+        const handlers = this.#eventHandlers.get(eventType);
+        if (handlers) {
+            handlers.forEach(handler => handler(data));
+        }
+    }
+
+    //
+    //
+    //
     
     
     /**
@@ -547,37 +553,37 @@ class MIDIPlayer {
     //
     //
     //
-    expandOrRetractMIDIPlayback(force, expandElseContract) {
+    // expandOrRetractMIDIPlayback(force, expandElseContract) {
 
-        var playerControlElement = document.getElementById('playerControl' + this.containerIndex);
-        var playerControlRowElement = document.getElementById('playerControlsRow' + this.containerIndex);
-        var tempoAndProgressElement = document.getElementById('tempoAndProgress' + this.containerIndex);
-        var midiMetronomeMenuElement = document.getElementById('midiMetronomeMenu' + this.containerIndex);
-        var gsLogoLoadFullGSElement = document.getElementById('midiGSLogo' + this.containerIndex);
-        var midiExpandImageElement = document.getElementById('midiExpandImage' + this.containerIndex);
-        var midiPlayTime = document.getElementById('MIDIPlayTime' + this.containerIndex);
+    //     var playerControlElement = document.getElementById('playerControl' + this.containerIndex);
+    //     var playerControlRowElement = document.getElementById('playerControlsRow' + this.containerIndex);
+    //     var tempoAndProgressElement = document.getElementById('tempoAndProgress' + this.containerIndex);
+    //     var midiMetronomeMenuElement = document.getElementById('midiMetronomeMenu' + this.containerIndex);
+    //     var gsLogoLoadFullGSElement = document.getElementById('midiGSLogo' + this.containerIndex);
+    //     var midiExpandImageElement = document.getElementById('midiExpandImage' + this.containerIndex);
+    //     var midiPlayTime = document.getElementById('MIDIPlayTime' + this.containerIndex);
     
-        if (playerControlElement.className.indexOf("small") > -1 || (force && expandElseContract)) {
-            // make large
-            playerControlElement.className = playerControlElement.className.replace(" small", "") + " large";
-            playerControlRowElement.className = playerControlRowElement.className.replace(" small", "") + " large";
-            tempoAndProgressElement.className = tempoAndProgressElement.className.replace(" small", "") + " large";
-            midiMetronomeMenuElement.className = midiMetronomeMenuElement.className.replace(" small", "") + " large";
-            gsLogoLoadFullGSElement.className = gsLogoLoadFullGSElement.className.replace(" small", "") + " large";
-            midiExpandImageElement.className = midiExpandImageElement.className.replace(" small", "") + " large";
-            midiPlayTime.className = midiPlayTime.className.replace(" small", "") + " large";
-        } else {
-            // make small
-            playerControlElement.className = playerControlElement.className.replace(" large", "") + " small";
-            playerControlRowElement.className = playerControlRowElement.className.replace(" large", "") + " small";
-            midiMetronomeMenuElement.className = midiMetronomeMenuElement.className.replace(" large", "") + " small";
-            tempoAndProgressElement.className = tempoAndProgressElement.className.replace(" large", "") + " small";
-            gsLogoLoadFullGSElement.className = gsLogoLoadFullGSElement.className.replace(" large", "") + " small";
-            midiExpandImageElement.className = midiExpandImageElement.className.replace(" large", "") + " small";
-            midiPlayTime.className = midiPlayTime.className.replace(" large", "") + " small";
-        }
+    //     if (playerControlElement.className.indexOf("small") > -1 || (force && expandElseContract)) {
+    //         // make large
+    //         playerControlElement.className = playerControlElement.className.replace(" small", "") + " large";
+    //         playerControlRowElement.className = playerControlRowElement.className.replace(" small", "") + " large";
+    //         tempoAndProgressElement.className = tempoAndProgressElement.className.replace(" small", "") + " large";
+    //         midiMetronomeMenuElement.className = midiMetronomeMenuElement.className.replace(" small", "") + " large";
+    //         gsLogoLoadFullGSElement.className = gsLogoLoadFullGSElement.className.replace(" small", "") + " large";
+    //         midiExpandImageElement.className = midiExpandImageElement.className.replace(" small", "") + " large";
+    //         midiPlayTime.className = midiPlayTime.className.replace(" small", "") + " large";
+    //     } else {
+    //         // make small
+    //         playerControlElement.className = playerControlElement.className.replace(" large", "") + " small";
+    //         playerControlRowElement.className = playerControlRowElement.className.replace(" large", "") + " small";
+    //         midiMetronomeMenuElement.className = midiMetronomeMenuElement.className.replace(" large", "") + " small";
+    //         tempoAndProgressElement.className = tempoAndProgressElement.className.replace(" large", "") + " small";
+    //         gsLogoLoadFullGSElement.className = gsLogoLoadFullGSElement.className.replace(" large", "") + " small";
+    //         midiExpandImageElement.className = midiExpandImageElement.className.replace(" large", "") + " small";
+    //         midiPlayTime.className = midiPlayTime.className.replace(" large", "") + " small";
+    //     }
     
-    };
+    // };
 
 
     /**
@@ -669,6 +675,3 @@ class MIDIPlayer {
 
 
 function midiEventCallbackClass() { };
-
-
-
