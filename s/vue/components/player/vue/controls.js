@@ -5,25 +5,14 @@ export default {
   data() {
     return {
       containerIndex: midiPlayer?.containerIndex || 1,
-      touchClass: '',
-      playTime: '0:00',
-      state: ''
+      touchClass: ''      
     }
   },
   props: {},
   methods: {
     updateStats() {
-      if (!midiPlayer) return
-
-      const playTimeThisPlay = midiPlayer.getPlayTimeThisPlay();
-      const minutes = playTimeThisPlay.getUTCMinutes();
-      const seconds = playTimeThisPlay.getSeconds();
-      this.playTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-      this.state = midiPlayer.getState();
-    },
-    togglePlayPause() {
-      midiPlayer.startOrStop();
-    }
+      if (!midiPlayer) return      
+    }    
   },
   mounted() {
     if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
