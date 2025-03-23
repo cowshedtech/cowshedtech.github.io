@@ -31,7 +31,7 @@ export default {
     PlayButton, Timer, Tempo, Swing
   },
   template: `
-    <div id="midiPlayer" class="fullWidthEle"><!-- space for the midiplayer to be attached by the javascript -->
+    <div id="midiPlayer" class="fullWidthEle">
       <div :id="'playerControl' + containerIndex" class="playerControl">
           <div :id="'playerControlsRow' + containerIndex" class="playerControlsRow">
               <PlayButton></PlayButton>
