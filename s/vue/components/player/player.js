@@ -319,71 +319,6 @@ class MIDIPlayer {
         MIDI.Player.playing ? this.pause() : this.play();
     };
 
-    
-    /**
-     * Toggles MIDI playback repeat mode
-     */
-    repeatToggle() {
-        this.#shouldRepeat = !this.#shouldRepeat; // Toggle repeat state
-        
-        // Update MIDI player and UI
-        MIDI.Player.loop(this.#shouldRepeat);
-        if (this.#shouldRepeat)
-            document.getElementById("midiRepeatImage" + this.containerIndex).src = this.getImageLocation() + "repeat.png";
-        else
-            document.getElementById("midiRepeatImage" + this.containerIndex).src = this.getImageLocation() + "grey_repeat.png";
-    }
-
-
-    //
-    // Setup and display functions
-    //
-
-    //
-    // pass in a tag ID.  (not a class)
-    // HTML will be put within the tag replacing whatever else was there
-    AddMidiPlayerToPage(grooveUtil, HTML_Id_to_attach_to, division, expandable) {
-        const rootElement = document.getElementById(HTML_Id_to_attach_to);
-        if (!rootElement) return;
-        
-        const uniqueIndex = this.containerIndex
-        
-        // Define event listeners configuration
-        const eventListeners = [
-            {
-                id: `midiRepeatImage${uniqueIndex}`,
-                event: 'click',
-                handler: this.repeatToggle
-            },
-            {
-                id: `midiExpandImage${uniqueIndex}`,
-                event: 'click',
-                handler: this.expandOrRetractMIDI_playback
-            },
-            {
-                id: `midiGSLogo${uniqueIndex}`,
-                event: 'click',
-                handler: grooveUtil.loadFullScreenGrooveScribe
-            },
-            {
-                id: `midiMetronomeMenu${uniqueIndex}`,
-                event: 'click',
-                handler: metronome.miniMenuClick
-            }
-        ];
-
-        // Attach event listeners
-        eventListeners.forEach(({ id, event, handler }) => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.addEventListener(event, handler, false);
-            }
-        });
-
-        // Enable or disable swing
-        this.setSwingEnabled(this.doesDivisionSupportSwing(division));
-    }
-
 
     //
     // Swing functions
@@ -474,117 +409,7 @@ class MIDIPlayer {
 		tempo--;
 		this.setTempo(tempo);
 	};
-
-
-    //
-    // Core display functions
-    //
-
-    //
-    //
-    //
-    // _HTMLForMidiPlayer(expandable) {
-    //     const touchClass = isTouchDevice() ? ' touch' : '';
-
-    //     // Build the base player controls
-    //     const baseControls = `
-    //         <div id="playerControl${this.containerIndex}" class="playerControl">
-    //             <div class="playerControlsRow" id="playerControlsRow${this.containerIndex}">
-    //                 <span title="Play/Pause" class="midiPlayImage" id="midiPlayImage${this.containerIndex}"></span>
-    //                 <span class="MIDIPlayTime" id="MIDIPlayTime${this.containerIndex}">${this.playTime}</span>`;
-
-    //     // Optional metronome controls
-    //     const metronomeControls = expandable ? `
-    //                 <span title="Metronome controls" class="midiMetronomeMenu" id="midiMetronomeMenu${this.containerIndex}">
-    //                     ${addInlineMetronomeSVG()}
-    //                 </span>` : '';
-
-    //     // Tempo and swing controls
-    //     const tempoAndSwingControls = `
-    //                 <span class="tempoAndProgress" id="tempoAndProgress${this.containerIndex}">
-    //                     <div class="tempoRow">
-    //                         <span class="tempoLabel">BPM</span>
-    //                         <input type="text" 
-    //                                for="tempo" 
-    //                                class="tempoTextField" 
-    //                                pattern="\\d+" 
-    //                                id="tempoTextField${this.containerIndex}" 
-    //                                value="80">
-    //                         <input type="range" 
-    //                                min="30" 
-    //                                max="300" 
-    //                                value="90" 
-    //                                class="tempoInput${touchClass}" 
-    //                                id="tempoInput${this.containerIndex}" 
-    //                                list="tempoSettings">
-    //                     </div>
-    //                     <div class="swingRow">
-    //                         <span class="swingLabel">SWING</span>
-    //                         <span for="swingAmount" 
-    //                               class="swingOutput" 
-    //                               id="swingOutput${this.containerIndex}">0% swing</span>
-    //                         <input type="range" 
-    //                                min="0" 
-    //                                max="50" 
-    //                                value="0" 
-    //                                class="swingInput${touchClass}" 
-    //                                id="swingInput${this.containerIndex}" 
-    //                                list="swingSettings" 
-    //                                step="5">
-    //                     </div>
-    //                 </span>`;
-
-    //     // Optional expand controls
-    //     const expandControls = expandable ? `
-    //                 <span title="Expand full screen in GrooveScribe" 
-    //                       class="midiGSLogo" 
-    //                       id="midiGSLogo${this.containerIndex}">
-    //                     ${addInLineGScribeLogoLoneGSVG()}
-    //                 </span>
-    //                 <span title="Expand/Retract player" 
-    //                       class="midiExpandImage" 
-    //                       id="midiExpandImage${this.containerIndex}"></span>` : '';
-
-    //     // Combine all components
-    //     return `${baseControls}${metronomeControls}${tempoAndSwingControls}${expandControls}</div>`;
-    // }
-
-
-    //
-    //
-    //
-    // expandOrRetractMIDIPlayback(force, expandElseContract) {
-
-    //     var playerControlElement = document.getElementById('playerControl' + this.containerIndex);
-    //     var playerControlRowElement = document.getElementById('playerControlsRow' + this.containerIndex);
-    //     var tempoAndProgressElement = document.getElementById('tempoAndProgress' + this.containerIndex);
-    //     var midiMetronomeMenuElement = document.getElementById('midiMetronomeMenu' + this.containerIndex);
-    //     var gsLogoLoadFullGSElement = document.getElementById('midiGSLogo' + this.containerIndex);
-    //     var midiExpandImageElement = document.getElementById('midiExpandImage' + this.containerIndex);
-    //     var midiPlayTime = document.getElementById('MIDIPlayTime' + this.containerIndex);
     
-    //     if (playerControlElement.className.indexOf("small") > -1 || (force && expandElseContract)) {
-    //         // make large
-    //         playerControlElement.className = playerControlElement.className.replace(" small", "") + " large";
-    //         playerControlRowElement.className = playerControlRowElement.className.replace(" small", "") + " large";
-    //         tempoAndProgressElement.className = tempoAndProgressElement.className.replace(" small", "") + " large";
-    //         midiMetronomeMenuElement.className = midiMetronomeMenuElement.className.replace(" small", "") + " large";
-    //         gsLogoLoadFullGSElement.className = gsLogoLoadFullGSElement.className.replace(" small", "") + " large";
-    //         midiExpandImageElement.className = midiExpandImageElement.className.replace(" small", "") + " large";
-    //         midiPlayTime.className = midiPlayTime.className.replace(" small", "") + " large";
-    //     } else {
-    //         // make small
-    //         playerControlElement.className = playerControlElement.className.replace(" large", "") + " small";
-    //         playerControlRowElement.className = playerControlRowElement.className.replace(" large", "") + " small";
-    //         midiMetronomeMenuElement.className = midiMetronomeMenuElement.className.replace(" large", "") + " small";
-    //         tempoAndProgressElement.className = tempoAndProgressElement.className.replace(" large", "") + " small";
-    //         gsLogoLoadFullGSElement.className = gsLogoLoadFullGSElement.className.replace(" large", "") + " small";
-    //         midiExpandImageElement.className = midiExpandImageElement.className.replace(" large", "") + " small";
-    //         midiPlayTime.className = midiPlayTime.className.replace(" large", "") + " small";
-    //     }
-    
-    // };
-
 
     /**
      * 
@@ -664,8 +489,7 @@ class MIDIPlayer {
 
     // open a new tab with GrooveScribe with the current groove
 	loadFullScreenGrooveScribe() {
-		var fullURL = getUrlStringFromGrooveData(root.track, options, midiPlayer, metronome, 'fullGrooveScribe')
-
+		var fullURL = getUrlStringFromGrooveData(editor.track, options, midiPlayer, metronome, 'fullGrooveScribe')
 		var win = window.open(fullURL, '_blank');
 		win.focus();
 	};

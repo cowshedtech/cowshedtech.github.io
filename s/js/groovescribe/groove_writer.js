@@ -73,7 +73,7 @@ function GrooveWriter() {
         })
 	
  		// initialise our midi player
-		midiPlayer.AddMidiPlayerToPage(root.track, "midiPlayer", root.track.timeDivision);
+		// midiPlayer.AddMidiPlayerToPage(root.track, "midiPlayer", root.track.timeDivision);
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 		midiPlayer?.subscribe(EventTypes.PARAMETERS_UPDATE, () => {
 			// if there is a timeout running clear it
