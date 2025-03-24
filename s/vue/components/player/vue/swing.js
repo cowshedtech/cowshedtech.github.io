@@ -3,7 +3,8 @@ export default {
         return {
             containerIndex: midiPlayer?.containerIndex || 1,
             touchClass: '',
-            swing: midiPlayer ? midiPlayer.getSwing() : 0
+            swing: midiPlayer ? midiPlayer.getSwing() : 0,
+            enabled: midiPlayer ? midiPlayer.isSwingEnabled() : true,            
         }
     },
     props: {},
@@ -11,11 +12,12 @@ export default {
         update() {
             if (!midiPlayer) return
             this.swing = midiPlayer ? midiPlayer.getSwing() : 0
+            this.enabled = midiPlayer ? midiPlayer.isSwingEnabled() : true
             updateRangeSlider('swingInput' + this.containerIndex)
         },
         handleSwingChange(event) {
             midiPlayer.setSwing(event.target.value)
-        }     
+        }
     },
     mounted() {
         if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
@@ -31,10 +33,16 @@ export default {
     template: `
         <div class="swingRow">
             <span class="swingLabel">SWING</span>
-            <span for="swingAmount" 
+            <span  v-if="enabled"  
+                   for="swingAmount" 
                     class="swingOutput" 
                     :id="'swingOutput' + containerIndex"                    
             >{{ swing }}%</span>
+            <span v-else
+                   for="swingAmount" 
+                    class="swingOutput" 
+                    :id="'swingOutput' + containerIndex"                    
+            >N/A</span>
             <input type="range" 
                     min="0" 
                     max="50" 

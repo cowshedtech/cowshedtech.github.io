@@ -53,6 +53,10 @@ class MIDIPlayer {
         this.containerIndex = containerIndex;
     }        
     
+
+    // TODO
+    //this.setSwingEnabled(this.doesDivisionSupportSwing(division));
+
     /**
      * 
      */    
@@ -332,6 +336,13 @@ class MIDIPlayer {
 		return true;
 	};
 
+
+    //
+    //
+    //
+    isSwingEnabled() {
+        return this.#swingIsEnabled
+    }
 
     //
     //
