@@ -19,7 +19,7 @@ export default {
         <p></p>
         <textarea id="ABCsource" rows="10" cols="72" ></textarea>
         <br>
-        <button type="button" onclick="displayNewSVG();">Re-render the music</button>
+        <button type="button" onclick="update();">Re-render the music</button>
         <button type="button" onclick="myGrooveWriter.saveABCtoFile();">Save ABC to file</button>
     </div>
     <span id="debugOutput"></span>
