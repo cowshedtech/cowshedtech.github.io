@@ -488,8 +488,9 @@ class MIDIPlayer {
                 midiPlayer.totalNotes++;
                 midiPlayer.eventCallbacks.notePlaying(note_type, percentComplete);
                 // TODO Fix midiPlayer
-                // if (midiPlayer.root.highlightOn) highlightNoteInABCSVGFromPercentComplete(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.noteMappingArray, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
-                 if (options.highlightOn) highlightNoteInABCSVGFromPercentComplete(editor.track.trackID, editor.track.noteMappingArray, percentComplete, editor.track.numberOfMeasures, editor.track.repeatedMeasures);
+                // if (midiPlayer.root.highlightOn) highlightNote(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.noteMappingArray, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
+                //  if (options.highlightOn) highlightNote(editor.track, editor.track.trackID, editor.track.noteMappingArray, percentComplete, editor.track.numberOfMeasures, editor.track.repeatedMeasures);
+                 if (options.highlightOn) sheetMusic.highlightNote(editor.track, percentComplete);
                 // if (editor.oteCallback) {
                 // if (midiPlayer.root.noteCallback) {
                 //     midiPlayer.root.noteCallback(note_type);
