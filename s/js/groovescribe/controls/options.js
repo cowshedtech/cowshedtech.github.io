@@ -89,7 +89,7 @@ class Options {
      * @param {string} option_type - The type of option being toggled (unused in current implementation)
      * @requires Functions:
      * - clear_all_highlights - Function to remove all current highlights
-     * - clearHighlightNoteInABCSVG - Function to clear ABC notation highlights
+     * - clearHighlight - Function to clear ABC notation highlights
      * - updateCurrentURL - Function to update browser URL with new state
      */
     optionsHighlightPopupClick(option_type) {
@@ -99,7 +99,7 @@ class Options {
         
         // Ensure current highlighting removed if highlighing now off
         if (!this.highlightOn) clear_all_highlights(null);
-        if (!this.highlightOn) clearHighlightNoteInABCSVG(editor.track.trackID);
+        if (!this.highlightOn) clearHighlight(editor.track.trackID);
         
         this.optionsMenuSetSelectedState();
         updateCurrentURL();

@@ -1,8 +1,10 @@
 class SheetMusic {
 
     #changeHandlers = [];
+    #track;
     #svg;
     #highlightedNoteIndex
+
 
     constructor() { }
 
@@ -39,7 +41,7 @@ class SheetMusic {
      * Update our sheet music 
      * @param {string} abc_source - The abc notation for our track
      */    
-    update(abc_source) {
+    update(track, abc_source) {
         
         var svg_return = renderABCtoSVG(editor.track, abc_source);
 
@@ -48,6 +50,7 @@ class SheetMusic {
         
         // this.setSVG()    
         this.#svg = svg_return.svg;
+        this.#track = track;
         this.#notifyHandlers();    
     };
 
@@ -75,27 +78,27 @@ class SheetMusic {
      * @param
      * @param
      */
-    highlightNote(track, percentComplete) {
+    highlightNote(percentComplete) {
 
-        if (track.noteMappingArray === null) return
+        if (this.#track.noteMappingArray === null) return
             
         // How many measures do we have when we include repeats
-        let totalMeasures = track.numberOfMeasures + Array.from(track.repeatedMeasures.values()).reduce((sum, repeats) => sum + (repeats - 1), 0);
+        let totalMeasures = this.#track.numberOfMeasures + Array.from(this.#track.repeatedMeasures.values()).reduce((sum, repeats) => sum + (repeats - 1), 0);
         
         // How far through are we when we consider repeats in the total
         var curNoteIndexNew = percentComplete * 32 * totalMeasures;
         
         // Which measure are we currently on taking account of repeated measures
-        let measure = getCurrentMeasureWithRepeats(curNoteIndexNew, track.numberOfMeasures, track.repeatedMeasures);
+        let measure = getCurrentMeasureWithRepeats(curNoteIndexNew, this.#track.numberOfMeasures, this.#track.repeatedMeasures);
         
         // Figure out our adjusted note position taking account of repeated measures
         let adjusted_note_id_in_32 = measure * 32 + curNoteIndexNew % 32;
         
         // Now figure out which actual note we are on in abc
-        var real_note_index = this.#getRealNoteIndex(adjusted_note_id_in_32, track.noteMappingArray);
+        var real_note_index = this.#getRealNoteIndex(adjusted_note_id_in_32, this.#track.noteMappingArray);
         
         // now the real_note_index should map to the correct abc note, highlight italics
-        this.#highlightNoteByIndex(track.trackID, real_note_index);	
+        this.#highlightNoteByIndex(real_note_index);	
     };
 
     
@@ -104,11 +107,11 @@ class SheetMusic {
     * @param
     * @param
     */
-    #highlightNoteByIndex(trackID, noteToHighlight) {
+    #highlightNoteByIndex(noteToHighlight) {
 
-        this.clearHighlightNoteInABCSVG(trackID);
+        this.clearHighlight();
 
-        var myElements = document.querySelectorAll("#abcNoteNum_" + trackID + "_" + noteToHighlight);
+        var myElements = document.querySelectorAll("#abcNoteNum_" + this.#track.trackID + "_" + noteToHighlight);
         for (var i = 0; i < myElements.length; i++) {
             myElements[i].setAttribute("class", myElements[i].getAttribute("class") + " highlighted");
             this.#highlightedNoteIndex = noteToHighlight;
@@ -121,10 +124,10 @@ class SheetMusic {
     * @param
     * @param
     */
-    clearHighlightNoteInABCSVG(trackID) {
+    clearHighlight() {
         if (this.#highlightedNoteIndex < 0) return;
         
-        var myElements = document.querySelectorAll("#abcNoteNum_" + trackID + "_" + this.#highlightedNoteIndex);
+        var myElements = document.querySelectorAll("#abcNoteNum_" + this.#track.trackID + "_" + this.#highlightedNoteIndex);
         for (var i = 0; i < myElements.length; i++) {
             //note.className = note.className.replace(new RegExp(' highlighted', 'g'), "");
             var class_name = myElements[i].getAttribute("class");

@@ -245,7 +245,7 @@ function GrooveWriter() {
 		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
 		updateCurrentURL();
 
-		sheetMusic.update(fullABC);
+		sheetMusic.update(editor.track, fullABC);
 	}
 
 	

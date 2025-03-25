@@ -288,7 +288,7 @@ class MIDIPlayer {
         MIDI.Player.pause();
         this.setState(PlayerState.PAUSED);
         this.eventCallbacks.notePlaying("clear", -1);
-        clearHighlightNoteInABCSVG(this.containerIndex);        
+        clearHighlight(this.containerIndex);        
     };
     
 
@@ -303,7 +303,7 @@ class MIDIPlayer {
         MIDI.Player.stop();
     
         this.eventCallbacks.notePlaying("clear", -1);
-        clearHighlightNoteInABCSVG(this.containerIndex);
+        clearHighlight(this.containerIndex);
         metronome.resetOptionsOffsetClickStartRotation();
     };
 
@@ -490,7 +490,7 @@ class MIDIPlayer {
                 // TODO Fix midiPlayer
                 // if (midiPlayer.root.highlightOn) highlightNote(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.noteMappingArray, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
                 //  if (options.highlightOn) highlightNote(editor.track, editor.track.trackID, editor.track.noteMappingArray, percentComplete, editor.track.numberOfMeasures, editor.track.repeatedMeasures);
-                 if (options.highlightOn) sheetMusic.highlightNote(editor.track, percentComplete);
+                 if (options.highlightOn) sheetMusic.highlightNote(percentComplete);
                 // if (editor.oteCallback) {
                 // if (midiPlayer.root.noteCallback) {
                 //     midiPlayer.root.noteCallback(note_type);
