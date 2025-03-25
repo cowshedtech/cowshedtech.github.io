@@ -38,6 +38,7 @@ var metronome;
 var editor;
 var options;
 var abcToSVGCallback;
+var sheetMusic;
 	
 
 function GrooveWriter() {
@@ -47,6 +48,7 @@ function GrooveWriter() {
 	editor = this;
 	options = new Options();
 	metronome = new Metronome();
+	sheetMusic = new SheetMusic();
 	root.track = new Track();
 	midiPlayer = new MIDIPlayer(root.track.trackID);
 	abcToSVGCallback = new SVGLibCallback(root.track);
@@ -243,7 +245,7 @@ function GrooveWriter() {
 		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
 		updateCurrentURL();
 
-		displayNewSVG();
+		sheetMusic.displayNewSVG();
 	}
 
 	

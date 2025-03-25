@@ -56,3 +56,7 @@ export default {
         </div>
 `
 }
+
+
+// Enable or disable swing
+//this.setSwingEnabled(this.doesDivisionSupportSwing(division));

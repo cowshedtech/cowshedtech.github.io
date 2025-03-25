@@ -6,7 +6,7 @@ import TotalPlayTime from './player/vue/totals_display.js'
 import MeasureContainer from './measure_container.js'
 import MusicTextFields from './music_text_fields.js'
 import Warnings from './warnings.js'
-import SheetMusic from './sheet_music.js'
+import SheetMusic from './sheet_music/vue/display.js'
 import PermutationOptions from './permutation_options.js'
 
 export default {
