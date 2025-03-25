@@ -288,7 +288,6 @@ class MIDIPlayer {
         MIDI.Player.pause();
         this.setState(PlayerState.PAUSED);
         this.eventCallbacks.notePlaying("clear", -1);
-        clearHighlight(this.containerIndex);        
     };
     
 
@@ -303,7 +302,6 @@ class MIDIPlayer {
         MIDI.Player.stop();
     
         this.eventCallbacks.notePlaying("clear", -1);
-        clearHighlight(this.containerIndex);
         metronome.resetOptionsOffsetClickStartRotation();
     };
 
@@ -432,7 +430,7 @@ class MIDIPlayer {
         // this.eventCallbacks.percentProgress(this.eventCallbacks.classRoot, percentComplete * 100);
 
         if (midiPlayer.#lastMidiTimeUpdate && midiPlayer.#lastMidiTimeUpdate < (data.now + 800)) {
-            midiPlayer.#notifySubscribers(EventTypes.PLAY_PROGRESS);
+            // midiPlayer.#notifySubscribers(EventTypes.PLAY_PROGRESS);
             midiPlayer.#lastMidiTimeUpdate = data.now;
         }
 
@@ -488,9 +486,7 @@ class MIDIPlayer {
                 midiPlayer.totalNotes++;
                 midiPlayer.eventCallbacks.notePlaying(note_type, percentComplete);
                 // TODO Fix midiPlayer
-                // if (midiPlayer.root.highlightOn) highlightNote(midiPlayer.root.midiPlayer.rootsUniqueIndex, midiPlayer.root.noteMappingArray, percentComplete, midiPlayer.root.numberOfMeasures, midiPlayer.root.repeatedMeasures);
-                //  if (options.highlightOn) highlightNote(editor.track, editor.track.trackID, editor.track.noteMappingArray, percentComplete, editor.track.numberOfMeasures, editor.track.repeatedMeasures);
-                 if (options.highlightOn) sheetMusic.highlightNote(percentComplete);
+                midiPlayer.#notifySubscribers(EventTypes.PLAY_PROGRESS, { percentComplete: percentComplete });
                 // if (editor.oteCallback) {
                 // if (midiPlayer.root.noteCallback) {
                 //     midiPlayer.root.noteCallback(note_type);

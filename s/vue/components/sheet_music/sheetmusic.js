@@ -63,6 +63,10 @@ class SheetMusic {
         return this.#svg;
     }
 
+    stop() {
+        this.clearHighlight()
+    }
+
 
     /**
      * Sets a new svg and notifies handlers

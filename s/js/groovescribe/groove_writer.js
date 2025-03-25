@@ -88,6 +88,14 @@ function GrooveWriter() {
 				updateCurrentURL();
 			}, 300);
 		})
+
+		midiPlayer?.subscribe(EventTypes.PLAY_STATE, () => {
+			if (midiPlayer.getState() == PlayerState.STOPPED) sheetMusic.stop();
+		})
+
+		midiPlayer?.subscribe(EventTypes.PLAY_PROGRESS, (data) => {			
+			if (data?.percentComplete) sheetMusic.highlightNote(data.percentComplete)			
+		})
 		
 		// load the groove from the URL data if it was passed in.
 		root.updateFromURL(window.location.search);
