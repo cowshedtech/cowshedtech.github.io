@@ -7,7 +7,7 @@ import MeasureContainer from './measure_container.js'
 import MusicTextFields from './music_text_fields.js'
 import Warnings from './warnings.js'
 import SheetMusic from './sheet_music/vue/display.js'
-import PermutationOptions from './permutation_options.js'
+import PermutationOptions from './permutations/vue/options.js'
 
 export default {
   data() {

@@ -1,5 +1,5 @@
 import RightHandContent from './components/right_hand_content.js'
-import LeftNavigation from './components/navigation/left_navigation.js'
+import TimeSignature from './components/time_signature/vue/picker.js'
 import TopNavigation from './components/navigation/top_navigation.js'
 import ContextMenus from './components/context_menus/context_menus.js'
 import MetronomeOptionsMenu from './components/metronome/vue/menu_options.js'
@@ -12,11 +12,11 @@ export default {
     return {}
   },
   components: {
-    RightHandContent, ContextMenus, MetronomeOptionsMenu, MetronomeOptionsOffsetClickMenu, MetronomeOptionsSpeedMenu, LeftNavigation, TopNavigation, MidiPlayer
+    RightHandContent, ContextMenus, MetronomeOptionsMenu, MetronomeOptionsOffsetClickMenu, MetronomeOptionsSpeedMenu, TimeSignature, TopNavigation, MidiPlayer
   },
   template: `
     <div class="nonPrintable">
-			<LeftNavigation></LeftNavigation>		
+			<TimeSignature></TimeSignature>		
       <TopNavigation></TopNavigation>		      
       <MidiPlayer></MidiPlayer>
     </div>			
