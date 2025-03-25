@@ -94,23 +94,19 @@ function GrooveWriter() {
 		})
 
 		midiPlayer?.subscribe(EventTypes.PLAY_PROGRESS, (data) => {			
-			if (data?.percentComplete) sheetMusic.highlightNote(data.percentComplete)			
+			if (data?.percentComplete && options.highlightOn) {
+				sheetMusic.highlightNote(data.percentComplete)			
+				hilight_note(null, data?.percentComplete, root.class_permutation_type, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures, root.track.notesPerMeasure, root.track.repeatedMeasures, usingTriplets());
+			} 
 		})
-		
-		// load the groove from the URL data if it was passed in.
-		root.updateFromURL(window.location.search);
 
-		// TODO
-		setupPermutationMenu();
-		setTimeSigLabel();
-
-		// if Mode != "view" put into edit mode  (we default to view mode to prevent screen flicker)
-		// if ("view" != getQueryVariableFromURL("Mode", "edit"))
-		root.updateViewEdit(true);
-		
-		// set the background and text color of the current subdivision
-		selectButton(document.getElementById("subdivision_" + root.track.notesPerMeasure + "ths"));
-
+		midiPlayer.eventCallbacks.notePlaying = function (note_type, percent_complete) {
+			if (note_type !== "complete") return
+			if (!metronome.isAutoSpeedUpActive()) return
+			// reload with new tempo
+			midiPlayer.noteHasChanged();
+			root.metronomeAutoSpeedUpTempoUpdate();			
+		};
 
 		midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
 			var midiURL;
@@ -132,16 +128,20 @@ function GrooveWriter() {
 			midiPlayer.loadFromURL(midiURL, midiPlayer.getTempo());
 			updateGrooveDBSource();
 		};
+		
+		// load the groove from the URL data if it was passed in.
+		root.updateFromURL(window.location.search);
 
-		midiPlayer.eventCallbacks.notePlaying = function (note_type, percent_complete) {
-			if (note_type == "complete" && metronome.isAutoSpeedUpActive()) {
-				// reload with new tempo
-				midiPlayer.noteHasChanged();
-				root.metronomeAutoSpeedUpTempoUpdate();
-			}
+		// TODO
+		setupPermutationMenu();
+		setTimeSigLabel();
 
-			if (options.highlightOn) hilight_note(note_type, percent_complete, root.class_permutation_type, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures, root.track.notesPerMeasure, root.track.repeatedMeasures, usingTriplets());
-		};
+		// if Mode != "view" put into edit mode  (we default to view mode to prevent screen flicker)
+		// if ("view" != getQueryVariableFromURL("Mode", "edit"))
+		root.updateViewEdit(true);
+		
+		// set the background and text color of the current subdivision
+		selectButton(document.getElementById("subdivision_" + root.track.notesPerMeasure + "ths"));
 
 		midiPlayer.initialise();
 

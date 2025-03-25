@@ -260,13 +260,11 @@ class MIDIPlayer {
         if (MIDI.Player.playing) return;
         
         if (this.getState() === PlayerState.PAUSED && false === this.doesMidiDataNeedRefresh()) {
-            // this.#currentStartTime = new Date();
             this.resetStartTime();
             this.#lastUpdateTime = 0;
             MIDI.Player.resume();
         } else {
             MIDI.Player.ctx.resume();
-            // this.#currentStartTime = new Date();
             this.resetStartTime();
             this.#lastUpdateTime = 0;
             this.eventCallbacks.loadMidiDataEvent(true);

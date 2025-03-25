@@ -97,9 +97,12 @@ class Options {
         this.highlightOn = !this.highlightOn
         editor.track.highlightOn = this.highlightOn
         
+
+        // TODO Add event handling here ...
+        
         // Ensure current highlighting removed if highlighing now off
-        if (!this.highlightOn) clear_all_highlights(null);
-        if (!this.highlightOn) clearHighlight(editor.track.trackID);
+        // if (!this.highlightOn) clear_all_highlights(null);
+        // if (!this.highlightOn) clearHighlight(editor.track.trackID);
         
         this.optionsMenuSetSelectedState();
         updateCurrentURL();
