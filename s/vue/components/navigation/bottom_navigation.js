@@ -1,8 +1,9 @@
 import BottomNavigationButton from './bottom_navigation_button.js'
+import PrintButton from '../print/vue/print.js'
 
 export default {
   components: {
-    BottomNavigationButton
+    BottomNavigationButton, PrintButton
   },
   data() {
     return { }
@@ -23,10 +24,8 @@ export default {
     <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="downloadButton" button-text="DOWNLOAD" click-handler="downloadAnchorClick();">
       <span class="bottomButtonIcon"><i class="fa fa-download fa-2x"></i></span>
     </BottomNavigationButton>
-    
-    <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="printButton" button-text="PRINT" click-handler="printMusic();">
-      <i class="fa fa-print fa-2x"></i>
-    </BottomNavigationButton>
+      
+    <PrintButton></PrintButton>
     
     <BottomNavigationButton button-class=" grooveDB_hidden shareSaveButton" button-id="shareButton" button-text="SHARE" click-handler="event.preventDefault(); show_FullURLPopup();">
       <i class="fa fa-share fa-2x"></i>
@@ -35,3 +34,8 @@ export default {
   </div>
 `
 } 
+
+
+{/* <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="printButton" button-text="PRINT" click-handler="printMusic();">
+  <i class="fa fa-print fa-2x"></i>
+</BottomNavigationButton> */}
