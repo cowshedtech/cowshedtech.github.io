@@ -49,7 +49,7 @@ function shortenerCheckboxChanged() {
     if (document.getElementById("shortenerCheckbox").checked) {
         fillInShortenedURLInFullURLPopup(editor.get_FullURLForPage(), 'fullURLPopupTextField');
     } else {
-        editor.fillInFullURLInFullURLPopup();
+        fillInFullURLInFullURLPopup();
     }
 };
 
