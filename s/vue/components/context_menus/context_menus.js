@@ -19,9 +19,9 @@ import Kick from './instruments/kick.js'
 // Controls
 import Help from './help.js'
 import Stickings from './stickings.js'
-import Download from './download.js'
+import Download from '../download/vue/download.js'
 import TimeSignature from './time_signature.js'
-import Share from './share.js'
+import Share from '../share/vue/share.js'
 import MetronomeSpeed from '../metronome/vue/menu_speed.js'
 import Grooves from './grooves.js'
 
