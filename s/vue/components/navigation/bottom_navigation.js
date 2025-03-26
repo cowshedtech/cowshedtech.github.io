@@ -1,14 +1,16 @@
 import BottomNavigationButton from './bottom_navigation_button.js'
 import PrintButton from '../print/vue/print.js'
+import DownloadButton from '../download/vue/button.js'
+import ShareButton from '../share/vue/button.js'
 
 export default {
   components: {
-    BottomNavigationButton, PrintButton
+    BottomNavigationButton, DownloadButton, PrintButton, ShareButton
   },
   data() {
     return { }
   },
-  template: `
+  template: ` 
   <div id="bottomButtonRow" class="fullWidthEle">
 
     <BottomNavigationButton button-id="clearAllNotesButton" button-text="CLEAR ALL" click-handler="event.preventDefault(); clearAllNotes();">
@@ -21,21 +23,17 @@ export default {
     
     <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="stickingsButton" button-text="STICKINGS" click-handler="stickingsAnchorClick();"></BottomNavigationButton>
     
-    <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="downloadButton" button-text="DOWNLOAD" click-handler="downloadAnchorClick();">
-      <span class="bottomButtonIcon"><i class="fa fa-download fa-2x"></i></span>
-    </BottomNavigationButton>
+    <DownloadButton></DownloadButton>
       
     <PrintButton></PrintButton>
     
-    <BottomNavigationButton button-class=" grooveDB_hidden shareSaveButton" button-id="shareButton" button-text="SHARE" click-handler="event.preventDefault(); show_FullURLPopup();">
-      <i class="fa fa-share fa-2x"></i>
-    </BottomNavigationButton>
+    <ShareButton></ShareButton>
     
   </div>
 `
 } 
 
 
-{/* <BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="printButton" button-text="PRINT" click-handler="printMusic();">
-  <i class="fa fa-print fa-2x"></i>
-</BottomNavigationButton> */}
+{/* <BottomNavigationButton button-class=" grooveDB_hidden shareSaveButton" button-id="shareButton" button-text="SHARE" click-handler="event.preventDefault(); show_FullURLPopup();">
+      <i class="fa fa-share fa-2x"></i>
+    </BottomNavigationButton> */}
