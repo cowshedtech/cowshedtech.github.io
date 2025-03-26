@@ -8,12 +8,11 @@ export default {
     return {
 		longURL: editor.get_FullURLForPage(),
 		shortURL: "",
-		url: this.longURL,
+		url: editor.get_FullURLForPage(),
 		isShortURL: false,
 		isEmbedCode: false
 	 }
   },
-  props: { },
   methods: {
 	close() {
 		var popup = document.getElementById("fullURLPopup");	
@@ -21,12 +20,13 @@ export default {
 	},
 	
 	handleShortUrlChange(){
-		if (!this.isShortURL) {
-			this.getShortURL();			
-		}
-	  	if (this.isShortURL) {			
-			this.url = this.longURL;
-		}	  	
+		if (!this.isShortURL) this.getShortURL();			
+		if (this.isShortURL) this.url = this.longURL;		
+  	},
+
+	handleEmbedUrlChange(){
+		if (!this.isEmbedCode) this.getEmbedURL();			
+		if (this.isEmbedCode) this.url = this.longURL;		
   	},
 
 	handleCopyClick(event) {
@@ -61,12 +61,19 @@ export default {
 			}
 		};
 		xhr.send(JSON.stringify(params));
+	},
+
+	getEmbedURL() {		
+		var embedText = '<iframe width="100%" height="240" src="' + this.longURL + '" frameborder="0" ></iframe>	';
+		this.url = embedText		
 	}
+
+
   },
   template: `
 	<!-- this is used by the share/save button, and is hidden by default -->
 	<div id="fullURLPopup">
-		<span id="fullURLPopupCloseButton" onclick="close();"><i class="fa fa-lg fa-times-circle"></i></span>
+		<span id="fullURLPopupCloseButton" @click="close();"><i class="fa fa-lg fa-times-circle"></i></span>
 		<div id="fullURLPopupTitle">Share Your Groove</div>
 		<div id="fullURLPopupSubTitle">Use this URL to share or save this groove</div>
 		<div id="fullURLPopupSubSubTitle">(You can also bookmark this page)</div>
@@ -87,7 +94,7 @@ export default {
 						type="checkbox" 
 						id="embedCodeCheckbox"
 						v-model="isEmbedCode"
-						@click="handleEmbedCodeChange"
+						@click="handleEmbedUrlChange"
 					>Embed Code
 				</label>
 			</span>
