@@ -1,83 +1,150 @@
+import { reactive, computed } from 'vue'
 // import download from '../download.js'
 
 export default {
-  data() {
-    return {
-      menuWidth: '200px'
-    }
-  },
-  methods: {
-    downloadSVG() { 
-      this.downloadImages('svg');  
-    },
-    
-    downloadPNG() { 
-      var parent = this;
+  name: 'DownloadMenu',
 
-      Pablo.support.image.png(function (acceptable) {
-          if (acceptable) {
-            parent.downloadImages('png');
+  setup() {
+    const DEFAULTS = {
+      MENU_WIDTH: '200px',
+      DEFAULT_FILENAME: 'notation',
+      SVG_WIDTH: 2000,
+      SCALE_FACTOR: 2,
+      VIEW_BOX_SCALE: 0.8
+    };
+
+    /**
+     * State using Vue's reactive system
+     */
+    const state = reactive({
+      menuWidth: DEFAULTS.MENU_WIDTH
+    });
+
+    /**
+     * Processes SVG for download with specified dimensions
+     * @param {string} svgContent - The SVG content to process
+     * @param {string} imageType - The target image type
+     * @param {string} filename - The output filename
+     */
+    const processSVGForDownload = (svgContent, imageType, filename) => {
+      const myPablo = Pablo(svgContent + '</svg>');
+      const width = parseFloat(myPablo.attr('width'));
+      const height = parseFloat(myPablo.attr('height'));
+      
+      const newWidth = DEFAULTS.SVG_WIDTH;
+      const newHeight = Math.round(newWidth * (height / width));
+      const newBoxWidth = Math.round(newWidth * DEFAULTS.VIEW_BOX_SCALE);
+      const newBoxHeight = Math.round(newHeight * DEFAULTS.VIEW_BOX_SCALE);
+
+      myPablo
+        .attr({
+          width: `${newWidth}px`,
+          height: `${newHeight}px`,
+          viewBox: `0 0 ${newBoxWidth} ${newBoxHeight}`
+        })
+        .children('g')
+        .attr('transform', `scale(${DEFAULTS.SCALE_FACTOR})`);
+
+      return new Promise((resolve, reject) => {
+        myPablo.download(imageType, filename, result => {
+          if (result.error) {
+            reject(new Error('Failed to convert sheet music to image file'));
           } else {
-              alert("Sorry, this browser can't export PNG images");
+            resolve();
           }
-      });       
-    },
-    
-    downloadMIDI() { 
-      var midi_url = createMidiUrlFromClickableUI("general_MIDI");
-      document.location = midi_url;
-     },
+        });
+      });
+    };
 
+    /**
+     * Handles image download
+     * @param {string} imageType - Type of image to download
+     */
+    const downloadImages = async (imageType) => {
+      try {
+        const abc_source = generate_ABC(800);
+        const svg_obj = renderABCtoSVG(editor.track, abc_source);
+        const tuneTitle = document.getElementById('tuneTitle')?.value?.trim() || DEFAULTS.DEFAULT_FILENAME;
+        const filename = `${tuneTitle}.${imageType}`;
 
-    // Render an SVG that is good for download.
-    // Constant size at 2000x200
-    downloadImages(imageType) {
-      var abc_source = generate_ABC(800);
-      var svg_obj = renderABCtoSVG(editor.track, abc_source);
-      var filename;
-      var tune_title = document.getElementById("tuneTitle").value;
+        const svgImages = svg_obj.svg.split('</svg>');
+        const promises = svgImages
+          .slice(0, -1) // Remove last empty element from split
+          .map(svg => processSVGForDownload(svg, imageType, filename));
 
-      if (tune_title.length == 0) {
-          filename = "notation.";
-      } else {
-          filename = tune_title;
+        await Promise.all(promises);
+      } catch (error) {
+        console.error('Download failed:', error);
+        alert(error.message);
       }
-      filename += imageType;
+    };
 
-      var svg_images = svg_obj.svg.split("</svg>");
-      // that split should always create at least 2 since it will match that </svg> if there is only one
-      // since the split creates an extra one reduce the length by 1
-      for (var i = 0; i < svg_images.length - 1; i++) {
-          var myPablo = Pablo(svg_images[i] + "</svg>");
-          var width = parseFloat(myPablo.attr('width'));
-          var height = parseFloat(myPablo.attr('height'));
-          var imageRatio = height / width;
-          var newWidth = 2000;
-          var newHeight = Math.round(newWidth * imageRatio);
-          var newBoxWidth = Math.round(newWidth * .8);
-          var newBoxHeight = Math.round(newHeight * .8);
-          myPablo.attr('width', newWidth + 'px');
-          myPablo.attr('height', newHeight + 'px');
-          myPablo.attr('viewBox', '0 0 ' + newBoxWidth + ' ' + newBoxHeight);
-          myPablo.children('g').attr('transform', 'scale(2)');
+    /**
+     * Handles SVG download
+     */
+    const downloadSVG = () => downloadImages('svg');
 
-          myPablo.download(imageType, filename, function (result) {
-              if (result.error) {
-                  alert("An error occurred when trying to convert the sheet music to a PNG file.");
-              }
-          });
+    /**
+     * Handles PNG download with browser support check
+     */
+    const downloadPNG = async () => {
+      try {
+        const acceptable = await new Promise(resolve => {
+          Pablo.support.image.png(resolve);
+        });
+
+        if (!acceptable) {
+          throw new Error('This browser cannot export PNG images');
+        }
+
+        await downloadImages('png');
+      } catch (error) {
+        console.error('PNG download failed:', error);
+        alert(error.message);
       }
-    }
+    };
 
+    /**
+     * Handles MIDI file download
+     */
+    const downloadMIDI = () => {
+      try {
+        const midi_url = createMidiUrlFromClickableUI('general_MIDI');
+        if (!midi_url) {
+          throw new Error('Failed to generate MIDI URL');
+        }
+        document.location = midi_url;
+      } catch (error) {
+        console.error('MIDI download failed:', error);
+        alert('Failed to generate MIDI file');
+      }
+    };
 
+    return {
+      menuWidth: computed(() => state.menuWidth),
+      downloadSVG,
+      downloadPNG,
+      downloadMIDI
+    };
   },
+
   template: `
-	<div class="noteContextMenu">
-		<ul id="downloadContextMenu" class="list" :style="{ width: menuWidth }">
-			<li @click="downloadSVG"><b>Download SVG Images</b></li>
-			<li @click="downloadPNG"><b>Download PNG Images</b></li>
-			<li @click="downloadMIDI"><b>Download MIDI file</b></li>
-		</ul>
-	</div>	
-`
+    <div class="noteContextMenu">
+      <ul 
+        id="downloadContextMenu" 
+        class="list" 
+        :style="{ width: menuWidth }"
+      >
+        <li @click="downloadSVG">
+          <b>Download SVG Images</b>
+        </li>
+        <li @click="downloadPNG">
+          <b>Download PNG Images</b>
+        </li>
+        <li @click="downloadMIDI">
+          <b>Download MIDI file</b>
+        </li>
+      </ul>
+    </div>
+  `
 }
