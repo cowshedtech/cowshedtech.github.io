@@ -7,7 +7,10 @@ export default {
   methods: {
     downloadSVG() { SVGSaveAs() },
     downloadPNG() { PNGSaveAs() },
-    downloadMIDI() { MIDISaveAs() }
+    downloadMIDI() { 
+      var midi_url = createMidiUrlFromClickableUI("general_MIDI");
+      document.location = midi_url;
+     }
   },
   template: `
 	<div class="noteContextMenu">
