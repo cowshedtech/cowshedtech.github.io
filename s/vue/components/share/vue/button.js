@@ -69,7 +69,7 @@ export default {
         // open the popup with full url and try to load short in the background
         fillInFullURLInFullURLPopup();
         // default is to use shortened url
-        fillInShortenedURLInFullURLPopup(editor.get_FullURLForPage(), 'fullURLPopupTextField');
+        // fillInShortenedURLInFullURLPopup(editor.get_FullURLForPage(), 'fullURLPopupTextField');
     
     };
 

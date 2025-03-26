@@ -20,9 +20,9 @@ function fillInShortenedURLInFullURLPopup(fullURL, cssIdOfTextFieldToFill) {
             // select the URL for copy/paste
             textField.focus();
             textField.select();
-            document.getElementById("shortenerCheckbox").checked = true;  // this is now true if isn't already
+            // document.getElementById("shortenerCheckbox").checked = true;  // this is now true if isn't already
         } else {
-            document.getElementById("shortenerCheckbox").checked = false;  // request failed
+            // document.getElementById("shortenerCheckbox").checked = false;  // request failed
         }
     };
     xhr.send(JSON.stringify(params));
@@ -32,8 +32,8 @@ function fillInShortenedURLInFullURLPopup(fullURL, cssIdOfTextFieldToFill) {
 // embed looks something like this:
 // <iframe width="100%" height="240" src="https://hosting.com/path/GrooveDisplay.html?Div=16&Title=Example..." frameborder="0" ></iframe>
 function fillInEmbedURLInFullURLPopup(fullURL, cssIdOfTextFieldToFill) {
-    document.getElementById("shortenerCheckbox").checked = false;  // uncheck shortenerCheckbox, because it is not compatible
-    document.getElementById("embedCodeCheckbox").checked = true;  // this will be true if isn't already
+    // document.getElementById("shortenerCheckbox").checked = false;  // uncheck shortenerCheckbox, because it is not compatible
+    // document.getElementById("embedCodeCheckbox").checked = true;  // this will be true if isn't already
 
     var embedText = '<iframe width="100%" height="240" src="' + fullURL + '" frameborder="0" ></iframe>	';
 
@@ -63,8 +63,8 @@ function embedCodeCheckboxChanged() {
 
 
 function fillInFullURLInFullURLPopup() {
-    document.getElementById("embedCodeCheckbox").checked = false;  // uncheck embedCodeCheckbox
-    document.getElementById("shortenerCheckbox").checked = false;  // uncheck shortenerCheckbox
+    // document.getElementById("embedCodeCheckbox").checked = false;  // uncheck embedCodeCheckbox
+    // document.getElementById("shortenerCheckbox").checked = false;  // uncheck shortenerCheckbox
 
     var popup = document.getElementById("fullURLPopup");
     if (popup) {
@@ -78,22 +78,4 @@ function fillInFullURLInFullURLPopup() {
         textField.focus();
         textField.select();
     }
-};
-
-
-function copyShareURLToClipboard() {
-    var copyText = document.getElementById("fullURLPopupTextField");
-
-    copyText.select();
-    // hack fix for mobile
-    copyText.setSelectionRange(0, 99999);
-
-    document.execCommand("copy");
-}
-
-function close_FullURLPopup() {
-    var popup = document.getElementById("fullURLPopup");
-
-    if (popup)
-        popup.style.display = "none";
 };
