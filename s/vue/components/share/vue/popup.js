@@ -14,21 +14,40 @@ export default {
 	 }
   },
   methods: {
+	
+	/*
+	 *
+	*/
 	close() {
 		var popup = document.getElementById("fullURLPopup");	
 		if (popup) popup.style.display = "none";
 	},
 	
+	open() { 
+		console.log(`here`)
+	},
+
+	/*
+	 *
+	*/
 	handleShortUrlChange(){
 		if (!this.isShortURL) this.getShortURL();			
 		if (this.isShortURL) this.url = this.longURL;		
   	},
 
+
+	/*
+	 *
+	*/
 	handleEmbedUrlChange(){
 		if (!this.isEmbedCode) this.getEmbedURL();			
 		if (this.isEmbedCode) this.url = this.longURL;		
   	},
 
+
+	/*
+	 *
+	*/
 	handleCopyClick(event) {
 		event.preventDefault();
       
@@ -38,6 +57,10 @@ export default {
 		document.execCommand("copy");
     },
 	
+	
+	/*
+	 *
+	*/
 	getShortURL() {
 		this.isEmbedCode = false;
 		
@@ -63,12 +86,14 @@ export default {
 		xhr.send(JSON.stringify(params));
 	},
 
+	
+	/*
+	 *
+	*/
 	getEmbedURL() {		
 		var embedText = '<iframe width="100%" height="240" src="' + this.longURL + '" frameborder="0" ></iframe>	';
 		this.url = embedText		
 	}
-
-
   },
   template: `
 	<!-- this is used by the share/save button, and is hidden by default -->

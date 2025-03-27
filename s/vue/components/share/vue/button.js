@@ -11,6 +11,7 @@ export default {
     openPopup() {    
       var popup = document.getElementById("fullURLPopup");
       if (popup) popup.style.display = "block";  
+      this.$emit('openSharePopup')
     },
 
     /**

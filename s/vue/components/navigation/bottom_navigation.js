@@ -7,6 +7,11 @@ export default {
   components: {
     BottomNavigationButton, DownloadButton, PrintButton, ShareButton
   },
+  methods: {
+    open() { 
+      console.log(`parent`)
+    },
+  },
   data() {
     return { }
   },
@@ -27,7 +32,7 @@ export default {
       
     <PrintButton></PrintButton>
     
-    <ShareButton></ShareButton>
+    <ShareButton @open-share-popup="open"></ShareButton>
     
   </div>
 `
