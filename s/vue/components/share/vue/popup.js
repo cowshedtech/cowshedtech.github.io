@@ -4,28 +4,52 @@ import { reactive, watch } from 'vue'
 export default {
   name: 'SharePopup',
 
+  
+	setup(props, { emit }) {
+	const handleClose = () => {
+	  emit('close-clicked');
+	};
+  
+	return {
+	  handleClose
+	};
+  },
+  
   data() {
     return {
-		longURL: editor.get_FullURLForPage(),
+		longURL: "",
 		shortURL: "",
-		url: editor.get_FullURLForPage(),
+		url: "",
 		isShortURL: false,
 		isEmbedCode: false
 	 }
   },
+  
+  props: {
+    greetingMessage: Boolean,
+	showMenu: Boolean,
+	isOpen: {
+		type: Boolean,
+		default: false
+	}
+  },
+
+  mounted() {
+    this.longURL = editor?.get_FullURLForPage() || "";
+	this.url = this.longURL;	
+  },
+
   methods: {
 	
-	/*
-	 *
-	*/
+	// /*
+	//  *
+	// */
 	close() {
-		var popup = document.getElementById("fullURLPopup");	
-		if (popup) popup.style.display = "none";
+		// var popup = document.getElementById("fullURLPopup");	
+		// if (popup) popup.style.display = "none";
+		this.handleClose();
 	},
 	
-	open() { 
-		console.log(`here`)
-	},
 
 	/*
 	 *
@@ -95,10 +119,11 @@ export default {
 		this.url = embedText		
 	}
   },
+
   template: `
 	<!-- this is used by the share/save button, and is hidden by default -->
-	<div id="fullURLPopup">
-		<span id="fullURLPopupCloseButton" @click="close();"><i class="fa fa-lg fa-times-circle"></i></span>
+	<div id="fullURLPopup" v-if="isOpen">
+	    <span id="fullURLPopupCloseButton" @click="close();"><i class="fa fa-lg fa-times-circle"></i></span>
 		<div id="fullURLPopupTitle">Share Your Groove</div>
 		<div id="fullURLPopupSubTitle">Use this URL to share or save this groove</div>
 		<div id="fullURLPopupSubSubTitle">(You can also bookmark this page)</div>

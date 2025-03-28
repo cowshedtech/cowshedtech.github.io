@@ -685,7 +685,7 @@
 		font-size: 14px;
 	}
 	#fullURLPopup, #metronomeAutoSpeedupConfiguration {
-		/visibility: hidden;
+		/* /visibility: hidden; */
 		display: none;
 		position:absolute; left:250px; top:250px; z-index:999;
 		background-color: var(--highlight-color);

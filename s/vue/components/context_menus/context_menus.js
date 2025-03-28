@@ -21,7 +21,6 @@ import Help from './help.js'
 import Stickings from './stickings.js'
 import Download from '../download/vue/menu.js'
 import TimeSignature from './time_signature.js'
-import Share from '../share/vue/popup.js'
 import MetronomeSpeed from '../metronome/vue/menu_speed.js'
 import Grooves from './grooves.js'
 
@@ -50,7 +49,6 @@ export default {
         { name: 'Stickings' },
         { name: 'Download' },
         { name: 'TimeSignature' },
-        { name: 'Share' },
         { name: 'Grooves' },
         { name: 'MetronomeSpeed' }
       ]
@@ -59,7 +57,7 @@ export default {
   components: {
     Sticking, HighHat, Tom1, Tom4, Snare, Kick,
     StickingsLabel, HighHatLabel, Tom1Label, Tom4Label, SnareLabel, KickLabel, PermutationLabel, Options,
-    Help, Stickings, Download, TimeSignature, Share, MetronomeSpeed, Grooves
+    Help, Stickings, Download, TimeSignature, MetronomeSpeed, Grooves
   },
   template: `
     <div class="context-menus">

@@ -923,7 +923,15 @@
 		font-family: monospace;
 		font-size: 14px;
 	}
-	#fullURLPopup, #metronomeAutoSpeedupConfiguration, #timeSigPopup {
+	#fullURLPopup {
+		position:absolute; left:300px; top:250px; z-index:999;
+		background-color: #FFF;
+		width: 400px;
+		padding: 10px;
+		border: solid 2px #999;
+		border-radius: 5px;
+	}
+	#metronomeAutoSpeedupConfiguration, #timeSigPopup {
 		/visibility: hidden;
 		display: none;
 		position:absolute; left:300px; top:250px; z-index:999;
