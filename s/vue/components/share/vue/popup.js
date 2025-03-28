@@ -165,8 +165,11 @@ export default {
 			</button>
 			&nbsp; &nbsp; &nbsp;
 			<share-button id="shareButton"></share-button>
-			<ShareTo></ShareTo>
+			<ShareTo :gsurl="url"></ShareTo>
 		</div>		
 	</div>	
 `
 }
+
+
+{/* <ShareTo :gsurl="url"></ShareTo> */}

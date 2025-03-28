@@ -3,7 +3,26 @@ export default {
     return { }
   },
 
+  props: {
+		gsurl: {
+			type: String,
+			required: true
+		}
+	},
+
+  watch: {
+		gsurl() {
+			console.log(`here`)
+		}
+	},
+
   mounted() {
+
+    // TODO FIX
+    console.log(this.gsurl)
+
+    var parent = this;
+
     this.ShareBut = new ShareButton({
       ui: {
         flyout: 'bottom center', // change the flyout direction of the shares. chose from `top left`, `top center`, `top right`, `bottom left`, `bottom right`, `bottom center`, `middle left`, or `middle right` [Default: `top center`]
@@ -14,7 +33,8 @@ export default {
       networks: {
         facebook: {
           before: function () {
-            this.url = document.getElementById("fullURLPopupTextField").value;
+            // this.url = document.getElementById("fullURLPopupTextField").value;
+            this.url = parent.url
             this.description = "Check out this groove.";
           },
           //app_id : "839699029418014"    // staging id
@@ -27,20 +47,26 @@ export default {
         },
         twitter: {
           before: function () {
-            this.url = encodeURIComponent(document.getElementById("fullURLPopupTextField").value);
-            this.description = "Check out this groove:  " + document.getElementById("fullURLPopupTextField").value;
+            // this.url = encodeURIComponent(document.getElementById("fullURLPopupTextField").value);
+            // this.description = "Check out this groove:  " + document.getElementById("fullURLPopupTextField").value;
+            this.url = parent.url
+            this.description = "Check out this groove:  " + url;            
           }
         },
         reddit: {
           before: function () {
-            this.url = document.getElementById("fullURLPopupTextField").value;
-            this.title = "Check out this groove: " + document.getElementById("fullURLPopupTextField").value;
+            // this.url = document.getElementById("fullURLPopupTextField").value;
+            // this.title = "Check out this groove: " + document.getElementById("fullURLPopupTextField").value;
+            this.url = parent.url            
+            this.title = "Check out this groove: " + url;
           }
         },
         email: {
           before: function () {
-            this.url = document.getElementById("fullURLPopupTextField").value;
-            this.description = "Check out this groove. %0A%0A " + encodeURIComponent(document.getElementById("fullURLPopupTextField").value);
+            // this.url = document.getElementById("fullURLPopupTextField").value;
+            // this.description = "Check out this groove. %0A%0A " + encodeURIComponent(document.getElementById("fullURLPopupTextField").value);
+            this.url = parent.url
+            this.description = "Check out this groove. %0A%0A " + url;
           }
         },
         pinterest: {

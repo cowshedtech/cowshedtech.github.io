@@ -6,7 +6,6 @@ import Tom4Label from './instruments/tom4_label.js'
 import SnareLabel from './instruments/snare_label.js'
 import KickLabel from './instruments/kick_label.js'
 import PermutationLabel from './permutation_label.js'
-import Options from './options.js'
 
 // Instruments
 import Sticking from './instruments/sticking.js'

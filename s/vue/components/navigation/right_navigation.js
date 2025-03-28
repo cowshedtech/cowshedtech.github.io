@@ -1,3 +1,5 @@
+import Options from '../../components/options/vue/menu.js'
+
 export default {
     data() {
         return {
@@ -33,6 +35,9 @@ export default {
             ]
         }
     },
+    components: {
+        Options
+    },
     template: `
         <span id="upperRight">
             <span v-for="button in buttons"
@@ -44,5 +49,6 @@ export default {
                 <i class="fa" :class="button.icon"></i> {{ button.label }}
             </span>
         </span>
+        <Options></Options>
     `
 }

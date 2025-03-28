@@ -7,6 +7,7 @@ import MetronomeOptionsOffsetClickMenu from './components/metronome/vue/menu_opt
 import MetronomeOptionsSpeedMenu from './components/metronome/vue/menu_options_speed.js'
 import MidiPlayer from './components/player/vue/controls.js'
 
+
 export default {
   data() {
     return {}
