@@ -4,17 +4,6 @@ import { reactive, watch } from 'vue'
 export default {
 	name: 'SharePopup',
 
-
-	setup(props, { emit }) {
-		const handleClose = () => {
-			emit('close-clicked');
-		};
-
-		return {
-			handleClose
-		};
-	},
-
 	data() {
 		return {
 			longURL: "",
@@ -32,20 +21,23 @@ export default {
 		}
 	},
 
-	mounted() {
-		this.longURL = editor?.get_FullURLForPage() || "";
-		this.url = this.longURL;
+	watch: {
+		isOpen() {
+			this.isEmbedCode = false;
+			this.isShortURL = false;
+			this.longURL = editor?.get_FullURLForPage() || "";
+			this.url = this.longURL;
+			this.getShortURL();			
+		}
 	},
 
 	methods: {
 
-		// /*
-		//  *
-		// */
+		/*
+		 *
+		*/
 		close() {
-			// var popup = document.getElementById("fullURLPopup");	
-			// if (popup) popup.style.display = "none";
-			this.handleClose();
+			this.$emit('close-clicked');
 		},
 
 
@@ -53,7 +45,10 @@ export default {
 		 *
 		*/
 		handleShortUrlChange() {
-			if (!this.isShortURL) this.getShortURL();
+			if (!this.isShortURL) {
+				this.url = this.shortURL;
+				this.isEmbedCode = false;
+			}
 			if (this.isShortURL) this.url = this.longURL;
 		},
 
@@ -84,8 +79,6 @@ export default {
 		 *
 		*/
 		getShortURL() {
-			this.isEmbedCode = false;
-
 			var params = {
 				"dynamicLinkInfo": {
 					"domainUriPrefix": "https://gscribe.com/share",
@@ -100,9 +93,10 @@ export default {
 			xhr.onload = function () {
 				if (xhr.status === 200) {
 					var response = JSON.parse(xhr.responseText);
-					parent.url = response.shortLink
-				} else {
-					this.isShortURL = false;
+					parent.shortURL = response.shortLink
+					parent.url = parent.shortURL
+					parent.isShortURL = true;
+					parent.isEmbedCode = false;
 				}
 			};
 			xhr.send(JSON.stringify(params));
@@ -113,8 +107,9 @@ export default {
 		 *
 		*/
 		getEmbedURL() {
-			var embedText = '<iframe width="100%" height="240" src="' + this.longURL + '" frameborder="0" ></iframe>	';
+			var embedText = '<iframe width="100%" height="240" src="' + this.longURL + '" frameborder="0" ></iframe>';
 			this.url = embedText
+			this.isShortURL = false;
 		}
 	},
 
