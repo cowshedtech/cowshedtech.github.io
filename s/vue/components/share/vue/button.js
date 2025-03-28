@@ -95,7 +95,7 @@ export default {
     >
       <i class="fa fa-share fa-2x"></i>      
     </BottomNavigationButton>
-    <Menu :is-open="isPopupOpen" @action-clicked="closeMenu"></Menu>
+    <Menu :is-open="isPopupOpen" @close-clicked="closeMenu"></Menu>
   `
 }
 
