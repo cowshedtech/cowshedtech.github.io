@@ -1,8 +1,12 @@
-import ShareButton from './button.js'
-import { reactive, watch } from 'vue'
+import { watch } from 'vue'
+import ShareTo from './button_share_to.js'
 
 export default {
 	name: 'SharePopup',
+
+	components: {
+		ShareTo
+	},
 
 	data() {
 		return {
@@ -27,7 +31,7 @@ export default {
 			this.isShortURL = false;
 			this.longURL = editor?.get_FullURLForPage() || "";
 			this.url = this.longURL;
-			this.getShortURL();			
+			this.getShortURL();
 		}
 	},
 
@@ -161,7 +165,8 @@ export default {
 			</button>
 			&nbsp; &nbsp; &nbsp;
 			<share-button id="shareButton"></share-button>
-		</div>
-	</div>
+			<ShareTo></ShareTo>
+		</div>		
+	</div>	
 `
 }
