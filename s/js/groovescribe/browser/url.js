@@ -80,7 +80,7 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
     }
 
     // only add if we need them.  // they are long and ugly. :)
-    if (options.showStickings) {
+    if (options.isStickingVisible()) {
         var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', track.sticking_array, true, true, total_notes, track.notesPerMeasure);
         fullURL += Stickings;
     }
@@ -108,9 +108,10 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     var stickingsString = getQueryVariableFromString("Stickings", false, encodedURLData);
     if (!stickingsString) {
         stickingsString = GetDefaultStickingsGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
-        options.showStickings = false;
+       options.setStickingVisible(false);
+
     } else {
-        options.showStickings = true;
+        options.setStickingVisible(true);
     }
 
     let highlight = getQueryVariableFromString("Highlight", "ON", encodedURLData);

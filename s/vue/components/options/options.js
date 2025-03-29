@@ -69,7 +69,7 @@ class Options {
 
     /**
      * is note highlighting on
-     * @returns {number} The current frequency
+     * @returns {boolean} The current frequency
      */
     isHighlightOn() {
         return this.#highlightOn;
@@ -77,11 +77,28 @@ class Options {
 
     /**
      * Sets whether note highlighting is on
-     * @param {number} isOn - is highlighting on
+     * @param {boolean} isOn - is highlighting on
      */
     setHighlightOn(isOn) {
         this.#highlightOn = isOn;
         this.#notifyHandlers();
+    }
+
+    /**
+     * is sticking visible
+     * @returns {boolean} true if sticking visible
+     */
+    isStickingVisible() {
+        return this.showStickings;
+    }
+
+    /**
+     * Sets whether sticking is visible
+     * @param {boolean} isVisible - is sticking visible
+     */
+    setStickingVisible(isVisible) {
+        this.showStickings = isVisible;
+        // this.#notifyHandlers();
     }
 
     

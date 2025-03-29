@@ -196,9 +196,9 @@ function stickingsShowHide(force, showElseHide, dontRefreshScreen) {
     toggleDisplayByClass(".stickings-label", force, showElseHide, "block");
 
     if (force) {
-        options.showStickings = showElseHide
+        options.setStickingVisible(showElseHide)
     } else {
-        options.showStickings = !options.showStickings
+        options.setStickingVisible(!options.isStickingsVisible())
     }
 
     // if (OnElseOff) {

@@ -75,7 +75,7 @@ function getGSUrlStringFromGrooveData(track, url_destination) {
     }
 
     // only add if we need them.  // they are long and ugly. :)
-    if (options.showStickings) {
+    if (options.isStickingVisible()) {
         var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', track.sticking_array, true, true, total_notes, track.notesPerMeasure);
         fullURL += Stickings;
     }

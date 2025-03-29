@@ -384,7 +384,7 @@ function GrooveWriter() {
 		if (options.tomsVisible)
 			showHideToms(true, true, true);
 
-		if (track.showStickings)
+		if (options.isStickingVisible())
 			stickingsShowHide(true, true, true);
 		
 		
@@ -403,7 +403,7 @@ function GrooveWriter() {
 	//      would make this whole thing much easier.  :(
 	root.changeDivisionWithNotes = function(newDivision, Stickings, HH, Tom1, Tom4, Snare, Kick) {
 		var oldDivision = root.track.timeDivision;
-		var wasStickingsVisable = options.showStickings;
+		var wasStickingsVisable = options.isStickingVisible();
 		// var wasTomsVisable = isTomsVisible();
 		var wasTomsVisable = options.tomsVisible;
 
