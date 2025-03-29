@@ -169,7 +169,7 @@ function stickingsShowHide(force, showElseHide, dontRefreshScreen) {
     if (force) {
         options.setStickingVisible(showElseHide)
     } else {
-        options.setStickingVisible(!options.isStickingsVisible())
+        options.setStickingVisible(!options.isStickingVisible())
     }
 
     // if (!dontRefreshScreen) {
@@ -182,6 +182,6 @@ function stickingsShowHide(force, showElseHide, dontRefreshScreen) {
 // if stickings are shown, hide them and vice versa
 function stickingsShowHideToggle() {
 
-    var stickingsAreCurrentlyShown = options.isStickingsVisible();
+    var stickingsAreCurrentlyShown = options.isStickingVisible();
     stickingsShowHide(true, !stickingsAreCurrentlyShown, false);
 }
