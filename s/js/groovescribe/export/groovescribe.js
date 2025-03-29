@@ -68,7 +68,7 @@ function getGSUrlStringFromGrooveData(track, url_destination) {
     fullURL += HH + Snare + Kick;
 
     // only add if we need them.  // they are long and ugly. :)
-    if (options.tomsVisible) {
+    if (options.areTomsVisible()) {
         var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', track.toms_array[0], true, true, total_notes, track.notesPerMeasure);
         var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', track.toms_array[3], true, true, total_notes, track.notesPerMeasure);
         fullURL += Tom1 + Tom4;

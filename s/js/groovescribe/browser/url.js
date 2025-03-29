@@ -73,7 +73,7 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
     fullURL += HH + Snare + Kick;
 
     // only add if we need them.  // they are long and ugly. :)
-    if (options.tomsVisible) {
+    if (options.areTomsVisible()) {
         var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', track.toms_array[0], true, true, total_notes, track.notesPerMeasure);
         var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', track.toms_array[3], true, true, total_notes, track.notesPerMeasure);
         fullURL += Tom1 + Tom4;
@@ -168,14 +168,14 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     }
 
     // Get the Toms
-    options.tomsVisible = false;
+    options.setTomsVisible(false);
     for (i = 0; i < 4; i++) {
         // toms are named T1, T2, T3, T4
         var Tom_string = getQueryVariableFromString("T" + (i + 1), false, encodedURLData);
         if (!Tom_string) {
             Tom_string = GetDefaultTomGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);            
         } else {
-            options.tomsVisible = true;
+            options.setTomsVisible(true);
         }
 
         /// the toms array index starts at zero (0) the first one is T1

@@ -16,10 +16,10 @@ class Options {
     #highlightOn;
 
     /** @type {boolean} Whether tom drums are visible in the editor */
-    tomsVisible = false;
+    #tomsVisible = false;
 
     /** @type {boolean} Whether sticking notations are shown */
-    showStickings = false;
+    #stickingsVisible = false;
 
     /** @type {boolean} Whether the legend is displayed */
     showLegend;
@@ -89,7 +89,7 @@ class Options {
      * @returns {boolean} true if sticking visible
      */
     isStickingVisible() {
-        return this.showStickings;
+        return this.#stickingsVisible;
     }
 
     /**
@@ -97,8 +97,25 @@ class Options {
      * @param {boolean} isVisible - is sticking visible
      */
     setStickingVisible(isVisible) {
-        this.showStickings = isVisible;
+        this.#stickingsVisible = isVisible;
         // this.#notifyHandlers();
+    }
+
+    /**
+     * are toms visible
+     * @returns {boolean} true if toms visible
+     */
+    areTomsVisible() {
+        return this.#tomsVisible;
+    }
+
+    /**
+     * Sets whether toms are visible
+     * @param {boolean} isVisible - is toms visible
+     */
+    setTomsVisible(isVisible) {
+        this.#tomsVisible = isVisible;
+        this.#notifyHandlers();
     }
 
     

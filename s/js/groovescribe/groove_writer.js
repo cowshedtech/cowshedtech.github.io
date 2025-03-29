@@ -131,6 +131,7 @@ function GrooveWriter() {
 
 		options.addChangeHandler(() => {
 			if (!options.isHighlightOn()) sheetMusic.clearHighlight();
+			showHideToms(true, options.areTomsVisible(), true);
 			updateCurrentURL();
 		})
 		
@@ -381,7 +382,7 @@ function GrooveWriter() {
 		document.getElementById("tuneAuthor").value = track.author;
 		document.getElementById("tuneComments").value = track.comments;
 
-		if (options.tomsVisible)
+		if (options.areTomsVisible())
 			showHideToms(true, true, true);
 
 		if (options.isStickingVisible())
@@ -404,8 +405,7 @@ function GrooveWriter() {
 	root.changeDivisionWithNotes = function(newDivision, Stickings, HH, Tom1, Tom4, Snare, Kick) {
 		var oldDivision = root.track.timeDivision;
 		var wasStickingsVisable = options.isStickingVisible();
-		// var wasTomsVisable = isTomsVisible();
-		var wasTomsVisable = options.tomsVisible;
+		var wasTomsVisable = options.areTomsVisible();
 
 		root.track.timeDivision = newDivision;
 		root.track.notesPerMeasure = calc_notes_per_measure(root.track.timeDivision, root.track.numBeats, root.track.noteValue);

@@ -144,33 +144,7 @@ function generateTomContainerHTML(indexStartForNotes, baseindex, notesPerMeasure
     return newHTML.join(''); // Join the array into a single string
 }
 
-function isTomsVisible() {
-    var myElements = document.querySelectorAll(".toms-container");
-    for (var i = 0; i < myElements.length; i++) {
-        if (myElements[i].style.visibility == "visible")
-            return true;
-    }
-
-    return false;
-}
-
 function showHideToms(force, showElseHide, dontRefreshScreen) {
     var OnElseOff = toggleVisibilityByClass(".toms-container", force, showElseHide);
-    toggleVisibilityByClass(".tom-label", force, showElseHide);
-    
-    if (force) {
-        options.tomsVisible = showElseHide
-    } else {
-        options.tomsVisible = !options.tomsVisible
-    }
-
-    // if (OnElseOff)
-    //     addOrRemoveKeywordFromClassById("showHideTomsButton", "ClickToHide", true);
-    // else
-    //     addOrRemoveKeywordFromClassById("showHideTomsButton", "ClickToHide", false);
-
-    if (!dontRefreshScreen)
-        editor.updateSheetMusic();
-    
-    return false; // don't follow the link
+    toggleVisibilityByClass(".tom-label", force, showElseHide);    
 };
