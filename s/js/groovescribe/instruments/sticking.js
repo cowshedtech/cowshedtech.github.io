@@ -107,15 +107,6 @@ function sticking_rotate_state(id, notesPerMeasure, timeDivision, noteValuePerMe
     set_sticking_state(id, new_state, true, notesPerMeasure, timeDivision, noteValuePerMeasure);
 }
 
-function isStickingsVisible() {
-    var myElements = document.querySelectorAll(".stickings-container");
-    for (var i = 0; i < myElements.length; i++) {
-        if (myElements[i].style.display == "block")
-            return true;
-    }
-
-    return false;
-}
 
 function GetDefaultStickingsGroove(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
     return GetEmptyGroove(notes_per_measure, numMeasures);
@@ -156,26 +147,6 @@ function generateStickingContainerHTML(baseindex, indexStartForNotes, notesPerMe
 }
 
 
-
-// // the user has clicked on the stickings menu (at bottom)
-function stickingsAnchorClick(event) {
-
-    var contextMenu = document.getElementById("stickingsContextMenu");
-    if (contextMenu) {
-        var anchorPoint = document.getElementById("stickingsButton");
-
-        if (anchorPoint) {
-            if (!event)
-                event = window.event;
-            if (event.clientX || event.clientY) {
-                contextMenu.style.top = event.clientY - 100 + "px";
-                contextMenu.style.left = event.clientX - 150 + "px";
-            }
-        }
-        showContextMenu(contextMenu);
-    }
-};
-
 // Swap Right and Left stickings if any are shown
 function stickingsReverseRL() {
     for (var i = 0; i < editor.track.numberOfMeasures * editor.notesPerMeasure; i++) {
@@ -201,15 +172,9 @@ function stickingsShowHide(force, showElseHide, dontRefreshScreen) {
         options.setStickingVisible(!options.isStickingsVisible())
     }
 
-    // if (OnElseOff) {
-    //     addOrRemoveKeywordFromClassById("stickingsButton", "ClickToHide", true);
-    // } else {
-    //     addOrRemoveKeywordFromClassById("stickingsButton", "ClickToHide", false);
+    // if (!dontRefreshScreen) {
+    //     editor.updateSheetMusic();
     // }
-
-    if (!dontRefreshScreen) {
-        editor.updateSheetMusic();
-    }
 
     return false; // don't follow the link
 };
@@ -217,6 +182,6 @@ function stickingsShowHide(force, showElseHide, dontRefreshScreen) {
 // if stickings are shown, hide them and vice versa
 function stickingsShowHideToggle() {
 
-    var stickingsAreCurrentlyShown = isStickingsVisible();
+    var stickingsAreCurrentlyShown = options.isStickingsVisible();
     stickingsShowHide(true, !stickingsAreCurrentlyShown, false);
 }
