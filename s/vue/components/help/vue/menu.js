@@ -26,10 +26,6 @@ export default {
   },
 
   methods: {
-    handleMenuClick(action) {
-      this.helpMenuPopupClick(action);
-    },
-
     /**
      * Handles clicks on help menu items. Opens help/about pages in new windows or triggers undo/redo actions.
      * 
@@ -42,7 +38,7 @@ export default {
      * - undoCommand - Function to handle undo operations
      * - redoCommand - Function to handle redo operations
      */
-      helpMenuPopupClick(help_type) {
+    handleMenuClick(help_type) {
         const HELP_ACTIONS = {
           help: () => this.openHelpWindow('./content/gscribe_help.html'),
           about: () => this.openHelpWindow('./content/gscribe_about.html'),
@@ -68,7 +64,6 @@ export default {
       const win = window.open(url, '_blank');
       if (win) win.focus();
     }
-
 
   },
 

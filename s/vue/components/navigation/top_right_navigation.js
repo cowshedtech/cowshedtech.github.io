@@ -1,17 +1,11 @@
-import OptionsButton from '../../components/options/vue/button.js'
-import HelpButton from '../../components/help/vue/button.js'
+import OptionsButton from '../options/vue/button.js'
+import HelpButton from '../help/vue/button.js'
+import PermutationButton from '../permutations/vue/button.js'
 
 export default {
     data() {
         return {
             buttons: [
-                {
-                    id: 'permutationAnchor',
-                    label: 'Permutations',
-                    icon: 'fa-bars',
-                    handler: (event) => permutationAnchorClick(event),
-                    class: 'rightButtons grooveDB_hidden'
-                },
                 {
                     id: 'groovesAnchor',
                     label: 'Grooves',
@@ -23,11 +17,12 @@ export default {
         }
     },
     components: {
-        OptionsButton, HelpButton
+        OptionsButton, HelpButton, PermutationButton
     },
     template: `
         <span id="upperRight">
             <OptionsButton></OptionsButton>
+            <PermutationButton></PermutationButton>
             <span v-for="button in buttons"
                 :key="button.id"
                 :id="button.id"

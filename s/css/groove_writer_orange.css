@@ -847,10 +847,13 @@
 	.noteContextMenu {
 
 	}
-	#permutationContextMenu, #helpContextMenu, #metronomeOptionsContextMenu, #metronomeOptionsOffsetClickContextMenu {
+	#permutationContextMenu, #metronomeOptionsContextMenu, #metronomeOptionsOffsetClickContextMenu {
 		position: fixed;
 		top: 0px;
 		right: 0px;
+	}
+	#helpContextMenu {
+		position: fixed;		
 	}
 	.metronomeOptionsContextMenuItem:before, .metronomeOptionsOffsetClickContextMenuItem:before {
 		font-family: FontAwesome;
