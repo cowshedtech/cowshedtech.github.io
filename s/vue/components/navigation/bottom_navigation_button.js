@@ -1,19 +1,30 @@
 export default {
-  data() {
-    return { }
-  },
+  name: 'BottomNavigationButton',
+
   props: {
-    buttonId: String,
-    buttonText: String,
-    clickHandler: String,
+    buttonId: {
+      type: String,
+      required: true
+    },
+    buttonText: {
+      type: String,
+      required: true
+    },
     buttonClass: {
-      default: "pageBottomButton edit-block",
-      type: String
+      type: String,
+      default: 'pageBottomButton edit-block'
     }
   },
+
   template: `
-  <span v-bind:class="buttonClass" v-bind:id="buttonId" v-bind:onclick="clickHandler">
-    <span class="bottomButtonIcon"><slot></slot></span>
-    <span class="bottomButtonLabel">{{ buttonText }}</span>
-  </span>`
+    <span 
+      :class="buttonClass"
+      :id="buttonId"
+    >
+      <span class="bottomButtonIcon">
+        <slot></slot>
+      </span>
+      <span class="bottomButtonLabel">{{ buttonText }}</span>
+    </span>
+  `
 }
