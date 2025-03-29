@@ -8,11 +8,12 @@ export default {
     methods: {
         handleClick(event) {
             console.log(`here`)
+            clearAllNotes();
         }
     },
 
     template: `
-        <BottomNavigationButton button-id="clearAllNotesButton" button-text="CLEAR ALL" click-handler="event.preventDefault(); clearAllNotes();">
+        <BottomNavigationButton button-id="clearAllNotesButton" button-text="CLEAR ALL" @click="handleClick">
             <i class="fa fa-trash fa-2x"></i>
         </BottomNavigationButton>
         `
