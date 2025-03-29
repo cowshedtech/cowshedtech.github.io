@@ -1,16 +1,10 @@
 import OptionsButton from '../../components/options/vue/button.js'
+import HelpButton from '../../components/help/vue/button.js'
 
 export default {
     data() {
         return {
             buttons: [
-                // {
-                //     id: 'optionsAnchor',
-                //     label: 'Options',
-                //     icon: 'fa-bars',
-                //     handler: (event) => options.optionsAnchorClick(event),
-                //     class: 'rightButtons'
-                // },
                 {
                     id: 'permutationAnchor',
                     label: 'Permutations',
@@ -23,20 +17,13 @@ export default {
                     label: 'Grooves',
                     icon: 'fa-bars',
                     handler: (event) => myGrooveWriter.groovesAnchorClick(event),
-                    class: 'rightButtons'
-                },
-                {
-                    id: 'helpAnchor',
-                    label: 'Help',
-                    icon: 'fa-bars',
-                    handler: (event) => helpAnchorClick(event),
-                    class: 'rightButtons'
+                    class: 'rightButtons'                
                 }
             ]
         }
     },
     components: {
-        OptionsButton
+        OptionsButton, HelpButton
     },
     template: `
         <span id="upperRight">
@@ -49,6 +36,7 @@ export default {
             >
                 <i class="fa" :class="button.icon"></i> {{ button.label }}
             </span>
+            <HelpButton></HelpButton>
         </span>        
     `
 }

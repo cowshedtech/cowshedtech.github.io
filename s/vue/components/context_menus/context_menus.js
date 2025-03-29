@@ -16,7 +16,7 @@ import Snare from './instruments/snare.js'
 import Kick from './instruments/kick.js'
 
 // Controls
-import Help from './help.js'
+// import Help from './help.js'
 import Stickings from '../options/vue/stickings_menu.js'
 import Download from '../download/vue/menu.js'
 import TimeSignature from './time_signature.js'
@@ -44,7 +44,7 @@ export default {
         { name: 'PermutationLabel' },
         { name: 'Options' },        
         // Controls
-        { name: 'Help' },
+        // { name: 'Help' },
         { name: 'Stickings' },
         { name: 'Download' },
         { name: 'TimeSignature' },
@@ -56,7 +56,7 @@ export default {
   components: {
     Sticking, HighHat, Tom1, Tom4, Snare, Kick,
     StickingsLabel, HighHatLabel, Tom1Label, Tom4Label, SnareLabel, KickLabel, PermutationLabel, Options,
-    Help, Stickings, Download, TimeSignature, MetronomeSpeed, Grooves
+    Stickings, Download, TimeSignature, MetronomeSpeed, Grooves
   },
   template: `
     <div class="context-menus">

@@ -1,5 +1,6 @@
 export default {
   emits: ['menu-action'],
+
   data() {
     return {
       menuItems: [
@@ -10,13 +11,28 @@ export default {
       ]
     }
   },
-  methods: {
-    handleMenuClick(action) {
-    	helpMenuPopupClick(action);
+
+  props: {
+    isOpen: {
+      type: Boolean,
+      default: false
+    },
+    x: {
+      type: String
+    },
+    y: {
+      type: String
     }
   },
+
+  methods: {
+    handleMenuClick(action) {
+      helpMenuPopupClick(action);
+    }
+  },
+
   template: `
-	<div class="noteContextMenu">
+	<span class="noteContextMenuNew"v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="helpContextMenu" class="list">
 			<li
 				v-for="item in menuItems"
@@ -26,6 +42,6 @@ export default {
 				{{ item.label }}
 			</li>
 		</ul>
-	</div>
+	</span>
 `
 }
