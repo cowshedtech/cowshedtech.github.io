@@ -4,26 +4,20 @@ import DownloadButton from '../download/vue/button.js'
 import ShareButton from '../share/vue/button.js'
 import StickingsButton from '../options/vue/stickings_button.js'
 import TomsButton from '../options/vue/toms_button.js'
+import ClearButton from '../clear/vue/button.js'
 
 export default {
   components: {
-    BottomNavigationButton, StickingsButton, DownloadButton, PrintButton, ShareButton, TomsButton
+    BottomNavigationButton, StickingsButton, DownloadButton, PrintButton, ShareButton, TomsButton, ClearButton
   },
   template: ` 
   <div id="bottomButtonRow" class="fullWidthEle">
 
-    <BottomNavigationButton button-id="clearAllNotesButton" button-text="CLEAR ALL" click-handler="event.preventDefault(); clearAllNotes();">
-      <i class="fa fa-trash fa-2x"></i>
-    </BottomNavigationButton>
-    
+    <ClearButton></ClearButton>
     <TomsButton></TomsButton>
-    
     <StickingsButton></StickingsButton>
-    
     <DownloadButton></DownloadButton>
-      
     <PrintButton></PrintButton>
-    
     <ShareButton></ShareButton>
     
   </div>
