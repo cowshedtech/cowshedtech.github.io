@@ -1,13 +1,64 @@
 export default {
+  
   data() {
-    return { }
+    return {
+		highlight: options ? options.isHighlightOn() : false		
+	 }
   },
-  props: { },
+  
+  props: {
+		isOpen: {
+			type: Boolean,
+			default: false
+		},
+		x: {
+			type: String
+		},
+		y: {
+			type: String
+		}
+	},
+
+  watch: {
+		isOpen() {
+			console.log(`here`)
+			console.log(this.isOpen)
+			console.log(this.x)
+			console.log(this.y)
+      		// options.optionsAnchorClick()
+		}
+	},
+
+	methods: {
+        handleToggleHighlight() {
+			let higlightOn = options.isHighlightOn();
+			options.setHighlightOn(!higlightOn)            
+        },        
+    },
+
+	mounted() {
+        // Subscribe to metronome changes
+        this.removeHandler = options?.addChangeHandler(() => {
+            this.highlight = options.isHighlightOn()
+        })
+    },
+    beforeUnmount() {
+        // Cleanup event handler
+        if (this.removeHandler) this.removeHandler() 
+    },
+
   template: `
-	<div class="noteContextMenu">
+	<span class="noteContextMenuNew" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="optionsContextMenu" class="list">
-			<li class="metronomeOptionsContextMenuItem" id="optionsContextMenuHighlight" onclick='options.optionsHighlightPopupClick("highlight");'><b>Highlighting</b></li>
+			<li 
+				class="metronomeOptionsContextMenuItem" 
+				:class="{ 'menuChecked': highlight }"
+				id="optionsContextMenuHighlight" 
+				@click="handleToggleHighlight"
+			>
+				<b>Highlighting</b>
+			</li>
 		</ul>
-	</div>
+	</span>
 `
 }

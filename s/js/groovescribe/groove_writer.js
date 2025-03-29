@@ -94,7 +94,7 @@ function GrooveWriter() {
 		})
 
 		midiPlayer?.subscribe(EventTypes.PLAY_PROGRESS, (data) => {			
-			if (data?.percentComplete && options.highlightOn) {
+			if (data?.percentComplete && options.isHighlightOn()) {
 				sheetMusic.highlightNote(data.percentComplete)			
 				hilight_note(null, data?.percentComplete, root.class_permutation_type, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures, root.track.notesPerMeasure, root.track.repeatedMeasures, usingTriplets());
 			} 
@@ -128,6 +128,11 @@ function GrooveWriter() {
 			midiPlayer.loadFromURL(midiURL, midiPlayer.getTempo());
 			updateGrooveDBSource();
 		};
+
+		options.addChangeHandler(() => {
+			if (!options.isHighlightOn()) sheetMusic.clearHighlight();
+			updateCurrentURL();
+		})
 		
 		// load the groove from the URL data if it was passed in.
 		root.updateFromURL(window.location.search);

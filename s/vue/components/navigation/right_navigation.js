@@ -1,16 +1,16 @@
-import Options from '../../components/options/vue/menu.js'
+import OptionsButton from '../../components/options/vue/button.js'
 
 export default {
     data() {
         return {
             buttons: [
-                {
-                    id: 'optionsAnchor',
-                    label: 'Options',
-                    icon: 'fa-bars',
-                    handler: (event) => options.optionsAnchorClick(event),
-                    class: 'rightButtons'
-                },
+                // {
+                //     id: 'optionsAnchor',
+                //     label: 'Options',
+                //     icon: 'fa-bars',
+                //     handler: (event) => options.optionsAnchorClick(event),
+                //     class: 'rightButtons'
+                // },
                 {
                     id: 'permutationAnchor',
                     label: 'Permutations',
@@ -36,10 +36,11 @@ export default {
         }
     },
     components: {
-        Options
+        OptionsButton
     },
     template: `
         <span id="upperRight">
+            <OptionsButton></OptionsButton>
             <span v-for="button in buttons"
                 :key="button.id"
                 :id="button.id"
@@ -48,7 +49,6 @@ export default {
             >
                 <i class="fa" :class="button.icon"></i> {{ button.label }}
             </span>
-        </span>
-        <Options></Options>
+        </span>        
     `
 }

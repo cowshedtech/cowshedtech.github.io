@@ -42,7 +42,7 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
     if (options && options.debugMode) fullURL += "Debug=1&";
     if (options && options.viewMode) fullURL += "Mode=view&";
     if (options && options.grooveDBAuthoring) fullURL += "GDB_Author=1&";
-    if (options && !options.highlightOn) fullURL += "&Highlight=OFF";
+    if (options && !options.isHighlightOn()) fullURL += "&Highlight=OFF";
 
     fullURL += 'TimeSig=' + track.numBeats + '/' + track.noteValue;
     fullURL += "&Div=" + track.timeDivision;
@@ -116,9 +116,9 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     let highlight = getQueryVariableFromString("Highlight", "ON", encodedURLData);
     if (highlight && highlight.length > 0) {
         if (highlight.toUpperCase() == "OFF") {
-            options.highlightOn = false
+            options.setHighlightOn(false)
         } else {
-            options.highlightOn = true
+            options.setHighlightOn(true)
         }
     }
 

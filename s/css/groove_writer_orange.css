@@ -862,6 +862,28 @@
 		content: "\f00c";
 		letter-spacing: 5px;
 	} /* checked icon */
+	.noteContextMenuNew>ul.list  {
+		position:fixed;
+		z-index:999;
+		width:150px;
+		margin:0; padding:0px; list-style:none;
+		background: #eeeeee;
+		color: #000;
+		border: 1px solid #393939;
+		list-style:none;
+	}
+	.noteContextMenuNew>ul.list li {
+		padding:10px;
+		border-bottom: solid 1px #393939;
+		text-decoration: none;
+	}
+	.noteContextMenuNew>ul.list li:hover, ul.list a:hover {
+		background: #cccccc;
+	}
+	.noteContextMenuNew>ul.list li:last-child {
+		border:none;
+	}
+
 	.noteContextMenu>ul.list  {
 		display: none;
 		position:fixed; left:30px; top:-30px; z-index:999;
