@@ -1,5 +1,5 @@
-import RightHandContent from './components/TheRightHandContent/vue/right_hand_content.js'
-import TimeSignature from './components/time_signature/vue/picker.js'
+import RightHandContent from './components/TheContentRightHand/vue/right_hand_content.js'
+import TimeSignature from './components/SignatureTime/vue/picker.js'
 import TopNavigation from './components/TheNavigationTop/vue/top_navigation.js'
 import ContextMenus from './components/context_menus/context_menus.js'
 import MetronomeOptionsMenu from './components/metronome/vue/menu_options.js'
