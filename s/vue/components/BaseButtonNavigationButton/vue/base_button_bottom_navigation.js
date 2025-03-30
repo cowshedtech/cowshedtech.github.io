@@ -1,5 +1,5 @@
 export default {
-  name: 'BottomNavigationButton',
+  name: 'BaseButtonNavigationButton',
 
   props: {
     buttonId: {

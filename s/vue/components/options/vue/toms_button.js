@@ -1,4 +1,4 @@
-import BottomNavigationButton from '../../navigation/bottom_navigation_button.js'
+import BottomNavigationButton from '../../BaseButtonNavigationButton/vue/base_button_bottom_navigation.js'
 
 export default {
   components: {
