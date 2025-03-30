@@ -1,4 +1,4 @@
-// import Menu from './menu.js'
+import Menu from './menu.js'
 
 export default {
     data() {
@@ -10,7 +10,7 @@ export default {
     },
 
     components: {
-        // Menu
+        Menu
     },
 
     methods: {
@@ -21,7 +21,7 @@ export default {
         handleClick(event) {
             this.toggleMenu();
             this.menuX = event.clientX;
-            this.menuY = event.clientY;
+            this.menuY = event.clientY;            
         }
     },
 
@@ -31,18 +31,6 @@ export default {
             class="rightButtons"
             @click="handleClick">
             <i class="fa fa-bars"></i>Grooves
-        </span>
+        </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY"></Menu>
         `
 }
-
-
-
-// {
-//     id: 'groovesAnchor',
-//     label: 'Grooves',
-//     icon: 'fa-bars',
-//     handler: (event) => myGrooveWriter.groovesAnchorClick(event),
-//     class: 'rightButtons'                
-// }
-
-{/* <Menu :is-open="isPopupOpen" :x="menuX" :y="menuY"></Menu> */}

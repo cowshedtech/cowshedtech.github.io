@@ -5,7 +5,18 @@ export default {
     }
   },
   
-  props: {},
+  props: {
+		isOpen: {
+			type: Boolean,
+			default: false
+		},
+		x: {
+			type: String
+		},
+		y: {
+			type: String
+		}
+	},
   
   created() {
     try {
@@ -17,7 +28,7 @@ export default {
   },
   
   template: `
-    <div id="grooveListWrapper">
+    <div id="grooveListWrapper" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
       <span v-html="groovesAsHTML" />
     </div>
   `
