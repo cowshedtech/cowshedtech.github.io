@@ -1,10 +1,27 @@
+import Menu from './menu.js'
+
 export default {
+    data() {
+        return {
+            isPopupOpen: false,
+            menuX: 0,
+            menuY: 0,
+        }
+    },
+    
+    components: {
+        Menu
+    },
+
     methods: {
+        toggleMenu() {
+            this.isPopupOpen = !this.isPopupOpen;
+        },
+
         handleClick(event) {
-            permutationAnchorClick(event)
-            // this.toggleMenu();
-            // this.menuX = event.clientX;
-            // this.menuY = event.clientY;
+            this.toggleMenu();
+            this.menuX = event.clientX;
+            this.menuY = event.clientY;
         }
     },
 
@@ -14,6 +31,6 @@ export default {
             class="rightButtons grooveDB_hidden"
             @click="handleClick">
             <i class="fa fa-bars"></i>Permutations
-        </span>
+        </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY"></Menu>
         `
 }

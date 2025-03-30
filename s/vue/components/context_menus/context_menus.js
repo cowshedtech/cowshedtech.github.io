@@ -5,7 +5,6 @@ import Tom1Label from './instruments/tom1_label.js'
 import Tom4Label from './instruments/tom4_label.js'
 import SnareLabel from './instruments/snare_label.js'
 import KickLabel from './instruments/kick_label.js'
-import PermutationLabel from './permutation_label.js'
 
 // Instruments
 import Sticking from './instruments/sticking.js'
@@ -40,7 +39,6 @@ export default {
         { name: 'Tom4Label' },
         { name: 'SnareLabel' },
         { name: 'KickLabel' },
-        { name: 'PermutationLabel' },
         { name: 'Options' },        
         // Controls
         // { name: 'Help' },
@@ -53,7 +51,7 @@ export default {
   },
   components: {
     Sticking, HighHat, Tom1, Tom4, Snare, Kick,
-    StickingsLabel, HighHatLabel, Tom1Label, Tom4Label, SnareLabel, KickLabel, PermutationLabel, Options,
+    StickingsLabel, HighHatLabel, Tom1Label, Tom4Label, SnareLabel, KickLabel, Options,
     Stickings, Download, TimeSignature, MetronomeSpeed
   },
   template: `
