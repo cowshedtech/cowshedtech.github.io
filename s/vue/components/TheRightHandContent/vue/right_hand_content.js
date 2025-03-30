@@ -2,12 +2,12 @@ import BottomNavigation from '../../TheNavigationBottom/vue/the_navigation_botto
 import HiddenDiscription from '../../hidden_description.js'
 import GrooveDBMetaData from '../../groovedb_metadata.js'
 import GrooveDBDisplay from '../../DisplayABC/vue/grovedb_display.js'
-import TotalPlayTime from '../../player/vue/totals_display.js'
+import TotalPlayTime from '../../Player/vue/totals_display.js'
 import MeasureContainer from '../../EditorClickable/vue/measure_container.js'
 import MusicTextFields from '../../EditorMusicTextFields/vue/music_text_fields.js'
 import Warnings from '../../warnings.js'
-import SheetMusic from '../../sheet_music/vue/display.js'
-import PermutationOptions from '../../permutations/vue/options.js'
+import SheetMusic from '../../Sheet_music/vue/display.js'
+import PermutationOptions from '../../Permutations/vue/options.js'
 
 export default {
   data() {
