@@ -85,7 +85,7 @@ class MIDIPlayer {
      * 
      */
     _getSoundFontLocation() {
-        return getGrooveUtilsBaseLocation() + "../../soundfont/";
+        return getGrooveUtilsBaseLocation() + "../soundfont/";
     };
     
 
@@ -93,7 +93,7 @@ class MIDIPlayer {
      * 
      */
     getImageLocation() {
-        return getGrooveUtilsBaseLocation() + "../../images/";
+        return getGrooveUtilsBaseLocation() + "../images/";
     };
 
     //
