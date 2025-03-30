@@ -955,9 +955,19 @@
 		border: solid 2px #999;
 		border-radius: 5px;
 	}
-	#metronomeAutoSpeedupConfiguration, #timeSigPopup {
+	#metronomeAutoSpeedupConfiguration {
 		/visibility: hidden;
 		display: none;
+		position:absolute; left:300px; top:250px; z-index:999;
+		background-color: #FFF;
+		width: 400px;
+		padding: 10px;
+		border: solid 2px #999;
+		border-radius: 5px;
+	}
+
+	#timeSigPopup {
+		/visibility: hidden;
 		position:absolute; left:300px; top:250px; z-index:999;
 		background-color: #FFF;
 		width: 400px;

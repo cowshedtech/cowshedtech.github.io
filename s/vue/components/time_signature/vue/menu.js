@@ -1,11 +1,30 @@
 export default {
-  data() {
-    return { }
-  },
-  props: { },
-  template: `
+	props: {
+		isOpen: {
+			type: Boolean,
+			default: false
+		},
+		x: {
+			type: String
+		},
+		y: {
+			type: String
+		}
+	},
+
+	methods: {
+
+		/*
+		 *
+		*/
+		close() {
+			this.$emit('close-clicked');
+		}
+	},
+
+	template: `
 	<!-- dialog for the TIME label, hidden by default -->
-	<div id="timeSigPopup">
+	<div id="timeSigPopup" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<div id="timeSigPopupTitle">Choose a Time Signature</div>
 		<div id="timeSigPopupOptions">
 			<select id="timeSigPopupTimeSigTop">
@@ -32,7 +51,7 @@ export default {
 		</select>
 		</div>
 		<div id="timeSigPopupButtons">
-		<button id="timeSigPopupCancel" onclick="myGrooveWriter.timeSigPopupClose('cancel');">Cancel</button>
+		<button id="timeSigPopupCancel"  @click="close();">Cancel</button>
 		<button id="timeSigPopupOK" onclick="myGrooveWriter.timeSigPopupClose('ok');">Done</button>
 		</div>
 	</div>

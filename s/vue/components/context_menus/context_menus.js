@@ -18,7 +18,6 @@ import Kick from './instruments/kick.js'
 // import Help from './help.js'
 import Stickings from '../options/vue/stickings_menu.js'
 import Download from '../download/vue/menu.js'
-import TimeSignature from './time_signature.js'
 import MetronomeSpeed from '../metronome/vue/menu_speed.js'
 
 export default {
@@ -44,7 +43,6 @@ export default {
         // { name: 'Help' },
         { name: 'Stickings' },
         { name: 'Download' },
-        { name: 'TimeSignature' },
         { name: 'MetronomeSpeed' }
       ]
     }
@@ -52,7 +50,7 @@ export default {
   components: {
     Sticking, HighHat, Tom1, Tom4, Snare, Kick,
     StickingsLabel, HighHatLabel, Tom1Label, Tom4Label, SnareLabel, KickLabel, Options,
-    Stickings, Download, TimeSignature, MetronomeSpeed
+    Stickings, Download, MetronomeSpeed
   },
   template: `
     <div class="context-menus">

@@ -1,13 +1,39 @@
+import Menu from './menu.js'
+
 export default {
     data() {
-      return { }
+        return {
+            isPopupOpen: false,
+            menuX: 0,
+            menuY: 0,
+        }
     },
-    props: { },
+
+    components: {
+        Menu
+    },
+
+    methods: {
+        toggleMenu() {
+            this.isPopupOpen = !this.isPopupOpen;
+        },
+
+        closeMenu() {
+            this.isPopupOpen = false;
+        },
+
+        handleClick(event) {
+            this.toggleMenu();
+            this.menuX = event.clientX;
+            this.menuY = event.clientY;
+        }
+    },
+
     template: `
     <div id="LeftHandNav">
         <span id="divisionButtonContainer">
             <span id="logoInSubdivision" class="left-button-content"><img src="images/GScribe_Logo_lone_g.svg"></span>
-            <span class="left-button edit-block" id="timeLabel" onclick="timeSigPopupOpen();"><span class="left-button-content"><span><span id="timeSigLabel" class="buttonFraction"><sup>4</sup>/<sub>4</sub></span><span id="timeSubLabel">TIME</span></span></span></span>
+            <span class="left-button edit-block" id="timeLabel" @click="handleClick"><span class="left-button-content"><span><span id="timeSigLabel" class="buttonFraction"><sup>4</sup>/<sub>4</sub></span><span id="timeSubLabel">TIME</span></span></span></span>
             <span class="left-button subdivision edit-block" id="subdivision_8ths"  onclick="myGrooveWriter.changeDivision(8);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>8</sub></span>NOTES</span></span></span>
             <span class="left-button subdivision edit-block" id="subdivision_16ths" onclick="myGrooveWriter.changeDivision(16);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>16</sub></span>NOTES</span></span></span>
             <span class="left-button subdivision edit-block" id="subdivision_32ths" onclick="myGrooveWriter.changeDivision(32);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>32</sub></span>NOTES</span></span></span>
@@ -31,5 +57,6 @@ export default {
         </span>
 
     </div>
+    <Menu :is-open="isPopupOpen" :x="menuX" :y="menuY" @close-clicked="closeMenu"></Menu>
   `
   }
