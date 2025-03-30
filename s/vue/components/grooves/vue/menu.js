@@ -54,8 +54,6 @@ export default {
 
   methods: {
     handleGrooveClick(name, pattern) {
-      console.log(name);
-      console.log(pattern);
       myGrooveWriter.updateFromURL(pattern)
     }
   },
