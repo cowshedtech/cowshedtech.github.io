@@ -52,6 +52,14 @@ export default {
     }
   },
 
+  methods: {
+    handleGrooveClick(name, pattern) {
+      console.log(name);
+      console.log(pattern);
+      myGrooveWriter.updateFromURL(pattern)
+    }
+  },
+
   template: `
     <div id="grooveListWrapper" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
       <ul class="grooveListUL">
@@ -61,18 +69,16 @@ export default {
           :key="section"
         >
           <li class="grooveListHeaderLI">{{ section }}</li>
-          <li v-for="(pattern, name) in items" :key="name" class="grooveListLI">{{ name }}</li>
+          <li 
+            v-for="(pattern, name) in items" 
+            :key="name" 
+            class="grooveListLI"
+            @click="handleGrooveClick(name, pattern)"
+          >
+            {{ name }}
+          </li>
         </span>
       </ul>
     </div>  
-  ` 
+  `
 }
-
-/* 
-<span v-html="groovesAsHTML" />
-<ul class="grooveListUL">
-<li class="grooveListHeaderLI">key</li>
-<li class="grooveListLI" onClick="myGrooveWriter.updateFromURL('URL')">'key</li>
-<li class="grooveListLI" onClick="myGrooveWriter.updateFromURL('URL')">'key</li>
-<li class="grooveListLI" onClick="myGrooveWriter.updateFromURL('URL')">'key</li>        
-</ul> */
