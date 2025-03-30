@@ -1,5 +1,5 @@
-import MetronomeNavigation from '../metronome/vue/menu_main.js'
-import RightNavigation from './top_right_navigation.js'
+import MetronomeNavigation from '../../metronome/vue/menu_main.js'
+import RightNavigation from '../../TheNavigationTop/vue/top_right_navigation.js'
 
 export default {
     data() {

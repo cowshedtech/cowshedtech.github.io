@@ -1,4 +1,4 @@
-import BottomNavigation from './navigation/bottom_navigation.js'
+import BottomNavigation from './TheNavigationBottom/vue/the_navigation_bottom.js'
 import HiddenDiscription from './hidden_description.js'
 import GrooveDBMetaData from './groovedb_metadata.js'
 import GrooveDBDisplay from './grovedb_display.js'
