@@ -75,7 +75,7 @@ class MIDIPlayer {
                 
                 // Successfully loaded MIDI plugin so lets init our MIDI play button
                 parent.setState(PlayerState.STOPPED);
-                setupHotKeys(); // spacebar to play
+                // setupHotKeys(); // spacebar to play
             }
         });
     };
