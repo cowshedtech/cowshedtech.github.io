@@ -1,4 +1,6 @@
 import { ref } from 'vue'
+import ContextMenus from './instruments/context_menus.js'
+
 
 //
 //
@@ -18,12 +20,13 @@ export default {
   data() {
     return { }
   },
-  props: {    
+  components: {
+    ContextMenus
   },
   setup() {
     const content = ref("")
     content.value = generateWriterHTML();
     return { content }
   },
-  template: `<div id="musicalInput" class="fullWidthEle edit-block"><div id="measureContainer" v-html="content"></div></div>`
+  template: `<div id="musicalInput" class="fullWidthEle edit-block"><div id="measureContainer" v-html="content"></div></div><ContextMenus></ContextMenus>`
 }

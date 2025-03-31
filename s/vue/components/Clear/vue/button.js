@@ -7,7 +7,6 @@ export default {
 
     methods: {
         handleClick(event) {
-            console.log(`here`)
             clearAllNotes();
         }
     },
