@@ -9,46 +9,6 @@ import Snare from './snare.js'
 import Kick from './kick.js'
 
 
-/**
- * Creates HTML for a music staff container including note grids and labels.
- * Each staff container represents one measure in the score.
- * 
- * @param {number} baseindex - Index for CSS labels (e.g., "staff-container1")
- * @param {number} indexStartForNotes - Starting index for note IDs in this container
- * @returns {string} HTML string containing the complete staff container
- * @requires Functions:
- * - generateLineLabels - Creates drum kit line labels
- * - generateMeasureButtons - Creates measure control buttons
- * @requires editor.track - Track object containing score state
- */
-function htmlForStaffContainer2(baseindex, indexStartForNotes) {
-  const { notesPerMeasure, numBeats, noteValue } = editor.track;
-  const parts = [];
-
-  // Generate instrument containers
-  const instruments = [
-    { fn: generateTomContainerHTML, args: [4] }
-  ];
-
-  parts.push(instruments.map(({ fn, args }) =>
-    fn(indexStartForNotes, baseindex, notesPerMeasure, numBeats, noteValue, indexStartForNotes, ...args)
-  ).join(''));
-  
-  return parts.join('\n');
-}
-
-
-//
-//
-function generateWriterHTML() {
-  var genHTML = "";
-  var cur_measure;
-  for (cur_measure = 1; cur_measure <= editor.track.numberOfMeasures; cur_measure++) {
-    genHTML += htmlForStaffContainer2(cur_measure, (cur_measure - 1) * editor.track.notesPerMeasure);
-  }
-  return genHTML
-}
-
 //
 //
 export default {
@@ -64,14 +24,11 @@ export default {
   },
 
   setup() {
-    const content = ref("")
-    content.value = generateWriterHTML();
-
     const { notesPerMeasure, numBeats, noteValue } = editor.track;
     const highlightsContent = ref("")  
     highlightsContent.value = generateBackgroundHighlights(0, notesPerMeasure, numBeats, noteValue)
 
-    return { content, highlightsContent }
+    return { highlightsContent }
   },
 
   render() {
@@ -109,7 +66,3 @@ export default {
     ])
   }
 }
-
-{/* <component v-html="content"></component> */}
-// createStaticVNode(this.content),
-                

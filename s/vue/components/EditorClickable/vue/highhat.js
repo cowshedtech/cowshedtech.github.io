@@ -2,7 +2,6 @@ import { ref } from 'vue'
 
 function generateHiHatContainerHTML2(indexStartForNotes, baseindex, notesPerMeasure, numBeats, noteValuePerMeasure) {
     let html = [];
-    // html.push('<div class="hi-hat-container">');
     html.push('<div class="opening_note_space"> </div>');
 
     for (let i = indexStartForNotes; i < notesPerMeasure + indexStartForNotes; i++) {
@@ -27,8 +26,7 @@ function generateHiHatContainerHTML2(indexStartForNotes, baseindex, notesPerMeas
         }
     }
 
-    html.push(`<div class="unmuteHHButton" id="unmutehhButton${baseindex}" onClick='muteInstrument("hh", ${baseindex}, false)'><span class="fa-stack unmuteHHStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span></div>`);
-    // html.push('</div>'); // Close hi-hat container
+    html.push(`<div class="unmuteHHButton" id="unmutehhButton${baseindex}" onClick='muteInstrument("hh", ${baseindex}, false)'><span class="fa-stack unmuteHHStack"><i class="fa fa-ban fa-stack-2x" style="color:red"></i><i class="fa fa-volume-down fa-stack-1x"></i></span></div>`);    
 
     return html.join(''); // Join the array into a single string
 }		
