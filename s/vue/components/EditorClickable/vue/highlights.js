@@ -24,7 +24,7 @@ export default {
     },
 
     template: `
-        <div v-if="measureIndex === 1" class="background-highlight-container">
+        <div class="background-highlight-container">
             <div class="opening_note_space"></div>
             <template v-for="(highlight, index) in highlights" :key="highlight.id">
                 <div :id="'bg-highlight' + highlight.id" class="bg-highlight"></div>
