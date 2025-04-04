@@ -1,7 +1,13 @@
 export default {
   data() {
     return {
-      measureIndex: 1     
+      labels: [
+        { class: 'hh-label', id: 'hh-label', text: 'Hi-hat' },
+        { class: 'tom-label', id: 'tom1-label', text: 'Tom' },
+        { class: 'snare-label', id: 'snare-label', text: 'Snare' },
+        { class: 'tom-label', id: 'tom4-label', text: 'Tom' },
+        { class: 'kick-label', id: 'kick-label', text: 'Kick' }
+      ]
     }
   },
 
@@ -22,35 +28,13 @@ export default {
 
   template: `
     <div class="line-labels">
-      <div class="hh-label" 
-           id="hh-label" 
+      <div v-for="label in labels"
+           :key="label.id"
+           :class="label.class"
+           :id="label.id"
            @click="handleClick"
            @contextmenu.prevent="handleClick">
-        Hi-hat
-      </div>
-      <div class="tom-label" 
-           id="tom1-label" 
-          @click="handleClick"
-          @contextmenu.prevent="handleClick">
-        Tom
-      </div>
-      <div class="snare-label" 
-           id="snare-label" 
-          @click="handleClick"
-          @contextmenu.prevent="handleClick">
-        Snare
-      </div>
-      <div class="tom-label" 
-           id="tom4-label" 
-           @click="handleClick"
-           @contextmenu.prevent="handleClick">
-        Tom
-      </div>
-      <div class="kick-label" 
-           id="kick-label" 
-          @click="handleClick"
-          @contextmenu.prevent="handleClick">
-        Kick
+        {{ label.text }}
       </div>
     </div>
   `

@@ -1,13 +1,7 @@
 import ContextMenus from './instruments/context_menus.js'
 import Measure from './measure.js'
 
-//
-//
 export default {
-  data() {
-    return {}
-  },
-
   components: {
     ContextMenus,Measure
   },

@@ -1,4 +1,4 @@
-import { ref, h, Fragment, createVNode, createCommentVNode, withDirectives, createStaticVNode } from 'vue'
+import { h } from 'vue'
 import MeasureButtonAddStart from './measure_button_add_start.js'
 import MeasureControls from './measure_controls.js'
 import Sticking from './sticking.js'
@@ -7,17 +7,10 @@ import HighHat from './highhat.js'
 import Tom from './tom.js'
 import Snare from './snare.js'
 import Kick from './kicks.js'
+import Highlights from './highlights.js'
 
 
-//
-//
 export default {
-  data() {
-    return {
-      repeatCount: 2
-    }
-  },
-
   props: {
     measureIndex: {
       type: Number,
@@ -27,14 +20,6 @@ export default {
 
   components: {
     MeasureButtonAddStart, MeasureControls, Sticking, LineLabels, HighHat, Tom, Snare, Kick
-  },
-
-  setup() {
-    const { notesPerMeasure, numBeats, noteValue } = editor.track;
-    const highlightsContent = ref("")  
-    highlightsContent.value = generateBackgroundHighlights(0, notesPerMeasure, numBeats, noteValue)
-
-    return { highlightsContent }
   },
 
   render() {
@@ -54,7 +39,7 @@ export default {
                 h('div', { class: 'staff-line-5' }, []),
                 h('div', { class: 'background-highlight-container' }, [
                   h('div', { class: 'opening_note_space' }, [ 
-                    createStaticVNode(this.highlightsContent),
+                    h(Highlights),
                     h('div', { class: 'end_note_space' }, [])
                   ])
                 ]),
