@@ -6,7 +6,7 @@ import LineLabels from './line_labels.js'
 import HighHat from './highhat.js'
 import Tom from './tom.js'
 import Snare from './snare.js'
-import Kick from './kick.js'
+import Kick from './kicks.js'
 
 
 //
