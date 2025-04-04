@@ -21,11 +21,7 @@ function htmlForStaffContainer2(baseindex, indexStartForNotes) {
   const parts = [];
 
   // Notes row container with line labels
-  parts.push(`
-          <div class="music-line-container">
-              <div class="notes-container">
-                  ${Array(5).fill().map((_, i) => `<div class="staff-line-${i + 1}"></div>`).join('\n')}
-  `);
+  // parts.push(`${Array(5).fill().map((_, i) => `<div class="staff-line-${i + 1}"></div>`).join('\n')}`);
 
   // Background highlights
   parts.push(`
@@ -50,7 +46,7 @@ function htmlForStaffContainer2(baseindex, indexStartForNotes) {
   ).join(''));
 
   // Close containers
-  parts.push('</div></div>');
+  // parts.push('</div>');
 
   return parts.join('\n');
 }
@@ -95,7 +91,16 @@ export default {
         h('span', { class: 'notes-row-container' }, [
           h('span', [
             h(LineLabels),
-            createStaticVNode(this.content)
+            h('div', { class: 'music-line-container' }, [
+              h('div', { class: 'notes-container' }, [
+                h('div', { class: 'staff-line-1' }, []),
+                h('div', { class: 'staff-line-2' }, []),
+                h('div', { class: 'staff-line-3' }, []),
+                h('div', { class: 'staff-line-4' }, []),
+                h('div', { class: 'staff-line-5' }, []),
+                createStaticVNode(this.content)
+              ])
+            ])              
           ])
         ])
       ]),
