@@ -1,8 +1,8 @@
-import { ref } from 'vue'
+import { ref, h, Fragment, createVNode, createCommentVNode, withDirectives, createStaticVNode } from 'vue'
 import MeasureButtonAddStart from './measure_button_add_start.js'
 import MeasureControls from './measure_controls.js'
 import Sticking from './sticking.js'
-
+import LineLabels from './line_labels.js'
 
 /**
  * Creates HTML for a music staff container including note grids and labels.
@@ -20,13 +20,8 @@ function htmlForStaffContainer2(baseindex, indexStartForNotes) {
   const { notesPerMeasure, numBeats, noteValue } = editor.track;
   const parts = [];
 
-  // Add sticking container
-  // parts.push(generateStickingContainerHTML2(baseindex, indexStartForNotes, notesPerMeasure, numBeats, noteValue));
-
   // Notes row container with line labels
   parts.push(`
-      <span class="notes-row-container">
-          ${generateLineLabels(baseindex)}
           <div class="music-line-container">
               <div class="notes-container">
                   ${Array(5).fill().map((_, i) => `<div class="staff-line-${i + 1}"></div>`).join('\n')}
@@ -55,7 +50,7 @@ function htmlForStaffContainer2(baseindex, indexStartForNotes) {
   ).join(''));
 
   // Close containers
-  parts.push('</div></div></span>');
+  parts.push('</div></div>');
 
   return parts.join('\n');
 }
@@ -83,7 +78,7 @@ export default {
   },
 
   components: {
-    MeasureButtonAddStart, MeasureControls, Sticking
+    MeasureButtonAddStart, MeasureControls, Sticking, LineLabels
   },
 
   setup() {
@@ -92,12 +87,22 @@ export default {
     return { content }
   },
 
-  template: `
-    <MeasureButtonAddStart></MeasureButtonAddStart>
-    <div class="staff-container" id="staff-container1">
-      <Sticking></Sticking>
-      <span v-html="content"></span>
-    </div>    
-    <MeasureControls></MeasureControls>    
-  </div>`
+  render() {
+    return h('div', [
+      h(MeasureButtonAddStart),
+      h('div', { class: 'staff-container', id: 'staff-container1' }, [
+        h(Sticking),
+        h('span', { class: 'notes-row-container' }, [
+          h('span', [
+            h(LineLabels),
+            createStaticVNode(this.content)
+          ])
+        ])
+      ]),
+      h(MeasureControls)
+    ])
+  }
 }
+
+{/* <component v-html="content"></component> */}
+          
