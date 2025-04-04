@@ -36,12 +36,7 @@ export default {
                 h('div', { class: 'staff-line-3' }, []),
                 h('div', { class: 'staff-line-4' }, []),
                 h('div', { class: 'staff-line-5' }, []),
-                h('div', { class: 'background-highlight-container' }, [
-                  h('div', { class: 'opening_note_space' }, [ 
-                    h(Highlights),
-                    h('div', { class: 'end_note_space' }, [])
-                  ])
-                ]),
+                h(Highlights),
                 h(HighHat),
                 h(Tom, { index: 1}),
                 h(Snare),
