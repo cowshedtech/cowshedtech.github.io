@@ -1,5 +1,6 @@
 import { ref } from 'vue'
-import ContextMenus from './instruments/context_menus.js'
+import MeasureButtonAddStart from './measure_button_add_start.js'
+import MeasureControls from './measure_controls.js'
 
 /**
  * Creates HTML for a music staff container including note grids and labels.
@@ -40,15 +41,15 @@ function htmlForStaffContainer2(baseindex, indexStartForNotes) {
 
   // Generate instrument containers
   const instruments = [
-      { fn: generateHiHatContainerHTML, args: [] },
-      { fn: generateTomContainerHTML, args: [1] },
-      { fn: generateSnareContainerHTML, args: [] },
-      { fn: generateTomContainerHTML, args: [4] },
-      { fn: generateKickContainerHTML, args: [] }
+    { fn: generateHiHatContainerHTML, args: [] },
+    { fn: generateTomContainerHTML, args: [1] },
+    { fn: generateSnareContainerHTML, args: [] },
+    { fn: generateTomContainerHTML, args: [4] },
+    { fn: generateKickContainerHTML, args: [] }
   ];
 
-  parts.push(instruments.map(({ fn, args }) => 
-      fn(indexStartForNotes, baseindex, notesPerMeasure, numBeats, noteValue, indexStartForNotes, ...args)
+  parts.push(instruments.map(({ fn, args }) =>
+    fn(indexStartForNotes, baseindex, notesPerMeasure, numBeats, noteValue, indexStartForNotes, ...args)
   ).join(''));
 
   // Close containers
@@ -75,13 +76,13 @@ function generateWriterHTML() {
 export default {
   data() {
     return {
-        measureIndex: 1,
-        repeatCount: 2
+      measureIndex: 1,
+      repeatCount: 2
     }
   },
 
   components: {
-    ContextMenus
+    MeasureButtonAddStart, MeasureControls
   },
 
   setup() {
@@ -90,22 +91,11 @@ export default {
     return { content }
   },
 
-template: `
-  <span id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)">
-      <i class="fa fa-plus"></i>
-    </span>
+  template: `
+    <MeasureButtonAddStart></MeasureButtonAddStart>
     <div class="staff-container" id="staff-container1">
       <span v-html="content"></span>
     </div>    
-    <div style="display: inline-block;vertical-align: top; margin-top: 15px; margin-left: 15px; margin-right: 15px">
-        <div title="Remove Measure" :id="'closeMeasureButton' + measureIndex" :onClick="'closeMeasureButtonClick('+ measureIndex +')'" class="closeMeasureButton"><i class="fa fa-times-circle"></i></div>
-        <div title="Repeat Measure" :id="'repeateMeasureIncButton' + measureIndex" :onClick="'repeatMeasureIncButtonClick('+ measureIndex +')'" class="closeMeasureButton"><i class="fa">↑</i></div>
-        <span style="color: var(--highlight-color-on-white);">{{ repeatCount }}</span>
-        <div title="Repeat Measure" :id="'repeateMeasureDecButton' + measureIndex" :onClick="'repeatMeasureDecButtonClick('+ measureIndex +')'" class="closeMeasureButton"><i class="fa">↓</i></div>
-        <div title="Duplicate Measure" :id="'duplicateMeasureButton' + measureIndex" :onClick="'duplicateMeasureButtonClick('+ measureIndex +')'" class="closeMeasureButton"><i class="fa fa-rotate-left"></i></div>
-        <div title="Add Measure" :id="'addMeasureMiddleButton' + measureIndex" :onClick="'addMeasureMiddleButtonClick('+ measureIndex +')'" class="closeMeasureButton"><i class="fa fa-plus"></i></div>
-    </div>
+    <MeasureControls></MeasureControls>    
   </div>`
 }
-
-
