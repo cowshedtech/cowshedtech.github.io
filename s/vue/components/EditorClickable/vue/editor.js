@@ -15,7 +15,7 @@ export default {
   template: `
     <div id="musicalInput" class="fullWidthEle edit-block">
       <div id="measureContainer">
-        <Measure></Measure>
+        <Measure measureIndex="1"></Measure>
       </div>
     <ContextMenus></ContextMenus>`
   }

@@ -14,9 +14,15 @@ import Kick from './kicks.js'
 export default {
   data() {
     return {
-      measureIndex: 1,
       repeatCount: 2
     }
+  },
+
+  props: {
+    measureIndex: {
+      type: Number,
+      required: true
+    },
   },
 
   components: {
