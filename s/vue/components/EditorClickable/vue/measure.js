@@ -3,6 +3,10 @@ import MeasureButtonAddStart from './measure_button_add_start.js'
 import MeasureControls from './measure_controls.js'
 import Sticking from './sticking.js'
 import LineLabels from './line_labels.js'
+import HighHat from './highhat.js'
+import Tom from './tom.js'
+import Snare from './snare.js'
+
 
 /**
  * Creates HTML for a music staff container including note grids and labels.
@@ -22,9 +26,6 @@ function htmlForStaffContainer2(baseindex, indexStartForNotes) {
 
   // Generate instrument containers
   const instruments = [
-    { fn: generateHiHatContainerHTML, args: [] },
-    { fn: generateTomContainerHTML, args: [1] },
-    { fn: generateSnareContainerHTML, args: [] },
     { fn: generateTomContainerHTML, args: [4] },
     { fn: generateKickContainerHTML, args: [] }
   ];
@@ -59,7 +60,7 @@ export default {
   },
 
   components: {
-    MeasureButtonAddStart, MeasureControls, Sticking, LineLabels
+    MeasureButtonAddStart, MeasureControls, Sticking, LineLabels, HighHat, Tom, Snare
   },
 
   setup() {
@@ -94,6 +95,9 @@ export default {
                     h('div', { class: 'end_note_space' }, [])
                   ])
                 ]),
+                h(HighHat),
+                h(Tom),
+                h(Snare),
                 createStaticVNode(this.content)
               ])
             ])              
