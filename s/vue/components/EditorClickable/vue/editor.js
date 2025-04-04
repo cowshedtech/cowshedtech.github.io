@@ -17,16 +17,6 @@ function htmlForStaffContainer2(baseindex, indexStartForNotes) {
   const { notesPerMeasure, numBeats, noteValue } = editor.track;
   const parts = [];
 
-  // Add measure button for first staff
-  // if (baseindex === 1) {
-  //     parts.push(`<span id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)">
-  //         <i class="fa fa-plus"></i>
-  //     </span>`);
-  // }
-
-  // Staff container start
-  // parts.push(`<div class="staff-container" id="staff-container${baseindex}">`);
-
   // Add sticking container
   parts.push(generateStickingContainerHTML(baseindex, indexStartForNotes, notesPerMeasure, numBeats, noteValue));
 
@@ -64,10 +54,6 @@ function htmlForStaffContainer2(baseindex, indexStartForNotes) {
   // Close containers
   parts.push('</div></div></span>');
 
-  // Add measure buttons
-  // const repeat = editor.track.repeatedMeasures.get(baseindex - 1) || 1;
-  // parts.push(generateMeasureButtons(editor.track.numberOfMeasures, baseindex, repeat));
-
   return parts.join('\n');
 }
 
@@ -88,16 +74,22 @@ function generateWriterHTML() {
 //
 export default {
   data() {
-    return { }
+    return {
+        measureIndex: 1,
+        repeatCount: 2
+    }
   },
+
   components: {
     ContextMenus
   },
+
   setup() {
     const content = ref("")
     content.value = generateWriterHTML();
     return { content }
   },
+
   template: `<div id="musicalInput" class="fullWidthEle edit-block">
                 <div id="measureContainer">
                   <span id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)">
@@ -107,12 +99,12 @@ export default {
                     <span v-html="content"></span>
                   </div>    
                   <div style="display: inline-block;vertical-align: top; margin-top: 15px; margin-left: 15px; margin-right: 15px">
-                      <div title="Remove Measure" id="closeMeasureButton1" onClick="closeMeasureButtonClick(1)" class="closeMeasureButton"><i class="fa fa-times-circle"></i></div>
-                      <div title="Repeat Measure" id="repeateMeasureIncButton1" onClick="repeatMeasureIncButtonClick(1)" class="closeMeasureButton"><i class="fa">↑</i></div>
-                      <span style="color: var(--highlight-color-on-white);">' + repeat + '</span>
-                      <div title="Repeat Measure" id="repeateMeasureDecButton1" onClick="repeatMeasureDecButtonClick(1)" class="closeMeasureButton"><i class="fa">↓</i></div>
-                      <div title="Duplicate Measure" id="duplicateMeasureButton1" onClick="duplicateMeasureButtonClick(1)" class="closeMeasureButton"><i class="fa fa-rotate-left"></i></div>
-                      <div title="Add Measure" id="addMeasureMiddleButton1" onClick="addMeasureMiddleButtonClick(1)" class="closeMeasureButton"><i class="fa fa-plus"></i></div>
+                      <div title="Remove Measure" :id="'closeMeasureButton' + measureIndex" :onClick="'closeMeasureButtonClick('+ measureIndex +')'" class="closeMeasureButton"><i class="fa fa-times-circle"></i></div>
+                      <div title="Repeat Measure" :id="'repeateMeasureIncButton' + measureIndex" :onClick="'repeatMeasureIncButtonClick('+ measureIndex +')'" class="closeMeasureButton"><i class="fa">↑</i></div>
+                      <span style="color: var(--highlight-color-on-white);">{{ repeatCount }}</span>
+                      <div title="Repeat Measure" :id="'repeateMeasureDecButton' + measureIndex" :onClick="'repeatMeasureDecButtonClick('+ measureIndex +')'" class="closeMeasureButton"><i class="fa">↓</i></div>
+                      <div title="Duplicate Measure" :id="'duplicateMeasureButton' + measureIndex" :onClick="'duplicateMeasureButtonClick('+ measureIndex +')'" class="closeMeasureButton"><i class="fa fa-rotate-left"></i></div>
+                      <div title="Add Measure" :id="'addMeasureMiddleButton' + measureIndex" :onClick="'addMeasureMiddleButtonClick('+ measureIndex +')'" class="closeMeasureButton"><i class="fa fa-plus"></i></div>
                   </div>
                 </div>
             </div>
