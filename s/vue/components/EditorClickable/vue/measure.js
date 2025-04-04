@@ -6,6 +6,7 @@ import LineLabels from './line_labels.js'
 import HighHat from './highhat.js'
 import Tom from './tom.js'
 import Snare from './snare.js'
+import Kick from './kick.js'
 
 
 /**
@@ -26,8 +27,7 @@ function htmlForStaffContainer2(baseindex, indexStartForNotes) {
 
   // Generate instrument containers
   const instruments = [
-    { fn: generateTomContainerHTML, args: [4] },
-    { fn: generateKickContainerHTML, args: [] }
+    { fn: generateTomContainerHTML, args: [4] }
   ];
 
   parts.push(instruments.map(({ fn, args }) =>
@@ -60,7 +60,7 @@ export default {
   },
 
   components: {
-    MeasureButtonAddStart, MeasureControls, Sticking, LineLabels, HighHat, Tom, Snare
+    MeasureButtonAddStart, MeasureControls, Sticking, LineLabels, HighHat, Tom, Snare, Kick
   },
 
   setup() {
@@ -98,7 +98,8 @@ export default {
                 h(HighHat),
                 h(Tom),
                 h(Snare),
-                createStaticVNode(this.content)
+                createStaticVNode(this.content),
+                h(Kick)
               ])
             ])              
           ])
