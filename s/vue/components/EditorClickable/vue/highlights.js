@@ -1,6 +1,12 @@
 import { ref, h } from 'vue'
 
 export default {
+    props: {
+        measureIndex: {
+            type: Number,
+            required: true
+        }
+    },
 
     setup() {
         const { notesPerMeasure, numBeats, noteValue } = editor.track;
@@ -18,13 +24,13 @@ export default {
     },
 
     template: `
-        <dev class="background-highlight-container">
-            <dev class="opening_note_space"></div>
+        <div v-if="measureIndex === 1" class="background-highlight-container">
+            <div class="opening_note_space"></div>
             <template v-for="(highlight, index) in highlights" :key="highlight.id">
                 <div :id="'bg-highlight' + highlight.id" class="bg-highlight"></div>
                 <div v-if="highlight.shouldAddSpace" class="space_between_note_groups"></div>
             </template>
-            <dev class="end_note_space"></div>
+            <div class="end_note_space"></div>
         </div>
     `
 }

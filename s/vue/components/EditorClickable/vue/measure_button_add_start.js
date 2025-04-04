@@ -1,12 +1,14 @@
 export default {
-  data() {
-    return {
-        measureIndex: 1
-    }
+  
+  props: {
+    measureIndex: {
+      type: Number,
+      required: true
+    },
   },
 
   template: `
-    <span id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)">
+    <span v-if="measureIndex === 1" id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)">
         <i class="fa fa-plus"></i>
     </span>`
 }

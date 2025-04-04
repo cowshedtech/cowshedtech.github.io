@@ -3,7 +3,7 @@ import Measure from './measure.js'
 
 export default {
   components: {
-    ContextMenus,Measure
+    ContextMenus, Measure
   },
 
   template: `
@@ -12,6 +12,4 @@ export default {
         <Measure measureIndex="1"></Measure>
       </div>
     <ContextMenus></ContextMenus>`
-  }
-
-
+}

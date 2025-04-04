@@ -23,7 +23,7 @@ export default {
 
   render() {
     return h('div', [
-      h(MeasureButtonAddStart),
+      h(MeasureButtonAddStart, { measureIndex: 1}),
       h('div', { class: 'staff-container', id: 'staff-container1' }, [
         h(Sticking),
         h('span', { class: 'notes-row-container' }, [
