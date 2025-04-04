@@ -3,7 +3,7 @@ import HiddenDiscription from '../../DisplayHiddenDescription/vue/hidden_descrip
 import GrooveDBMetaData from '../../DisplayMetadata/vue/groovedb_metadata.js'
 import GrooveDBDisplay from '../../DisplayABC/vue/grovedb_display.js'
 import TotalPlayTime from '../../Player/vue/totals_display.js'
-import MeasureContainer from '../../EditorClickable/vue/measure_container.js'
+import MeasureContainer from '../../EditorClickable/vue/editor.js'
 import MusicTextFields from '../../EditorMusicTextFields/vue/music_text_fields.js'
 import Warnings from '../../DisplayWarnings/vue/warnings.js'
 import SheetMusic from '../../DisplaySheetMusic/vue/display.js'

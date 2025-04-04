@@ -416,7 +416,7 @@ function GrooveWriter() {
 		}
 
 		// rewrite the HTML for the HTML note grid
-		document.getElementById("measureContainer").innerHTML = newHTML;
+		// document.getElementById("measureContainer").innerHTML = newHTML;
 
 		// change the Permutation options too
 		newHTML = HTMLforPermutationOptions(root.class_permutation_type, usingTriplets());
