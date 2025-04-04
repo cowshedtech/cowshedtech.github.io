@@ -9,7 +9,6 @@ import Snare from './snare.js'
 import Kick from './kicks.js'
 import Highlights from './highlights.js'
 
-
 export default {
   props: {
     measureIndex: {
