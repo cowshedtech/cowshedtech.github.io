@@ -96,9 +96,9 @@ export default {
                   ])
                 ]),
                 h(HighHat),
-                h(Tom),
+                h(Tom, { index: 1}),
                 h(Snare),
-                createStaticVNode(this.content),
+                h(Tom, { index: 4}),
                 h(Kick)
               ])
             ])              
@@ -111,4 +111,5 @@ export default {
 }
 
 {/* <component v-html="content"></component> */}
-          
+// createStaticVNode(this.content),
+                

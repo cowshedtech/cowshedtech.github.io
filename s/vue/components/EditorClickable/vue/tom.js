@@ -26,11 +26,11 @@ function generateTomContainerHTML2(indexStartForNotes, baseindex, notesPerMeasur
 
 //
 //
-function generateeTomHTML() {
+function generateeTomHTML(index) {
   var genHTML = "";
   const { notesPerMeasure, numBeats, noteValue } = editor.track;
   
-  return generateTomContainerHTML2(0, 1, notesPerMeasure, numBeats, noteValue, 1);
+  return generateTomContainerHTML2(0, 1, notesPerMeasure, numBeats, noteValue, index);
 }
 
 
@@ -44,9 +44,17 @@ export default {
     }
   },
 
-  setup() {
+  props: {
+    index: {
+      type: Number
+    }
+  },
+
+  setup(props) {
+    console.log(props.index)
+    
     const tomContent = ref("")
-    tomContent.value = generateeTomHTML();
+    tomContent.value = generateeTomHTML(props.index);
     return { tomContent }
   },
 
