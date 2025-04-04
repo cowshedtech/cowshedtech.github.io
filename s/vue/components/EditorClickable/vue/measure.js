@@ -20,18 +20,6 @@ function htmlForStaffContainer2(baseindex, indexStartForNotes) {
   const { notesPerMeasure, numBeats, noteValue } = editor.track;
   const parts = [];
 
-  // Notes row container with line labels
-  // parts.push(`${Array(5).fill().map((_, i) => `<div class="staff-line-${i + 1}"></div>`).join('\n')}`);
-
-  // Background highlights
-  parts.push(`
-      <div class="background-highlight-container">
-          <div class="opening_note_space"></div>
-          ${generateBackgroundHighlights(indexStartForNotes, notesPerMeasure, numBeats, noteValue)}
-          <div class="end_note_space"></div>
-      </div>
-  `);
-
   // Generate instrument containers
   const instruments = [
     { fn: generateHiHatContainerHTML, args: [] },
@@ -44,10 +32,7 @@ function htmlForStaffContainer2(baseindex, indexStartForNotes) {
   parts.push(instruments.map(({ fn, args }) =>
     fn(indexStartForNotes, baseindex, notesPerMeasure, numBeats, noteValue, indexStartForNotes, ...args)
   ).join(''));
-
-  // Close containers
-  // parts.push('</div>');
-
+  
   return parts.join('\n');
 }
 
@@ -80,7 +65,12 @@ export default {
   setup() {
     const content = ref("")
     content.value = generateWriterHTML();
-    return { content }
+
+    const { notesPerMeasure, numBeats, noteValue } = editor.track;
+    const highlightsContent = ref("")  
+    highlightsContent.value = generateBackgroundHighlights(0, notesPerMeasure, numBeats, noteValue)
+
+    return { content, highlightsContent }
   },
 
   render() {
@@ -98,6 +88,12 @@ export default {
                 h('div', { class: 'staff-line-3' }, []),
                 h('div', { class: 'staff-line-4' }, []),
                 h('div', { class: 'staff-line-5' }, []),
+                h('div', { class: 'background-highlight-container' }, [
+                  h('div', { class: 'opening_note_space' }, [ 
+                    createStaticVNode(this.highlightsContent),
+                    h('div', { class: 'end_note_space' }, [])
+                  ])
+                ]),
                 createStaticVNode(this.content)
               ])
             ])              
