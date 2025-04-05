@@ -38,7 +38,7 @@ export default {
                 h(Toms, { measureIndex: 1, tomIndex: 1}),
                 h(Snare),
                 h(Toms, { measureIndex: 1, tomIndex: 4}),
-                h(Kick)
+                h(Kick, { measureIndex: 1}),
               ])
             ])              
           ])
