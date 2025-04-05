@@ -1,5 +1,6 @@
 import Tom from './tom.js'
 import TomsMute from './toms_mute.js'
+import NoteSpacer from './note_spacer.js'
 
 export default {
 
@@ -15,14 +16,13 @@ export default {
   },
 
   components: {
-    Tom, TomsMute
+    Tom, TomsMute, NoteSpacer
   },
 
   setup(props) {
     const { notesPerMeasure, numBeats, noteValue } = editor.track;
-    const groupSize = noteGroupingSize(notesPerMeasure, numBeats, noteValue)
     const startNoteIndex = (props.measureIndex - 1) * notesPerMeasure;
-    return { startNoteIndex, notesPerMeasure, groupSize }
+    return { startNoteIndex, notesPerMeasure }
   },
 
   template: `
@@ -30,7 +30,7 @@ export default {
       <div class="opening_note_space"></div>
       <template v-for="i in notesPerMeasure" :key="i">
         <Tom :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" />
-        <div v-if="i % groupSize === 0 && i < notesPerMeasure" class="space_between_note_groups"></div>
+        <NoteSpacer :noteIndex="i" />
       </template>
       <TomsMute :measureIndex="measureIndex" :tomIndex="tomIndex></TomsMute>
     </div>

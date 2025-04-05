@@ -31,7 +31,7 @@ export default {
         <div class="snare_circle note_part" :id="'snare_circle' + noteIndex"></div>
         <div class="snare_xstick note_part" :id="'snare_xstick' + noteIndex"><i class="fa fa-times"></i></div>
         <div class="snare_buzz note_part" :id="'snare_buzz' + noteIndex"><i class="fa fa-bars"></i></div>
-        <div class="snare_flam note_part" :id="'snare_flam' + noteIndex"><SnareFlam></SnareFlam></div>
+        <div class="snare_flam note_part" :id="'snare_flam' + noteIndex"></div>
         <div class="snare_drag note_part" :id="'snare_drag' + noteIndex"></div>
         <div class="snare_accent note_part" :id="'snare_accent' + noteIndex">
             <i class="fa fa-chevron-right"></i>
@@ -40,3 +40,4 @@ export default {
   `,
 }
 
+{/* <SnareFlam></SnareFlam> */}

@@ -38,7 +38,7 @@ export default {
                     <div class="opening_note_space"></div>
                         <template v-for="i in notesPerMeasure" :key="i">
                             <Sticking :noteIndex="startNoteIndex + (i - 1)"  />
-                            <NoteSpacer :noteIndex="startNoteIndex + (i - 1)" />
+                            <NoteSpacer :noteIndex="i" />
                         </template>
                     </div>
                 </div>   
@@ -47,6 +47,3 @@ export default {
         </div>
     </div>`
 }
-
-
-{/* <div v-if="i % groupSize === 0 && i < notesPerMeasure" class="space_between_note_groups"></div> */}
