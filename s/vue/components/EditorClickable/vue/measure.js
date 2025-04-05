@@ -8,6 +8,7 @@ import Tom from './tom.js'
 import Snare from './snare.js'
 import Kick from './kicks.js'
 import Highlights from './highlights.js'
+import StaffLines from './staff_line.js'
 
 export default {
   props: {
@@ -31,11 +32,7 @@ export default {
             h(LineLabels),
             h('div', { class: 'music-line-container' }, [
               h('div', { class: 'notes-container' }, [
-                h('div', { class: 'staff-line-1' }, []),
-                h('div', { class: 'staff-line-2' }, []),
-                h('div', { class: 'staff-line-3' }, []),
-                h('div', { class: 'staff-line-4' }, []),
-                h('div', { class: 'staff-line-5' }, []),
+                h(StaffLines),
                 h(Highlights),
                 h(HighHats,  { measureIndex: 1}),
                 h(Tom, { index: 1}),
