@@ -9,7 +9,7 @@ export default {
 
   methods: {
     handleClick(event) {
-        noteLeftClick('hh', this.noteIndex, false)
+        muteInstrument('hh', this.measureIndex, false)
     }
   },
 

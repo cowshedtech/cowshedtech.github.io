@@ -1,5 +1,6 @@
 import HighHat from './highhat.js'
 import HighHatMute from './highhats_mute.js'
+import MuteButton from './button_mute.js'
 import NoteSpacer from './note_spacer.js'
 
 export default {
@@ -12,7 +13,7 @@ export default {
   },
 
   components: {
-   HighHat, HighHatMute, NoteSpacer
+   HighHat, HighHatMute, MuteButton, NoteSpacer
   },
 
   setup(props) {
@@ -28,7 +29,9 @@ export default {
         <HighHat :noteIndex="startNoteIndex + (i - 1)" />
         <NoteSpacer :noteIndex="i" />
       </template>
-      <HighHatMute :measureIndex="measureIndex"></HighHatMute>
+      <MuteButton instrument="hh" :measureIndex="measureIndex"></MuteButton>
     </div>
   `
 }
+
+{/* <MuteButton instrument="hh" :measureIndex="measureIndex"></MuteButton> */}
