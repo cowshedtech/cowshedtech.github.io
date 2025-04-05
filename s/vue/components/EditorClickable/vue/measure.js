@@ -3,7 +3,7 @@ import MeasureButtonAddStart from './measure_button_add_start.js'
 import MeasureControls from './measure_controls.js'
 import Sticking from './sticking.js'
 import LineLabels from './line_labels.js'
-import HighHat from './highhats.js'
+import HighHats from './highhats.js'
 import Tom from './tom.js'
 import Snare from './snare.js'
 import Kick from './kicks.js'
@@ -18,7 +18,7 @@ export default {
   },
 
   components: {
-    MeasureButtonAddStart, MeasureControls, Sticking, LineLabels, HighHat, Tom, Snare, Kick
+    MeasureButtonAddStart, MeasureControls, Sticking, LineLabels, HighHats, Tom, Snare, Kick
   },
 
   render() {
@@ -37,7 +37,7 @@ export default {
                 h('div', { class: 'staff-line-4' }, []),
                 h('div', { class: 'staff-line-5' }, []),
                 h(Highlights),
-                h(HighHat),
+                h(HighHats,  { measureIndex: 1}),
                 h(Tom, { index: 1}),
                 h(Snare),
                 h(Tom, { index: 4}),
