@@ -1,6 +1,6 @@
 import Snare from './snare.js'
-import SnaresMute from './snares_mute.js'
-import NoteSpacer from './note_spacer.js'
+import NoteSpacer from './all_note_spacer.js'
+import MuteButton from './all_button_mute.js'
 
 export default {
   
@@ -12,7 +12,7 @@ export default {
   },
 
   components: {
-    Snare, SnaresMute, NoteSpacer
+    Snare, MuteButton, NoteSpacer
   },
 
   setup(props) {
@@ -28,7 +28,7 @@ export default {
         <Snare :noteIndex="startNoteIndex + (i - 1)" />
         <NoteSpacer :noteIndex="i" />
       </template>
-      <SnaresMute :measureIndex="measureIndex"></SnaresMute>
+      <MuteButton instrument="snare" :measureIndex="measureIndex"></MuteButton>
     </div>
   `
 }

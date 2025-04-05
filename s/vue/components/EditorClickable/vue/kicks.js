@@ -1,6 +1,6 @@
 import Kick from './kick.js'
-import KicksMute from './kicks_mute.js'
-import NoteSpacer from './note_spacer.js'
+import MuteButton from './all_button_mute.js'
+import NoteSpacer from './all_note_spacer.js'
 
 export default {
   
@@ -12,7 +12,7 @@ export default {
   },
 
   components: {
-   Kick, KicksMute, NoteSpacer
+   Kick, MuteButton, NoteSpacer
   },
 
   setup(props) {
@@ -28,7 +28,7 @@ export default {
         <Kick :noteIndex="startNoteIndex + (i - 1)" />
          <NoteSpacer :noteIndex="i" />
       </template>
-      <KicksMute :measureIndex="measureIndex"></KicksMute>
+      <MuteButton instrument="kick" :measureIndex="measureIndex"></MuteButton>
     </div>
   `
 }

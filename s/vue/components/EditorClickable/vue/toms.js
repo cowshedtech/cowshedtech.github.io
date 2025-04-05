@@ -1,7 +1,6 @@
 import Tom from './tom.js'
-import TomsMute from './toms_mute.js'
-import NoteSpacer from './note_spacer.js'
-import MuteButton from './button_mute.js'
+import NoteSpacer from './all_note_spacer.js'
+import MuteButton from './all_button_mute.js'
 
 export default {
 
@@ -17,7 +16,7 @@ export default {
   },
 
   components: {
-    Tom, TomsMute, NoteSpacer, MuteButton
+    Tom, NoteSpacer, MuteButton
   },
 
   setup(props) {

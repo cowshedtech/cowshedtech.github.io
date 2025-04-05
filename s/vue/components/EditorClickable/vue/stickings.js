@@ -1,4 +1,4 @@
-import NoteSpacer from './note_spacer.js'
+import NoteSpacer from './all_note_spacer.js'
 import Sticking from './sticking.js'
 
 export default {
