@@ -8,13 +8,13 @@ export default {
 
   methods: {
     handleLeftClick(event) {
-        noteLeftClick(event, 'hh', this.noteIndex)
+        noteLeftClick(event, 'kick', this.noteIndex)
     },
     handleRightClick(event) {
-        noteRightClick(event, 'hh', this.noteIndex)
+        noteRightClick(event, 'kick', this.noteIndex)
     },
     handleMouseEnter(event) {
-        noteOnMouseEnter(event, 'hh', this.noteIndex)
+        noteOnMouseEnter(event, 'kick', this.noteIndex)
     },
   },
 
