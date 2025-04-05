@@ -1,3 +1,4 @@
+import NoteSpacer from './note_spacer.js'
 import Sticking from './sticking.js'
 
 export default {
@@ -10,7 +11,7 @@ export default {
   },
 
   components: {
-    Sticking
+    NoteSpacer, Sticking
   },
 
   setup(props) {
@@ -37,7 +38,7 @@ export default {
                     <div class="opening_note_space"></div>
                         <template v-for="i in notesPerMeasure" :key="i">
                             <Sticking :noteIndex="startNoteIndex + (i - 1)"  />
-                            <div v-if="i % groupSize === 0 && i < notesPerMeasure" class="space_between_note_groups"></div>
+                            <NoteSpacer :noteIndex="startNoteIndex + (i - 1)" />
                         </template>
                     </div>
                 </div>   
@@ -46,3 +47,6 @@ export default {
         </div>
     </div>`
 }
+
+
+{/* <div v-if="i % groupSize === 0 && i < notesPerMeasure" class="space_between_note_groups"></div> */}
