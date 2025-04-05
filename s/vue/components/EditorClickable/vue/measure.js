@@ -29,7 +29,7 @@ export default {
         h(Sticking),
         h('span', { class: 'notes-row-container' }, [
           h('span', [
-            h(LineLabels),
+            h(LineLabels,  { measureIndex: 1}),
             h('div', { class: 'music-line-container' }, [
               h('div', { class: 'notes-container' }, [
                 h(StaffLines),

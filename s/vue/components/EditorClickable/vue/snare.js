@@ -22,7 +22,7 @@ export default {
   },
 
   components: {
-    SnareDrag, SnareFlam
+    SnareFlam
   },
 
   template: `
