@@ -1,7 +1,7 @@
 import { h } from 'vue'
 import MeasureButtonAddStart from './measure_button_add_start.js'
 import MeasureControls from './measure_controls.js'
-import Sticking from './sticking.js'
+import Stickings from './stickings.js'
 import LineLabels from './line_labels.js'
 import HighHats from './highhats.js'
 import Toms from './toms.js'
@@ -19,14 +19,14 @@ export default {
   },
 
   components: {
-    MeasureButtonAddStart, MeasureControls, Sticking, LineLabels, HighHats, Toms, Snares, Kick
+    MeasureButtonAddStart, MeasureControls, Stickings, LineLabels, HighHats, Toms, Snares, Kick
   },
 
   render() {
     return h('div', [
       h(MeasureButtonAddStart, { measureIndex: 1}),
       h('div', { class: 'staff-container', id: 'staff-container1' }, [
-        h(Sticking),
+        h(Stickings, { measureIndex: 1}),
         h('span', { class: 'notes-row-container' }, [
           h('span', [
             h(LineLabels,  { measureIndex: 1}),
