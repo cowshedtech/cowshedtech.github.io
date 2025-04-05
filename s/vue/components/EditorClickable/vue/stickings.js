@@ -22,7 +22,7 @@ export default {
 
   methods: {
     handleClick(event) {
-      noteLabelClick(event, stickings, this.measureIndex)
+      noteLabelClick(event, "stickings", this.measureIndex)
     }
   },
 
