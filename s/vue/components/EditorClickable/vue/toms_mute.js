@@ -13,12 +13,12 @@ export default {
 
   methods: {
     handleClick(event) {
-        noteLeftClick('hh', this.noteIndex, false)
+        muteInstrument('tom' + this.tomIndex, this.measureIndex, false)
     }
   },
 
   template: `
-    <div :id="'unmuteTom' + tomIndex + 'Button' + measureIndex" :class="'unmuteTom' + tomIndex + 'Button'" @click="handleClick">
+    <div :id="'unmutetom' + tomIndex + 'Button' + measureIndex" :class="'unmuteTom' + tomIndex + 'Button'" @click="handleClick">
       <span class="fa-stack unmuteHHStack">
         <i class="fa fa-ban fa-stack-2x" style="color:red"></i>
         <i class="fa fa-volume-down fa-stack-1x"></i>

@@ -605,7 +605,7 @@
 		color: transparent;
 		float:left;
 	}
-	.unmuteHHButton, .unmuteSnareButton, .unmuteKickButton, .unmuteTom1Button, .unmuteTom4Button {
+	.unmuteHhButton, .unmuteSnareButton, .unmuteKickButton, .unmuteTom1Button, .unmuteTom4Button {
 		display: inline-block;
 		display: none;
 		position: relative;
@@ -618,10 +618,10 @@
 		margin-left: 2px;
 		cursor: pointer;
 	}
-	.unmuteHHButton:hover, .unmuteSnareButton:hover, .unmuteKickButton:hover, .unmuteTom1Button:hover, .unmuteTom4Button:hover {
+	.unmuteHhButton:hover, .unmuteSnareButton:hover, .unmuteKickButton:hover, .unmuteTom1Button:hover, .unmuteTom4Button:hover {
 		opacity: .6;
 	}
-	.unmuteHHStack {
+	.unmuteHhStack {
 		margin-top: 9px;
 	}
 	.unmuteStack {

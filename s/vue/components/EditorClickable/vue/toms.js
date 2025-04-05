@@ -32,7 +32,7 @@ export default {
         <Tom :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" />
         <NoteSpacer :noteIndex="i" />
       </template>
-      <TomsMute :measureIndex="measureIndex" :tomIndex="tomIndex></TomsMute>
+      <TomsMute :measureIndex="measureIndex" :tomIndex="tomIndex"></TomsMute>
     </div>
   `
 }
