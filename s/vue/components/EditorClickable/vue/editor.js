@@ -9,6 +9,8 @@ export default {
   },
 
   mounted() {
+    console.log(`editor mounted`)
+    
     // Subscribe to metronome changes
     this.removeHandler = sheetMusic?.addChangeHandler(() => {
       this.track = editor.track

@@ -36,6 +36,7 @@ var metronome;
 // var editor;
 // var track;
 var editor;
+var editorClickable;
 var options;
 var abcToSVGCallback;
 var sheetMusic;
@@ -46,6 +47,7 @@ function GrooveWriter() {
 
 	var root = this;
 	editor = this;
+	editorClickable = new EditorClickable();
 	options = new Options();
 	metronome = new Metronome();
 	sheetMusic = new SheetMusic();
@@ -64,6 +66,8 @@ function GrooveWriter() {
 
 	// This function initializes the data for the groove Scribe web page
 	root.runsOnPageLoad = function () {
+
+		console.log(`runsOnPageLoad`)
 
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 
@@ -90,7 +94,10 @@ function GrooveWriter() {
 		})
 
 		midiPlayer?.subscribe(EventTypes.PLAY_STATE, () => {
-			if (midiPlayer.getState() == PlayerState.STOPPED) sheetMusic.stop();
+			if (midiPlayer.getState() == PlayerState.STOPPED) {
+				sheetMusic.stop();
+				editorClickable.stop();
+			}
 		})
 
 		midiPlayer?.subscribe(EventTypes.PLAY_PROGRESS, (data) => {			
@@ -130,7 +137,10 @@ function GrooveWriter() {
 		};
 
 		options.addChangeHandler(() => {
-			if (!options.isHighlightOn()) sheetMusic.clearHighlight();
+			if (!options.isHighlightOn()) {
+				sheetMusic.clearHighlight();
+				editorClickable.clearHighlight();
+			}
 			showHideToms(true, options.areTomsVisible(), true);
 			updateCurrentURL();
 		})
