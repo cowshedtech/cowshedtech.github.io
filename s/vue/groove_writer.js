@@ -103,7 +103,7 @@ function GrooveWriter() {
 		midiPlayer?.subscribe(EventTypes.PLAY_PROGRESS, (data) => {			
 			if (data?.percentComplete && options.isHighlightOn()) {
 				sheetMusic.highlightNote(data.percentComplete)			
-				hilight_note(null, data?.percentComplete, root.class_permutation_type, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures, root.track.notesPerMeasure, root.track.repeatedMeasures, usingTriplets());
+				editorClickable.hilight_note(null, data?.percentComplete, root.class_permutation_type, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures, root.track.notesPerMeasure, root.track.repeatedMeasures, usingTriplets());
 			} 
 		})
 
