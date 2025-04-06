@@ -20,6 +20,10 @@ export default {
             this.isPopupOpen = !this.isPopupOpen;
         },
 
+        closeMenu() {
+            this.isPopupOpen = false;
+        },
+
         handleClick(event) {
             this.toggleMenu();
             this.menuX = event.clientX;
@@ -27,5 +31,17 @@ export default {
         }
     },
 
-    template: `<BottomNavigationButton button-class=" grooveDB_hidden pageBottomButton" button-id="stickingsButton" button-text="STICKINGS" @click="handleClick"></BottomNavigationButton><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY"></Menu>`
+    template: `
+    <BottomNavigationButton 
+        button-class=" grooveDB_hidden pageBottomButton" 
+        button-id="stickingsButton" 
+        button-text="STICKINGS" 
+        @click="handleClick">
+    </BottomNavigationButton>
+    <Menu 
+        :is-open="isPopupOpen" 
+        :x="menuX" 
+        :y="menuY"
+        @close="closeMenu">
+    </Menu>`
 }
