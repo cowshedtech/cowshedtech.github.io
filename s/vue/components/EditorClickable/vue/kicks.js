@@ -1,7 +1,7 @@
 import Kick from './kick.js'
 import MuteButton from './all_button_mute.js'
 import NoteSpacer from './all_note_spacer.js'
-import KickMenu from './kick.js'
+import KickMenu from './kick_menu.js'
 
 export default {
   

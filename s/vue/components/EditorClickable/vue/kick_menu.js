@@ -1,4 +1,4 @@
-import InstrumentMenu from './instrument_menu.js'
+import InstrumentMenu from './base_instrument_menu.js'
 
 export default {
 	name: 'KickMenu',

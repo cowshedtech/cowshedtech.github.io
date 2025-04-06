@@ -38,7 +38,7 @@ export default {
                 <Toms :measureIndex="measureIndex" :tomIndex="1" />
                 <Snares :measureIndex="measureIndex" />
                 <Toms :measureIndex="measureIndex" :tomIndex="4" />
-                <Kick :measureIndex="measureIndex" />
+                <Kick :measureIndex="measureIndex" />                
               </div>
             </div>
           </span>
