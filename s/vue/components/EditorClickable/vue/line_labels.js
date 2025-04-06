@@ -1,16 +1,18 @@
 import HighHatLabelMenu from "./label_menu_highhat.js"
+import SnareLabelMenu from "./label_menu_snare.js"
 
 export default {
   data() {
     return {
       labels: [
-        { class: 'hh-label', id: 'hh-label', text: 'Hi-hat' },
-        { class: 'tom-label', id: 'tom1-label', text: 'Tom' },
-        { class: 'snare-label', id: 'snare-label', text: 'Snare' },
-        { class: 'tom-label', id: 'tom4-label', text: 'Tom' },
-        { class: 'kick-label', id: 'kick-label', text: 'Kick' }
+        { instrument: 'hh', class: 'hh-label', id: 'hh-label', text: 'Hi-hat' },
+        { instrument: 'tom', class: 'tom-label', id: 'tom1-label', text: 'Tom' },
+        { instrument: 'snare', class: 'snare-label', id: 'snare-label', text: 'Snare' },
+        { instrument: 'tom', class: 'tom-label', id: 'tom4-label', text: 'Tom' },
+        { instrument: 'kick', class: 'kick-label', id: 'kick-label', text: 'Kick' }
       ],
-      isPopupOpen: false,
+      isHighHatPopupOpen: false,
+      isSnarePopupOpen: false,
       menuX: 0,
       menuY: 0,      
     }
@@ -23,31 +25,25 @@ export default {
     }
   },
 
-  // methods: {
-  //   handleClick(event) {
-  //     const idParts = event.srcElement.id.split('-')
-  //     const idBeforeHyphen = idParts[0]
-  //     noteLabelClick(event, idBeforeHyphen, this.measureIndex)
-  //   }
-  // },
-
   components: {
-    HighHatLabelMenu
+    HighHatLabelMenu, SnareLabelMenu
   },
 
   methods: {
-    toggleMenu() {
-      this.isPopupOpen = !this.isPopupOpen;
+    toggleMenu(instrument) {
+      if (instrument === "hh") {this.isHighHatPopupOpen = !this.isHighHatPopupOpen;
+      if (instrument === "snare") this.isSnarePopupOpen = !this.isSnarePopupOpen;
     },
 
     closeMenu() {
-      this.isPopupOpen = false;
+      this.isHighHatPopupOpen = false;
+      this.isSnarePopupOpen = false;
     },
 
-    handleClick(event) {
-      this.toggleMenu();
+    handleClick(event, instrument) {
       this.menuX = event.clientX;
       this.menuY = event.clientY;
+      this.toggleMenu(instrument);      
     }
   },
 
@@ -57,17 +53,24 @@ export default {
            :key="label.id"
            :class="label.class"
            :id="label.id"
-           @click="handleClick"
+           @click="handleClick($event, label.instrument)"
            @contextmenu.prevent="handleClick">
         {{ label.text }}
       </div>
       <HighHatLabelMenu
         :measureIndex="measureIndex"
-        :is-open="isPopupOpen" 
+        :is-open="isHighHatPopupOpen" 
         :x="menuX" 
         :y="menuY"
         @close="closeMenu">
       </HighHatLabelMenu>
+      <SnareLabelMenu
+        :measureIndex="measureIndex"
+        :is-open="isSnarePopupOpen" 
+        :x="menuX" 
+        :y="menuY"
+        @close="closeMenu">
+      </SnareLabelMenu>
     </div>    
   `
 }

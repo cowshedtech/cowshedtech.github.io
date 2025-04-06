@@ -2,7 +2,6 @@ import HighHat from './highhat.js'
 import MuteButton from './all_button_mute.js'
 import NoteSpacer from './all_note_spacer.js'
 import HighHatMenu from './highhat_menu.js'
-import HighHatLabelMenu from './highhat_label_menu.js'
 
 export default {
   
@@ -14,7 +13,7 @@ export default {
   },
 
   components: {
-   HighHat, MuteButton, NoteSpacer, HighHatMenu, HighHatLabelMenu
+   HighHat, MuteButton, NoteSpacer, HighHatMenu
   },
 
   setup(props) {
