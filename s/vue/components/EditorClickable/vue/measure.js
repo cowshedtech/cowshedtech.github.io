@@ -24,21 +24,21 @@ export default {
 
   template: `
     <div>
-      <MeasureButtonAddStart :measureIndex="1" />
+      <MeasureButtonAddStart :measureIndex="measureIndex" />
       <div class="staff-container" id="staff-container1">
-        <Stickings :measureIndex="1" />
+        <Stickings :measureIndex="measureIndex" />
         <span class="notes-row-container">
           <span>
-            <LineLabels :measureIndex="1" />
+            <LineLabels :measureIndex="measureIndex" />
             <div class="music-line-container">
               <div class="notes-container">
                 <StaffLines />
                 <Highlights />
-                <HighHats :measureIndex="1" />
-                <Toms :measureIndex="1" :tomIndex="1" />
-                <Snares :measureIndex="1" />
-                <Toms :measureIndex="1" :tomIndex="4" />
-                <Kick :measureIndex="1" />
+                <HighHats :measureIndex="measureIndex" />
+                <Toms :measureIndex="measureIndex" :tomIndex="1" />
+                <Snares :measureIndex="measureIndex" />
+                <Toms :measureIndex="measureIndex" :tomIndex="4" />
+                <Kick :measureIndex="measureIndex" />
               </div>
             </div>
           </span>
