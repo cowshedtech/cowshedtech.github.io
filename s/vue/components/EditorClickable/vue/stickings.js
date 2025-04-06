@@ -6,9 +6,9 @@ export default {
 
   data() {
     return {
-        isPopupOpen: false,
-        menuX: 0,
-        menuY: 0,
+      isPopupOpen: false,
+      menuX: 0,
+      menuY: 0,
     }
   },
 
@@ -32,17 +32,17 @@ export default {
 
   methods: {
     toggleMenu() {
-        this.isPopupOpen = !this.isPopupOpen;
+      this.isPopupOpen = !this.isPopupOpen;
     },
 
     closeMenu() {
-        this.isPopupOpen = false;
+      this.isPopupOpen = false;
     },
 
     handleClick(event) {
-        this.toggleMenu();
-        this.menuX = event.clientX;
-        this.menuY = event.clientY;
+      this.toggleMenu();
+      this.menuX = event.clientX;
+      this.menuY = event.clientY;
     }
   },
 

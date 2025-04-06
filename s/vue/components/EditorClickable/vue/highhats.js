@@ -32,7 +32,6 @@ export default {
       </template>
       <MuteButton instrument="hh" :measureIndex="measureIndex"></MuteButton>
     </div>
-    <HighHatMenu />
-    <HighHatLabelMenu />
+    <HighHatMenu />    
   `
 }

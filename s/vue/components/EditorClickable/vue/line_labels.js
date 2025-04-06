@@ -1,3 +1,5 @@
+import HighHatLabelMenu from "./label_menu_highhat.js"
+
 export default {
   data() {
     return {
@@ -7,7 +9,10 @@ export default {
         { class: 'snare-label', id: 'snare-label', text: 'Snare' },
         { class: 'tom-label', id: 'tom4-label', text: 'Tom' },
         { class: 'kick-label', id: 'kick-label', text: 'Kick' }
-      ]
+      ],
+      isPopupOpen: false,
+      menuX: 0,
+      menuY: 0,      
     }
   },
 
@@ -18,11 +23,31 @@ export default {
     }
   },
 
+  // methods: {
+  //   handleClick(event) {
+  //     const idParts = event.srcElement.id.split('-')
+  //     const idBeforeHyphen = idParts[0]
+  //     noteLabelClick(event, idBeforeHyphen, this.measureIndex)
+  //   }
+  // },
+
+  components: {
+    HighHatLabelMenu
+  },
+
   methods: {
+    toggleMenu() {
+      this.isPopupOpen = !this.isPopupOpen;
+    },
+
+    closeMenu() {
+      this.isPopupOpen = false;
+    },
+
     handleClick(event) {
-      const idParts = event.srcElement.id.split('-')
-      const idBeforeHyphen = idParts[0]
-      noteLabelClick(event, idBeforeHyphen, this.measureIndex)
+      this.toggleMenu();
+      this.menuX = event.clientX;
+      this.menuY = event.clientY;
     }
   },
 
@@ -36,6 +61,13 @@ export default {
            @contextmenu.prevent="handleClick">
         {{ label.text }}
       </div>
-    </div>
+      <HighHatLabelMenu
+        :measureIndex="measureIndex"
+        :is-open="isPopupOpen" 
+        :x="menuX" 
+        :y="menuY"
+        @close="closeMenu">
+      </HighHatLabelMenu>
+    </div>    
   `
 }
