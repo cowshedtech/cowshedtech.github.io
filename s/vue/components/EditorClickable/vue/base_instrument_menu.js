@@ -1,4 +1,4 @@
-import MenuItem from './instrument_menu_item.js'
+import MenuItem from './base_instrument_menu_item.js'
 
 export default {
 	components: { MenuItem },

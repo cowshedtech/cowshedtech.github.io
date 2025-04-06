@@ -8,7 +8,7 @@ import KickLabel from './kick_label.js'
 
 // Instruments
 import Sticking from './sticking.js'
-import HighHat from './high_hat.js'
+import HighHat from './highhat_menu.js'
 import Tom1 from './tom1.js'
 import Tom4 from './tom4.js'
 import Snare from './snare.js'

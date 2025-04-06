@@ -1,4 +1,4 @@
-import ContextMenus from './instruments/context_menus.js'
+import ContextMenus from './context_menus.js'
 import Measure from './measure.js'
 
 export default {

@@ -1,7 +1,7 @@
-import InstrumentMenu from './instrument_menu.js'
+import InstrumentMenu from './base_instrument_menu.js'
 
 export default {
-	name: 'Tom1Menu',
+	name: 'Tom4Menu',
 	components: {
 		InstrumentMenu
 	},
@@ -11,8 +11,8 @@ export default {
 			{ newState: 'off', label: 'Off' },
 			{ newState: 'normal', label: 'On' }	
 		],
-		instrument: "tom1",
-		element: "tom1ContextMenu",
+		instrument: "tom4",
+		element: "tom4ContextMenu",
 	}	
   },
   template: `
