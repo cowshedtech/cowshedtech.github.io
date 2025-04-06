@@ -2,8 +2,6 @@ import Tom from './tom.js'
 import NoteSpacer from './all_note_spacer.js'
 import MuteButton from './all_button_mute.js'
 import TomMenu from './tom_menu.js'
-import TomLabelMenu from './tom_label_menu.js'
-
 
 export default {
 
@@ -19,7 +17,7 @@ export default {
   },
 
   components: {
-    Tom, TomMenu, TomLabelMenu, NoteSpacer, MuteButton
+    Tom, TomMenu, NoteSpacer, MuteButton
   },
 
   setup(props) {
