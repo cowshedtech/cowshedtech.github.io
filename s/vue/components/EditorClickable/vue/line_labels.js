@@ -1,4 +1,5 @@
 import HighHatLabelMenu from "./label_menu_highhat.js"
+import KickLabelMenu from "./label_menu_kick.js"
 import SnareLabelMenu from "./label_menu_snare.js"
 
 export default {
@@ -12,6 +13,7 @@ export default {
         { instrument: 'kick', class: 'kick-label', id: 'kick-label', text: 'Kick' }
       ],
       isHighHatPopupOpen: false,
+      isKickPopupOpen: false,
       isSnarePopupOpen: false,
       menuX: 0,
       menuY: 0,      
@@ -26,17 +28,19 @@ export default {
   },
 
   components: {
-    HighHatLabelMenu, SnareLabelMenu
+    HighHatLabelMenu, KickLabelMenu, SnareLabelMenu
   },
 
   methods: {
     toggleMenu(instrument) {
-      if (instrument === "hh") {this.isHighHatPopupOpen = !this.isHighHatPopupOpen;
+      if (instrument === "hh") this.isHighHatPopupOpen = !this.isHighHatPopupOpen;
+      if (instrument === "kick") this.isKickPopupOpen = !this.isKickPopupOpen;
       if (instrument === "snare") this.isSnarePopupOpen = !this.isSnarePopupOpen;
     },
 
     closeMenu() {
       this.isHighHatPopupOpen = false;
+      this.isKickPopupOpen = false;
       this.isSnarePopupOpen = false;
     },
 
@@ -64,6 +68,13 @@ export default {
         :y="menuY"
         @close="closeMenu">
       </HighHatLabelMenu>
+      <KickLabelMenu
+        :measureIndex="measureIndex"
+        :is-open="isKickPopupOpen" 
+        :x="menuX" 
+        :y="menuY"
+        @close="closeMenu">
+      </KickLabelMenu>
       <SnareLabelMenu
         :measureIndex="measureIndex"
         :is-open="isSnarePopupOpen" 
