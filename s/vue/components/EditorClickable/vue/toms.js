@@ -1,6 +1,9 @@
 import Tom from './tom.js'
 import NoteSpacer from './all_note_spacer.js'
 import MuteButton from './all_button_mute.js'
+import TomMenu from './tom_menu.js'
+import TomLabelMenu from './tom_label_menu.js'
+
 
 export default {
 
@@ -16,7 +19,7 @@ export default {
   },
 
   components: {
-    Tom, NoteSpacer, MuteButton
+    Tom, TomMenu, TomLabelMenu, NoteSpacer, MuteButton
   },
 
   setup(props) {
@@ -34,5 +37,7 @@ export default {
       </template>
       <MuteButton :instrument="'tom' + tomIndex" :measureIndex="measureIndex"></MuteButton>
     </div>
+    <TomMenu :tomIndex="tomIndex"/>
+    <TomLabelMenu :tomIndex="tomIndex"/>
   `
 }

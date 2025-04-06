@@ -1,5 +1,6 @@
 import NoteSpacer from './all_note_spacer.js'
 import Sticking from './sticking.js'
+import StickingLabelMenu from './sticking_label_menu.js'
 
 export default {
 
@@ -11,7 +12,7 @@ export default {
   },
 
   components: {
-    NoteSpacer, Sticking
+    NoteSpacer, Sticking, StickingLabelMenu
   },
 
   setup(props) {
@@ -31,6 +32,7 @@ export default {
     <div class="stickings-row-container">
         <div class="line-labels">
             <div class="stickings-label" @click="handleClick" @contextmenu.prevent="handleClick">STICKINGS</div>
+            <StickingLabelMenu></StickingLabelMenu>
         </div>      
         <div class="music-line-container">
             <div class="notes-container">
@@ -45,5 +47,6 @@ export default {
             </div>
             <slot></slot>
         </div>
-    </div>`
+    </div>
+    `
 }
