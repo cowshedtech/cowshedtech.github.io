@@ -101,14 +101,14 @@ class EditorClickable {
         let adjusted_note_id_in_32 = measure * notesPerMeasure + note_id_in_32 % notesPerMeasure;
         var real_note_id = adjusted_note_id_in_32 / getNoteScaler(trackNotesPerMeasure, numBeats, noteValuePerMeasure);
     
-        this.hilight_all_notes_on_same_beat(instrument, real_note_id, notesPerMeasure, numberOfMeasures);
+        this.hilight_all_notes_on_same_beat(real_note_id, notesPerMeasure, numberOfMeasures);
     }
     
     
     //
     //
     //
-    hilight_all_notes_on_same_beat(instrument, id, notesPerMeasure, numberOfMeasures) {
+    hilight_all_notes_on_same_beat(id, notesPerMeasure, numberOfMeasures) {
     
         id = Math.floor(id);
         if (id < 0 || id >= notesPerMeasure * numberOfMeasures)
