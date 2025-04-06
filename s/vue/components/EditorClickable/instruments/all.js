@@ -80,9 +80,11 @@ function noteLabelClick(event, instrument, measure) {
 //
 //
 //
-function noteLabelPopupClick(instrument, action) {
+function noteLabelPopupClick(instrument, action, measureIndex) {
     var setFunction = false;
     var contextMenu = false;
+
+    if (measureIndex) measureForNoteLabelClick = measureIndex;
 
     switch (instrument) {
         case "stickings":

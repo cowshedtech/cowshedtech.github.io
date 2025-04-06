@@ -1,18 +1,38 @@
 export default {
-  data() {
-    return { }
-  },
-  props: { },
-  template: `
-	<div class="noteContextMenu">
+	props: {
+		measureIndex: {
+			type: Number,
+			required: true
+		},
+		isOpen: {
+			type: Boolean,
+			default: false
+		},
+		x: {
+			type: String
+		},
+		y: {
+			type: String
+		}
+	},
+
+	methods: {
+		handleClick(action) {
+			noteLabelPopupClick("stickings", action, this.measureIndex)
+			this.$emit('close')
+		}
+	},
+
+	template: `
+	<div class="noteContextMenuNew" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="stickingsLabelContextMenu" class="list">
-			<li onclick='noteLabelPopupClick("stickings", "all_off");'>all <b>Off</b></li>
-			<li onclick='noteLabelPopupClick("stickings", "alternate");'>alternate <b>R</b>/<b>L</b></li>
-			<li onclick='noteLabelPopupClick("stickings", "all_right");'>all <b>R</b>s</li>
-			<li onclick='noteLabelPopupClick("stickings", "all_left");'>all <b>L</b>s</li>
-			<li onclick='noteLabelPopupClick("stickings", "all_count");'><b>C</b>ounts</li>
-			<li onclick='noteLabelPopupClick("stickings", "cancel");'>cancel</li>
+			<li @click='handleClick("all_off")'>all <b>Off</b></li>
+			<li @click='handleClick("alternate")'>alternate <b>R</b>/<b>L</b></li>
+			<li @click='handleClick("all_right")'>all <b>R</b>s</li>
+			<li @click='handleClick("all_left")'>all <b>L</b>s</li>
+			<li @click='handleClick("all_count")'><b>C</b>ounts</li>
+			<li @click='handleClick("cancel")'>cancel</li>
 		</ul>
 	</div>
-`
+	`
 }

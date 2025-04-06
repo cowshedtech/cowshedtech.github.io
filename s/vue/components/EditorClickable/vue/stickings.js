@@ -4,6 +4,14 @@ import StickingLabelMenu from './sticking_label_menu.js'
 
 export default {
 
+  data() {
+    return {
+        isPopupOpen: false,
+        menuX: 0,
+        menuY: 0,
+    }
+  },
+
   props: {
     measureIndex: {
       type: Number,
@@ -23,8 +31,18 @@ export default {
   },
 
   methods: {
+    toggleMenu() {
+        this.isPopupOpen = !this.isPopupOpen;
+    },
+
+    closeMenu() {
+        this.isPopupOpen = false;
+    },
+
     handleClick(event) {
-      noteLabelClick(event, "stickings", this.measureIndex)
+        this.toggleMenu();
+        this.menuX = event.clientX;
+        this.menuY = event.clientY;
     }
   },
 
@@ -32,7 +50,13 @@ export default {
     <div class="stickings-row-container">
         <div class="line-labels">
             <div class="stickings-label" @click="handleClick" @contextmenu.prevent="handleClick">STICKINGS</div>
-            <StickingLabelMenu></StickingLabelMenu>
+            <StickingLabelMenu
+              :measureIndex="measureIndex"
+              :is-open="isPopupOpen" 
+              :x="menuX" 
+              :y="menuY"
+              @close="closeMenu">
+            </StickingLabelMenu>
         </div>      
         <div class="music-line-container">
             <div class="notes-container">
