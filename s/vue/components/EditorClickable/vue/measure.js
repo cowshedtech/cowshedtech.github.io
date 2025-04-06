@@ -19,32 +19,32 @@ export default {
   },
 
   components: {
-    MeasureButtonAddStart, MeasureControls, Stickings, LineLabels, HighHats, Toms, Snares, Kick
+    MeasureButtonAddStart, MeasureControls, Stickings, LineLabels, HighHats, Toms, Snares, Kick, Highlights, StaffLines
   },
 
-  render() {
-    return h('div', [
-      h(MeasureButtonAddStart, { measureIndex: 1}),
-      h('div', { class: 'staff-container', id: 'staff-container1' }, [
-        h(Stickings, { measureIndex: 1}),
-        h('span', { class: 'notes-row-container' }, [
-          h('span', [
-            h(LineLabels,  { measureIndex: 1}),
-            h('div', { class: 'music-line-container' }, [
-              h('div', { class: 'notes-container' }, [
-                h(StaffLines),
-                h(Highlights),
-                h(HighHats,  { measureIndex: 1}),
-                h(Toms, { measureIndex: 1, tomIndex: 1}),
-                h(Snares, { measureIndex: 1}),
-                h(Toms, { measureIndex: 1, tomIndex: 4}),
-                h(Kick, { measureIndex: 1}),
-              ])
-            ])              
-          ])
-        ])
-      ]),
-      h(MeasureControls)
-    ])
-  }
+  template: `
+    <div>
+      <MeasureButtonAddStart :measureIndex="1" />
+      <div class="staff-container" id="staff-container1">
+        <Stickings :measureIndex="1" />
+        <span class="notes-row-container">
+          <span>
+            <LineLabels :measureIndex="1" />
+            <div class="music-line-container">
+              <div class="notes-container">
+                <StaffLines />
+                <Highlights />
+                <HighHats :measureIndex="1" />
+                <Toms :measureIndex="1" :tomIndex="1" />
+                <Snares :measureIndex="1" />
+                <Toms :measureIndex="1" :tomIndex="4" />
+                <Kick :measureIndex="1" />
+              </div>
+            </div>
+          </span>
+        </span>
+      </div>
+      <MeasureControls />
+    </div>
+  `
 }
