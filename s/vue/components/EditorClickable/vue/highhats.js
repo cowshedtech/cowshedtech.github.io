@@ -7,7 +7,8 @@ export default {
   
   data() {
     return {
-      trackData: editor.track ? editor.track : null
+      trackData: editor.track ? editor.track : null,
+      startNoteIndex: editor.track ? (this.measureIndex - 1) * editor.track.notesPerMeasure : 0
     }
   },
   
@@ -26,7 +27,7 @@ export default {
     track: {
       handler(newVal, oldVal) { 
         this.trackData = newVal;
-        this.$forceUpdate(); 
+        this.startNoteIndex = (this.measureIndex - 1) * this.trackData.notesPerMeasure;        
       },
       deep: true
     },    
@@ -34,12 +35,6 @@ export default {
 
   components: {
     HighHat, MuteButton, NoteSpacer, HighHatMenu
-  },
-
-  setup(props) {
-    const { notesPerMeasure } = editor.track;
-    const startNoteIndex = (props.measureIndex - 1) * notesPerMeasure;
-    return { startNoteIndex, notesPerMeasure}
   },
 
   template: `
