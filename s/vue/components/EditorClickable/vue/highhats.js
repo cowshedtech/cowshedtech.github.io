@@ -47,7 +47,7 @@ export default {
       <div class="opening_note_space"></div>
       <template v-for="i in trackData.notesPerMeasure" :key="i">
         <HighHat :noteIndex="startNoteIndex + (i - 1)" />
-        <NoteSpacer :noteIndex="i" />
+        <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton instrument="hh" :measureIndex="measureIndex"></MuteButton>
     </div>

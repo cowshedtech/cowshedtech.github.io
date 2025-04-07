@@ -1,26 +1,52 @@
-import { ref, h } from 'vue'
+import { ref } from 'vue'
+
+function buildHighlights(track) {
+    const { notesPerMeasure, numBeats, noteValue } = track;
+    const groupSize = noteGroupingSize(notesPerMeasure, numBeats, noteValue)
+
+    const highlights = ref([])
+    for (let i = 0; i < notesPerMeasure; i++) {
+        highlights.value.push({
+            id: i,
+            shouldAddSpace: (i + 1) % groupSize === 0 && i < notesPerMeasure - 1
+        })
+    }
+
+    return highlights
+}
 
 export default {
     props: {
+        track: {
+            type: Object,
+            required: true
+        },
         measureIndex: {
             type: Number,
             required: true
         }
     },
 
-    setup() {
-        const { notesPerMeasure, numBeats, noteValue } = editor.track;
-        const groupSize = noteGroupingSize(notesPerMeasure, numBeats, noteValue)
-        
-        const highlights = ref([])
-        for (let i = 0; i < notesPerMeasure; i++) {
-            highlights.value.push({
-                id: i,
-                shouldAddSpace: (i + 1) % groupSize === 0 && i < notesPerMeasure - 1
-            })
+    data() {
+        return {
+            highlights: null,
         }
+    },
 
-        return { highlights }
+    watch: {
+        track: {
+            handler(newVal, oldVal) {
+                let highlights = buildHighlights(newVal)
+                this.highlights = highlights;
+                this.$forceUpdate();
+            },
+            deep: true
+        },
+    },
+
+    onBeforeMount() {
+        let highlights = buildHighlights(this.track)
+        this.highlights = highlights;
     },
 
     template: `

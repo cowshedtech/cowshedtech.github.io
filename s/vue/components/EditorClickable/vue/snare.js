@@ -39,5 +39,3 @@ export default {
     </div>
   `,
 }
-
-{/* <SnareFlam></SnareFlam> */}

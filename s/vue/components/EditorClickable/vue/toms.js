@@ -5,7 +5,17 @@ import TomMenu from './tom_menu.js'
 
 export default {
 
+  data() {
+    return {
+      trackData: editor.track ? editor.track : null
+    }
+  },
+  
   props: {
+    track: {
+      type: Object,
+      required: true
+    },
     measureIndex: {
       type: Number,
       required: true
@@ -16,6 +26,16 @@ export default {
     }
   },
 
+  watch: { 
+    track: {
+      handler(newVal, oldVal) { 
+        this.trackData = newVal;
+        this.$forceUpdate(); 
+      },
+      deep: true
+    },    
+  },
+  
   components: {
     Tom, TomMenu, NoteSpacer, MuteButton
   },
@@ -29,9 +49,9 @@ export default {
   template: `
     <div class="toms-container" id="tom1-container">
       <div class="opening_note_space"></div>
-      <template v-for="i in notesPerMeasure" :key="i">
+      <template v-for="i in trackData.notesPerMeasure" :key="i">
         <Tom :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" />
-        <NoteSpacer :noteIndex="i" />
+        <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton :instrument="'tom' + tomIndex" :measureIndex="measureIndex"></MuteButton>
     </div>

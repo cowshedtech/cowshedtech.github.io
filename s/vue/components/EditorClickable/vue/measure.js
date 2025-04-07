@@ -52,12 +52,12 @@ export default {
             <div class="music-line-container">
               <div class="notes-container">
                 <StaffLines />
-                <Highlights />
+                <Highlights :track="track" :measureIndex="measureIndex" />
                 <HighHats :track="track" :measureIndex="measureIndex" />
-                <Toms :measureIndex="measureIndex" :tomIndex="1" />
-                <Snares :measureIndex="measureIndex" />
-                <Toms :measureIndex="measureIndex" :tomIndex="4" />
-                <Kick :measureIndex="measureIndex" />                
+                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="1" />
+                <Snares :track="track" :measureIndex="measureIndex" />
+                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="4" />
+                <Kick :track="track" :measureIndex="measureIndex" />                
               </div>
             </div>
           </span>
