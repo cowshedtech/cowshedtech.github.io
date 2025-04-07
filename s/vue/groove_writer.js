@@ -424,9 +424,9 @@ function GrooveWriter() {
 		root.track.notesPerMeasure = calc_notes_per_measure(root.track.timeDivision, root.track.numBeats, root.track.noteValue);
 
 		var newHTML = "";
-		for (var cur_measure = 1; cur_measure <= root.track.numberOfMeasures; cur_measure++) {
-			newHTML += htmlForStaffContainer(cur_measure, (cur_measure - 1) * root.track.notesPerMeasure);
-		}
+		// for (var cur_measure = 1; cur_measure <= root.track.numberOfMeasures; cur_measure++) {
+		// 	newHTML += htmlForStaffContainer(cur_measure, (cur_measure - 1) * root.track.notesPerMeasure);
+		// }
 
 		// rewrite the HTML for the HTML note grid
 		// document.getElementById("measureContainer").innerHTML = newHTML;
