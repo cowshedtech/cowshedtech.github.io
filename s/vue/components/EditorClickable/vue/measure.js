@@ -30,9 +30,8 @@ export default {
 
   watch: { 
     track: {
-      handler(newVal, oldVal) { // watch it
-        this.trackData = editor.track;
-        console.log('measure change [' + this.trackData.title + ']' )
+      handler(newVal, oldVal) { 
+        this.trackData = newVal;        
       },
       deep: true
     },    
@@ -54,7 +53,7 @@ export default {
               <div class="notes-container">
                 <StaffLines />
                 <Highlights />
-                <HighHats :measureIndex="measureIndex" />
+                <HighHats :track="track" :measureIndex="measureIndex" />
                 <Toms :measureIndex="measureIndex" :tomIndex="1" />
                 <Snares :measureIndex="measureIndex" />
                 <Toms :measureIndex="measureIndex" :tomIndex="4" />

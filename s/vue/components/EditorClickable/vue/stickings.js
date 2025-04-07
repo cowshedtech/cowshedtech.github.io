@@ -26,10 +26,8 @@ export default {
 
   watch: { 
     track: {
-      handler(newVal, oldVal) { // watch it
-        this.trackData = editor.track;
-        console.log('stickings change [' + this.trackData.title + ']' )
-        console.log('stickings ' + this.trackData.notesPerMeasure)
+      handler(newVal, oldVal) { 
+        this.trackData = newVal;
         this.$forceUpdate(); 
       },
       deep: true
