@@ -147,6 +147,7 @@ function GrooveWriter() {
 		
 		// load the groove from the URL data if it was passed in.
 		root.updateFromURL(window.location.search);
+		// editorClickable.update(editor.track);
 
 		// TODO
 		setupPermutationMenu();
@@ -265,6 +266,7 @@ function GrooveWriter() {
 		updateGrooveDBSource();
 
 		midiPlayer.noteHasChanged();
+		editorClickable.update(editor.track);
 
 		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
 		updateCurrentURL();
@@ -372,6 +374,7 @@ function GrooveWriter() {
 	root.updateFromURL = function (encodedURLData) {
 
 		var track = getGrooveDataFromUrlString(encodedURLData, root.track, options, midiPlayer, metronome, options.debugMode);
+		editorClickable.update(editor.track);
 
 		// if (track.notesPerMeasure != root.track.notesPerMeasure || track.numberOfMeasures != root.track.numberOfMeasures) {
 		// 	root.track.numberOfMeasures = track.numberOfMeasures;

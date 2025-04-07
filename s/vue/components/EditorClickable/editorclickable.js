@@ -43,6 +43,16 @@ class EditorClickable {
         this.#changeHandlers.forEach(handler => handler());
     }
 
+    /**
+     * Update our track
+     * @param {Track} 
+     */    
+    update(track) {
+        this.#track = track;
+        this.#notifyHandlers();    
+    };
+
+
     stop() {
         this.clearHighlight()
     }

@@ -6,6 +6,7 @@ export default {
 
   data() {
     return {
+      trackData: editor.track ? editor.track : null,
       isPopupOpen: false,
       menuX: 0,
       menuY: 0,
@@ -13,10 +14,26 @@ export default {
   },
 
   props: {
+    track: {
+      type: Object,
+      required: true
+    },
     measureIndex: {
       type: Number,
       required: true
     }
+  },
+
+  watch: { 
+    track: {
+      handler(newVal, oldVal) { // watch it
+        this.trackData = editor.track;
+        console.log('stickings change [' + this.trackData.title + ']' )
+        console.log('stickings ' + this.trackData.notesPerMeasure)
+        this.$forceUpdate(); 
+      },
+      deep: true
+    },    
   },
 
   components: {
@@ -25,9 +42,8 @@ export default {
 
   setup(props) {
     const { notesPerMeasure, numBeats, noteValue } = editor.track;
-    const groupSize = noteGroupingSize(notesPerMeasure, numBeats, noteValue)
     const startNoteIndex = (props.measureIndex - 1) * notesPerMeasure;
-    return { startNoteIndex, notesPerMeasure, groupSize }
+    return { startNoteIndex }
   },
 
   methods: {
@@ -62,7 +78,7 @@ export default {
             <div class="notes-container">
                 <div class="stickings-container">
                     <div class="opening_note_space"></div>
-                        <template v-for="i in notesPerMeasure" :key="i">
+                        <template v-for="i in trackData.notesPerMeasure" :key="i">
                             <Sticking :noteIndex="startNoteIndex + (i - 1)"  />
                             <NoteSpacer :noteIndex="i" />
                         </template>

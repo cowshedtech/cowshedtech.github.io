@@ -1149,7 +1149,7 @@ function generate_ABC(renderWidth) {
 					Snare_Array = get_empty_note_array_in_32nds();
 					Kick_Array = get_empty_note_array_in_32nds();
 
-					get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, editor.class_notes_per_measure * i);
+					get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, editor.track.notesPerMeasure * i);
 				}
 
 				if ((i + 1) == editor.track.numberOfMeasures) {

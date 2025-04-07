@@ -132,7 +132,7 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
 
     if (metronome) metronome.setFrequency(parseInt(getQueryVariableFromString("MetronomeFreq", "0", encodedURLData), 10));
 
-    track.numberOfMeasures = parseInt(getQueryVariableFromString("measures", 1, encodedURLData), 10);
+    track.numberOfMeasures = parseInt(getQueryVariableFromString("Measures", 1, encodedURLData), 10);
     if (track.numberOfMeasures < 1 || isNaN(track.numberOfMeasures))
         track.numberOfMeasures = 1;
     else if (track.numberOfMeasures > constant_MAX_MEASURES)

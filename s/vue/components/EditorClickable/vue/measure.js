@@ -1,4 +1,4 @@
-import { h } from 'vue'
+import { h, isReactive } from 'vue'
 import MeasureButtonAddStart from './measure_button_add_start.js'
 import MeasureControls from './measure_controls.js'
 import Stickings from './stickings.js'
@@ -11,11 +11,31 @@ import Highlights from './highlights.js'
 import StaffLines from './staff_line.js'
 
 export default {
+  data() {
+    return {
+      trackData: editor.track ? editor.track : null
+    }
+  },
+  
   props: {
+    track: {
+      type: Object,
+      required: true
+    },
     measureIndex: {
       type: Number,
       required: true
-    },
+    },    
+  },
+
+  watch: { 
+    track: {
+      handler(newVal, oldVal) { // watch it
+        this.trackData = editor.track;
+        console.log('measure change [' + this.trackData.title + ']' )
+      },
+      deep: true
+    },    
   },
 
   components: {
@@ -26,7 +46,7 @@ export default {
     <div>
       <MeasureButtonAddStart :measureIndex="measureIndex" />
       <div class="staff-container" id="staff-container1">
-        <Stickings :measureIndex="measureIndex" />
+        <Stickings :track="track" :measureIndex="measureIndex" />
         <span class="notes-row-container">
           <span>
             <LineLabels :measureIndex="measureIndex" />
