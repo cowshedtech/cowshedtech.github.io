@@ -6,7 +6,7 @@ export default {
 
   data() {
     return {
-      trackData: editor.track ? editor.track : null,
+      startNoteIndex: this.track ? (this.measureIndex - 1) * this.track.notesPerMeasure : 0,
       isPopupOpen: false,
       menuX: 0,
       menuY: 0,
@@ -27,8 +27,7 @@ export default {
   watch: { 
     track: {
       handler(newVal, oldVal) { 
-        this.trackData = newVal;
-        this.$forceUpdate(); 
+        this.startNoteIndex = (this.measureIndex - 1) * this.track.notesPerMeasure;        
       },
       deep: true
     },    
@@ -36,12 +35,6 @@ export default {
 
   components: {
     NoteSpacer, Sticking, StickingLabelMenu
-  },
-
-  setup(props) {
-    const { notesPerMeasure, numBeats, noteValue } = editor.track;
-    const startNoteIndex = (props.measureIndex - 1) * notesPerMeasure;
-    return { startNoteIndex }
   },
 
   methods: {
@@ -76,7 +69,7 @@ export default {
             <div class="notes-container">
                 <div class="stickings-container">
                     <div class="opening_note_space"></div>
-                        <template v-for="i in trackData.notesPerMeasure" :key="i">
+                        <template v-for="i in track.notesPerMeasure" :key="i">
                             <Sticking :noteIndex="startNoteIndex + (i - 1)"  />
                             <NoteSpacer :track="track" :noteIndex="i" />
                         </template>
