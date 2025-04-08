@@ -5,13 +5,6 @@ import HighHatMenu from './highhat_menu.js'
 
 export default {
   
-  data() {
-    return {
-      trackData: editor.track ? editor.track : null,
-      startNoteIndex: editor.track ? (this.measureIndex - 1) * editor.track.notesPerMeasure : 0
-    }
-  },
-  
   props: {
     track: {
       type: Object,
@@ -23,11 +16,16 @@ export default {
     }
   },
 
+  data() {
+    return {
+      startNoteIndex: this.track ? (this.measureIndex - 1) * this.track.notesPerMeasure : 0
+    }
+  },
+  
   watch: { 
     track: {
       handler(newVal, oldVal) { 
-        this.trackData = newVal;
-        this.startNoteIndex = (this.measureIndex - 1) * this.trackData.notesPerMeasure;        
+        this.startNoteIndex = (this.measureIndex - 1) * this.track.notesPerMeasure;        
       },
       deep: true
     },    
@@ -40,7 +38,7 @@ export default {
   template: `
     <div class="hi-hat-container">
       <div class="opening_note_space"></div>
-      <template v-for="i in trackData.notesPerMeasure" :key="i">
+      <template v-for="i in track.notesPerMeasure" :key="i">
         <HighHat :noteIndex="startNoteIndex + (i - 1)" />
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
