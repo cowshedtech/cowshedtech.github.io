@@ -50,9 +50,6 @@ export default {
         var new_state = false;
         var sticking_state = this.noteABC;
       
-        // figure out the next state
-        // we could get fancy here and default down strokes to R and upstrokes to L
-        // for now we will rotate through (Off, R, L, BOTH) in order
         if (!sticking_state || sticking_state == constant_ABC_STICK_OFF) {
             new_state = constant_ABC_STICK_R;
         } else if (sticking_state == constant_ABC_STICK_R) {

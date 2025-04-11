@@ -39,8 +39,8 @@ export default {
     <div class="kick-container">
       <div class="opening_note_space"></div>
       <template v-for="i in track.notesPerMeasure" :key="i">
-        <Kick :noteIndex="startNoteIndex + (i - 1)" />
-         <NoteSpacer :track="track" :noteIndex="i" />
+        <Kick :track="track" :kicks="track.kick_array" :noteIndex="startNoteIndex + (i - 1)" />
+        <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton instrument="kick" :measureIndex="measureIndex"></MuteButton>
     </div>

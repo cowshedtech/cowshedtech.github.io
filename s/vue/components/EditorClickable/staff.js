@@ -429,7 +429,7 @@ function addMeasurePrevButtonClick (event) {
 function clearAllNotes() {
     editor.track.repeatedMeasures.clear();
     for (var i = 0; i < editor.track.numberOfMeasures * editor.track.notesPerMeasure; i++) {
-        set_sticking_state(i, 'off', editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
+        set_sticking_state(i, 'off');
         set_hh_state(i, 'off');
         set_tom1_state(i, 'off');
         set_tom4_state(i, 'off');

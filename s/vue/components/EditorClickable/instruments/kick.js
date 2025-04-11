@@ -35,74 +35,53 @@ function is_kick_on(id) {
 // "F^d,"  = kick & splash
 function get_kick_state(id, returnType) {
 
-    var splashOn = (document.getElementById("kick_splash" + id).style.color == constant_note_on_color_rgb);
-    var kickOn = (document.getElementById("kick_circle" + id).style.backgroundColor == constant_note_on_color_rgb);
-
-    if (returnType != "ABC" && returnType != "URL") {
-        console.log("bad returnType in get_kick_state()");
-        returnType = "ABC";
+    let abcState = editor.track.kick_array[id] ? editor.track.kick_array[id] : constant_ABC_OFF;
+    let result = abcState;
+    
+    if (returnType == "URL")
+    {
+        if (abcState === constant_ABC_KI_SandK) returnType = "X";
+        if (abcState === constant_ABC_KI_Splash) returnType = "x";
+        if (abcState === constant_ABC_KI_Normal) returnType = "o";        
     }
 
-    if (splashOn && kickOn) {
-        if (returnType == "ABC")
-            return constant_ABC_KI_SandK; // kick & splash
-        else if (returnType == "URL")
-            return "X"; // kick & splash
-    } else if (splashOn) {
-        if (returnType == "ABC")
-            return constant_ABC_KI_Splash; // splash only
-        else if (returnType == "URL")
-            return "x"; // splash only
-    } else if (kickOn) {
-        if (returnType == "ABC")
-            return constant_ABC_KI_Normal; // kick normal
-        else if (returnType == "URL")
-            return "o"; // kick normal
-    }
-
-    if (returnType == "ABC")
-        return false; // off (rest)
-    else if (returnType == "URL")
-        return "-"; // off (rest)
+    return result;        
 }
 
 // set the kick note on with type
 function set_kick_state(id, mode, make_sound) {
 
-    // hide everything optional
-    document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_hidden_color_rgb;
-    document.getElementById("kick_splash" + id).style.color = constant_note_hidden_color_rgb;
-
-    // turn stuff on conditionally
-    switch (mode) {
-        case "off":
-            document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_off_color_hex;
-            document.getElementById("kick_circle" + id).style.borderColor = constant_note_border_color_hex;
-            break;
-        case "normal":
-            document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_on_color_hex;
-            document.getElementById("kick_circle" + id).style.borderColor = constant_note_border_color_hex;
-            if (make_sound)
-                midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
-            break;
-        case "splash":
-            document.getElementById("kick_splash" + id).style.color = constant_note_on_color_hex;
-            document.getElementById("kick_circle" + id).style.borderColor = constant_note_hidden_color_rgb;
-            if (make_sound)
-                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
-            break;
-        case "kick_and_splash":
-            document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_on_color_hex;
-            document.getElementById("kick_splash" + id).style.color = constant_note_on_color_hex;
-            if (make_sound)
-                midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
-            if (make_sound)
-                midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
-            break;
-        default:
-            console.log("bad switch in set_kick_state");
-            break;
-    }
+    editor.track.kick_array[id] = mode;
+    
+    // // turn stuff on conditionally
+    // switch (mode) {
+    //     case "off":
+    //         document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_off_color_hex;
+    //         document.getElementById("kick_circle" + id).style.borderColor = constant_note_border_color_hex;
+    //         break;
+    //     case "normal":
+    //         document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_on_color_hex;
+    //         document.getElementById("kick_circle" + id).style.borderColor = constant_note_border_color_hex;
+    //         if (make_sound)
+    //             midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
+    //         break;
+    //     case "splash":
+    //         document.getElementById("kick_splash" + id).style.color = constant_note_on_color_hex;
+    //         document.getElementById("kick_circle" + id).style.borderColor = constant_note_hidden_color_rgb;
+    //         if (make_sound)
+    //             midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
+    //         break;
+    //     case "kick_and_splash":
+    //         document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_on_color_hex;
+    //         document.getElementById("kick_splash" + id).style.color = constant_note_on_color_hex;
+    //         if (make_sound)
+    //             midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
+    //         if (make_sound)
+    //             midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
+    //         break;
+    //     default:
+    //         console.log("bad switch in set_kick_state");
+    //         break;
 }
 
 

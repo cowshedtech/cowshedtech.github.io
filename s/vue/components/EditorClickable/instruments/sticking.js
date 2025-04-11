@@ -1,6 +1,6 @@
 // Javascript for the Groove Scribe HTML application
 
-function set_sticking_state(id, new_state, make_sound, notesPerMeasure, timeDivision, noteValuePerMeasure) {
+function set_sticking_state(id, new_state) {
     editor.track.sticking_array[id] = new_state;
 }
 

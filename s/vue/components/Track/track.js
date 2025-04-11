@@ -63,4 +63,23 @@ function Track() {
 
 	root.track = root.trackNew();
 
+	root.getKickState = function(id, returnType) {
+
+		let abcState = this.kick_array[id] ? this.kick_array[id] : constant_ABC_OFF;
+		let result = abcState;
+		
+		if (returnType == "URL")
+		{
+			if (abcState === constant_ABC_KI_SandK) returnType = "X";
+			if (abcState === constant_ABC_KI_Splash) returnType = "x";
+			if (abcState === constant_ABC_KI_Normal) returnType = "o";        
+		}
+	
+		return result;        
+	}
+	
+	root.setKickState = function(id, mode, make_sound) {
+		this.kick_array[id] = mode;			
+	}
+
 } // end of class
