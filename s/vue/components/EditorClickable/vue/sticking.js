@@ -28,9 +28,7 @@ export default {
       if (this.sticking[this.noteIndex]) {
         this.noteABC = this.sticking[this.noteIndex]
       }
-    }
-    
-    // this.sticking && (this.noteIndex || this.noteIndex == 0) ? this.sticking[this.noteIndex] : constant_ABC_STICK_OFF;    
+    }    
   },
 
   watch: { 
@@ -41,8 +39,7 @@ export default {
           if (this.sticking[this.noteIndex]) {
             this.noteABC = this.sticking[this.noteIndex]
           }
-        }
-        // this.noteABC = this.sticking && (this.noteIndex || this.noteIndex == 0) ? this.sticking[this.noteIndex] : constant_ABC_STICK_OFF;                  
+        }        
       },
       deep: true
     },    
@@ -50,11 +47,7 @@ export default {
 
   methods: {
     handleLeftClick(event) {
-        // noteLeftClick(event, 'sticking', this.noteIndex)
-        // sticking_rotate_state(this.noteIndex, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
-
         var new_state = false;
-        // var sticking_state = get_sticking_state(this.noteIndex, "ABC");
         var sticking_state = this.noteABC;
       
         // figure out the next state
@@ -71,14 +64,8 @@ export default {
         } else {
             new_state = constant_ABC_STICK_OFF;
         }
-        console.log(editor.track)
         this.noteABC = new_state;
-        this.sticking[this.noteIndex] = new_state;
-        console.log(editor.track)
-        // editorClickable.update(editor.track);
-      
-        // set_sticking_state(this.noteIndex, new_state, true, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);              
-        // editor.updateSheetMusic();
+        this.sticking[this.noteIndex] = new_state;        
     },
     handleRightClick(event) {
         noteRightClick(event, 'sticking', this.noteIndex)
@@ -91,10 +78,18 @@ export default {
   template: `
     <div :id="'sticking' + noteIndex" class="sticking">
         <div v-if="noteABC === constants.STICK_OFF" class="sticking_right note_part" :id="'sticking_right' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R</div>
-        <div v-if="noteABC === constants.STICK_R" class="sticking_right note_part" :id="'sticking_right' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R</div>
-        <div v-if="noteABC === constants.STICK_L" class="sticking_left note_part" :id="'sticking_left' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">L</div>
-        <div v-if="noteABC === constants.STICK_BOTH" class="sticking_both note_part" :id="'sticking_both' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R/L</div>
-        <div v-if="noteABC === constants.STICK_COUNT" class="sticking_count note_part" :id="'sticking_count' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">C</div>
+        <div v-if="noteABC === constants.STICK_R" class="sticking_right note_part" style="color:rgb(36, 132, 192)" :id="'sticking_right' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R</div>
+        <div v-if="noteABC === constants.STICK_L" class="sticking_left note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_left' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">L</div>
+        <div v-if="noteABC === constants.STICK_BOTH" class="sticking_both note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_both' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R/L</div>
+        <div v-if="noteABC === constants.STICK_COUNT" class="sticking_count note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_count' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">C</div>
     </div>
   `,
 }
+
+
+// var constant_sticking_right_on_color_rgb = "rgb(36, 132, 192)";
+// var constant_sticking_left_on_color_rgb = "rgb(57, 57, 57)";
+// var constant_sticking_both_on_color_rgb = "rgb(57, 57, 57)";
+// var constant_sticking_count_on_color_rgb = "rgb(57, 57, 57)";
+// var constant_sticking_right_off_color_rgb = "rgb(204, 204, 204)";
+// var constant_sticking_left_off_color_rgb = "rgb(204, 204, 204)";
