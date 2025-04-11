@@ -85,11 +85,3 @@ export default {
     </div>
   `,
 }
-
-
-// var constant_sticking_right_on_color_rgb = "rgb(36, 132, 192)";
-// var constant_sticking_left_on_color_rgb = "rgb(57, 57, 57)";
-// var constant_sticking_both_on_color_rgb = "rgb(57, 57, 57)";
-// var constant_sticking_count_on_color_rgb = "rgb(57, 57, 57)";
-// var constant_sticking_right_off_color_rgb = "rgb(204, 204, 204)";
-// var constant_sticking_left_off_color_rgb = "rgb(204, 204, 204)";

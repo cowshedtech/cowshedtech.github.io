@@ -264,9 +264,6 @@ function noteLeftClick(event, type, id) {
             case "kick":
                 set_kick_state(id, is_kick_on(id) ? "off" : "normal", true);
                 break;
-            case "sticking":
-                sticking_rotate_state(id, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
-                break;
             default:
                 console.log("Bad case in noteLeftClick: " + type);
                 break;
