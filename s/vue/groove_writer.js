@@ -67,8 +67,6 @@ function GrooveWriter() {
 	// This function initializes the data for the groove Scribe web page
 	root.runsOnPageLoad = function () {
 
-		console.log(`runsOnPageLoad`)
-
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 
 		// initialise our metronome with event handler for changes to metronome value
@@ -423,14 +421,9 @@ function GrooveWriter() {
 		root.track.timeDivision = newDivision;
 		root.track.notesPerMeasure = calc_notes_per_measure(root.track.timeDivision, root.track.numBeats, root.track.noteValue);
 
+		editorClickable.update(editor.track);		
+
 		var newHTML = "";
-		// for (var cur_measure = 1; cur_measure <= root.track.numberOfMeasures; cur_measure++) {
-		// 	newHTML += htmlForStaffContainer(cur_measure, (cur_measure - 1) * root.track.notesPerMeasure);
-		// }
-
-		// rewrite the HTML for the HTML note grid
-		// document.getElementById("measureContainer").innerHTML = newHTML;
-
 		// change the Permutation options too
 		newHTML = HTMLforPermutationOptions(root.class_permutation_type, usingTriplets());
 		document.getElementById("PermutationOptions").innerHTML = newHTML;
@@ -545,7 +538,7 @@ function GrooveWriter() {
 			metronome.resetOptionsMenuOffsetClick();
 		}
 
-		root.expandAuthoringViewWhenNecessary(newDivision, root.track.numberOfMeasures);
+		root.expandAuthoringViewWhenNecessary(newDivision, root.track.numberOfMeasures);		
 
 		root.changeDivisionWithNotes(newDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 

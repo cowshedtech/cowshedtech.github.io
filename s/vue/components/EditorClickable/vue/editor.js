@@ -10,8 +10,7 @@ export default {
 
   mounted() {
     this.removeHandler = editorClickable?.addChangeHandler(() => {
-      this.track = deepCopy(editor.track)
-      this.$forceUpdate(); 
+      this.track = deepCopy(editor.track)            
     })
   },
 
