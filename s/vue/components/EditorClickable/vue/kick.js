@@ -4,9 +4,6 @@ export default {
       type: Object,
       required: true
     },
-    kicks: {
-      type: Array,      
-    },
     noteIndex: {
       type: Number,
       required: true
@@ -25,12 +22,8 @@ export default {
     }
   },
 
-  mounted() {
-    this.noteABC = this.track ? this.track.getKickState(this.noteIndex, "ABC") : constant_ABC_OFF;                  
-  },
-
   watch: { 
-    kicks: {
+    track: {
       handler(newVal, oldVal) { 
         this.noteABC = this.track ? this.track.getKickState(this.noteIndex, "ABC") : constant_ABC_OFF;              
       },
@@ -41,7 +34,7 @@ export default {
   methods: {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_KI_Normal
-        this.track.setKickState(this.noteIndex, newMode, true);        
+        this.track.setKickState(this.noteIndex, newMode, true);                
     },
     handleRightClick(event) {
         noteRightClick(event, 'kick', this.noteIndex)
