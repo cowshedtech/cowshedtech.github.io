@@ -28,7 +28,7 @@ export default {
   watch: { 
     track: {
       handler(newVal, oldVal) { 
-        this.noteABC = this.track ? this.track.getTomState(this.noteIndex, "ABC") : constant_ABC_OFF;              
+        this.noteABC = this.track ? this.track.getTomState(this.tomIndex, this.noteIndex, "ABC") : constant_ABC_OFF;              
       },
       deep: true
     },    
@@ -36,7 +36,14 @@ export default {
 
   methods: {
     handleLeftClick(event) {
-        noteLeftClick(event, 'tom' + this.tomIndex, this.noteIndex)
+        if (this.tomIndex === 1) {
+          let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_T1_Normal
+          this.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);                
+        }
+        if (this.tomIndex === 4) {
+          let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_T4_Normal
+          this.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);                
+        }
     },
     handleRightClick(event) {
         noteRightClick(event, 'tom' + this.tomIndex, this.noteIndex)

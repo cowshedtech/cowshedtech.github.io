@@ -261,9 +261,6 @@ function noteLeftClick(event, type, id) {
             case "tom4":
                 set_tom_state(id, 4, is_tom_on(id, 4) ? "off" : "normal", true);
                 break;
-            case "kick":
-                set_kick_state(id, is_kick_on(id) ? "off" : "normal", true);
-                break;
             default:
                 console.log("Bad case in noteLeftClick: " + type);
                 break;
