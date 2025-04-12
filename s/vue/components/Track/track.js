@@ -82,4 +82,47 @@ function Track() {
 		this.kick_array[id] = mode;			
 	}
 
+	root.getTomState = function(tomId, id, returnType) {
+		let abcState = this.toms_array[tomId-1][id] ? this.toms_array[tomId-1][id] : constant_ABC_OFF;
+		let result = abcState;
+
+		if (returnType == "URL")
+		{
+			if (abcState === constant_ABC_T1_Normal || constant_ABC_T4_Normal) returnType = "x";			
+		}
+	
+		return result;  
+
+
+		// if (tomOn) {
+		//     if (returnType == "ABC")
+		//         switch (tom_num) {
+		//             case 1:
+		//                 return constant_ABC_T1_Normal; // normal
+		//                 break;
+		//             case 4:
+		//                 return constant_ABC_T4_Normal; // normal
+		//                 break;
+		//             default:
+		//                 console.log("bad switch in get_tom_state. bad tom num:" + tom_num);
+		//                 break;
+		//         }
+		//     else if (returnType == "URL")
+		//         return "x"; // normal
+		// }
+
+		// if (returnType == "ABC")
+		//     return false; // off (rest)
+		// else if (returnType == "URL")
+		//     return "-"; // off (rest)
+
+
+
+
+
+	}
+
+	root.setTomState = function(tomId, id, mode, make_sound) {
+		this.toms_array[tomId-1][id] = mode;			
+	}
 } // end of class

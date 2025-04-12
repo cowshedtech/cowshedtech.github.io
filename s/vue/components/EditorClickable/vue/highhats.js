@@ -39,7 +39,7 @@ export default {
     <div class="hi-hat-container">
       <div class="opening_note_space"></div>
       <template v-for="i in track.notesPerMeasure" :key="i">
-        <HighHat :noteIndex="startNoteIndex + (i - 1)" />
+        <HighHat :track="track" :noteIndex="startNoteIndex + (i - 1)" />
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton instrument="hh" :measureIndex="measureIndex"></MuteButton>
