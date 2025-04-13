@@ -2,25 +2,55 @@ import InstrumentMenu from './base_instrument_menu.js'
 
 export default {
 	name: 'SnareMenu',
+	
+	props: {
+		isOpen: {
+			type: Boolean,
+			default: false
+		},
+		x: {
+			type: String
+		},
+		y: {
+			type: String
+		}
+	},
+
 	components: {
 		InstrumentMenu
 	},
+	
 	data() {
     	return { 
-		modes: [
-			{ newState: 'off', label: 'Off' },
-			{ newState: 'normal', label: 'Snare Normal' },
-			{ newState: 'accent', label: 'Snare Accent' },
-			{ newState: 'ghost', label: 'Ghost Note' },			
-			{ newState: 'xstick', label: 'Cross Stick' },
-			{ newState: 'buzz', label: 'Buzz Stroke' },
-			{ newState: 'flam', label: 'Flam' },			
-		],
-		instrument: "snare",
-		element: "snareContextMenu",
-	}	
-  },
-  template: `
-	<InstrumentMenu :instrument="instrument" :element="element" :instrument-modes="modes"></InstrumentMenu>
-  `
+			modes: [
+				{ newState: constant_ABC_OFF, label: 'Off' },
+				{ newState: constant_ABC_SN_Normal, label: 'Snare Normal' },
+				{ newState: constant_ABC_SN_Accent, label: 'Snare Accent' },
+				{ newState: constant_ABC_SN_Ghost, label: 'Ghost Note' },			
+				{ newState: constant_ABC_SN_XStick, label: 'Cross Stick' },
+				{ newState: constant_ABC_SN_Buzz, label: 'Buzz Stroke' },
+				{ newState: constant_ABC_SN_Flam, label: 'Flam' },			
+			],
+			instrument: "snare",
+			element: "snareContextMenu",
+		}	
+	},
+
+	methods: {
+		handleAction(action) {
+			this.$emit('action', action)
+		}
+	},
+
+	template: `
+		<InstrumentMenu 
+			:is-open="isOpen" 
+			:x="x" 
+			:y="y"
+			@action="closeMenu"
+			:instrument="instrument" 
+			:element="element" 
+			:instrument-modes="modes">
+		</InstrumentMenu>
+	`
 }
