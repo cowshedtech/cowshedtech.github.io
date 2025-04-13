@@ -84,13 +84,14 @@ export default {
     handleRightClick(event) {
         this.menuX = event.clientX;
         this.menuY = event.clientY;
-        this.toggleMenu();   
+        this.isPopupOpen = true;
     },
     handleMouseEnter(event) {
-        noteOnMouseEnter(event, 'hh', this.noteIndex)
-    },
-    toggleMenu(instrument) {
-      this.isPopupOpen = !this.isPopupOpen;
+        let action = null;
+        if (event.ctrlKey) action = "on";
+        if (event.altKey) action = "off";  
+        if (action)
+          this.track.setHighHatState(this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_HH_Normal, true);          
     },
     handleAction(action) {
       this.track.setHighHatState(this.noteIndex, action, true);  
@@ -118,13 +119,14 @@ export default {
             <i :class="'fa ' + currentIcon.icon"></i>
           </div>
         </template>
-      </template>      
+      </template>
+      <Menu
+        :is-open="isPopupOpen" 
+        :x="menuX" 
+        :y="menuY"
+        @action="handleAction">
+      </Menu>   
     </div>
-    <Menu
-      :is-open="isPopupOpen" 
-      :x="menuX" 
-      :y="menuY"
-      @action="handleAction">
-    </Menu>
+    
   `
 }

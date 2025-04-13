@@ -26,5 +26,5 @@ export default {
 		}
 	},
 	
-	template: `<li @click="handleClick">{{ label }}</li>`
+	template: `<li @click.stop.prevent="handleClick">{{ label }}</li>`
 }
