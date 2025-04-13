@@ -4,7 +4,8 @@ import Measure from './measure.js'
 export default {
   data() {
     return {
-      track: editor.track ? editor.track : null      
+      track: editor.track ? editor.track : null,
+      midiPlayer: midiPlayer ? midiPlayer : null
     }
   },
 
@@ -26,8 +27,10 @@ export default {
     <div id="musicalInput" class="fullWidthEle edit-block">
       <div id="measureContainer">
         <template v-for="i in track.numberOfMeasures" :key="i">
-          <Measure :track="track" :measureIndex="i"></Measure>
+          <Measure :midiPlayer="midiPlayer" :track="track" :measureIndex="i"></Measure>
         </template>
       </div>
-    <ContextMenus></ContextMenus>`
+      <ContextMenus></ContextMenus>
+    </div>
+    `
 }

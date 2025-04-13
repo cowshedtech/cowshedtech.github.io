@@ -41,18 +41,6 @@ export default {
             <span class="left-button subdivision edit-block" id="subdivision_24ths" onclick="myGrooveWriter.changeDivision(24);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>16</sub></span>TRIPLETS</span></span></span>
             <span class="left-button subdivision edit-block" id="subdivision_48ths" onclick="myGrooveWriter.changeDivision(48);"><span class="left-button-content"><span>MIXED<br>Division</span></span></span>
 
-            <script>
-                if (!options.grooveDBAuthoring) {
-                    document.write('<span class="left-button" onclick="myGrooveWriter.updateViewEdit();"><span class="left-button-content"><span id="view-edit-switch" >Switch to EDIT mode</span></span></span>');
-                }
-            </script>
-
-            <script>
-                if (isTouchDevice()) {
-                    document.write('<span class="left-button edit-block" id="advancedEditAnchor" onclick="event.preventDefault(); myGrooveWriter.toggleAdvancedEdit()"><span class="left-button-content">Advanced Edit</span></span>');
-                }
-            </script>
-
             <span class="left-button edit-block" id="undoButton" onclick="undoCommand();"><span class="left-button-content"><i class="fa fa-undo"></i>&nbsp;&nbsp;Undo</span></span>
         </span>
 
@@ -60,3 +48,16 @@ export default {
     <Menu :is-open="isPopupOpen" :x="menuX" :y="menuY" @close-clicked="closeMenu"></Menu>
   `
   }
+
+
+//   <script>
+//   if (!options.grooveDBAuthoring) {
+//       document.write('<span class="left-button" onclick="myGrooveWriter.updateViewEdit();"><span class="left-button-content"><span id="view-edit-switch" >Switch to EDIT mode</span></span></span>');
+//   }
+// </script>
+
+// <script>
+//   if (isTouchDevice()) {
+//       document.write('<span class="left-button edit-block" id="advancedEditAnchor" onclick="event.preventDefault(); myGrooveWriter.toggleAdvancedEdit()"><span class="left-button-content">Advanced Edit</span></span>');
+//   }
+// </script>

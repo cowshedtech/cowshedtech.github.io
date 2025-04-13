@@ -192,84 +192,8 @@ function noteLabelPopupClick(instrument, action, measureIndex) {
     return false;
 };
 
-var class_which_index_last_clicked = 0; // which note was last clicked for the context menu	
 
-// // returns true on error!
-// // returns false if working.  (this is because of the onContextMenu handler
-function noteRightClick(event, type, id) {
-    class_which_index_last_clicked = id;
-    var contextMenu;
 
-    switch (type) {
-        case "sticking":
-            contextMenu = document.getElementById("stickingContextMenu");
-            break;
-        case "hh":
-            contextMenu = document.getElementById("hhContextMenu");
-            break;
-        case "tom1":
-            contextMenu = document.getElementById("tom1ContextMenu");
-            break;
-        case "tom4":
-            contextMenu = document.getElementById("tom4ContextMenu");
-            break;
-        case "snare":
-            contextMenu = document.getElementById("snareContextMenu");
-            break;
-        case "kick":
-            contextMenu = document.getElementById("kickContextMenu");
-            break;
-        default:
-            console.log("Bad case in handleNotePopup");
-            break;
-    }
-
-    if (contextMenu) {
-        if (!event)
-            event = window.event;
-        if (event.clientX || event.clientY) {
-            contextMenu.style.top = event.clientY - 30 + "px";
-            contextMenu.style.left = event.clientX - 75 + "px";
-        }
-        showContextMenu(contextMenu);
-    } else {
-        return true; //error
-    }
-
-    return false;
-};
-
-// // called when we initially mouseOver a note.
-// // We can use it to sense left or right mouse or ctrl events
-function noteOnMouseEnter(event, instrument, id) {
-
-    var action = false;
-
-    if (event.ctrlKey)
-        action = "on";
-    if (event.altKey)
-        action = "off";
-
-    if (action) {
-        switch (instrument) {
-            case "hh":
-                set_hh_state(id, action == "off" ? "off" : "normal", true);
-                break;
-            case "snare":
-                set_snare_state(id, action == "off" ? "off" : "accent", true);
-                break;
-            case "kick":
-                set_kick_state(id, action == "off" ? "off" : "normal", true);
-                break;
-            default:
-                console.log("Bad case in noteOnMouseEnter");
-                break;
-        }
-        updateSheetMusic(); // update music
-    }
-
-    return false;
-};
 
 // each of the instruments can be muted.   Check the UI and zero out the array if the instrument is marked as muted
 // for a particular measure

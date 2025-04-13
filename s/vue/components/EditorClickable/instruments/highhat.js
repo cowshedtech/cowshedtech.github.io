@@ -11,9 +11,6 @@ var constant_hihat_note_off_color_hex = "#CCC";
 var constant_hihat_note_off_color_rgb = 'rgb(204, 204, 204)'; // grey
 var constant_note_hidden_color_rgb = "transparent";
 
-function is_hh_on(id) {
-    return get_hh_state(id, "ABC") !== false;
-}
 
 // returns the ABC notation for the HH state
 // false = off

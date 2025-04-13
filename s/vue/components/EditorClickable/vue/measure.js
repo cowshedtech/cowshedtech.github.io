@@ -22,6 +22,10 @@ export default {
   },
   
   props: {
+    midiPlayer: {
+      type: Object,
+      required: false
+    }, 
     track: {
       type: Object,
       required: true
@@ -36,6 +40,7 @@ export default {
     track: {
       handler(newVal, oldVal) { 
         this.trackData = newVal;        
+        if (this.midiPlayer) this.midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_NORMAL);                
       },
       deep: true
     },    
