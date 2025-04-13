@@ -1,7 +1,6 @@
 import HighHat from './highhat.js'
 import MuteButton from './all_button_mute.js'
 import NoteSpacer from './all_note_spacer.js'
-import HighHatMenu from './highhat_menu.js'
 
 export default {
   
@@ -32,7 +31,7 @@ export default {
   },
 
   components: {
-    HighHat, MuteButton, NoteSpacer, HighHatMenu
+    HighHat, MuteButton, NoteSpacer
   },
 
   template: `
@@ -43,7 +42,6 @@ export default {
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton instrument="hh" :measureIndex="measureIndex"></MuteButton>
-    </div>
-    <HighHatMenu />    
+    </div>  
   `
 }

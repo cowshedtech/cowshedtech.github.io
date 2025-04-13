@@ -14,10 +14,10 @@ export default {
             default: false
         },
         x: {
-            type: String
+            type: Number
         },
         y: {
-            type: String
+            type: Number
         }
 	},
 

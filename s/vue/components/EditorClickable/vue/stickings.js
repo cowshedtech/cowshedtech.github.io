@@ -69,11 +69,10 @@ export default {
             <div class="notes-container">
                 <div class="stickings-container">
                     <div class="opening_note_space"></div>
-                        <template v-for="i in track.notesPerMeasure" :key="i">
-                            <Sticking :sticking="track.sticking_array" :noteIndex="startNoteIndex + (i - 1)"  />
-                            <NoteSpacer :track="track" :noteIndex="i" />
-                        </template>
-                    </div>
+                    <template v-for="i in track.notesPerMeasure" :key="i">
+                        <Sticking :sticking="track.sticking_array" :noteIndex="startNoteIndex + (i - 1)"  />
+                        <NoteSpacer :track="track" :noteIndex="i" />
+                    </template>
                 </div>   
             </div>
             <slot></slot>

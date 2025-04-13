@@ -9,10 +9,10 @@ export default {
 			default: false
 		},
 		x: {
-			type: String
+			type: Number
 		},
 		y: {
-			type: String
+			type: Number
 		}
 	},
 	
@@ -50,7 +50,7 @@ export default {
 			:is-open="isOpen" 
 			:x="x" 
 			:y="y"
-			@action="closeMenu"
+			@action="handleAction"
 			:element="element" 
 			:instrument-modes="modes">
 		</InstrumentMenu>

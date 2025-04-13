@@ -10,7 +10,7 @@ export default {
 			required: true
 		},
 		instrumentModes: {
-			type: String,
+			type: Object,
 			required: true
 		},
 		isOpen: {
@@ -18,10 +18,10 @@ export default {
 			default: false
 		},
 		x: {
-			type: String
+			type: Number
 		},
 		y: {
-			type: String
+			type: Number
 		}
 	},
 
