@@ -30,6 +30,37 @@ export default {
     }
   },
 
+  computed: {
+    iconConfig() {
+      return {
+        [this.constants.HIGHHAT_OFF]: { class: 'hh_cross', icon: 'fa-times', color: '#CCC' },
+        [this.constants.HIGHHAT_NORMAL]: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
+        [this.constants.HIGHHAT_RIDE]: { class: 'hh_ride', icon: 'fa-dot-circle-o', color: '#000000' },
+        [this.constants.HIGHHAT_RIDE_BELL]: { class: 'hh_ride_bell', icon: 'fa-bell-o', color: '#000000' },
+        [this.constants.HIGHHAT_COW_BELL]: { class: 'hh_cow_bell', icon: 'fa-plus-square-o', color: '#000000' },
+        [this.constants.HIGHHAT_CRASH]: { class: 'hh_crash', icon: 'fa-asterisk', color: '#000000' },
+        [this.constants.HIGHHAT_STACKER]: { class: 'hh_stacker', icon: 'fa-bars', color: '#000000' },
+        [this.constants.HIGHHAT_OPEN]: { 
+          primary: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
+          secondary: { class: 'hh_open', icon: 'fa-circle-o', color: '#000000' }
+        },
+        [this.constants.HIGHHAT_CLOSE]: { 
+          primary: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
+          secondary: { class: 'hh_close', icon: 'fa-plus', color: '#000000' }
+        },
+        [this.constants.HIGHHAT_ACCENT]: { 
+          primary: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
+          secondary: { class: 'hh_accent', icon: 'fa-angle-right', color: '#000000' }
+        },
+        [this.constants.HIGHHAT_METRONOME_NORMAL]: { class: 'hh_metronome_normal', icon: 'fa-neuter', color: '#000000' },
+        [this.constants.HIGHHAT_METRONOME_ACCENT]: { class: 'hh_metronome_accent', icon: 'fa-map-pin', color: '#000000' }
+      }
+    },
+    currentIcon() {
+      return this.iconConfig[this.noteABC]
+    }
+  },
+
   watch: { 
     track: {
       handler(newVal, oldVal) { 
@@ -54,23 +85,23 @@ export default {
 
   template: `
     <div :id="'hi-hat' + noteIndex" class="hi-hat" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">
-        <div v-if="noteABC === constants.HIGHHAT_OFF" class="hh_cross note_part" style="color: #CCC" :id="'hh_cross' + noteIndex"><i class="fa fa-times"></i></div>
-        <div v-if="noteABC === constants.HIGHHAT_NORMAL" class="hh_cross note_part" style="color: #000000" :id="'hh_cross' + noteIndex"><i class="fa fa-times"></i></div>
-        <div v-if="noteABC === constants.HIGHHAT_RIDE" class="hh_ride note_part" style="color: #000000" :id="'hh_ride' + noteIndex"><i class="fa fa-dot-circle-o"></i></div>
-        <div v-if="noteABC === constants.HIGHHAT_RIDE_BELL" class="hh_ride_bell note_part" style="color: #000000" :id="'hh_ride_bell' + noteIndex"><i class="fa fa-bell-o"></i></div>
-        <div v-if="noteABC === HIGHHAT_COW_BELL" class="hh_cow_bell note_part" style="color: #000000" :id="'hh_cow_bell' + noteIndex"><i class="fa fa-plus-square-o"></i></div>
-        <div v-if="noteABC === HIGHHAT_CRASH" class="hh_crash note_part" style="color: #000000" :id="'hh_crash' + noteIndex"><i class="fa fa-asterisk"></i></div>
-        <div v-if="noteABC === HIGHHAT_STACKER" class="hh_stacker note_part" style="color: #000000" :id="'hh_stacker' + noteIndex"><i class="fa fa-bars"></i></div>
-        <div v-if="noteABC === HIGHHAT_METRONOME_NORMAL" class="hh_metronome_normal note_part" style="color: #000000" :id="'hh_metronome_normal' + noteIndex"><i class="fa fa-neuter"></i></div>
-        <div v-if="noteABC === HIGHHAT_METRONOME_ACCENT" class="hh_metronome_accent note_part" style="color: #000000" :id="'hh_metronome_accent' + noteIndex"><i class="fa fa-map-pin"></i></div>
-        <div v-if="noteABC === HIGHHAT_OPEN" class="hh_cross note_part" style="color: #000000" :id="'hh_cross' + noteIndex"><i class="fa fa-times"></i></div>
-        <div v-if="noteABC === HIGHHAT_OPEN" class="hh_open note_part" style="color: #000000" :id="'hh_open' + noteIndex"><i class="fa fa-circle-o"></i></div>
-        <div v-if="noteABC === HIGHHAT_CLOSE" class="hh_cross note_part" style="color: #000000" :id="'hh_cross' + noteIndex"><i class="fa fa-times"></i></div>
-        <div v-if="noteABC === HIGHHAT_CLOSE" class="hh_close note_part" style="color: #000000" :id="'hh_close' + noteIndex"><i class="fa fa-plus"></i></div>
-        <div v-if="noteABC === HIGHHAT_ACCENT" class="hh_cross note_part" style="color: #000000" :id="'hh_cross' + noteIndex"><i class="fa fa-times"></i></div>
-        <div v-if="noteABC === HIGHHAT_ACCENT" class="hh_accent note_part" style="color: #000000" :id="'hh_accent' + noteIndex"><i class="fa fa-angle-right"></i></div>           
+      <template v-if="currentIcon">
+        <template v-if="currentIcon.primary">
+          <div :class="[currentIcon.primary.class, 'note_part']" :style="{ color: currentIcon.primary.color }" :id="currentIcon.primary.class + noteIndex">
+            <i :class="'fa ' + currentIcon.primary.icon"></i>
+          </div>
+          <div :class="[currentIcon.secondary.class, 'note_part']" :style="{ color: currentIcon.secondary.color }" :id="currentIcon.secondary.class + noteIndex">
+            <i :class="'fa ' + currentIcon.secondary.icon"></i>
+          </div>
+        </template>
+        <template v-else>
+          <div :class="[currentIcon.class, 'note_part']" :style="{ color: currentIcon.color }" :id="currentIcon.class + noteIndex">
+            <i :class="'fa ' + currentIcon.icon"></i>
+          </div>
+        </template>
+      </template>
     </div>
-  `,
+  `
 }
 
 
