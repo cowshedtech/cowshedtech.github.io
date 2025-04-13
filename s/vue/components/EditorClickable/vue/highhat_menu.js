@@ -2,9 +2,28 @@ import InstrumentMenu from './base_instrument_menu.js'
 
 export default {
 	name: 'HighHatMenu',
+
+	props: {
+		measureIndex: {
+			type: Number,
+			required: true
+		},
+		isOpen: {
+			type: Boolean,
+			default: false
+		},
+		x: {
+			type: String
+		},
+		y: {
+			type: String
+		}
+	},
+	
 	components: {
 		InstrumentMenu
 	},
+	
 	data() {
     	return { 
 		modes: [
@@ -22,9 +41,17 @@ export default {
 		],
 		instrument: "hh",
 		element: "hhContextMenu",
-	}	
-  },
-  template: `
-	<InstrumentMenu :instrument="instrument" :element="element" :instrument-modes="modes"></InstrumentMenu>
-  `
+		}	
+	},
+
+	template: `
+		<InstrumentMenu 
+			:is-open="isOpen" 
+			:x="x" 
+			:y="y"
+			:instrument="instrument" 
+			:element="element" 
+			:instrument-modes="modes">
+		</InstrumentMenu>
+	`
 }

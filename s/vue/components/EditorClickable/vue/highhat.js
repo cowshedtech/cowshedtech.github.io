@@ -1,3 +1,5 @@
+import Menu from "./highhat_menu.js"
+
 export default {
   props: {
     track: {
@@ -26,7 +28,10 @@ export default {
         HIGHHAT_NORMAL: constant_ABC_HH_Normal,
         HIGHHAT_METRONOME_NORMAL: constant_ABC_HH_Metronome_Normal,
         HIGHHAT_METRONOME_ACCENT: constant_ABC_HH_Metronome_Accent
-      }
+      },
+      isPopupOpen: false,
+      menuX: 0,
+      menuY: 0,
     }
   },
 
@@ -76,11 +81,24 @@ export default {
         this.track.setHighHatState(this.noteIndex, newMode, true);  
     },
     handleRightClick(event) {
-        noteRightClick(event, 'hh', this.noteIndex)
+        // noteRightClick(event, 'hh', this.noteIndex)
+        this.menuX = event.clientX;
+        this.menuY = event.clientY;
+        this.toggleMenu();   
     },
     handleMouseEnter(event) {
         noteOnMouseEnter(event, 'hh', this.noteIndex)
-    }
+    },
+    toggleMenu(instrument) {
+      this.isPopupOpen = !this.isPopupOpen;
+    },
+    closeMenu() {
+      this.isPopupOpen = false;
+    },
+  },
+
+  components: {
+    Menu
   },
 
   template: `
@@ -100,9 +118,12 @@ export default {
           </div>
         </template>
       </template>
-    </div>
+      <Menu
+        :is-open="isPopupOpen" 
+        :x="menuX" 
+        :y="menuY"
+        @close="closeMenu">
+      </Menu>
+    </div>    
   `
 }
-
-
-

@@ -239,39 +239,6 @@ function noteRightClick(event, type, id) {
     return false;
 };
 
-function noteLeftClick(event, type, id) {
-
-    // use a popup if advanced edit is on
-    // if (class_advancedEditIsOn === true) {
-    //     root.noteRightClick(event, type, id);
-
-    // } else {
-
-        // this is a non advanced edit left click
-        switch (type) {
-            case "hh":
-                set_hh_state(id, is_hh_on(id) ? "off" : "normal", true);
-                break;
-            case "snare":
-                set_snare_state(id, is_snare_on(id) ? "off" : "accent", true);
-                break;
-            case "tom1":
-                set_tom_state(id, 1, is_tom_on(id, 1) ? "off" : "normal", true);
-                break;
-            case "tom4":
-                set_tom_state(id, 4, is_tom_on(id, 4) ? "off" : "normal", true);
-                break;
-            default:
-                console.log("Bad case in noteLeftClick: " + type);
-                break;
-        }
-
-        // TODO
-        editor.updateSheetMusic();
-    // }
-
-};
-
 function notePopupClick(type, new_setting) {
     var id = class_which_index_last_clicked;
 
