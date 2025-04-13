@@ -239,36 +239,6 @@ function noteRightClick(event, type, id) {
     return false;
 };
 
-function notePopupClick(type, new_setting) {
-    var id = class_which_index_last_clicked;
-
-    switch (type) {
-        case "sticking":
-            set_sticking_state(id, new_setting, true, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
-            break;
-        case "hh":
-            set_hh_state(id, new_setting, true);
-            break;
-        case "tom1":
-            set_tom1_state(id, new_setting, true);
-            break;
-        case "tom4":
-            set_tom4_state(id, new_setting, true);
-            break;
-        case "snare":
-            set_snare_state(id, new_setting, true);
-            break;
-        case "kick":
-            set_kick_state(id, new_setting, true);
-            break;
-        default:
-            console.log("Bad case in contextMenuClick");
-            break;
-    }
-
-    editor.updateSheetMusic();
-};
-
 // // called when we initially mouseOver a note.
 // // We can use it to sense left or right mouse or ctrl events
 function noteOnMouseEnter(event, instrument, id) {

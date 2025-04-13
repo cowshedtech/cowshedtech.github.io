@@ -39,26 +39,26 @@ export default {
     iconConfig() {
       return {
         [constant_ABC_OFF]: { class: 'hh_cross', icon: 'fa-times', color: '#CCC' },
-        [this.constants.HIGHHAT_NORMAL]: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
+        [constant_ABC_HH_Normal]: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
         [constant_ABC_HH_Ride]: { class: 'hh_ride', icon: 'fa-dot-circle-o', color: '#000000' },
-        [this.constants.HIGHHAT_RIDE_BELL]: { class: 'hh_ride_bell', icon: 'fa-bell-o', color: '#000000' },
-        [this.constants.HIGHHAT_COW_BELL]: { class: 'hh_cow_bell', icon: 'fa-plus-square-o', color: '#000000' },
-        [this.constants.HIGHHAT_CRASH]: { class: 'hh_crash', icon: 'fa-asterisk', color: '#000000' },
-        [this.constants.HIGHHAT_STACKER]: { class: 'hh_stacker', icon: 'fa-bars', color: '#000000' },
-        [this.constants.HIGHHAT_OPEN]: { 
+        [constant_ABC_HH_Ride_Bell]: { class: 'hh_ride_bell', icon: 'fa-bell-o', color: '#000000' },
+        [constant_ABC_HH_Cow_Bell]: { class: 'hh_cow_bell', icon: 'fa-plus-square-o', color: '#000000' },
+        [constant_ABC_HH_Crash]: { class: 'hh_crash', icon: 'fa-asterisk', color: '#000000' },
+        [constant_ABC_HH_Stacker]: { class: 'hh_stacker', icon: 'fa-bars', color: '#000000' },
+        [constant_ABC_HH_Open]: { 
           primary: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
           secondary: { class: 'hh_open', icon: 'fa-circle-o', color: '#000000' }
         },
-        [this.constants.HIGHHAT_CLOSE]: { 
+        [constant_ABC_HH_Accent]: { 
           primary: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
           secondary: { class: 'hh_close', icon: 'fa-plus', color: '#000000' }
         },
-        [this.constants.HIGHHAT_ACCENT]: { 
+        [constant_ABC_HH_Accent]: { 
           primary: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
           secondary: { class: 'hh_accent', icon: 'fa-angle-right', color: '#000000' }
         },
-        [this.constants.HIGHHAT_METRONOME_NORMAL]: { class: 'hh_metronome_normal', icon: 'fa-neuter', color: '#000000' },
-        [this.constants.HIGHHAT_METRONOME_ACCENT]: { class: 'hh_metronome_accent', icon: 'fa-map-pin', color: '#000000' }
+        [constant_ABC_HH_Metronome_Normal]: { class: 'hh_metronome_normal', icon: 'fa-neuter', color: '#000000' },
+        [constant_ABC_HH_Metronome_Accent]: { class: 'hh_metronome_accent', icon: 'fa-map-pin', color: '#000000' }
       }
     },
     currentIcon() {
@@ -118,13 +118,13 @@ export default {
             <i :class="'fa ' + currentIcon.icon"></i>
           </div>
         </template>
-      </template>
-      <Menu
-        :is-open="isPopupOpen" 
-        :x="menuX" 
-        :y="menuY"
-        @action="handleAction">
-      </Menu>
-    </div>    
+      </template>      
+    </div>
+    <Menu
+      :is-open="isPopupOpen" 
+      :x="menuX" 
+      :y="menuY"
+      @action="handleAction">
+    </Menu>
   `
 }

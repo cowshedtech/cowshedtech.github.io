@@ -22,7 +22,6 @@ export default {
 				console.warn('myGrooveWriter is not defined');
 				return;
 			}
-			// notePopupClick(this.instrument, this.newState);
 			this.$emit('action', this.newState)
 		}
 	},
