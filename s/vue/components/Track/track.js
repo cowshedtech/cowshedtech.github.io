@@ -63,6 +63,29 @@ function Track() {
 
 	root.track = root.trackNew();
 
+	root.getSnareState = function(id, returnType) {
+
+		let abcState = this.snare_array[id] ? this.snare_array[id] : constant_ABC_OFF;
+		let result = abcState;
+		
+		if (returnType == "URL")
+		{
+			if (abcState === constant_ABC_SN_Flam) returnType = "f";
+			if (abcState === constant_ABC_SN_Drag) returnType = "d";
+			if (abcState === constant_ABC_SN_Ghost) returnType = "g";
+			if (abcState === constant_ABC_SN_Accent) returnType = "O";
+			if (abcState === constant_ABC_SN_Normal) returnType = "o";
+			if (abcState === constant_ABC_SN_XStick) returnType = "x";
+			if (abcState === constant_ABC_SN_Buzz) returnType = "b";
+		}
+	
+		return result;        
+	}
+	
+	root.setSnareState = function(id, mode, make_sound) {
+		this.snare_array[id] = mode;			
+	}
+	
 	root.getKickState = function(id, returnType) {
 
 		let abcState = this.kick_array[id] ? this.kick_array[id] : constant_ABC_OFF;

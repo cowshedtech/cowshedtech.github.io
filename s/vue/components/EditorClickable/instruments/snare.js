@@ -25,6 +25,8 @@ function is_snare_on(id) {
 //
 //
 function get_snare_state(id, returnType) {
+    return editor.track.getSnareState(id, returnType)
+    
     // Validate and normalize returnType
     if (returnType !== "ABC" && returnType !== "URL") {
         console.log("bad returnType in get_snare_state()");
@@ -94,6 +96,9 @@ function get_snare_state(id, returnType) {
 //
 function set_snare_state(id, mode, make_sound) {
     
+    editor.track.setSnareState(id, mode, false)
+    return
+
     // Build out our dom element IDs
     const elements = [
         'circle', 'ghost', 'accent', 'xstick', 'buzz', 'flam', 'drag'

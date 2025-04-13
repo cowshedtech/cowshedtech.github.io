@@ -38,7 +38,7 @@ export default {
     handleLeftClick(event) {
         if (this.tomIndex === 1) {
           let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_T1_Normal
-          this.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);                
+          this.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);
         }
         if (this.tomIndex === 4) {
           let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_T4_Normal
