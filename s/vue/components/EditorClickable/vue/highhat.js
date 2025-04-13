@@ -38,9 +38,9 @@ export default {
   computed: {
     iconConfig() {
       return {
-        [this.constants.HIGHHAT_OFF]: { class: 'hh_cross', icon: 'fa-times', color: '#CCC' },
+        [constant_ABC_OFF]: { class: 'hh_cross', icon: 'fa-times', color: '#CCC' },
         [this.constants.HIGHHAT_NORMAL]: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
-        [this.constants.HIGHHAT_RIDE]: { class: 'hh_ride', icon: 'fa-dot-circle-o', color: '#000000' },
+        [constant_ABC_HH_Ride]: { class: 'hh_ride', icon: 'fa-dot-circle-o', color: '#000000' },
         [this.constants.HIGHHAT_RIDE_BELL]: { class: 'hh_ride_bell', icon: 'fa-bell-o', color: '#000000' },
         [this.constants.HIGHHAT_COW_BELL]: { class: 'hh_cow_bell', icon: 'fa-plus-square-o', color: '#000000' },
         [this.constants.HIGHHAT_CRASH]: { class: 'hh_crash', icon: 'fa-asterisk', color: '#000000' },
@@ -62,7 +62,8 @@ export default {
       }
     },
     currentIcon() {
-      return this.iconConfig[this.noteABC]
+      let currentIcon = this.iconConfig[this.noteABC];
+      return currentIcon;
     }
   },
 
@@ -81,7 +82,6 @@ export default {
         this.track.setHighHatState(this.noteIndex, newMode, true);  
     },
     handleRightClick(event) {
-        // noteRightClick(event, 'hh', this.noteIndex)
         this.menuX = event.clientX;
         this.menuY = event.clientY;
         this.toggleMenu();   
@@ -92,7 +92,8 @@ export default {
     toggleMenu(instrument) {
       this.isPopupOpen = !this.isPopupOpen;
     },
-    closeMenu() {
+    handleAction(action) {
+      this.track.setHighHatState(this.noteIndex, action, true);  
       this.isPopupOpen = false;
     },
   },
@@ -122,7 +123,7 @@ export default {
         :is-open="isPopupOpen" 
         :x="menuX" 
         :y="menuY"
-        @close="closeMenu">
+        @action="handleAction">
       </Menu>
     </div>    
   `

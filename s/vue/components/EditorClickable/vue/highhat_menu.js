@@ -27,17 +27,17 @@ export default {
 	data() {
     	return { 
 		modes: [
-			{ newState: 'off', label: 'Off' },
-			{ newState: 'normal', label: 'On' },
-			{ newState: 'open', label: 'Hi-hat open' },
-			{ newState: 'accent', label: 'Hi-hat closed' },
-			{ newState: 'crash', label: 'Crash' },
-			{ newState: 'ride', label: 'Ride' },
-			{ newState: 'ride_bell', label: 'Ride Bell' },
-			{ newState: 'cow_bell', label: 'Cow Bell' },
-			{ newState: 'stacker', label: 'Stacker' },
-			{ newState: 'metronome_normal', label: 'Click' },
-			{ newState: 'metronome_accent', label: 'Click - accent' }
+			{ newState: constant_ABC_OFF, label: 'Off' },
+			{ newState: constant_ABC_HH_Normal, label: 'On' },
+			{ newState: constant_ABC_HH_Open, label: 'Hi-hat open' },
+			{ newState: constant_ABC_HH_Accent, label: 'Hi-hat closed' },
+			{ newState: constant_ABC_HH_Crash, label: 'Crash' },
+			{ newState: constant_ABC_HH_Ride, label: 'Ride' },
+			{ newState: constant_ABC_HH_Ride_Bell, label: 'Ride Bell' },
+			{ newState: constant_ABC_HH_Cow_Bell, label: 'Cow Bell' },
+			{ newState: constant_ABC_HH_Stacker, label: 'Stacker' },
+			{ newState: constant_ABC_HH_Metronome_Normal, label: 'Click' },
+			{ newState: constant_ABC_HH_Metronome_Accent, label: 'Click - accent' }
 		],
 		instrument: "hh",
 		element: "hhContextMenu",
@@ -45,8 +45,8 @@ export default {
 	},
 
 	methods: {
-		closeMenu() {
-			this.$emit('close')
+		handleAction(action) {
+			this.$emit('action', action)
 		}
 	},
 
@@ -55,7 +55,7 @@ export default {
 			:is-open="isOpen" 
 			:x="x" 
 			:y="y"
-			@close="closeMenu"
+			@action="closeMenu"
 			:instrument="instrument" 
 			:element="element" 
 			:instrument-modes="modes">

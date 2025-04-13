@@ -30,8 +30,8 @@ export default {
 	},
 
 	methods: {
-		closeMenu() {
-			this.$emit('close')
+		handleAction(action) {
+			this.$emit('action', action)
 		}
 	},
 
@@ -47,9 +47,10 @@ export default {
 				:instrument="instrument"
 				:new-state="instrumentMode.newState"
 				:label="instrumentMode.label"
-				@close="closeMenu"
+				@action="handleAction"
 				/>
 		  	</ul>		  
 	  </div>
   `
 }
+
