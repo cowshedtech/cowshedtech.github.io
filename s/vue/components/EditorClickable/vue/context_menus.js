@@ -7,7 +7,7 @@ export default {
     return {
       components: [
         // Instruments
-        { name: 'Sticking' },
+        // { name: 'Sticking' },
         // Labels
       ]
     }

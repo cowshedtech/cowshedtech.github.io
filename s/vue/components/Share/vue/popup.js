@@ -8,6 +8,10 @@ export default {
 		ShareTo
 	},
 
+	compilerOptions: {
+		isCustomElement: tag => tag === 'share-button'
+	},
+
 	data() {
 		return {
 			longURL: "",

@@ -32,18 +32,11 @@ export default {
 		}	
 	},
 
-	methods: {
-		handleAction(action) {
-			this.$emit('action', action)
-		}
-	},
-  
 	template: `
 		<InstrumentMenu 
 			:is-open="isOpen" 
 			:x="x" 
 			:y="y"
-			@action="closeMenu"
 			:element="element" 
 			:instrument-modes="modes">
 		</InstrumentMenu>

@@ -72,7 +72,7 @@ export default {
           </span>
         </span>
       </div>
-      <MeasureControls />
+      <MeasureControls :measureIndex="measureIndex"/>
     </div>
   `
 }

@@ -8,10 +8,6 @@ export default {
 	},
 
 	props: {
-		tomIndex: {
-			type: Number,
-			required: true
-		},
 		abcOn: {
 			type: String,
 			required: true
@@ -44,7 +40,6 @@ export default {
 			:is-open="isOpen" 
 			:x="x" 
 			:y="y"
-			@action="closeMenu"
 			:element="element" 
 			:instrument-modes="modes">
 		</InstrumentMenu>
