@@ -1,3 +1,5 @@
+import Menu from "./tom_menu.js"
+
 export default {
   props: {
     track: {
@@ -11,6 +13,10 @@ export default {
     tomIndex: {
         type: Number,
         required: true
+    },
+    abcOn: {
+        type: String,
+        required: true
     }
   },
 
@@ -18,10 +24,11 @@ export default {
     return {
       noteABC: this.track ? this.track.getTomState(this.tomIndex, this.noteIndex, "ABC") : constant_ABC_OFF,
       constants: {
-        TOM_OFF: constant_ABC_OFF,
-        TOM1_NORMAL: constant_ABC_T1_Normal,
-        TOM4_NORMAL: constant_ABC_T4_Normal        
-      }
+        TOM_OFF: constant_ABC_OFF        
+      },
+      isPopupOpen: false,
+      menuX: 0,
+      menuY: 0,
     }
   },
 
@@ -36,21 +43,29 @@ export default {
 
   methods: {
     handleLeftClick(event) {
-        if (this.tomIndex === 1) {
-          let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_T1_Normal
-          this.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);
-        }
-        if (this.tomIndex === 4) {
-          let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_T4_Normal
-          this.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);                
-        }
+      let newMode = this.noteABC ? constant_ABC_OFF : this.abcOn
+      this.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);      
     },
     handleRightClick(event) {
-        noteRightClick(event, 'tom' + this.tomIndex, this.noteIndex)
+      this.menuX = event.clientX;
+      this.menuY = event.clientY;
+      this.isPopupOpen = true;
     },
     handleMouseEnter(event) {
-        noteOnMouseEnter(event, 'tom' + this.tomIndex, this.noteIndex)
+      let action = null;
+      if (event.ctrlKey) action = "on";
+      if (event.altKey) action = "off";  
+      if (action)
+        this.track.setTomState(this.tomIndex, this.noteIndex, action == "off" ? constant_ABC_OFF : this.abcOn, true);    
     },
+    handleAction(action) {
+      this.track.setTomState(this.tomIndex, this.noteIndex, action, true);  
+      this.isPopupOpen = false;
+    }
+  },
+
+  components: {
+    Menu
   },
 
   template: `
@@ -66,17 +81,18 @@ export default {
           :id="'tom_circle' + tomIndex + '-' + noteIndex">
         </div>
 
-        <div v-if="noteABC === constants.TOM1_NORMAL"
+        <div v-if="noteABC === this.abcOn"
           class="tom_circle note_part" 
           style="backgroundColor: #000000; borderColor: #999"
           :id="'tom_circle' + tomIndex + '-' + noteIndex">
         </div>
 
-        <div v-if="noteABC === constants.TOM4_NORMAL"
-          class="tom_circle note_part" 
-          style="backgroundColor: #000000; borderColor: #999"
-          :id="'tom_circle' + tomIndex + '-' + noteIndex">
-        </div>
+        <Menu
+          :is-open="isPopupOpen" 
+          :x="menuX" 
+          :y="menuY"
+          @action="handleAction">
+        </Menu>
     </div>
   `,
 }

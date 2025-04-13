@@ -2,7 +2,6 @@ import SnareFlam from './snare_flam.js'
 import SnareDrag from './snare_drag.js'
 import Menu from "./snare_menu.js"
 
-
 export default {
   props: {
     track: {

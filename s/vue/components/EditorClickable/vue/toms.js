@@ -23,6 +23,10 @@ export default {
     tomIndex: {
       type: Number,
       required: true
+    },
+    abcOn: {
+      type: String,
+      required: true
     }
   },
 
@@ -43,7 +47,7 @@ export default {
     <div class="toms-container" id="tom1-container">
       <div class="opening_note_space"></div>
       <template v-for="i in track.notesPerMeasure" :key="i">
-        <Tom :track="track" :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" />
+        <Tom :track="track" :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" :abcOn="abcOn"/>
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton :instrument="'tom' + tomIndex" :measureIndex="measureIndex"></MuteButton>

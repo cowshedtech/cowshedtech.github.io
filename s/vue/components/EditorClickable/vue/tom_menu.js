@@ -2,6 +2,7 @@ import InstrumentMenu from './base_instrument_menu.js'
 
 export default {
 	name: 'Tom1Menu',
+	
 	components: {
 		InstrumentMenu
 	},
@@ -10,22 +11,39 @@ export default {
 		tomIndex: {
 			type: Number,
 			required: true
+		},
+		isOpen: {
+			type: Boolean,
+			default: false
+		},
+		x: {
+			type: String
+		},
+		y: {
+			type: String
 		}
 	},
 
 	data() {
 		return {
 			modes: [
-				{ newState: 'off', label: 'Off' },
-				{ newState: 'normal', label: 'On' }
+				{ newState: constant_ABC_OFF, label: 'Off' },
+				{ newState: constant_ABC_T1_Normal, label: 'On' }
 			],
 			instrument: "tom1",
 			element: "tom1ContextMenu",
 		}
 	},
 
-
 	template: `
-	<InstrumentMenu :instrument="'tom' + tomIndex" :element="element" :instrument-modes="modes"></InstrumentMenu>
-  `
+		<InstrumentMenu 
+			:is-open="isOpen" 
+			:x="x" 
+			:y="y"
+			@action="closeMenu"
+			:instrument="instrument" 
+			:element="element" 
+			:instrument-modes="modes">
+		</InstrumentMenu>
+  	`
 }

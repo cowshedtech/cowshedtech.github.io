@@ -54,9 +54,9 @@ export default {
                 <StaffLines />
                 <Highlights :track="track" :measureIndex="measureIndex" />
                 <HighHats :track="track" :measureIndex="measureIndex" />
-                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="1" />
+                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="1" abcOn="e" />
                 <Snares :track="track" :measureIndex="measureIndex" />
-                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="4" />
+                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="4" abcOn="A" />
                 <Kick :track="track" :measureIndex="measureIndex" />                
               </div>
             </div>
