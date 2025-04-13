@@ -29,17 +29,27 @@ export default {
 		}
 	},
 
+	methods: {
+		closeMenu() {
+			this.$emit('close')
+		}
+	},
+
 	template: `
-	  <div v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }" class="noteContextMenuNew" >
-		  <ul :id="element" class="list">
-			 <MenuItem
+	  <div 
+	  	v-if="isOpen" 
+		:style="{ top: y + 'px', left: x + 'px' }" 
+		class="noteContextMenuNew" >
+		  	<ul :id="element" class="list">
+				<MenuItem
 				v-for="instrumentMode in instrumentModes"
 				:key="instrumentMode.newState"
 				:instrument="instrument"
 				:new-state="instrumentMode.newState"
 				:label="instrumentMode.label"
+				@close="closeMenu"
 				/>
-		  </ul>		  
+		  	</ul>		  
 	  </div>
   `
 }

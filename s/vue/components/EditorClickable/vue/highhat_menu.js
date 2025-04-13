@@ -44,11 +44,18 @@ export default {
 		}	
 	},
 
+	methods: {
+		closeMenu() {
+			this.$emit('close')
+		}
+	},
+
 	template: `
 		<InstrumentMenu 
 			:is-open="isOpen" 
 			:x="x" 
 			:y="y"
+			@close="closeMenu"
 			:instrument="instrument" 
 			:element="element" 
 			:instrument-modes="modes">

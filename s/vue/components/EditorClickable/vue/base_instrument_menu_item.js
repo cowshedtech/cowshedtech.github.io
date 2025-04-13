@@ -1,5 +1,6 @@
 export default {
 	name: 'InstrumentMenuItem',
+	
 	props: {
 		instrument: {
 			type: String,
@@ -14,6 +15,7 @@ export default {
 			required: true,
 		},
 	},
+
 	methods: {
 		handleClick() {
 			if (typeof myGrooveWriter === 'undefined') {
@@ -21,7 +23,9 @@ export default {
 				return;
 			}
 			notePopupClick(this.instrument, this.newState);
+			this.$emit('close')
 		}
 	},
+	
 	template: `<li @click="handleClick">{{ label }}</li>`
 }
