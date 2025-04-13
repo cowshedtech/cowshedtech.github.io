@@ -13,7 +13,11 @@ import StaffLines from './staff_line.js'
 export default {
   data() {
     return {
-      trackData: editor.track ? editor.track : null
+      trackData: editor.track ? editor.track : null,
+      constants: {
+        TOM1_ON: constant_ABC_T1_Normal,
+        TOM4_ON: constant_ABC_T4_Normal
+      },
     }
   },
   
@@ -54,9 +58,9 @@ export default {
                 <StaffLines />
                 <Highlights :track="track" :measureIndex="measureIndex" />
                 <HighHats :track="track" :measureIndex="measureIndex" />
-                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="1" abcOn="e" />
+                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" />
                 <Snares :track="track" :measureIndex="measureIndex" />
-                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="4" abcOn="A" />
+                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" />
                 <Kick :track="track" :measureIndex="measureIndex" />                
               </div>
             </div>

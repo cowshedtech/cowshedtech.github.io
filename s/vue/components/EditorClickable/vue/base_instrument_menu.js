@@ -5,10 +5,6 @@ export default {
 	props: ['instrument', 'element', 'instrumentModes'],
 
 	props: {
-		instrument: {
-			type: String,
-			required: true
-		},
 		element: {
 			type: String,
 			required: true
@@ -44,9 +40,8 @@ export default {
 				<MenuItem
 				v-for="instrumentMode in instrumentModes"
 				:key="instrumentMode.newState"
-				:instrument="instrument"
-				:new-state="instrumentMode.newState"
 				:label="instrumentMode.label"
+				:new-state="instrumentMode.newState"
 				@action="handleAction"
 				/>
 		  	</ul>		  

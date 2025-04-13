@@ -12,6 +12,10 @@ export default {
 			type: Number,
 			required: true
 		},
+		abcOn: {
+			type: String,
+			required: true
+		},
 		isOpen: {
 			type: Boolean,
 			default: false
@@ -22,15 +26,15 @@ export default {
 		y: {
 			type: String
 		}
+		
 	},
 
 	data() {
 		return {
 			modes: [
 				{ newState: constant_ABC_OFF, label: 'Off' },
-				{ newState: constant_ABC_T1_Normal, label: 'On' }
+				{ newState: this.abcOn, label: 'On' }
 			],
-			instrument: "tom1",
 			element: "tom1ContextMenu",
 		}
 	},
@@ -41,7 +45,6 @@ export default {
 			:x="x" 
 			:y="y"
 			@action="closeMenu"
-			:instrument="instrument" 
 			:element="element" 
 			:instrument-modes="modes">
 		</InstrumentMenu>

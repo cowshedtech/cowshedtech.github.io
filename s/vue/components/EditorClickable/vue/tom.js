@@ -88,6 +88,7 @@ export default {
         </div>
 
         <Menu
+          :abcOn="abcOn"
           :is-open="isPopupOpen" 
           :x="menuX" 
           :y="menuY"

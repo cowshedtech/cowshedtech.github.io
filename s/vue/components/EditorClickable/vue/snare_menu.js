@@ -31,7 +31,6 @@ export default {
 				{ newState: constant_ABC_SN_Buzz, label: 'Buzz Stroke' },
 				{ newState: constant_ABC_SN_Flam, label: 'Flam' },			
 			],
-			instrument: "snare",
 			element: "snareContextMenu",
 		}	
 	},
@@ -48,7 +47,6 @@ export default {
 			:x="x" 
 			:y="y"
 			@action="closeMenu"
-			:instrument="instrument" 
 			:element="element" 
 			:instrument-modes="modes">
 		</InstrumentMenu>

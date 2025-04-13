@@ -28,7 +28,6 @@ export default {
 				{ newState: constant_ABC_KI_Splash, label: 'Hi-hat foot' },
 				{ newState: constant_ABC_KI_SandK, label: 'Kick & Hi-hat foot' },			
 			],
-			instrument: "kick",
 			element: "kickContextMenu",
 		}	
 	},
@@ -45,7 +44,6 @@ export default {
 			:x="x" 
 			:y="y"
 			@action="closeMenu"
-			:instrument="instrument" 
 			:element="element" 
 			:instrument-modes="modes">
 		</InstrumentMenu>

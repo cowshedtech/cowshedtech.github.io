@@ -2,10 +2,6 @@ export default {
 	name: 'InstrumentMenuItem',
 	
 	props: {
-		instrument: {
-			type: String,
-			required: true,
-		},
 		label: {
 			type: String,
 			required: true,
@@ -18,10 +14,6 @@ export default {
 
 	methods: {
 		handleClick() {
-			if (typeof myGrooveWriter === 'undefined') {
-				console.warn('myGrooveWriter is not defined');
-				return;
-			}
 			this.$emit('action', this.newState)
 		}
 	},
