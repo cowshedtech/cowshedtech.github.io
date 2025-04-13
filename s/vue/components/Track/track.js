@@ -63,6 +63,33 @@ function Track() {
 
 	root.track = root.trackNew();
 
+	root.getHighHatState = function(id, returnType) {
+
+		let abcState = this.hh_array[id] ? this.hh_array[id] : constant_ABC_OFF;
+		let result = abcState;
+		
+		if (returnType == "URL")
+		{
+			if (abcState === constant_ABC_HH_Ride) returnType = "r";
+			if (abcState === constant_ABC_HH_Ride_Bell) returnType = "b";
+			if (abcState === constant_ABC_HH_Cow_Bell) returnType = "m";
+			if (abcState === constant_ABC_HH_Crash) returnType = "c";
+			if (abcState === constant_ABC_HH_Stacker) returnType = "s";
+			if (abcState === constant_ABC_HH_Metronome_Normal) returnType = "n";
+			if (abcState === constant_ABC_HH_Metronome_Accent) returnType = "N";
+			if (abcState === constant_ABC_HH_Open) returnType = "o";
+			if (abcState === constant_ABC_HH_Close) returnType = "+";
+			if (abcState === constant_ABC_HH_Accent) returnType = "X";
+			if (abcState === constant_ABC_HH_Normal) returnType = "x";
+		}
+	
+		return result;        
+	}
+	
+	root.setHighHatState = function(id, mode, make_sound) {
+		this.hh_array[id] = mode;			
+	}
+
 	root.getSnareState = function(id, returnType) {
 
 		let abcState = this.snare_array[id] ? this.snare_array[id] : constant_ABC_OFF;

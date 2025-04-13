@@ -19,6 +19,8 @@ function is_hh_on(id) {
 // false = off
 // see the top constants for mappings
 function get_hh_state(id, returnType) {
+    return editor.track.getHighHatState(id, returnType)
+
     // Validate returnType
     if (returnType !== "ABC" && returnType !== "URL") {
         console.log("bad returnType in get_hh_state()");
@@ -56,6 +58,9 @@ function get_hh_state(id, returnType) {
 
 // TODO: refactor this using a lookup table of constants
 function set_hh_state(id, mode, make_sound) {
+
+    editor.track.setHighHatState(id, mode, false)
+    return
 
     // hide everything optional
     document.getElementById("hh_cross" + id).style.color = constant_note_hidden_color_rgb;
