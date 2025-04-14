@@ -19,20 +19,6 @@ export default {
   data() {
     return {
       noteABC: this.track ? this.track.getHighHatState(this.noteIndex, "ABC") : constant_ABC_OFF,
-      constants: {
-        HIGHHAT_OFF: constant_ABC_OFF,
-        HIGHHAT_RIDE: constant_ABC_HH_Ride,
-        HIGHHAT_RIDE_BELL: constant_ABC_HH_Ride_Bell,
-        HIGHHAT_COW_BELL: constant_ABC_HH_Cow_Bell,
-        HIGHHAT_CRASH: constant_ABC_HH_Crash,
-        HIGHHAT_STACKER: constant_ABC_HH_Stacker,
-        HIGHHAT_OPEN: constant_ABC_HH_Open,
-        HIGHHAT_CLOSE: constant_ABC_HH_Close,
-        HIGHHAT_ACCENT: constant_ABC_HH_Accent,
-        HIGHHAT_NORMAL: constant_ABC_HH_Normal,
-        HIGHHAT_METRONOME_NORMAL: constant_ABC_HH_Metronome_Normal,
-        HIGHHAT_METRONOME_ACCENT: constant_ABC_HH_Metronome_Accent
-      },
       isPopupOpen: false,
       menuX: 0,
       menuY: 0,
@@ -40,34 +26,32 @@ export default {
   },
 
   computed: {
-    iconConfig() {
+    noteConfig() {
       return {
         [constant_ABC_OFF]: { class: 'hh_cross', icon: 'fa-times', color: '#CCC' },
-        [constant_ABC_HH_Normal]: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
-        [constant_ABC_HH_Ride]: { class: 'hh_ride', icon: 'fa-dot-circle-o', color: '#000000' },
-        [constant_ABC_HH_Ride_Bell]: { class: 'hh_ride_bell', icon: 'fa-bell-o', color: '#000000' },
-        [constant_ABC_HH_Cow_Bell]: { class: 'hh_cow_bell', icon: 'fa-plus-square-o', color: '#000000' },
-        [constant_ABC_HH_Crash]: { class: 'hh_crash', icon: 'fa-asterisk', color: '#000000' },
-        [constant_ABC_HH_Stacker]: { class: 'hh_stacker', icon: 'fa-bars', color: '#000000' },
+        [constant_ABC_HH_Normal]: { class: 'hh_cross', icon: 'fa-times', color: '#000000', midiNote: constant_OUR_MIDI_HIHAT_NORMAL },
+        [constant_ABC_HH_Ride]: { class: 'hh_ride', icon: 'fa-dot-circle-o', color: '#000000', midiNote: constant_OUR_MIDI_HIHAT_RIDE },
+        [constant_ABC_HH_Ride_Bell]: { class: 'hh_ride_bell', icon: 'fa-bell-o', color: '#000000', midiNote: constant_OUR_MIDI_HIHAT_RIDE_BELL },
+        [constant_ABC_HH_Cow_Bell]: { class: 'hh_cow_bell', icon: 'fa-plus-square-o', color: '#000000', midiNote: constant_OUR_MIDI_HIHAT_COW_BELL },
+        [constant_ABC_HH_Crash]: { class: 'hh_crash', icon: 'fa-asterisk', color: '#000000', midiNote: constant_OUR_MIDI_HIHAT_CRASH },
+        [constant_ABC_HH_Stacker]: { class: 'hh_stacker', icon: 'fa-bars', color: '#000000', midiNote: constant_OUR_MIDI_HIHAT_STACKER },
         [constant_ABC_HH_Open]: { 
           primary: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
-          secondary: { class: 'hh_open', icon: 'fa-circle-o', color: '#000000' }
+          secondary: { class: 'hh_open', icon: 'fa-circle-o', color: '#000000' },
+          midiNote: constant_OUR_MIDI_HIHAT_OPEN
         },
         [constant_ABC_HH_Accent]: { 
           primary: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
-          secondary: { class: 'hh_close', icon: 'fa-plus', color: '#000000' }
+          secondary: { class: 'hh_close', icon: 'fa-plus', color: '#000000' },
+          midiNote: constant_OUR_MIDI_HIHAT_ACCENT
         },
-        [constant_ABC_HH_Accent]: { 
-          primary: { class: 'hh_cross', icon: 'fa-times', color: '#000000' },
-          secondary: { class: 'hh_accent', icon: 'fa-angle-right', color: '#000000' }
-        },
-        [constant_ABC_HH_Metronome_Normal]: { class: 'hh_metronome_normal', icon: 'fa-neuter', color: '#000000' },
-        [constant_ABC_HH_Metronome_Accent]: { class: 'hh_metronome_accent', icon: 'fa-map-pin', color: '#000000' }
+        [constant_ABC_HH_Metronome_Normal]: { class: 'hh_metronome_normal', icon: 'fa-neuter', color: '#000000', midiNote: constant_OUR_MIDI_HIHAT_METRONOME_NORMAL },
+        [constant_ABC_HH_Metronome_Accent]: { class: 'hh_metronome_accent', icon: 'fa-map-pin', color: '#000000', midiNote: constant_OUR_MIDI_HIHAT_METRONOME_ACCENT }
       }
     },
-    currentIcon() {
-      let currentIcon = this.iconConfig[this.noteABC];
-      return currentIcon;
+    currentNoteConfig() {
+      let currentNoteConfig = this.noteConfig[this.noteABC];
+      return currentNoteConfig;
     }
   },
 
@@ -100,45 +84,8 @@ export default {
     },
     handleAction(action) {
       if (this.midiPlayer) {
-
-        let midiNote = null;
-        switch (action) {
-          case constant_ABC_HH_Normal: 
-            midiNote = constant_OUR_MIDI_HIHAT_NORMAL;
-            break;
-          case constant_ABC_HH_Normal: 
-            midiNote = constant_ABC_HH_Open;  
-            break;
-          case constant_ABC_HH_Open: 
-            midiNote = constant_OUR_MIDI_HIHAT_NORMAL;
-            break;  
-          case constant_ABC_HH_Accent: 
-            midiNote = constant_OUR_MIDI_HIHAT_ACCENT; 
-            break; 
-          case constant_ABC_HH_Crash: 
-            midiNote = constant_OUR_MIDI_HIHAT_CRASH;
-            break;
-          case constant_ABC_HH_Ride: 
-            midiNote = constant_OUR_MIDI_HIHAT_RIDE;  
-            break;
-          case constant_ABC_HH_Ride_Bell: 
-            midiNote = constant_OUR_MIDI_HIHAT_RIDE_BELL;
-            break;
-          case constant_ABC_HH_Cow_Bell: 
-            midiNote = constant_OUR_MIDI_HIHAT_COW_BELL;  
-            break;
-          case constant_ABC_HH_Stacker: 
-            midiNote = constant_OUR_MIDI_HIHAT_STACKER;
-            break;
-          case constant_ABC_HH_Metronome_Normal: 
-            midiNote = constant_OUR_MIDI_HIHAT_METRONOME_NORMAL;    
-            break;
-          case constant_ABC_HH_Metronome_Accent: 
-            midiNote = constant_OUR_MIDI_HIHAT_METRONOME_ACCENT;    
-            break;  
-        }
-
-        if (midiNote) this.midiPlayer.playSingleNote(midiNote);                
+        let note = this.noteConfig[action]?.midiNote;        
+        if (note) this.midiPlayer.playSingleNote(note);                
       }
       
       this.track.setHighHatState(this.noteIndex, action, true);  
@@ -152,18 +99,18 @@ export default {
 
   template: `
     <div :id="'hi-hat' + noteIndex" class="hi-hat" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">
-      <template v-if="currentIcon">
-        <template v-if="currentIcon.primary">
-          <div :class="[currentIcon.primary.class, 'note_part']" :style="{ color: currentIcon.primary.color }" :id="currentIcon.primary.class + noteIndex">
-            <i :class="'fa ' + currentIcon.primary.icon"></i>
+      <template v-if="currentNoteConfig">
+        <template v-if="currentNoteConfig.primary">
+          <div :class="[currentNoteConfig.primary.class, 'note_part']" :style="{ color: currentNoteConfig.primary.color }" :id="currentNoteConfig.primary.class + noteIndex">
+            <i :class="'fa ' + currentNoteConfig.primary.icon"></i>
           </div>
-          <div :class="[currentIcon.secondary.class, 'note_part']" :style="{ color: currentIcon.secondary.color }" :id="currentIcon.secondary.class + noteIndex">
-            <i :class="'fa ' + currentIcon.secondary.icon"></i>
+          <div :class="[currentNoteConfig.secondary.class, 'note_part']" :style="{ color: currentNoteConfig.secondary.color }" :id="currentNoteConfig.secondary.class + noteIndex">
+            <i :class="'fa ' + currentNoteConfig.secondary.icon"></i>
           </div>
         </template>
         <template v-else>
-          <div :class="[currentIcon.class, 'note_part']" :style="{ color: currentIcon.color }" :id="currentIcon.class + noteIndex">
-            <i :class="'fa ' + currentIcon.icon"></i>
+          <div :class="[currentNoteConfig.class, 'note_part']" :style="{ color: currentNoteConfig.color }" :id="currentNoteConfig.class + noteIndex">
+            <i :class="'fa ' + currentNoteConfig.icon"></i>
           </div>
         </template>
       </template>
