@@ -65,7 +65,7 @@ export default {
                 <Toms :track="track" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" />
                 <Snares :track="track" :measureIndex="measureIndex" />
                 <Toms :track="track" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" />
-                <Kick :track="track" :measureIndex="measureIndex" />                
+                <Kick :track="track" :measureIndex="measureIndex" :midiPlayer="midiPlayer"/>                
               </div>
             </div>
           </span>

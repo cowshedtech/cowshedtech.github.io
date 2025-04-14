@@ -103,7 +103,7 @@ function noteLabelPopupClick(instrument, action, measureIndex) {
             setFunction = set_snare_state;
             break;
         case "kick":
-            setFunction = set_kick_state;
+            setFunction = editor.track.setKickState;
             break;
         default:
             console.log("bad case in noteLabelPopupClick");
@@ -158,20 +158,20 @@ function noteLabelPopupClick(instrument, action, measureIndex) {
 
         } else if (instrument == "kick" && action == "hh_foot_nums_on") {
             var num_notes_per_count = editor.track.timeDivision / editor.track.noteValue
-            var cur_state = get_kick_state(i, "ABC");
+            var cur_state = editor.track.getKickState(i, "ABC");
             var kick_is_on = false;
             if (cur_state == constant_ABC_KI_SandK || cur_state == constant_ABC_KI_Normal)
                 kick_is_on = true;
-            set_kick_state(i, (i % num_notes_per_count === 0 ? (kick_is_on ? "kick_and_splash" : "splash") : (kick_is_on ? "normal" : "off")), i == (startIndex));
+            editor.track.setKickState(i, (i % num_notes_per_count === 0 ? (kick_is_on ? "kick_and_splash" : "splash") : (kick_is_on ? "normal" : "off")), i == (startIndex));
 
         } else if (instrument == "kick" && action == "hh_foot_ands_on") {
             var num_notes_per_count = editor.track.timeDivision / editor.track.noteValue
-            var cur_state = get_kick_state(i, "ABC");
+            var cur_state = editor.track.getKickState(i, "ABC");
             var kick_is_on = false;
             if (cur_state == constant_ABC_KI_SandK || cur_state == constant_ABC_KI_Normal)
                 kick_is_on = true;
 
-            set_kick_state(i, (i % num_notes_per_count === (num_notes_per_count / 2) ? (kick_is_on ? "kick_and_splash" : "splash") : (kick_is_on ? "normal" : "off")), i == (startIndex + num_notes_per_count / 2));
+            editor.track.setKickState(i, (i % num_notes_per_count === (num_notes_per_count / 2) ? (kick_is_on ? "kick_and_splash" : "splash") : (kick_is_on ? "normal" : "off")), i == (startIndex + num_notes_per_count / 2));
 
         } else if (action == "all_on") {
             setFunction(i, "normal", i == startIndex);
@@ -239,7 +239,7 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
 
         Snare_Array[array_index] = get_snare_state(i + startIndexForClickableUI, "ABC");
 
-        Kick_Array[array_index] = get_kick_state(i + startIndexForClickableUI, "ABC");
+        Kick_Array[array_index] = editor.track.getKickState(i + startIndexForClickableUI, "ABC");
     }
 
     var num_notes = Snare_Array.length;
@@ -276,7 +276,7 @@ grooveDataFromClickableUI = function () {
 
             // track.hh_array.push(editor.track.getHighHatState(i, "ABC"));
             // track.snare_array.push(get_snare_state(i, "ABC"));
-            // track.kick_array.push(get_kick_state(i, "ABC"));
+            // track.kick_array.push(editor.track.getKickState(i, "ABC"));
 
             if (options.areTomsVisible()) {
                 track.toms_array[0].push(get_tom_state(i, 1, "ABC"));
@@ -345,7 +345,7 @@ function setNotesFromURLData(drumType, noteString, numberOfMeasures) {
     } else if (drumType == "S") {
         setFunction = set_snare_state;
     } else if (drumType == "K") {
-        setFunction = set_kick_state;
+        setFunction = editor.track.setKickState;
     }
 
     // decode the %7C url encoding types
@@ -502,7 +502,7 @@ function setNotesFromABCArray(drumType, abcArray, numberOfMeasures) {
     } else if (drumType == "S") {
         setFunction = set_snare_state;
     } else if (drumType == "K") {
-        setFunction = set_kick_state;
+        setFunction = editor.track.setKickState;
     }
 
     //  DisplayIndex is the index into the notes on the HTML page  starts at 1/32\n%%flatbeams

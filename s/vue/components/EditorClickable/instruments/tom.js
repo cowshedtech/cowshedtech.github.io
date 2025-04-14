@@ -36,7 +36,7 @@ function get_tom_state(id, tom_num, returnType) {
     var tomOn = (document.getElementById("tom_circle" + tom_num + "-" + id).style.backgroundColor == constant_note_on_color_rgb);
 
     if (returnType != "ABC" && returnType != "URL") {
-        console.log("bad returnType in get_kick_state()");
+        console.log("bad returnType in editor.track.getKickState()");
         returnType = "ABC";
     }
 

@@ -10,6 +10,10 @@ export default {
       type: Number,
       required: true
     },
+    midiPlayer: {
+      type: Object,
+      required: false
+    }
   },
 
   data() {
@@ -39,6 +43,7 @@ export default {
   methods: {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_KI_Normal
+        if (this.midiPlayer && newMode === constant_ABC_KI_Normal) this.midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);                
         this.track.setKickState(this.noteIndex, newMode, true);                
     },
     handleRightClick(event) {
@@ -50,11 +55,20 @@ export default {
       let action = null;
       if (event.ctrlKey) action = "on";
       if (event.altKey) action = "off";  
-      if (action)
+      if (action) 
         this.track.setKickState(this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_KI_Normal, true);     
     },
     handleAction(action) {
       this.track.setKickState(this.noteIndex, action, true);  
+      if (this.midiPlayer) {
+        let note = null;
+        if (action === constant_ABC_KI_Normal) midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
+        if (action === constant_ABC_KI_Splash) midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
+        if (action === constant_ABC_KI_SandK) {
+          midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
+          midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
+        }              
+      }  
       this.isPopupOpen = false;
     }
   },

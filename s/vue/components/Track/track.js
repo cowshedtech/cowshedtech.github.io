@@ -101,7 +101,7 @@ function Track() {
 	/*
 	 *
 	 */
-	root.getDefaultHHGroove = function(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
+	root.getDefaultHHGroove = function() {
 		var retString = "";
 		var oneMeasureString = "|";
 		var i;
@@ -175,6 +175,30 @@ function Track() {
 	root.setKickState = function(id, mode, make_sound) {
 		this.kick_array[id] = mode;			
 	}
+
+	/*
+	 *
+	 */
+	root.getDefaultKickGroove = function() {
+		var retString = "";
+		var oneMeasureString = "|";
+		var i;
+		var notes_per_grouping = (this.notesPerMeasure / this.numBeats);
+	
+		for(i = 0; i < this.notesPerMeasure; i++) {
+			// if the note falls on the beginning of a group
+			// and the group is even
+			if(i % notes_per_grouping === 0 && (i / notes_per_grouping) % 2 === 0)
+				oneMeasureString += "o";
+			else
+				oneMeasureString += "-";
+		}
+		for (i = 0; i < this.numberOfMeasures; i++)
+				retString += oneMeasureString;
+			retString += "|";
+	
+		return retString;
+	};
 
 	/*
 	 *

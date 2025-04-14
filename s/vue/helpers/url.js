@@ -150,7 +150,7 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     if (!highhatString) {
         getQueryVariableFromString("HH", false, encodedURLData);
         if (!highhatString) {
-            highhatString = track.getDefaultHHGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+            highhatString = track.getDefaultHHGroove();
         }
     }
 
@@ -163,7 +163,7 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     if (!kickString) {
         getQueryVariableFromString("B", false, encodedURLData);
         if (!kickString) {
-            kickString = GetDefaultKickGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+            kickString = track.getDefaultKickGroove();
         }
     }
 

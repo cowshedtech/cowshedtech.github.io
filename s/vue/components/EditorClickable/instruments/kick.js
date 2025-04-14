@@ -22,91 +22,31 @@ var constant_snare_accent_on_color_rgb = "rgb(255, 255, 255)";
 
 
 
-// is the any kick note on for this note in the measure?
-function is_kick_on(id) {
-    return get_kick_state(id, "ABC") !== false;
-}
 
-
-// returns the ABC notation for the kick state
-// false = off
-// "F" = normal kick
-// "^d," = splash
-// "F^d,"  = kick & splash
-function get_kick_state(id, returnType) {
-
-    let abcState = editor.track.kick_array[id] ? editor.track.kick_array[id] : constant_ABC_OFF;
-    let result = abcState;
-    
-    if (returnType == "URL")
-    {
-        if (abcState === constant_ABC_KI_SandK) returnType = "X";
-        if (abcState === constant_ABC_KI_Splash) returnType = "x";
-        if (abcState === constant_ABC_KI_Normal) returnType = "o";        
-    }
-
-    return result;        
-}
-
-// set the kick note on with type
-function set_kick_state(id, mode, make_sound) {
-
-    editor.track.kick_array[id] = mode;
-    
-    // // turn stuff on conditionally
-    // switch (mode) {
-    //     case "off":
-    //         document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_off_color_hex;
-    //         document.getElementById("kick_circle" + id).style.borderColor = constant_note_border_color_hex;
-    //         break;
-    //     case "normal":
-    //         document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_on_color_hex;
-    //         document.getElementById("kick_circle" + id).style.borderColor = constant_note_border_color_hex;
-    //         if (make_sound)
-    //             midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
-    //         break;
-    //     case "splash":
-    //         document.getElementById("kick_splash" + id).style.color = constant_note_on_color_hex;
-    //         document.getElementById("kick_circle" + id).style.borderColor = constant_note_hidden_color_rgb;
-    //         if (make_sound)
-    //             midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
-    //         break;
-    //     case "kick_and_splash":
-    //         document.getElementById("kick_circle" + id).style.backgroundColor = constant_note_on_color_hex;
-    //         document.getElementById("kick_splash" + id).style.color = constant_note_on_color_hex;
-    //         if (make_sound)
-    //             midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
-    //         if (make_sound)
-    //             midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
-    //         break;
-    //     default:
-    //         console.log("bad switch in set_kick_state");
-    //         break;
-}
 
 
 // build a string that looks like this
 // |o---------------o---------------|
-function GetDefaultKickGroove(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
-    var retString = "";
-    var oneMeasureString = "|";
-    var i;
-    var notes_per_grouping = (notes_per_measure / timeSigTop);
+// function GetDefaultKickGroove(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
+//     var retString = "";
+//     var oneMeasureString = "|";
+//     var i;
+//     var notes_per_grouping = (notes_per_measure / timeSigTop);
 
-    for(i = 0; i < notes_per_measure; i++) {
-        // if the note falls on the beginning of a group
-        // and the group is even
-        if(i % notes_per_grouping === 0 && (i / notes_per_grouping) % 2 === 0)
-            oneMeasureString += "o";
-        else
-            oneMeasureString += "-";
-    }
-    for (i = 0; i < numMeasures; i++)
-            retString += oneMeasureString;
-        retString += "|";
+//     for(i = 0; i < notes_per_measure; i++) {
+//         // if the note falls on the beginning of a group
+//         // and the group is even
+//         if(i % notes_per_grouping === 0 && (i / notes_per_grouping) % 2 === 0)
+//             oneMeasureString += "o";
+//         else
+//             oneMeasureString += "-";
+//     }
+//     for (i = 0; i < numMeasures; i++)
+//             retString += oneMeasureString;
+//         retString += "|";
 
-    return retString;
-};
+//     return retString;
+// };
 
 
 // merge 2 kick arrays
