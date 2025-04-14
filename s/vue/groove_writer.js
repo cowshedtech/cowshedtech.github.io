@@ -77,7 +77,6 @@ function GrooveWriter() {
         })
 	
  		// initialise our midi player
-		// midiPlayer.AddMidiPlayerToPage(root.track, "midiPlayer", root.track.timeDivision);
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 		midiPlayer?.subscribe(EventTypes.PARAMETERS_UPDATE, () => {
 			// if there is a timeout running clear it
@@ -261,7 +260,9 @@ function GrooveWriter() {
 		var fullABC = generate_ABC(renderWidth);
 
 		document.getElementById("ABCsource").value = fullABC;
-		updateGrooveDBSource();
+		
+		// TODO
+		// updateGrooveDBSource();
 
 		midiPlayer.noteHasChanged();
 		editorClickable.update(editor.track);
@@ -380,14 +381,14 @@ function GrooveWriter() {
 			root.changeDivisionWithNotes(track.timeDivision);
 		// }
 
-		root.expandAuthoringViewWhenNecessary(root.track.notesPerMeasure, root.track.numberOfMeasures);
+		// root.expandAuthoringViewWhenNecessary(root.track.notesPerMeasure, root.track.numberOfMeasures);
 
-		setNotesFromABCArray("Stickings", track.sticking_array, root.track.numberOfMeasures);
+		// setNotesFromABCArray("Stickings", track.sticking_array, root.track.numberOfMeasures);
 		// setNotesFromABCArray("H", track.hh_array, root.track.numberOfMeasures);
-		setNotesFromABCArray("T1", track.toms_array[0], root.track.numberOfMeasures);
-		setNotesFromABCArray("T4", track.toms_array[3], root.track.numberOfMeasures);
-		setNotesFromABCArray("S", track.snare_array, root.track.numberOfMeasures);
-		setNotesFromABCArray("K", track.kick_array, root.track.numberOfMeasures);
+		// setNotesFromABCArray("T1", track.toms_array[0], root.track.numberOfMeasures);
+		// setNotesFromABCArray("T4", track.toms_array[3], root.track.numberOfMeasures);
+		// setNotesFromABCArray("S", track.snare_array, root.track.numberOfMeasures);
+		// setNotesFromABCArray("K", track.kick_array, root.track.numberOfMeasures);
 	
 		document.getElementById("tuneTitle").value = track.title;
 		document.getElementById("tuneAuthor").value = track.author;

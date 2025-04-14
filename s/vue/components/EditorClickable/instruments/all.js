@@ -262,9 +262,9 @@ grooveDataFromClickableUI = function () {
     for (var i = 0; i < editor.track.numberOfMeasures; i++) {
         var total_notes = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
         track.sticking_array = [];
-        track.hh_array = [];
-        track.snare_array = [];
-        track.kick_array = [];
+        // track.hh_array = [];
+        // track.snare_array = [];
+        // track.kick_array = [];
         track.toms_array = [[], [], [], []];
 
         // query the clickable UI and generate a arrays representing the notes of all measures
@@ -274,9 +274,9 @@ grooveDataFromClickableUI = function () {
             if (options.isStickingVisible())
                 track.sticking_array.push(get_sticking_state(i, "ABC"));
 
-            track.hh_array.push(editor.track.getHighHatState(i, "ABC"));
-            track.snare_array.push(get_snare_state(i, "ABC"));
-            track.kick_array.push(get_kick_state(i, "ABC"));
+            // track.hh_array.push(editor.track.getHighHatState(i, "ABC"));
+            // track.snare_array.push(get_snare_state(i, "ABC"));
+            // track.kick_array.push(get_kick_state(i, "ABC"));
 
             if (options.areTomsVisible()) {
                 track.toms_array[0].push(get_tom_state(i, 1, "ABC"));
