@@ -61,7 +61,6 @@ export default {
     handleAction(action) {
       this.track.setKickState(this.noteIndex, action, true);  
       if (this.midiPlayer) {
-        let note = null;
         if (action === constant_ABC_KI_Normal) midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
         if (action === constant_ABC_KI_Splash) midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
         if (action === constant_ABC_KI_SandK) {
