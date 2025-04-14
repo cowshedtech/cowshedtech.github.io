@@ -100,7 +100,7 @@ function noteLabelPopupClick(instrument, action, measureIndex) {
             setFunction = set_tom4_state;
             break;
         case "snare":
-            setFunction = set_snare_state;
+            setFunction = editor.track.setSnareState;
             break;
         case "kick":
             setFunction = editor.track.setKickState;
@@ -148,13 +148,13 @@ function noteLabelPopupClick(instrument, action, measureIndex) {
             editor.track.setHighHatState(i, (i % 2 === 0 ? "off" : "normal"), i == (startIndex + 1));
 
         } else if (instrument == "snare" && action == "all_on") {
-            set_snare_state(i, "accent", i == startIndex);
+            editor.track.setSnareState(i, "accent", i == startIndex);
 
         } else if (instrument == "snare" && action == "all_on_normal") {
-            set_snare_state(i, "normal", i == startIndex);
+            editor.track.setSnareState(i, "normal", i == startIndex);
 
         } else if (instrument == "snare" && action == "all_on_ghost") {
-            set_snare_state(i, "ghost", i == startIndex);
+            editor.track.setSnareState(i, "ghost", i == startIndex);
 
         } else if (instrument == "kick" && action == "hh_foot_nums_on") {
             var num_notes_per_count = editor.track.timeDivision / editor.track.noteValue
@@ -237,7 +237,7 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
             Toms_Array[3][array_index] = get_tom_state(i + startIndexForClickableUI, 4, "ABC");
         }
 
-        Snare_Array[array_index] = get_snare_state(i + startIndexForClickableUI, "ABC");
+        Snare_Array[array_index] = editor.track.getSnareState(i + startIndexForClickableUI, "ABC");
 
         Kick_Array[array_index] = editor.track.getKickState(i + startIndexForClickableUI, "ABC");
     }
@@ -275,7 +275,7 @@ grooveDataFromClickableUI = function () {
                 track.sticking_array.push(get_sticking_state(i, "ABC"));
 
             // track.hh_array.push(editor.track.getHighHatState(i, "ABC"));
-            // track.snare_array.push(get_snare_state(i, "ABC"));
+            // track.snare_array.push(editor.track.getSnareState(i, "ABC"));
             // track.kick_array.push(editor.track.getKickState(i, "ABC"));
 
             if (options.areTomsVisible()) {
@@ -343,7 +343,7 @@ function setNotesFromURLData(drumType, noteString, numberOfMeasures) {
     } else if (drumType == "T4") {
         setFunction = set_tom4_state;
     } else if (drumType == "S") {
-        setFunction = set_snare_state;
+        setFunction = editor.track.setSnareState;
     } else if (drumType == "K") {
         setFunction = editor.track.setKickState;
     }
@@ -500,7 +500,7 @@ function setNotesFromABCArray(drumType, abcArray, numberOfMeasures) {
     } else if (drumType == "T4") {
         setFunction = set_tom4_state;
     } else if (drumType == "S") {
-        setFunction = set_snare_state;
+        setFunction = editor.track.setSnareState;
     } else if (drumType == "K") {
         setFunction = editor.track.setKickState;
     }

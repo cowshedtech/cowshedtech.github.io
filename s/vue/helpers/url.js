@@ -156,7 +156,7 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
 
     var snareString = getQueryVariableFromString("S", false, encodedURLData);
     if (!snareString) {
-        snareString = GetDefaultSnareGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+        snareString = track.getDefaultSnareGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
     }
 
     var kickString = getQueryVariableFromString("K", false, encodedURLData);

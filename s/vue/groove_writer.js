@@ -517,7 +517,7 @@ function GrooveWriter() {
 				uiHH += editor.track.getHighHatState(i, "URL")				
 				uiTom1 += get_tom_state(i, 1, "URL");
 				uiTom4 += get_tom_state(i, 4, "URL");
-				uiSnare += get_snare_state(i, "URL");
+				uiSnare += editor.track.getSnareState(i, "URL");
 				uiKick += editor.track.getKickState(i, "URL")		
 			}
 
@@ -532,7 +532,7 @@ function GrooveWriter() {
 			uiHH = root.track.getDefaultHHGroove();
 			uiTom1 = GetDefaultTom1Groove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
 			uiTom4 = GetDefaultTom4Groove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
-			uiSnare = GetDefaultSnareGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
+			uiSnare = root.track.getDefaultSnareGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
 			uiKick = root.track.getDefaultKickGroove();
 
 			// reset the metronome click, since it has different options
