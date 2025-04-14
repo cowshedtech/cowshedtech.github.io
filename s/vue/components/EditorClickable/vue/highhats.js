@@ -12,6 +12,10 @@ export default {
     measureIndex: {
       type: Number,
       required: true
+    },
+    midiPlayer: {
+      type: Object,
+      required: false
     }
   },
 
@@ -38,7 +42,7 @@ export default {
     <div class="hi-hat-container">
       <div class="opening_note_space"></div>
       <template v-for="i in track.notesPerMeasure" :key="i">
-        <HighHat :track="track" :noteIndex="startNoteIndex + (i - 1)" />
+        <HighHat :track="track" :noteIndex="startNoteIndex + (i - 1)" :midiPlayer="midiPlayer"/>
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton instrument="hh" :measureIndex="measureIndex"></MuteButton>

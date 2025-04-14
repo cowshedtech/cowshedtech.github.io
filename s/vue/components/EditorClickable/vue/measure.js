@@ -39,8 +39,7 @@ export default {
   watch: { 
     track: {
       handler(newVal, oldVal) { 
-        this.trackData = newVal;        
-        if (this.midiPlayer) this.midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_NORMAL);                
+        this.trackData = newVal;                
       },
       deep: true
     },    
@@ -62,7 +61,7 @@ export default {
               <div class="notes-container">
                 <StaffLines />
                 <Highlights :track="track" :measureIndex="measureIndex" />
-                <HighHats :track="track" :measureIndex="measureIndex" />
+                <HighHats :track="track" :measureIndex="measureIndex" :midiPlayer="midiPlayer"/>
                 <Toms :track="track" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" />
                 <Snares :track="track" :measureIndex="measureIndex" />
                 <Toms :track="track" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" />

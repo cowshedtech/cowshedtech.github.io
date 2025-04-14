@@ -10,6 +10,10 @@ export default {
       type: Number,
       required: true
     },
+    midiPlayer: {
+      type: Object,
+      required: false
+    }
   },
 
   data() {
@@ -79,6 +83,7 @@ export default {
   methods: {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_HH_Normal
+        if (this.midiPlayer && newMode === constant_ABC_HH_Normal) this.midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_NORMAL);                
         this.track.setHighHatState(this.noteIndex, newMode, true);  
     },
     handleRightClick(event) {
@@ -94,6 +99,48 @@ export default {
           this.track.setHighHatState(this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_HH_Normal, true);          
     },
     handleAction(action) {
+      if (this.midiPlayer) {
+
+        let midiNote = null;
+        switch (action) {
+          case constant_ABC_HH_Normal: 
+            midiNote = constant_OUR_MIDI_HIHAT_NORMAL;
+            break;
+          case constant_ABC_HH_Normal: 
+            midiNote = constant_ABC_HH_Open;  
+            break;
+          case constant_ABC_HH_Open: 
+            midiNote = constant_OUR_MIDI_HIHAT_NORMAL;
+            break;  
+          case constant_ABC_HH_Accent: 
+            midiNote = constant_OUR_MIDI_HIHAT_ACCENT; 
+            break; 
+          case constant_ABC_HH_Crash: 
+            midiNote = constant_OUR_MIDI_HIHAT_CRASH;
+            break;
+          case constant_ABC_HH_Ride: 
+            midiNote = constant_OUR_MIDI_HIHAT_RIDE;  
+            break;
+          case constant_ABC_HH_Ride_Bell: 
+            midiNote = constant_OUR_MIDI_HIHAT_RIDE_BELL;
+            break;
+          case constant_ABC_HH_Cow_Bell: 
+            midiNote = constant_OUR_MIDI_HIHAT_COW_BELL;  
+            break;
+          case constant_ABC_HH_Stacker: 
+            midiNote = constant_OUR_MIDI_HIHAT_STACKER;
+            break;
+          case constant_ABC_HH_Metronome_Normal: 
+            midiNote = constant_OUR_MIDI_HIHAT_METRONOME_NORMAL;    
+            break;
+          case constant_ABC_HH_Metronome_Accent: 
+            midiNote = constant_OUR_MIDI_HIHAT_METRONOME_ACCENT;    
+            break;  
+        }
+
+        if (midiNote) this.midiPlayer.playSingleNote(midiNote);                
+      }
+      
       this.track.setHighHatState(this.noteIndex, action, true);  
       this.isPopupOpen = false;
     },
