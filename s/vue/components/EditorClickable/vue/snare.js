@@ -12,7 +12,12 @@ export default {
       type: Number,
       required: true
     },
+    midiPlayer: {
+      type: Object,
+      required: false
+    }
   },
+  
 
   data() {
     return {
@@ -45,6 +50,7 @@ export default {
   methods: {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_SN_Accent
+        if (this.midiPlayer && newMode === constant_ABC_SN_Accent) this.midiPlayer.playSingleNote(constant_OUR_MIDI_SNARE_ACCENT);                
         this.track.setSnareState(this.noteIndex, newMode, true);        
     },
     handleRightClick(event) {

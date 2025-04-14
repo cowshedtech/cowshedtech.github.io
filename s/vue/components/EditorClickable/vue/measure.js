@@ -63,7 +63,7 @@ export default {
                 <Highlights :track="track" :measureIndex="measureIndex" />
                 <HighHats :track="track" :measureIndex="measureIndex" :midiPlayer="midiPlayer"/>
                 <Toms :track="track" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" />
-                <Snares :track="track" :measureIndex="measureIndex" />
+                <Snares :track="track" :measureIndex="measureIndex" :midiPlayer="midiPlayer"/>
                 <Toms :track="track" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" />
                 <Kick :track="track" :measureIndex="measureIndex" :midiPlayer="midiPlayer"/>                
               </div>
