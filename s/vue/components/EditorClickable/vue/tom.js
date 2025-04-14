@@ -17,6 +17,14 @@ export default {
     abcOn: {
         type: String,
         required: true
+    },
+    midiPlayer: {
+      type: Object,
+      required: false
+    },
+    midiNormal: {
+      type: Number,
+      required: true
     }
   },
 
@@ -44,6 +52,7 @@ export default {
   methods: {
     handleLeftClick(event) {
       let newMode = this.noteABC ? constant_ABC_OFF : this.abcOn
+      if (this.midiPlayer && newMode === this.abcOn) this.midiPlayer.playSingleNote(constant_OUR_MIDI_TOM1_NORMAL);                
       this.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);      
     },
     handleRightClick(event) {

@@ -16,7 +16,9 @@ export default {
       trackData: editor.track ? editor.track : null,
       constants: {
         TOM1_ON: constant_ABC_T1_Normal,
-        TOM4_ON: constant_ABC_T4_Normal
+        TOM1_MIDI_NORMAL: constant_OUR_MIDI_TOM1_NORMAL,
+        TOM4_ON: constant_ABC_T4_Normal,
+        TOM4_MIDI_NORMAL: constant_OUR_MIDI_TOM4_NORMAL,
       },
     }
   },
@@ -62,9 +64,9 @@ export default {
                 <StaffLines />
                 <Highlights :track="track" :measureIndex="measureIndex" />
                 <HighHats :track="track" :measureIndex="measureIndex" :midiPlayer="midiPlayer"/>
-                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" />
+                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" :midiPlayer="midiPlayer" midiNormal="constants.TOM1_MIDI_NORMAL"/>                
                 <Snares :track="track" :measureIndex="measureIndex" :midiPlayer="midiPlayer"/>
-                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" />
+                <Toms :track="track" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" :midiPlayer="midiPlayer" midiNormal="constants.TOM4_MIDI_NORMAL"/>                
                 <Kick :track="track" :measureIndex="measureIndex" :midiPlayer="midiPlayer"/>                
               </div>
             </div>
