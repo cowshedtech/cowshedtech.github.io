@@ -52,7 +52,7 @@ export default {
   methods: {
     handleLeftClick(event) {
       let newMode = this.noteABC ? constant_ABC_OFF : this.abcOn
-      if (this.midiPlayer && newMode === this.abcOn) this.midiPlayer.playSingleNote(constant_OUR_MIDI_TOM1_NORMAL);                
+      if (this.midiPlayer && newMode === this.abcOn) this.midiPlayer.playSingleNote(this.midiNormal);                
       this.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);      
     },
     handleRightClick(event) {
@@ -68,6 +68,9 @@ export default {
         this.track.setTomState(this.tomIndex, this.noteIndex, action == "off" ? constant_ABC_OFF : this.abcOn, true);    
     },
     handleAction(action) {
+      if (this.midiPlayer) {
+        if (action === this.abcOn) this.midiPlayer.playSingleNote(this.midiNormal);                
+      }    
       this.track.setTomState(this.tomIndex, this.noteIndex, action, true);  
       this.isPopupOpen = false;
     }
