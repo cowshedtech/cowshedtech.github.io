@@ -383,7 +383,7 @@ function GrooveWriter() {
 		root.expandAuthoringViewWhenNecessary(root.track.notesPerMeasure, root.track.numberOfMeasures);
 
 		setNotesFromABCArray("Stickings", track.sticking_array, root.track.numberOfMeasures);
-		setNotesFromABCArray("H", track.hh_array, root.track.numberOfMeasures);
+		// setNotesFromABCArray("H", track.hh_array, root.track.numberOfMeasures);
 		setNotesFromABCArray("T1", track.toms_array[0], root.track.numberOfMeasures);
 		setNotesFromABCArray("T4", track.toms_array[3], root.track.numberOfMeasures);
 		setNotesFromABCArray("S", track.snare_array, root.track.numberOfMeasures);
@@ -513,7 +513,7 @@ function GrooveWriter() {
 			var topIndex = root.track.notesPerMeasure * root.track.numberOfMeasures;
 			for (var i = 0; i < topIndex; i++) {
 				uiStickings += get_sticking_state(i, "URL");
-				uiHH += get_hh_state(i, "URL");
+				uiHH += editor.track.getHighHatState(i, "URL")				
 				uiTom1 += get_tom_state(i, 1, "URL");
 				uiTom4 += get_tom_state(i, 4, "URL");
 				uiSnare += get_snare_state(i, "URL");
@@ -528,7 +528,7 @@ function GrooveWriter() {
 			// changing from or changing to a triplet division
 			// triplets don't scale well, so use defaults when we change
 			uiStickings = GetDefaultStickingsGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
-			uiHH = GetDefaultHHGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
+			uiHH = root.track.getDefaultHHGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
 			uiTom1 = GetDefaultTom1Groove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
 			uiTom4 = GetDefaultTom4Groove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
 			uiSnare = GetDefaultSnareGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);

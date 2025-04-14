@@ -10,7 +10,7 @@
  * @param {number} measureNum - Index of the measure to remove (1-based)
  * @requires Functions:
  * - get_sticking_state - Gets sticking notation for a note
- * - get_hh_state - Gets hi-hat state for a note
+ * - editor.track.getHighHatState - Gets hi-hat state for a note
  * - get_tom_state - Gets tom state for a note
  * - get_snare_state - Gets snare state for a note
  * - get_kick_state - Gets kick state for a note
@@ -34,7 +34,7 @@ function closeMeasureButtonClick(measureNum) {
     for (let i = 0; i < totalNotes; i++) {
         if (i < measureStart || i >= measureEnd) {
             noteData.stickings += get_sticking_state(i, "URL");
-            noteData.hh += get_hh_state(i, "URL");
+            noteData.hh += editor.track.getHighHatState(i, "URL");
             noteData.tom1 += get_tom_state(i, 1, "URL");
             noteData.tom4 += get_tom_state(i, 4, "URL");
             noteData.snare += get_snare_state(i, "URL");
@@ -68,7 +68,7 @@ function closeMeasureButtonClick(measureNum) {
  * @param {number} measureNum - Index of the measure to increment repeats for (1-based)
  * @requires Functions:
  * - get_sticking_state - Gets sticking notation for a note
- * - get_hh_state - Gets hi-hat state for a note
+ * - editor.track.getHighHatState - Gets hi-hat state for a note
  * - get_tom_state - Gets tom state for a note
  * - get_snare_state - Gets snare state for a note
  * - get_kick_state - Gets kick state for a note
@@ -92,7 +92,7 @@ function repeatMeasureIncButtonClick(measureNum) {
     const totalNotes = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
     for (let i = 0; i < totalNotes; i++) {
         notes.stickings += get_sticking_state(i, "URL");
-        notes.hh += get_hh_state(i, "URL");
+        notes.hh += editor.track.getHighHatState(i, "URL");
         notes.tom1 += get_tom_state(i, 1, "URL");
         notes.tom4 += get_tom_state(i, 4, "URL");
         notes.snare += get_snare_state(i, "URL");
@@ -118,7 +118,7 @@ function repeatMeasureIncButtonClick(measureNum) {
  * @param {number} measureNum - Index of the measure to decrement repeats for (1-based)
  * @requires Functions:
  * - get_sticking_state - Gets sticking notation for a note
- * - get_hh_state - Gets hi-hat state for a note
+ * - editor.track.getHighHatState - Gets hi-hat state for a note
  * - get_tom_state - Gets tom state for a note
  * - get_snare_state - Gets snare state for a note
  * - get_kick_state - Gets kick state for a note
@@ -133,7 +133,7 @@ function repeatMeasureDecButtonClick(measureNum) {
 
     for (let i = 0; i < topIndex; i++) {
         uiStickings += get_sticking_state(i, "URL");
-        uiHH += get_hh_state(i, "URL");
+        uiHH += editor.track.getHighHatState(i, "URL");
         uiTom1 += get_tom_state(i, 1, "URL");
         uiTom4 += get_tom_state(i, 4, "URL");
         uiSnare += get_snare_state(i, "URL");
@@ -156,7 +156,7 @@ function repeatMeasureDecButtonClick(measureNum) {
  * @param {number} measureNum - Index of the measure to duplicate (1-based)
  * @requires Functions:
  * - get_sticking_state - Gets sticking notation for a note
- * - get_hh_state - Gets hi-hat state for a note
+ * - editor.track.getHighHatState - Gets hi-hat state for a note
  * - get_tom_state - Gets tom state for a note
  * - get_snare_state - Gets snare state for a note
  * - get_kick_state - Gets kick state for a note
@@ -168,7 +168,7 @@ function duplicateMeasureButtonClick(measureNum) {
     function collectNotes(start, end, target) {
         for (let i = start; i < end; i++) {
             target.stickings += get_sticking_state(i, "URL");
-            target.hh += get_hh_state(i, "URL");
+            target.hh += editor.track.getHighHatState(i, "URL");
             target.tom1 += get_tom_state(i, 1, "URL");
             target.tom4 += get_tom_state(i, 4, "URL");
             target.snare += get_snare_state(i, "URL");
@@ -222,7 +222,7 @@ function duplicateMeasureButtonClick(measureNum) {
  * @param {Event} event - The click event object
  * @requires Functions:
  * - get_sticking_state - Gets sticking notation for a note
- * - get_hh_state - Gets hi-hat state for a note
+ * - editor.track.getHighHatState - Gets hi-hat state for a note
  * - get_tom_state - Gets tom state for a note
  * - get_snare_state - Gets snare state for a note
  * - get_kick_state - Gets kick state for a note
@@ -242,7 +242,7 @@ function addMeasureButtonClick(event) {
     const topIndex = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
     for (let i = 0; i < topIndex; i++) {
         notes.stickings.push(get_sticking_state(i, "URL"));
-        notes.hh.push(get_hh_state(i, "URL"));
+        notes.hh.push(editor.track.getHighHatState(i, "URL"));
         notes.tom1.push(get_tom_state(i, 1, "URL"));
         notes.tom4.push(get_tom_state(i, 4, "URL"));
         notes.snare.push(get_snare_state(i, "URL"));
@@ -295,7 +295,7 @@ function addMeasureButtonClick(event) {
  * @param {number} measureNum - Index of the measure after which to add (1-based)
  * @requires Functions:
  * - get_sticking_state - Gets sticking notation for a note
- * - get_hh_state - Gets hi-hat state for a note
+ * - editor.track.getHighHatState - Gets hi-hat state for a note
  * - get_tom_state - Gets tom state for a note
  * - get_snare_state - Gets snare state for a note
  * - get_kick_state - Gets kick state for a note
@@ -315,7 +315,7 @@ function addMeasureMiddleButtonClick(measureNum) {
     var loop1End = (measureNum) * editor.track.notesPerMeasure
     for (i = 0; i < loop1End; i++) {
         uiStickings += get_sticking_state(i, "URL");
-        uiHH += get_hh_state(i, "URL");
+        uiHH += editor.track.getHighHatState(i, "URL");
         uiTom1 += get_tom_state(i, 1, "URL");
         uiTom4 += get_tom_state(i, 4, "URL");
         uiSnare += get_snare_state(i, "URL");
@@ -337,7 +337,7 @@ function addMeasureMiddleButtonClick(measureNum) {
     var loop3End = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
     for (i = loop3Start; i < loop3End; i++) {
         uiStickings += get_sticking_state(i, "URL");
-        uiHH += get_hh_state(i, "URL");
+        uiHH += editor.track.getHighHatState(i, "URL");
         uiTom1 += get_tom_state(i, 1, "URL");
         uiTom4 += get_tom_state(i, 4, "URL");
         uiSnare += get_snare_state(i, "URL");
@@ -369,7 +369,7 @@ function addMeasureMiddleButtonClick(measureNum) {
  * @param {number} measureNum - Index of the measure after which to add (1-based)
  * @requires Functions:
  * - get_sticking_state - Gets sticking notation for a note
- * - get_hh_state - Gets hi-hat state for a note
+ * - editor.track.getHighHatState - Gets hi-hat state for a note
  * - get_tom_state - Gets tom state for a note
  * - get_snare_state - Gets snare state for a note
  * - get_kick_state - Gets kick state for a note
@@ -400,7 +400,7 @@ function addMeasurePrevButtonClick (event) {
     for (i = 0; i < topIndex; i++) {
 
         uiStickings += get_sticking_state(i, "URL");
-        uiHH += get_hh_state(i, "URL");
+        uiHH += editor.track.getHighHatState(i, "URL");
         uiTom1 += get_tom_state(i, 1, "URL");
         uiTom4 += get_tom_state(i, 4, "URL");
         uiSnare += get_snare_state(i, "URL");
@@ -430,7 +430,7 @@ function clearAllNotes() {
     editor.track.repeatedMeasures.clear();
     for (var i = 0; i < editor.track.numberOfMeasures * editor.track.notesPerMeasure; i++) {
         set_sticking_state(i, 'off');
-        set_hh_state(i, 'off');
+        editor.track.setHighHatState(i, 'off');
         set_tom1_state(i, 'off');
         set_tom4_state(i, 'off');
         set_snare_state(i, 'off');

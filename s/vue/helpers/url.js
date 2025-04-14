@@ -150,7 +150,7 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     if (!highhatString) {
         getQueryVariableFromString("HH", false, encodedURLData);
         if (!highhatString) {
-            highhatString = GetDefaultHHGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+            highhatString = track.getDefaultHHGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
         }
     }
 

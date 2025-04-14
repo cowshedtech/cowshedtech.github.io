@@ -63,6 +63,9 @@ function Track() {
 
 	root.track = root.trackNew();
 
+	/*
+	 *
+	 */
 	root.getHighHatState = function(id, returnType) {
 
 		let abcState = this.hh_array[id] ? this.hh_array[id] : constant_ABC_OFF;
@@ -86,10 +89,40 @@ function Track() {
 		return result;        
 	}
 	
+	
+	/*
+	 *
+	 */
 	root.setHighHatState = function(id, mode, make_sound) {
 		this.hh_array[id] = mode;			
 	}
 
+
+	/*
+	 *
+	 */
+	root.getDefaultHHGroove = function(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
+		var retString = "";
+		var oneMeasureString = "|";
+		var i;
+	
+		for(i = 0; i < this.notesPerMeasure; i++) {
+			if(this.notesPerMeasure == 48)
+				oneMeasureString += "-";
+			else
+				oneMeasureString += "x";
+		}
+		for (i = 0; i < this.numberOfMeasures; i++)
+			retString += oneMeasureString;
+		retString += "|";
+	
+		return retString;
+	};
+	
+
+	/*
+	 *
+	 */
 	root.getSnareState = function(id, returnType) {
 
 		let abcState = this.snare_array[id] ? this.snare_array[id] : constant_ABC_OFF;
@@ -109,10 +142,18 @@ function Track() {
 		return result;        
 	}
 	
+
+	/*
+	 *
+	 */
 	root.setSnareState = function(id, mode, make_sound) {
 		this.snare_array[id] = mode;			
 	}
 	
+
+	/*
+	 *
+	 */
 	root.getKickState = function(id, returnType) {
 
 		let abcState = this.kick_array[id] ? this.kick_array[id] : constant_ABC_OFF;
@@ -128,10 +169,16 @@ function Track() {
 		return result;        
 	}
 	
+	/*
+	 *
+	 */
 	root.setKickState = function(id, mode, make_sound) {
 		this.kick_array[id] = mode;			
 	}
 
+	/*
+	 *
+	 */
 	root.getTomState = function(tomId, id, returnType) {
 		let abcState = this.toms_array[tomId-1][id] ? this.toms_array[tomId-1][id] : constant_ABC_OFF;
 		let result = abcState;

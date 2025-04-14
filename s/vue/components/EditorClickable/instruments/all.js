@@ -91,7 +91,7 @@ function noteLabelPopupClick(instrument, action, measureIndex) {
             setFunction = set_sticking_state;
             break;
         case "hh":
-            setFunction = set_hh_state;
+            setFunction = editor.track.setHighHatState;
             break;
         case "tom1":
             setFunction = set_tom1_state;
@@ -142,10 +142,10 @@ function noteLabelPopupClick(instrument, action, measureIndex) {
                     break;
             }
         } else if (instrument == "hh" && action == "downbeats") {
-            set_hh_state(i, (i % 2 === 0 ? "normal" : "off"), i == startIndex);
+            editor.track.setHighHatState(i, (i % 2 === 0 ? "normal" : "off"), i == startIndex);
 
         } else if (instrument == "hh" && action == "upbeats") {
-            set_hh_state(i, (i % 2 === 0 ? "off" : "normal"), i == (startIndex + 1));
+            editor.track.setHighHatState(i, (i % 2 === 0 ? "off" : "normal"), i == (startIndex + 1));
 
         } else if (instrument == "snare" && action == "all_on") {
             set_snare_state(i, "accent", i == startIndex);
@@ -230,7 +230,7 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
         if (options.isStickingVisible())
             Sticking_Array[array_index] = get_sticking_state(i + startIndexForClickableUI, "ABC");
 
-        HH_Array[array_index] = get_hh_state(i + startIndexForClickableUI, "ABC");
+        HH_Array[array_index] = editor.track.getHighHatState(i + startIndexForClickableUI, "ABC");
 
         if (options.areTomsVisible()) {
             Toms_Array[0][array_index] = get_tom_state(i + startIndexForClickableUI, 1, "ABC");
@@ -274,7 +274,7 @@ grooveDataFromClickableUI = function () {
             if (options.isStickingVisible())
                 track.sticking_array.push(get_sticking_state(i, "ABC"));
 
-            track.hh_array.push(get_hh_state(i, "ABC"));
+            track.hh_array.push(editor.track.getHighHatState(i, "ABC"));
             track.snare_array.push(get_snare_state(i, "ABC"));
             track.kick_array.push(get_kick_state(i, "ABC"));
 
@@ -337,7 +337,7 @@ function setNotesFromURLData(drumType, noteString, numberOfMeasures) {
     if (drumType == "Stickings") {
         setFunction = set_sticking_state;
     } else if (drumType == "H") {
-        setFunction = set_hh_state;
+        setFunction = editor.track.setHighHatState;
     } else if (drumType == "T1") {
         setFunction = set_tom1_state;
     } else if (drumType == "T4") {
@@ -494,7 +494,7 @@ function setNotesFromABCArray(drumType, abcArray, numberOfMeasures) {
     if (drumType == "Stickings") {
         setFunction = set_sticking_state;
     } else if (drumType == "H") {
-        setFunction = set_hh_state;
+        setFunction = editor.track.setHighHatState;
     } else if (drumType == "T1") {
         setFunction = set_tom1_state;
     } else if (drumType == "T4") {
