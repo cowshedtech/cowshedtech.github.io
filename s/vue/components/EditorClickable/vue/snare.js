@@ -17,21 +17,10 @@ export default {
       required: false
     }
   },
-  
 
   data() {
     return {
       noteABC: this.track ? this.track.getSnareState(this.noteIndex, "ABC") : constant_ABC_OFF,
-      constants: {
-        SNARE_OFF: constant_ABC_OFF,
-        SNARE_GHOST: constant_ABC_SN_Ghost,
-        SNARE_ACCENT: constant_ABC_SN_Accent,
-        SNARE_NORMAL: constant_ABC_SN_Normal,
-        SNARE_XSTICK: constant_ABC_SN_XStick,
-        SNARE_BUZZ: constant_ABC_SN_Buzz,
-        SNARE_FLAM: constant_ABC_SN_Flam,
-        SNARE_DRAG: constant_ABC_SN_Drag
-      },
       isPopupOpen: false,
       menuX: 0,
       menuY: 0,
@@ -45,6 +34,52 @@ export default {
       },
       deep: true
     },    
+  },
+
+  computed: {
+    noteConfig() {
+      return {
+        [constant_ABC_OFF]: { 
+          primary: { class: 'snare_circle', style: 'color: #FFFFFF; borderColor: #999999' }
+        },
+        [constant_ABC_SN_Normal]: { 
+          primary: { class: 'snare_circle', style: 'background-color: #000000; color: #000000; borderColor: #999999' },
+          midiNote: constant_OUR_MIDI_SNARE_NORMAL
+        },
+        [constant_ABC_SN_Flam]: { 
+          primary: { class: 'snare_flam', style: 'color: #000000' },
+          midiNote: constant_OUR_MIDI_SNARE_FLAM
+        },
+        [constant_ABC_SN_Drag]: { 
+          primary: { class: 'snare_drag', style: 'color: #000000' },
+          midiNote: constant_OUR_MIDI_SNARE_DRAG
+        },
+        [constant_ABC_SN_Ghost]: { 
+          primary: { 
+            class: 'snare_ghost', 
+            style: 'color: #000000',
+            content: '(<i class="fa fa-circle dot_in_snare_ghost_note"></i>)'
+          },
+          midiNote: constant_OUR_MIDI_SNARE_GHOST
+        },
+        [constant_ABC_SN_Accent]: { 
+          primary: { class: 'snare_circle', style: 'background-color: #000000; borderColor: #999999' },
+          secondary: { class: 'snare_accent', style: 'color: #FFFFFF', content: '<i class="fa fa-chevron-right"></i>' },
+          midiNote: constant_OUR_MIDI_SNARE_ACCENT
+        },
+        [constant_ABC_SN_XStick]: { 
+          primary: { class: 'snare_xstick', style: 'color: #000000', content: '<i class="fa fa-times"></i>' },
+          midiNote: constant_OUR_MIDI_SNARE_XSTICK
+        },
+        [constant_ABC_SN_Buzz]: { 
+          primary: { class: 'snare_buzz', style: 'color: #000000', content: '<i class="fa fa-bars"></i>' },
+          midiNote: constant_OUR_MIDI_SNARE_BUZZ
+        }
+      }
+    },
+    currentNoteConfig() {
+      return this.noteConfig[this.noteABC]
+    }
   },
   
   methods: {
@@ -67,6 +102,10 @@ export default {
     },
     handleAction(action) {
       this.track.setSnareState(this.noteIndex, action, true);  
+      if (this.midiPlayer) {
+        let note = this.noteConfig[action]?.midiNote;        
+        if (note) this.midiPlayer.playSingleNote(note);                
+      }            
       this.isPopupOpen = false;
     }
   },
@@ -76,24 +115,21 @@ export default {
   },
 
   template: `
-    <div :id="'snare' + noteIndex" class="snare" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">        
-        <div v-if="noteABC === constants.SNARE_OFF" class="snare_circle note_part" style="color: #FFFFFF; borderColor: #999999" :id="'snare_circle' + noteIndex"></div>
-        <div v-if="noteABC === constants.SNARE_NORMAL" class="snare_circle note_part" style="background-color: #000000; color: #000000; borderColor: #999999" :id="'snare_circle' + noteIndex"></div>
-        <div v-if="noteABC === constants.SNARE_FLAM" class="snare_flam note_part" style="color: #000000" :id="'snare_flam' + noteIndex"></div>
-        <div v-if="noteABC === constants.SNARE_DRAG" class="snare_drag note_part" style="color: #000000" :id="'snare_drag' + noteIndex"></div>
-        <div v-if="noteABC === constants.SNARE_GHOST" class="snare_ghost note_part" style="color: #000000"  :id="'snare_ghost' + noteIndex">(<i class="fa fa-circle dot_in_snare_ghost_note"></i>)</div>
-        <div v-if="noteABC === constants.SNARE_ACCENT" class="snare_circle note_part" style="background-color: #000000; borderColor: #999999" :id="'snare_circle' + noteIndex"></div>
-        <div v-if="noteABC === constants.SNARE_ACCENT" class="snare_accent note_part" style="color: #FFFFFF" :id="'snare_accent' + noteIndex">
-            <i class="fa fa-chevron-right"></i>
-        </div>
-        <div v-if="noteABC === constants.SNARE_XSTICK" class="snare_xstick note_part" style="color: #000000" :id="'snare_xstick' + noteIndex"><i class="fa fa-times"></i></div>
-        <div v-if="noteABC === constants.SNARE_BUZZ" class="snare_buzz note_part" style="color: #000000" :id="'snare_buzz' + noteIndex"><i class="fa fa-bars"></i></div>
-        <Menu
-          :is-open="isPopupOpen" 
-          :x="menuX" 
-          :y="menuY"
-          @action="handleAction">
-        </Menu>
+    <div :id="'snare' + noteIndex" class="snare" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">
+      <template v-if="currentNoteConfig">
+        <template v-if="currentNoteConfig.primary">
+          <div :class="[currentNoteConfig.primary.class, 'note_part']" :style="currentNoteConfig.primary.style" :id="currentNoteConfig.primary.class + noteIndex" v-html="currentNoteConfig.primary.content"></div>
+        </template>
+        <template v-if="currentNoteConfig.secondary">
+          <div :class="[currentNoteConfig.secondary.class, 'note_part']" :style="currentNoteConfig.secondary.style" :id="currentNoteConfig.secondary.class + noteIndex" v-html="currentNoteConfig.secondary.content"></div>
+        </template>
+      </template>
+      <Menu
+        :is-open="isPopupOpen" 
+        :x="menuX" 
+        :y="menuY"
+        @action="handleAction">
+      </Menu>
     </div>
-  `,
+  `
 }
