@@ -515,8 +515,8 @@ function GrooveWriter() {
 			for (var i = 0; i < topIndex; i++) {
 				uiStickings += get_sticking_state(i, "URL");
 				uiHH += editor.track.getHighHatState(i, "URL")				
-				uiTom1 += get_tom_state(i, 1, "URL");
-				uiTom4 += get_tom_state(i, 4, "URL");
+				uiTom1 += editor.track.getTomState(1, i,  "URL");
+				uiTom4 += editor.track.getTomState(4, i, "URL");
 				uiSnare += editor.track.getSnareState(i, "URL");
 				uiKick += editor.track.getKickState(i, "URL")		
 			}
@@ -530,8 +530,8 @@ function GrooveWriter() {
 			// triplets don't scale well, so use defaults when we change
 			uiStickings = GetDefaultStickingsGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
 			uiHH = root.track.getDefaultHHGroove();
-			uiTom1 = GetDefaultTom1Groove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
-			uiTom4 = GetDefaultTom4Groove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
+			uiTom1 = root.track.getEmptyGroove();
+			uiTom4 = root.track.getEmptyGroove();
 			uiSnare = root.track.getDefaultSnareGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
 			uiKick = root.track.getDefaultKickGroove();
 

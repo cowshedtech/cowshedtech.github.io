@@ -268,4 +268,20 @@ function Track() {
 	root.setTomState = function(tomId, id, mode, make_sound) {
 		this.toms_array[tomId-1][id] = mode;			
 	}
+
+	root.setTom1State = function(id, mode, make_sound) {
+		this.setTomState(0, id, mode)
+	}
+
+	root.setTom4State = function(id, mode, make_sound) {
+		this.setTomState(3, id, mode)
+	}
+
+	root.getEmptyGroove = function() {
+		var oneMeasureString = "|" + "-".repeat(this.notesPerMeasure) + "|"; // Optimized measure string creation
+		var retString = oneMeasureString.repeat(this.numMeasures); // Use repeat to create the full string
+	
+		return retString;
+	};
+	
 } // end of class
