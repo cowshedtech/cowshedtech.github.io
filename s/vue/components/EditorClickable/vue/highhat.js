@@ -25,6 +25,15 @@ export default {
     }
   },
 
+  watch: { 
+    track: {
+      handler(newVal, oldVal) { 
+        this.noteABC = this.track ? this.track.getHighHatState(this.noteIndex, "ABC") : constant_ABC_OFF;              
+      },
+      deep: true
+    },    
+  },
+  
   computed: {
     noteConfig() {
       return {
@@ -55,15 +64,6 @@ export default {
     }
   },
 
-  watch: { 
-    track: {
-      handler(newVal, oldVal) { 
-        this.noteABC = this.track ? this.track.getHighHatState(this.noteIndex, "ABC") : constant_ABC_OFF;              
-      },
-      deep: true
-    },    
-  },
-  
   methods: {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_HH_Normal
@@ -86,8 +86,7 @@ export default {
       if (this.midiPlayer) {
         let note = this.noteConfig[action]?.midiNote;        
         if (note) this.midiPlayer.playSingleNote(note);                
-      }
-      
+      }      
       this.track.setHighHatState(this.noteIndex, action, true);  
       this.isPopupOpen = false;
     },
