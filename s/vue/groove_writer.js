@@ -138,7 +138,7 @@ function GrooveWriter() {
 				sheetMusic.clearHighlight();
 				editorClickable.clearHighlight();
 			}
-			showHideToms(true, options.areTomsVisible(), true);
+			// showHideToms(true, options.areTomsVisible(), true);
 			updateCurrentURL();
 		})
 		
@@ -359,8 +359,8 @@ function GrooveWriter() {
 		if (wasStickingsVisable)
 			stickingsShowHide(true, true, true);
 
-		if (wasTomsVisable)
-			showHideToms(true, true, true);
+		// if (wasTomsVisable)
+		// 	showHideToms(true, true, true);
 
 		// now set the right notes on and off
 		if (Stickings && HH && Tom1 && Tom4 && Snare && Kick) {

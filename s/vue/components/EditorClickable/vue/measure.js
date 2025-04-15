@@ -49,6 +49,12 @@ export default {
       },
       deep: true
     },    
+    options: {
+      handler(newVal, oldVal) { 
+        console.log(newVal);
+      },
+      deep: true
+    },    
   },
 
   components: {

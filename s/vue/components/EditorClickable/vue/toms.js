@@ -6,15 +6,12 @@ export default {
 
   data() {
     return {
-      startNoteIndex: this.track ? (this.measureIndex - 1) * this.track.notesPerMeasure : 0
+      startNoteIndex: this.track ? (this.measureIndex - 1) * this.track.notesPerMeasure : 0,
+      tomsVisible: options.areTomsVisible()
     }
   },
   
   props: {
-    options: {
-      type: Object,
-      required: false
-    }, 
     track: {
       type: Object,
       required: true
@@ -47,7 +44,17 @@ export default {
         this.startNoteIndex = (this.measureIndex - 1) * this.track.notesPerMeasure;        
       },
       deep: true
-    },    
+    }
+  },
+
+  mounted() {
+    this.removeHandler = options.addChangeHandler(() => {
+      this.tomsVisible = options.areTomsVisible()
+    })
+  },
+
+  beforeUnmount() {
+    if (this.removeHandler) this.removeHandler()
   },
   
   components: {
@@ -55,7 +62,7 @@ export default {
   },
 
   template: `
-    <div v-if="options.areTomsVisible" class="toms-container" id="tom1-container">
+    <div class="toms-container" id="tom1-container" :style="{ visibility: tomsVisible ? 'visible' : 'hidden' }">
       <div class="opening_note_space"></div>
       <template v-for="i in track.notesPerMeasure" :key="i">
         <Tom :track="track" :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" :abcOn="abcOn" :midiPlayer="midiPlayer" :midiNormal="midiNormal"/>

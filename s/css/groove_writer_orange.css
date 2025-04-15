@@ -1,4 +1,3 @@
-
 	/* this is for debugging layout issues - puts a red border around everything */
 	/* body * { border: 1px solid red; }		 */
 	DEBUG {
@@ -1284,4 +1283,8 @@
 			margin: 0px 0px !important;
 			width: 100% !important;
 		}
+	}
+
+	.hidden {
+		visibility: hidden;
 	}

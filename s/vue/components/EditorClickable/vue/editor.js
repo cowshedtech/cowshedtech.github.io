@@ -14,6 +14,10 @@ export default {
     this.removeHandler = editorClickable?.addChangeHandler(() => {
       this.track = deepCopy(editor.track)            
     })
+
+    this.removeOptionsHandler = options?.addChangeHandler(() => {
+      this.options = deepCopy(options)            
+    })
   },
 
   beforeUnmount() {

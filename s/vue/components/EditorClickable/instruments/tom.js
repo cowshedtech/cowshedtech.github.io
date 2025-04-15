@@ -18,9 +18,3 @@ var constant_sticking_right_off_color_rgb = "rgb(204, 204, 204)";
 var constant_sticking_left_off_color_rgb = "rgb(204, 204, 204)";
 var constant_snare_accent_on_color_hex = "#FFF";
 var constant_snare_accent_on_color_rgb = "rgb(255, 255, 255)";
-
-
-function showHideToms(force, showElseHide, dontRefreshScreen) {
-    var OnElseOff = toggleVisibilityByClass(".toms-container", force, showElseHide);
-    toggleVisibilityByClass(".tom-label", force, showElseHide);    
-};
