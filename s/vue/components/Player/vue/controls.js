@@ -3,6 +3,13 @@ import Timer from './timer.js'
 import Tempo from './tempo.js'
 import Swing from './swing.js'
 
+const KEYS = {
+  ARROW_DOWN: 'ArrowDown',
+  ARROW_UP: 'ArrowUp',
+  ARROW_LEFT: 'ArrowLeft',
+  ARROW_RIGHT: 'ArrowRight'
+};
+
 export default {
   data() {
     return {
@@ -10,31 +17,63 @@ export default {
       expandable: false
     }
   },
-  props: {},
+  
   mounted() {
     if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
       this.containerIndex = midiPlayer.containerIndex
     }
+
+    document.addEventListener('keydown', this.handleKeyDown);   
   },
+
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);          
+  },
+  
   components: {
     PlayButton, Timer, Tempo, Swing
   },
+  
   methods: {
     handleFullScreen() {
         midiPlayer.loadFullScreenGrooveScribe();        
     },
+
     handleExpand() {
       console.log(`expandOrRetractMIDIPlayback`)
     }
     ,
+    
     handleMetronomeMenu() {
       console.log(`handleMetronomeMenu metronome.miniMenuClick`)
     }
     ,
+    
     handleRepeat() {
       console.log(`handleRepeat repeatToggle`)
-    }
+    },
+    
+    handleKeyDown(event) {
+      if (event.target.type == "range" || (event.target.tagName.toUpperCase() != "INPUT" && event.target.tagName.toUpperCase() != "TEXTAREA")) {       
+        switch (event.code) {
+          case KEYS.ARROW_DOWN:
+            midiPlayer.downTempo();
+            return false;
+          case KEYS.ARROW_LEFT:
+            midiPlayer.downTempo();
+            return false;
+          case KEYS.ARROW_UP:
+            midiPlayer.upTempo();
+            return false;      
+          case KEYS.ARROW_RIGHT:
+            midiPlayer.upTempo();
+            return false;        
+        }
+      }
+      return true;
+    }  
   },
+
   template: `
     <div id="midiPlayer" class="fullWidthEle">
       <div :id="'playerControl' + containerIndex" class="playerControl">

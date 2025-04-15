@@ -37,14 +37,14 @@ function getGSUrlStringFromGrooveData(track, url_destination) {
     // # of notes
     fullURL += "&Div=" + track.timeDivision;
 
-    if (track.title !== "")
-        fullURL += "&Title=" + encodeURIComponent(track.title);
+    if (track.getTitle() !== "")
+        fullURL += "&Title=" + encodeURIComponent(track.getTitle());
 
-    if (track.author !== "")
-        fullURL += "&Author=" + encodeURIComponent(track.author);
+    if (track.getAuthor() !== "")
+        fullURL += "&Author=" + encodeURIComponent(track.getAuthor());
 
-    if (track.comments !== "")
-        fullURL += "&Comments=" + encodeURIComponent(track.comments);
+    if (track.getComments() !== "")
+        fullURL += "&Comments=" + encodeURIComponent(track.getComments());
 
     fullURL += "&Tempo=" + midiPlayer.getTempo()
 

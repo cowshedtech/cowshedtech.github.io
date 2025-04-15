@@ -32,9 +32,6 @@
 
 var midiPlayer;
 var metronome;
-// var sheetMusic;
-// var editor;
-// var track;
 var editor;
 var editorClickable;
 var options;
@@ -64,12 +61,11 @@ function GrooveWriter() {
 	options.grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
 
 
-	// This function initializes the data for the groove Scribe web page
+	/*
+	 * This function initializes the data for the groove Scribe web page
+	 */	
 	root.runsOnPageLoad = function () {
 
-		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
-
-		// initialise our metronome with event handler for changes to metronome value
 		root.track?.addChangeHandler(() => {
             console.log(`here`)
 			updateCurrentURL(); 
@@ -148,18 +144,20 @@ function GrooveWriter() {
 		
 		// load the groove from the URL data if it was passed in.
 		root.updateFromURL(window.location.search);
+		root.updateSheetMusic();
 		// editorClickable.update(editor.track);
 
 		// TODO
 		setupPermutationMenu();
-		setTimeSigLabel();
+		// setTimeSigLabel();
 
 		// if Mode != "view" put into edit mode  (we default to view mode to prevent screen flicker)
 		// if ("view" != getQueryVariableFromURL("Mode", "edit"))
 		root.updateViewEdit(true);
 		
 		// set the background and text color of the current subdivision
-		selectButton(document.getElementById("subdivision_" + root.track.notesPerMeasure + "ths"));
+		// selectButton(document.getElementById("subdivision_" + root.track.notesPerMeasure + "ths"));
+		// buttonSelected
 
 		midiPlayer.initialise();
 
@@ -276,56 +274,7 @@ function GrooveWriter() {
 
 		sheetMusic.update(editor.track, fullABC);
 	}
-
 	
-	root.setupWriterHotKeys = function () {
-
-		document.addEventListener("keydown", function (e) {
-
-			// only accept the event if it not going to an INPUT field   (allow for range types)
-			if (e.target.type == "range" || (e.target.tagName.toUpperCase() != "INPUT" && e.target.tagName.toUpperCase() != "TEXTAREA")) {
-				switch (e.which) {
-					case 90: // ctrl-z
-						if (e.ctrlKey) {
-							// ctrl-z
-							root.undoCommand();
-							return false;
-						}
-						break;
-
-					case 89: // ctrl-y
-						if (e.ctrlKey) {
-							// ctrl-y
-							redoCommand();
-							return false;
-						}
-						break;
-
-					case 37: // left arrow
-						// left arrow
-						root.track.downTempo();
-						return false;
-					//break;
-
-					case 39: // right arrow
-						// right arrow
-						root.track.upTempo();
-						return false;
-					//break;
-
-					default:
-						/* DEBUG
-						else if(e.ctrlKey && e.which !=17 && e.target.type != "text") {
-						alert("Key is: " + e.which);
-						}
-						 */
-						break;
-				}
-			}
-			return true; // let the default handler deal with the keypress
-		});
-	};
-
 	root.updateViewEdit = function (dontUpdateURL) {
 		var view_edit_button = document.getElementById("view-edit-switch");
 
@@ -352,10 +301,6 @@ function GrooveWriter() {
 	};
 
 
-	
-
-	
-
 	// get a really long URL that encodes all of the notes and the rest of the state of the page.
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
 	//
@@ -379,33 +324,11 @@ function GrooveWriter() {
 		var track = getGrooveDataFromUrlString(encodedURLData, root.track, options, midiPlayer, metronome, options.debugMode);
 		editorClickable.update(editor.track);
 
-		// if (track.notesPerMeasure != root.track.notesPerMeasure || track.numberOfMeasures != root.track.numberOfMeasures) {
-		// 	root.track.numberOfMeasures = track.numberOfMeasures;
-		// 	root.track.notesPerMeasure = track.notesPerMeasure;
-			root.changeDivisionWithNotes(track.timeDivision);
-		// }
-
-		// root.expandAuthoringViewWhenNecessary(root.track.notesPerMeasure, root.track.numberOfMeasures);
-
-		// setNotesFromABCArray("Stickings", track.sticking_array, root.track.numberOfMeasures);
-		// setNotesFromABCArray("H", track.hh_array, root.track.numberOfMeasures);
-		// setNotesFromABCArray("T1", track.toms_array[0], root.track.numberOfMeasures);
-		// setNotesFromABCArray("T4", track.toms_array[3], root.track.numberOfMeasures);
-		// setNotesFromABCArray("S", track.snare_array, root.track.numberOfMeasures);
-		// setNotesFromABCArray("K", track.kick_array, root.track.numberOfMeasures);
-	
-		document.getElementById("tuneTitle").value = track.title;
-		document.getElementById("tuneAuthor").value = track.author;
-		document.getElementById("tuneComments").value = track.comments;
-
-		if (options.areTomsVisible())
-			showHideToms(true, true, true);
-
+		root.changeDivisionWithNotes(track.timeDivision);
+		
 		if (options.isStickingVisible())
 			stickingsShowHide(true, true, true);
-		
-		
-		root.updateSheetMusic();
+				
 	}
 
 	
@@ -450,10 +373,10 @@ function GrooveWriter() {
 		}
 
 		// un-highlight the old div
-		unselectButton(document.getElementById("subdivision_" + oldDivision + "ths"));
+		// unselectButton(document.getElementById("subdivision_" + oldDivision + "ths"));
 
 		// highlight the new div
-		selectButton(document.getElementById("subdivision_" + root.track.timeDivision + "ths"));
+		// selectButton(document.getElementById("subdivision_" + root.track.timeDivision + "ths"));
 
 		// This may disable or enable the menu
 		setupPermutationMenu();
@@ -462,7 +385,7 @@ function GrooveWriter() {
 		setTimeDivisionSelectionOnOrOff();
 
 		// change the time label
-		setTimeSigLabel();
+		// setTimeSigLabel();
 
 		// enable or disable swing
 		// midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(newDivision));

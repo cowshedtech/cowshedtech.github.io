@@ -253,9 +253,6 @@ grooveDataFromClickableUI = function () {
     //var track = new editor.track.trackNew();
     track = editor.track;
 
-    track.title = document.getElementById("tuneTitle").value;
-    track.author = document.getElementById("tuneAuthor").value;
-    track.comments = document.getElementById("tuneComments").value;
     options.showLegend = document.getElementById("showLegend").checked;
     track.kickStemsUp = true;
 

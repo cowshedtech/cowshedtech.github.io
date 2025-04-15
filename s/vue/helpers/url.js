@@ -187,17 +187,20 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     track.snare_array = noteArraysFromURLData("S", snareString, track.notesPerMeasure, track.numberOfMeasures);
     track.kick_array = noteArraysFromURLData("K", kickString, track.notesPerMeasure, track.numberOfMeasures);
 
-    track.title = getQueryVariableFromString("title", "", encodedURLData);
-    track.title = decodeURIComponent(track.title);
-    track.title = track.title.replace(/\+/g, " ");
+    let title = getQueryVariableFromString("Title", "", encodedURLData);
+    title = decodeURIComponent(title);
+    title = title.replace(/\+/g, " ");
+    track.setTitle(title);
 
-    track.author = getQueryVariableFromString("author", "", encodedURLData);
-    track.author = decodeURIComponent(track.author);
-    track.author = track.author.replace(/\+/g, " ");
+    let author = getQueryVariableFromString("Author", "", encodedURLData);
+    author = decodeURIComponent(author);
+    author = author.replace(/\+/g, " ");
+    track.setAuthor(author);
 
-    track.comments = getQueryVariableFromString("comments", "", encodedURLData);
-    track.comments = decodeURIComponent(track.comments);
-    track.comments = track.comments.replace(/\+/g, " ");
+    let comments = getQueryVariableFromString("Comments", "", encodedURLData);
+    comments = decodeURIComponent(comments);
+    comments = comments.replace(/\+/g, " ");
+    track.setComments(comments);
 
     midiPlayer.setTempo(parseInt(getQueryVariableFromString("Tempo", constant_DEFAULT_TEMPO, encodedURLData), 10));
     tempo = midiPlayer.getTempo();

@@ -317,5 +317,32 @@ function Track() {
 	
 		return retString;
 	};
+
+	root.setTitle = function(title) {
+		this.title = title;
+		this.notifyHandlers();
+	}
+
+	root.getTitle = function() {
+		return this.title
+	}
+
+	root.setAuthor = function(author) {
+		this.author = author;
+		this.notifyHandlers();
+	}
+
+	root.getAuthor = function() {
+		return this.author
+	}
+
+	root.setComments = function(comments) {
+		this.comments = comments;
+		this.notifyHandlers();
+	}
+
+	root.getComments = function() {
+		return this.comments
+	}
 	
 } // end of class

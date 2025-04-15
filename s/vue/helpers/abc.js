@@ -929,9 +929,9 @@ function createABCFromGrooveData(track, renderWidth) {
 	var is_triplet_division = isTripletDivisionFromNotesPerMeasure(track.notesPerMeasure, track.numBeats, track.noteValue);
 
 	var fullABC = get_top_ABC_BoilerPlate(false,
-			track.title,
-			track.author,
-			track.comments,
+			track.getTitle(),
+			track.getAuthor(),
+			track.getComments(),
 			options.showLegend,
 			is_triplet_division,
 			track.kickStemsUp,

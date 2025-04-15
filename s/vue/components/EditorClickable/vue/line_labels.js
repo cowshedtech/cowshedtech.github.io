@@ -24,6 +24,10 @@ export default {
   },
 
   props: {
+    options: {
+      type: Object,
+      required: false
+    }, 
     measureIndex: {
       type: Number,
       required: true
@@ -89,7 +93,7 @@ export default {
         :y="menuY"
         @close="closeMenu">
       </SnareLabelMenu>
-      <TomLabelMenu
+      <TomLabelMenu v-if="options.areTomsVisible"
         :tomIndex="1"
         :measureIndex="measureIndex"
         :is-open="isTom1PopupOpen" 
@@ -97,7 +101,7 @@ export default {
         :y="menuY"
         @close="closeMenu">
       </TomLabelMenu>
-      <TomLabelMenu
+      <TomLabelMenu v-if="options.areTomsVisible"
         :tomIndex="2"
         :measureIndex="measureIndex"
         :is-open="isTom4PopupOpen" 
