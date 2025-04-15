@@ -70,6 +70,10 @@ function GrooveWriter() {
 		root.setupWriterHotKeys(); // there are other hot keys in GrooveUtils for the midi player
 
 		// initialise our metronome with event handler for changes to metronome value
+		root.track?.addChangeHandler(() => {
+            console.log(`here`)
+			updateCurrentURL(); 
+        })
 		
 		metronome?.addChangeHandler(() => {
             if (midiPlayer) midiPlayer.noteHasChanged();

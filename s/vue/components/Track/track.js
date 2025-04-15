@@ -36,6 +36,7 @@ function Track() {
 
 	var root = this;
     root.trackID = trackID;
+	root.changeHandlers = [];
 
 	root.trackNew = function () {
 		this.notesPerMeasure = 16;
@@ -62,6 +63,34 @@ function Track() {
 	// };
 
 	root.track = root.trackNew();
+
+	/**
+     * Adds a new change event handler
+     * @param {Function} handler - The callback function to be called when changes occur
+     * @returns {Function} - A function to remove this handler
+     */
+    root.addChangeHandler = function(handler) {
+        this.changeHandlers.push(handler);
+        return () => this.removeChangeHandler(handler);
+    }
+
+
+    /**
+     * Removes a change event handler
+     * @param {Function} handler - The callback function to remove
+     */
+    root.removeChangeHandler = function(handler) {
+        const index = this.changeHandlers.indexOf(handler);
+        if (index !== -1) this.changeHandlers.splice(index, 1);
+    }
+
+
+    /**
+     * Notifies all registered handlers of a change
+     */
+    root.notifyHandlers = function() {
+        this.changeHandlers.forEach(handler => handler());
+    }
 
 	/*
 	 *
@@ -94,7 +123,8 @@ function Track() {
 	 *
 	 */
 	root.setHighHatState = function(id, mode, make_sound) {
-		this.hh_array[id] = mode;			
+		this.hh_array[id] = mode;	
+		this.notifyHandlers();		
 	}
 
 
@@ -275,6 +305,10 @@ function Track() {
 
 	root.setTom4State = function(id, mode, make_sound) {
 		this.setTomState(3, id, mode)
+	}
+
+	root.getDefaultTomGroove = function() {
+		return this.getEmptyGroove()
 	}
 
 	root.getEmptyGroove = function() {
