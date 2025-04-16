@@ -98,7 +98,7 @@ class Options {
      */
     setStickingVisible(isVisible) {
         this.#stickingsVisible = isVisible;
-        // this.#notifyHandlers();
+        this.#notifyHandlers();
     }
 
     /**

@@ -6,6 +6,7 @@ export default {
 
   data() {
     return {
+      stickingVisible: options.isStickingVisible(),
       startNoteIndex: this.track ? (this.measureIndex - 1) * this.track.notesPerMeasure : 0,
       isPopupOpen: false,
       menuX: 0,
@@ -35,6 +36,17 @@ export default {
 
   components: {
     NoteSpacer, Sticking, StickingLabelMenu
+  },
+
+  mounted() {
+    console.log('Stickings mounted, initial visibility:', this.stickingVisible);
+    this.removeHandler = options.addChangeHandler(() => {
+      this.stickingVisible = options.isStickingVisible();      
+    })
+  },
+
+  beforeUnmount() {
+    if (this.removeHandler) this.removeHandler()
   },
 
   methods: {
@@ -67,7 +79,7 @@ export default {
         </div>      
         <div class="music-line-container">
             <div class="notes-container">
-                <div class="stickings-container">
+                <div class="stickings-container" :style="{ display: stickingVisible ? 'block' : 'none' }">
                     <div class="opening_note_space"></div>
                     <template v-for="i in track.notesPerMeasure" :key="i">
                         <Sticking :sticking="track.sticking_array" :noteIndex="startNoteIndex + (i - 1)"  />

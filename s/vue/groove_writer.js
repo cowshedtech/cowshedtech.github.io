@@ -324,16 +324,9 @@ function GrooveWriter() {
 		var track = getGrooveDataFromUrlString(encodedURLData, root.track, options, midiPlayer, metronome, options.debugMode);
 		editorClickable.update(editor.track);
 
-		root.changeDivisionWithNotes(track.timeDivision);
-		
-		if (options.isStickingVisible())
-			stickingsShowHide(true, true, true);
-				
+		root.changeDivisionWithNotes(track.timeDivision);			
 	}
 
-	
-
-	
 
 	// change the base division to something else.
 	// eg  16th to 8ths or   32nds to 8th note triplets
@@ -355,12 +348,6 @@ function GrooveWriter() {
 		// change the Permutation options too
 		newHTML = HTMLforPermutationOptions(root.class_permutation_type, usingTriplets());
 		document.getElementById("PermutationOptions").innerHTML = newHTML;
-
-		if (wasStickingsVisable)
-			stickingsShowHide(true, true, true);
-
-		// if (wasTomsVisable)
-		// 	showHideToms(true, true, true);
 
 		// now set the right notes on and off
 		if (Stickings && HH && Tom1 && Tom4 && Snare && Kick) {
@@ -455,7 +442,7 @@ function GrooveWriter() {
 		} else {
 			// changing from or changing to a triplet division
 			// triplets don't scale well, so use defaults when we change
-			uiStickings = GetDefaultStickingsGroove(new_notes_per_measure, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures);
+			uiStickings = root.track.getEmptyGroove();
 			uiHH = root.track.getDefaultHHGroove();
 			uiTom1 = root.track.getEmptyGroove();
 			uiTom4 = root.track.getEmptyGroove();

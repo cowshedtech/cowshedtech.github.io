@@ -129,7 +129,7 @@ class SheetMusic {
     * @param
     */
     clearHighlight() {
-        if (this.#highlightedNoteIndex < 0) return;
+        if (!this.#track || this.#highlightedNoteIndex < 0) return;
         
         var myElements = document.querySelectorAll("#abcNoteNum_" + this.#track.trackID + "_" + this.#highlightedNoteIndex);
         for (var i = 0; i < myElements.length; i++) {

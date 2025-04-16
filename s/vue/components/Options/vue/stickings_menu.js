@@ -18,7 +18,7 @@ export default {
 
 	methods: {
         handleToggle() {
-			stickingsShowHideToggle();
+			options.setStickingVisible(!options.isStickingVisible()) 
             this.$emit('close');
         },
 		handleReverse() {

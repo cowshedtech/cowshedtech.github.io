@@ -22,10 +22,6 @@ function get_sticking_state(id, returnType) {
 }
 
 
-function GetDefaultStickingsGroove(notes_per_measure, timeSigTop, timeSigBottom, numMeasures) {
-    return GetEmptyGroove(notes_per_measure, numMeasures);
-};
-
 
 // Swap Right and Left stickings if any are shown
 function stickingsReverseRL() {
@@ -38,26 +34,4 @@ function stickingsReverseRL() {
         }
     }
     editor.updateSheetMusic();
-}
-
-
-function stickingsShowHide(force, showElseHide, dontRefreshScreen) {
-
-    var OnElseOff = toggleDisplayByClass(".stickings-container", force, showElseHide, "block");
-    toggleDisplayByClass(".stickings-label", force, showElseHide, "block");
-
-    if (force) {
-        options.setStickingVisible(showElseHide)
-    } else {
-        options.setStickingVisible(!options.isStickingVisible())
-    }
-    
-    return false; // don't follow the link
-};
-
-// if stickings are shown, hide them and vice versa
-function stickingsShowHideToggle() {
-
-    var stickingsAreCurrentlyShown = options.isStickingVisible();
-    stickingsShowHide(true, !stickingsAreCurrentlyShown, false);
 }

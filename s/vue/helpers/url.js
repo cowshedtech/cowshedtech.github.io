@@ -107,7 +107,7 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
 
     var stickingsString = getQueryVariableFromString("Stickings", false, encodedURLData);
     if (!stickingsString) {
-        stickingsString = GetDefaultStickingsGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+        stickingsString = track.getEmptyGroove();
        options.setStickingVisible(false);
 
     } else {
