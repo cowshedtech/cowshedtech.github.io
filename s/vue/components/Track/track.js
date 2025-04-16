@@ -95,6 +95,33 @@ function Track() {
 	/*
 	 *
 	 */
+	root.setStickingState = function(id, new_state) {
+		this.sticking_array[id] = new_state;
+	}
+	
+	/*
+	 *
+	 */
+	root.getStickingState = function(id, returnType) {
+	
+		let abcState = this.sticking_array[id] ? this.sticking_array[id] : constant_ABC_STICK_OFF;
+		let result = abcState;
+		
+		if (returnType == "URL")
+		{
+			if (abcState === constant_ABC_STICK_BOTH) returnType = "B";
+			if (abcState === constant_ABC_STICK_R) returnType = "R";
+			if (abcState === constant_ABC_STICK_L) returnType = "L";
+			if (abcState === constant_ABC_STICK_COUNT) returnType = "C";
+			if (abcState === constant_ABC_STICK_OFF) returnType = "-";
+		}
+	
+		return result;    
+	}
+
+	/*
+	 *
+	 */
 	root.getHighHatState = function(id, returnType) {
 
 		let abcState = this.hh_array[id] ? this.hh_array[id] : constant_ABC_OFF;
@@ -116,6 +143,20 @@ function Track() {
 		}
 	
 		return result;        
+	}
+
+	/*
+	 *
+	 */
+	root.stickingsReverseRL = function() {
+		for (var i = 0; i < this.numberOfMeasures * this.notesPerMeasure; i++) {
+			var cur_state = this.getStickingState(i, "URL");
+			if (cur_state === "R") {
+				this.setStickingState(i, "left", false, this.notesPerMeasure, this.timeDivision, this.noteValue);
+			} else if (cur_state === "L") {
+				this.setStickingState(i, "right", false, this.notesPerMeasure, this.timeDivision, this.noteValue);
+			}
+		}		
 	}
 	
 	

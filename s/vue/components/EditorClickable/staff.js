@@ -33,7 +33,7 @@ function closeMeasureButtonClick(measureNum) {
 
     for (let i = 0; i < totalNotes; i++) {
         if (i < measureStart || i >= measureEnd) {
-            noteData.stickings += get_sticking_state(i, "URL");
+            noteData.stickings += editor.track.getStickingState(i, "URL");
             noteData.hh += editor.track.getHighHatState(i, "URL");
             noteData.tom1 += editor.track.getTomState(1, i, "URL");
             noteData.tom4 += editor.track.getTomState(4, i, "URL");
@@ -91,7 +91,7 @@ function repeatMeasureIncButtonClick(measureNum) {
     
     const totalNotes = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
     for (let i = 0; i < totalNotes; i++) {
-        notes.stickings += get_sticking_state(i, "URL");
+        notes.stickings += editor.track.getStickingState(i, "URL");
         notes.hh += editor.track.getHighHatState(i, "URL");
         notes.tom1 += editor.track.getTomState(1, i, "URL");
         notes.tom4 += editor.track.getTomState(4, i, "URL");
@@ -132,7 +132,7 @@ function repeatMeasureDecButtonClick(measureNum) {
     const topIndex = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
 
     for (let i = 0; i < topIndex; i++) {
-        uiStickings += get_sticking_state(i, "URL");
+        uiStickings += editor.track.getStickingState(i, "URL");
         uiHH += editor.track.getHighHatState(i, "URL");
         uiTom1 += editor.track.getTomState(1, i, "URL");
         uiTom4 += editor.track.getTomState(4, i, "URL");
@@ -167,7 +167,7 @@ function duplicateMeasureButtonClick(measureNum) {
     // Helper function to collect notes for a given range
     function collectNotes(start, end, target) {
         for (let i = start; i < end; i++) {
-            target.stickings += get_sticking_state(i, "URL");
+            target.stickings += editor.track.getStickingState(i, "URL");
             target.hh += editor.track.getHighHatState(i, "URL");
             target.tom1 += editor.track.getTomState(1, i, "URL");
             target.tom4 += editor.track.getTomState(4, i, "URL");
@@ -241,7 +241,7 @@ function addMeasureButtonClick(event) {
     // Get encoded notes from UI
     const topIndex = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
     for (let i = 0; i < topIndex; i++) {
-        notes.stickings.push(get_sticking_state(i, "URL"));
+        notes.stickings.push(editor.track.getStickingState(i, "URL"));
         notes.hh.push(editor.track.getHighHatState(i, "URL"));
         notes.tom1.push(editor.track.getTomState(1, i, "URL"));
         notes.tom4.push(editor.track.getTomState(4, i, "URL"));
@@ -314,7 +314,7 @@ function addMeasureMiddleButtonClick(measureNum) {
     // get the encoded notes out of the UI from before measure we are going to repeat
     var loop1End = (measureNum) * editor.track.notesPerMeasure
     for (i = 0; i < loop1End; i++) {
-        uiStickings += get_sticking_state(i, "URL");
+        uiStickings += editor.track.getStickingState(i, "URL");
         uiHH += editor.track.getHighHatState(i, "URL");
         uiTom1 += editor.track.getTomState(1, i, "URL");
         uiTom4 += editor.track.getTomState(4, i, "URL");
@@ -336,7 +336,7 @@ function addMeasureMiddleButtonClick(measureNum) {
     var loop3Start = measureNum * editor.track.notesPerMeasure
     var loop3End = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
     for (i = loop3Start; i < loop3End; i++) {
-        uiStickings += get_sticking_state(i, "URL");
+        uiStickings += editor.track.getStickingState(i, "URL");
         uiHH += editor.track.getHighHatState(i, "URL");
         uiTom1 += editor.track.getTomState(1, i, "URL");
         uiTom4 += editor.track.getTomState(4, i, "URL");
@@ -399,7 +399,7 @@ function addMeasurePrevButtonClick (event) {
     var topIndex = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
     for (i = 0; i < topIndex; i++) {
 
-        uiStickings += get_sticking_state(i, "URL");
+        uiStickings += editor.track.getStickingState(i, "URL");
         uiHH += editor.track.getHighHatState(i, "URL");
         uiTom1 += editor.track.getTomState(1, i, "URL");
         uiTom4 += editor.track.getTomState(4, i, "URL");
@@ -429,7 +429,7 @@ function addMeasurePrevButtonClick (event) {
 function clearAllNotes() {
     editor.track.repeatedMeasures.clear();
     for (var i = 0; i < editor.track.numberOfMeasures * editor.track.notesPerMeasure; i++) {
-        set_sticking_state(i, 'off');
+        editor.track.setStickingState(i, 'off');
         editor.track.setHighHatState(i, 'off');
         set_tom1_state(i, 'off');
         set_tom4_state(i, 'off');

@@ -427,7 +427,7 @@ function GrooveWriter() {
 			// run through both measures.
 			var topIndex = root.track.notesPerMeasure * root.track.numberOfMeasures;
 			for (var i = 0; i < topIndex; i++) {
-				uiStickings += get_sticking_state(i, "URL");
+				uiStickings += editor.track.getStickingState(i, "URL");
 				uiHH += editor.track.getHighHatState(i, "URL")				
 				uiTom1 += editor.track.getTomState(1, i,  "URL");
 				uiTom4 += editor.track.getTomState(4, i, "URL");

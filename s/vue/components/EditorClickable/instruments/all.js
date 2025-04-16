@@ -88,7 +88,7 @@ function noteLabelPopupClick(instrument, action, measureIndex) {
 
     switch (instrument) {
         case "stickings":
-            setFunction = set_sticking_state;
+            setFunction = editor.track.setStickingState;
             break;
         case "hh":
             setFunction = editor.track.setHighHatState;
@@ -126,16 +126,16 @@ function noteLabelPopupClick(instrument, action, measureIndex) {
         } else if (instrument == "stickings") {
             switch (action) {
                 case "all_right":
-                    set_sticking_state(i, "right", i == startIndex, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
+                    editor.track.setStickingState(i, "right", i == startIndex, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
                     break;
                 case "all_left":
-                    set_sticking_state(i, "left", i == startIndex, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
+                    editor.track.setStickingState(i, "left", i == startIndex, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
                     break;
                 case "alternate":
-                    set_sticking_state(i, (i % 2 === 0 ? "right" : "left"), i == startIndex, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
+                    editor.track.setStickingState(i, (i % 2 === 0 ? "right" : "left"), i == startIndex, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
                     break;
                 case "all_count":
-                    set_sticking_state(i, "count", i == startIndex, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
+                    editor.track.setStickingState(i, "count", i == startIndex, editor.track.notesPerMeasure, editor.track.timeDivision, editor.track.noteValue);
                     break;
                 default:
                     console.log("Bad sticking case in noteLabelPopupClick");
@@ -228,7 +228,7 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
 
         // only grab the stickings if they are visible
         if (options.isStickingVisible())
-            Sticking_Array[array_index] = get_sticking_state(i + startIndexForClickableUI, "ABC");
+            Sticking_Array[array_index] = editor.track.getStickingState(i + startIndexForClickableUI, "ABC");
 
         HH_Array[array_index] = editor.track.getHighHatState(i + startIndexForClickableUI, "ABC");
 
@@ -269,7 +269,7 @@ grooveDataFromClickableUI = function () {
 
             // only grab the stickings if they are visible
             if (options.isStickingVisible())
-                track.sticking_array.push(get_sticking_state(i, "ABC"));
+                track.sticking_array.push(editor.track.getStickingState(i, "ABC"));
 
             // track.hh_array.push(editor.track.getHighHatState(i, "ABC"));
             // track.snare_array.push(editor.track.getSnareState(i, "ABC"));
@@ -332,7 +332,7 @@ function setNotesFromURLData(drumType, noteString, numberOfMeasures) {
     var setFunction;
 
     if (drumType == "Stickings") {
-        setFunction = set_sticking_state;
+        setFunction = editor.track.setStickingState;
     } else if (drumType == "H") {
         setFunction = editor.track.setHighHatState;
     } else if (drumType == "T1") {
@@ -489,7 +489,7 @@ function setNotesFromABCArray(drumType, abcArray, numberOfMeasures) {
     }
 
     if (drumType == "Stickings") {
-        setFunction = set_sticking_state;
+        setFunction = editor.track.setStickingState;
     } else if (drumType == "H") {
         setFunction = editor.track.setHighHatState;
     } else if (drumType == "T1") {

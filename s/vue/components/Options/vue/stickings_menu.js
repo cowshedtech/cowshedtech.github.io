@@ -1,7 +1,10 @@
 export default {
 	data() {
-		return {}
-	},
+		return {
+		  track: editor.track ? editor.track : null,
+		  options: options ? options : null
+		}
+	  },
 
 	props: {
 		isOpen: {
@@ -22,7 +25,7 @@ export default {
             this.$emit('close');
         },
 		handleReverse() {
-			stickingsReverseRL();
+			this.track.stickingsReverseRL();
             this.$emit('close');
         }
     },
