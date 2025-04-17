@@ -24,7 +24,7 @@ export default {
   },
 
   watch: { 
-    sticking: {
+    track: {
       handler(newVal, oldVal) { 
         this.noteABC = constant_ABC_STICK_OFF;
         if (this.track && (this.noteIndex || this.noteIndex == 0)) {
