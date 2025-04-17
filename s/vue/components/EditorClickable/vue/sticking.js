@@ -1,7 +1,8 @@
 export default {
   props: {
-    sticking: {
-      type: Array,      
+    track: {
+      type: Object,
+      required: true
     },
     noteIndex: {
       type: Number,
@@ -11,7 +12,7 @@ export default {
 
   data() {
     return {
-      noteABC: this.sticking && this.noteIndex || this.noteIndex == 0 ? this.sticking[this.noteIndex] : constant_ABC_STICK_OFF,
+      noteABC: this.track && this.noteIndex || this.noteIndex == 0 ? this.track.getStickingState(this.noteIndex) : constant_ABC_STICK_OFF,
       constants: {
         STICK_R: constant_ABC_STICK_R,
         STICK_L: constant_ABC_STICK_L,
@@ -22,22 +23,13 @@ export default {
     }
   },
 
-  mounted() {
-    this.noteABC = constant_ABC_STICK_OFF;
-    if (this.sticking && (this.noteIndex || this.noteIndex == 0)) {
-      if (this.sticking[this.noteIndex]) {
-        this.noteABC = this.sticking[this.noteIndex]
-      }
-    }    
-  },
-
   watch: { 
     sticking: {
       handler(newVal, oldVal) { 
         this.noteABC = constant_ABC_STICK_OFF;
-        if (this.sticking && (this.noteIndex || this.noteIndex == 0)) {
-          if (this.sticking[this.noteIndex]) {
-            this.noteABC = this.sticking[this.noteIndex]
+        if (this.track && (this.noteIndex || this.noteIndex == 0)) {
+          if (this.track.getStickingState(this.noteIndex)) {
+            this.noteABC = this.track.getStickingState(this.noteIndex)
           }
         }        
       },
@@ -62,7 +54,7 @@ export default {
             new_state = constant_ABC_STICK_OFF;
         }
         this.noteABC = new_state;
-        this.sticking[this.noteIndex] = new_state;        
+        this.track.getStickingState(this.noteIndex, new_state);        
     },
     handleRightClick(event) {
         noteRightClick(event, 'sticking', this.noteIndex)

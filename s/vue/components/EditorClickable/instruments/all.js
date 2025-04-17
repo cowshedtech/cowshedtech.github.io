@@ -258,7 +258,7 @@ grooveDataFromClickableUI = function () {
 
     for (var i = 0; i < editor.track.numberOfMeasures; i++) {
         var total_notes = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
-        track.sticking_array = [];
+        // track.sticking_array = [];
         // track.hh_array = [];
         // track.snare_array = [];
         // track.kick_array = [];
@@ -268,20 +268,20 @@ grooveDataFromClickableUI = function () {
         for (var i = 0; i < total_notes; i++) {
 
             // only grab the stickings if they are visible
-            if (options.isStickingVisible())
-                track.sticking_array.push(editor.track.getStickingState(i, "ABC"));
+            // if (options.isStickingVisible())
+            //     track.sticking_array.push(editor.track.getStickingState(i, "ABC"));
 
             // track.hh_array.push(editor.track.getHighHatState(i, "ABC"));
             // track.snare_array.push(editor.track.getSnareState(i, "ABC"));
             // track.kick_array.push(editor.track.getKickState(i, "ABC"));
 
-            if (options.areTomsVisible()) {
-                track.toms_array[0].push(editor.track.getTomState(1, i, "ABC"));
-                track.toms_array[3].push(editor.track.getTomState(4, i, "ABC"));
-            } else {
-                track.toms_array[0].push(false);
-                track.toms_array[3].push(false);
-            }
+            // if (options.areTomsVisible()) {
+            //     track.toms_array[0].push(editor.track.getTomState(1, i, "ABC"));
+            //     track.toms_array[3].push(editor.track.getTomState(4, i, "ABC"));
+            // } else {
+            //     track.toms_array[0].push(false);
+            //     track.toms_array[3].push(false);
+            // }
         }
     }
 

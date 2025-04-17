@@ -82,7 +82,7 @@ export default {
                 <div class="stickings-container" :style="{ display: stickingVisible ? 'block' : 'none' }">
                     <div class="opening_note_space"></div>
                     <template v-for="i in track.notesPerMeasure" :key="i">
-                        <Sticking :sticking="track.sticking_array" :noteIndex="startNoteIndex + (i - 1)"  />
+                        <Sticking :track="track" :noteIndex="startNoteIndex + (i - 1)"  />
                         <NoteSpacer :track="track" :noteIndex="i" />
                     </template>
                 </div>   
