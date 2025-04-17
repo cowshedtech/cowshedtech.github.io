@@ -68,8 +68,7 @@ function GrooveWriter() {
 
 		// If track changes then update sheet music and url
 		root.track?.addChangeHandler(() => {
-            console.log(`here`)
-			updateCurrentURL(); 
+            updateCurrentURL(); 
 			root.updateSheetMusic();
 			midiPlayer.noteHasChanged();
 			editorClickable.update(editor.track);
