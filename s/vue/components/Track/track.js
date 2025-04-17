@@ -177,6 +177,10 @@ function Track() {
 		this.notifyHandlers();
 	}
 
+	root.setHighHatStateNoNotify = function(id, mode) {
+		this.hh_array[id] = mode;			
+	}
+
 
 	/*
 	 *
@@ -227,6 +231,14 @@ function Track() {
 	 *
 	 */
 	root.setSnareState = function(id, mode, make_sound) {
+		this.snare_array[id] = mode;	
+		this.notifyHandlers();
+	}
+
+	/*
+	 *
+	 */
+	root.setSnareStateNoNotify = function(id, mode, make_sound) {
 		this.snare_array[id] = mode;			
 	}
 
@@ -277,6 +289,14 @@ function Track() {
 	root.setKickState = function(id, mode, make_sound) {
 		this.kick_array[id] = mode;			
 	}
+
+	/*
+	 *
+	 */
+	root.setKickStateNoNotify = function(id, mode, make_sound) {
+		this.kick_array[id] = mode;		
+	}
+
 
 	/*
 	 *
@@ -347,13 +367,14 @@ function Track() {
 
 	root.setTomState = function(tomId, id, mode, make_sound) {
 		this.toms_array[tomId-1][id] = mode;			
+		this.notifyHandlers();
 	}
 
-	root.setTom1State = function(id, mode, make_sound) {
+	root.setTom1StateNoNotify = function(id, mode, make_sound) {
 		this.setTomState(0, id, mode)
 	}
 
-	root.setTom4State = function(id, mode, make_sound) {
+	root.setTom4StateNoNotify = function(id, mode, make_sound) {
 		this.setTomState(3, id, mode)
 	}
 

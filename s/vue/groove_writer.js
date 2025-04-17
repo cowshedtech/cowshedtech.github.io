@@ -70,6 +70,9 @@ function GrooveWriter() {
 		root.track?.addChangeHandler(() => {
             console.log(`here`)
 			updateCurrentURL(); 
+			root.updateSheetMusic();
+			midiPlayer.noteHasChanged();
+			editorClickable.update(editor.track);
         })
 		
 		metronome?.addChangeHandler(() => {
@@ -271,7 +274,7 @@ function GrooveWriter() {
 		editorClickable.update(editor.track);
 
 		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
-		updateCurrentURL();
+		// updateCurrentURL();
 
 		sheetMusic.update(editor.track, fullABC);
 	}

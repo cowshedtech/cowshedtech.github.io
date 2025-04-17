@@ -430,11 +430,11 @@ function clearAllNotes() {
     editor.track.repeatedMeasures.clear();
     for (var i = 0; i < editor.track.numberOfMeasures * editor.track.notesPerMeasure; i++) {
         editor.track.setStickingStateNoNotify(i, 'off');
-        editor.track.setHighHatState(i, 'off');
-        set_tom1_state(i, 'off');
-        set_tom4_state(i, 'off');
-        editor.track.setSnareState(i, 'off');
-        editor.track.setKickState(i, 'off');
+        editor.track.setHighHatStateNoNotify(i, 'off');
+        editor.track.setTom1StateNoNotify(i, 'off');
+        editor.track.setTom4StateNoNotify(i, 'off');
+        editor.track.setSnareStateNoNotify(i, 'off');
+        editor.track.setKickStateNoNotify(i, 'off');
     }
     editor.track.numberOfMeasures = 1;
 

@@ -239,14 +239,14 @@ function updateCurrentURL() {
     // Update temporary link out to GS
 
     var newURL = editor.get_FullURLForPage();
-    var newTitle = false;
-
+    
     addFullURLToUndoStack(newURL);
 
-    var title = document.getElementById("tuneTitle").value.trim();
+    var newTitle = false;
+    var title = editor.track.getTitle();
     if (title !== "") newTitle = title;
 
-    var author = document.getElementById("tuneAuthor").value.trim();
+    var author = editor.track.getAuthor();
     if (author !== "") {
         if (title)
             newTitle += " by " + author;
