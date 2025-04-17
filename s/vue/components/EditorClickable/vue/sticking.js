@@ -54,7 +54,8 @@ export default {
             new_state = constant_ABC_STICK_OFF;
         }
         this.noteABC = new_state;
-        this.track.getStickingState(this.noteIndex, new_state);        
+        // this.track.setStickingState(this.noteIndex, new_state);        
+        editor.track.setStickingState(this.noteIndex, new_state);        
     },
     handleRightClick(event) {
         noteRightClick(event, 'sticking', this.noteIndex)

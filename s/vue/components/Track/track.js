@@ -92,11 +92,20 @@ function Track() {
         this.changeHandlers.forEach(handler => handler());
     }
 
+	root.notify = function() {
+		this.notifyHandlers();
+	}
+
 	/*
 	 *
 	 */
 	root.setStickingState = function(id, new_state) {
 		this.sticking_array[id] = new_state;
+		this.notifyHandlers();
+	}
+
+	root.setStickingStateNoNotify = function(id, new_state) {
+		this.sticking_array[id] = new_state;		
 	}
 	
 	/*
@@ -165,7 +174,7 @@ function Track() {
 	 */
 	root.setHighHatState = function(id, mode, make_sound) {
 		this.hh_array[id] = mode;	
-		this.notifyHandlers();		
+		this.notifyHandlers();
 	}
 
 

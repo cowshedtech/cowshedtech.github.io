@@ -429,7 +429,7 @@ function addMeasurePrevButtonClick (event) {
 function clearAllNotes() {
     editor.track.repeatedMeasures.clear();
     for (var i = 0; i < editor.track.numberOfMeasures * editor.track.notesPerMeasure; i++) {
-        editor.track.setStickingState(i, 'off');
+        editor.track.setStickingStateNoNotify(i, 'off');
         editor.track.setHighHatState(i, 'off');
         set_tom1_state(i, 'off');
         set_tom4_state(i, 'off');
@@ -437,6 +437,8 @@ function clearAllNotes() {
         editor.track.setKickState(i, 'off');
     }
     editor.track.numberOfMeasures = 1;
+
+    editor.notify();
 
     editor.updateSheetMusic();
 

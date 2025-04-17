@@ -66,6 +66,7 @@ function GrooveWriter() {
 	 */	
 	root.runsOnPageLoad = function () {
 
+		// If track changes then update sheet music and url
 		root.track?.addChangeHandler(() => {
             console.log(`here`)
 			updateCurrentURL(); 
