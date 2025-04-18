@@ -11,7 +11,7 @@ export default {
         update() {
             if (!midiPlayer) return
             this.tempo = midiPlayer ? midiPlayer.getTempo() : 80
-            updateRangeSlider('tempoInput' + this.containerIndex)
+            updateRangeSlider('tempoInput' + this.containerIndex, this.tempo)
         },
         handleTempoChange(event) {
             midiPlayer.setTempo(event.target.value)
@@ -24,7 +24,7 @@ export default {
         this.removeSubscriber = midiPlayer?.subscribe(EventTypes.PARAMETERS_UPDATE, () => {
             this.update()
         })
-        updateRangeSlider('tempoInput' + this.containerIndex)
+        updateRangeSlider('tempoInput' + this.containerIndex, this.tempo)
     },
     beforeUnmount() {
         if (this.removeSubscriber) this.removeSubscriber()

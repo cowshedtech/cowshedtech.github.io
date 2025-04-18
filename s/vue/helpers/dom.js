@@ -215,7 +215,7 @@ const isIE10 = () => {
     }
 };
 
-function updateRangeSlider(sliderID) {
+function updateRangeSlider(sliderID, value) {
 
     var slider = document.getElementById(sliderID);
     var programaticCSSRules = document.getElementById(sliderID + "CSSRules");
@@ -232,7 +232,7 @@ function updateRangeSlider(sliderID) {
     var after_color = style_after.getPropertyValue('color');
 
     // change the before and after colors of the slider using a gradiant
-    var percent = Math.ceil(((slider.value - slider.min) / (slider.max - slider.min)) * 100);
+    var percent = Math.ceil(((value - slider.min) / (slider.max - slider.min)) * 100);
 
     var new_style_str = '#' + sliderID + '::-moz-range-track' + '{ background: -moz-linear-gradient(left, ' + before_color + ' ' + percent + '%, ' + after_color + ' ' + percent + '%)}\n';
     new_style_str += '#' + sliderID + '::-webkit-slider-runnable-track' + '{ background: -webkit-linear-gradient(left, ' + before_color + ' ' + '0%, ' + before_color + ' ' + percent + '%, ' + after_color + ' ' + percent + '%)}\n';

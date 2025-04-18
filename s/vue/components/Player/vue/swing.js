@@ -13,7 +13,7 @@ export default {
             if (!midiPlayer) return
             this.swing = midiPlayer ? midiPlayer.getSwing() : 0
             this.enabled = midiPlayer ? midiPlayer.isSwingEnabled() : true
-            updateRangeSlider('swingInput' + this.containerIndex)
+            updateRangeSlider('swingInput' + this.containerIndex, this.swing)
         },
         handleSwingChange(event) {
             midiPlayer.setSwing(event.target.value)
