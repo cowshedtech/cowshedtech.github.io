@@ -12,7 +12,7 @@ export default {
     },
     buttonClass: {
       type: String,
-      default: 'pageBottomButton edit-block'
+      default: 'pageBottomButton'
     }
   },
 

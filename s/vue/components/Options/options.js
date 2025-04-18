@@ -31,7 +31,7 @@ class Options {
     debugMode;
 
     /** @type {boolean} Whether groove database authoring is enabled */
-    grooveDBAuthoring;
+    grooveDBAuthoring = false;
 
     #changeHandlers = [];
 
@@ -115,6 +115,23 @@ class Options {
      */
     setTomsVisible(isVisible) {
         this.#tomsVisible = isVisible;
+        this.#notifyHandlers();
+    }
+
+    /**
+     * are we in view only mode
+     * @returns {boolean} true if view only mode
+     */
+    isViewMode() {
+        return this.viewMode;
+    }
+
+    /**
+     * Sets whether view only mode
+     * @param {boolean} isViewMode - is view only mode
+     */
+    setViewMode(isViewMode) {
+        this.viewMode = isViewMode;
         this.#notifyHandlers();
     }
 

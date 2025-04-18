@@ -58,8 +58,8 @@ function GrooveWriter() {
 	
 	// set debugMode immediately so we can use it in index.html
 	options.debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
-	options.grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
-
+	let grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
+	if (grooveDBAuthoring !== 0) options.grooveDBAuthoring = true;
 
 	/*
 	 * This function initializes the data for the groove Scribe web page
@@ -68,7 +68,7 @@ function GrooveWriter() {
 
 		// load the groove from URL data
 		getGrooveDataFromUrlString(window.location.search, root.track, options, midiPlayer, metronome, options.debugMode);
-		editorClickable.update(editor.track);
+		editorClickable.update(root.track);
 		root.updateSheetMusic();		
 
 
@@ -162,20 +162,12 @@ function GrooveWriter() {
 		setupPermutationMenu();
 		// setTimeSigLabel();
 
-		// if Mode != "view" put into edit mode  (we default to view mode to prevent screen flicker)
-		// if ("view" != getQueryVariableFromURL("Mode", "edit"))
-		root.updateViewEdit(true);
-		
-		// set the background and text color of the current subdivision
-		// selectButton(document.getElementById("subdivision_" + root.track.notesPerMeasure + "ths"));
-		// buttonSelected
-
 		midiPlayer.initialise();
 
 		// enable or disable swing
 		// midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(root.track.notesPerMeasure));
 
-		window.onresize = root.updateSheetMusic();
+		// window.onresize = root.updateSheetMusic();
 
 		root.browserInfo = getBrowserInfo();
 		if (root.browserInfo.browser == "MSIE" && root.browserInfo.version < 10) {
@@ -271,47 +263,14 @@ function GrooveWriter() {
 		}
 
 		var fullABC = generate_ABC(renderWidth);
-
-		document.getElementById("ABCsource").value = fullABC;
+		// document.getElementById("ABCsource").value = fullABC;
 		
 		// TODO
 		// updateGrooveDBSource();
 
-		midiPlayer.noteHasChanged();
-		editorClickable.update(editor.track);
-
-		// update the current URL so that reloads and history traversal and link shares and bookmarks work correctly
-		// updateCurrentURL();
-
 		sheetMusic.update(editor.track, fullABC);
 	}
-	
-	root.updateViewEdit = function (dontUpdateURL) {
-		var view_edit_button = document.getElementById("view-edit-switch");
-
-		if (options.viewMode) {
-
-			toggleDisplayByClass(".edit-block", true, false, "block"); // hide
-
-			if (view_edit_button)
-				view_edit_button.innerHTML = "Switch to EDIT mode";
-			options.viewMode = true;
-			if (!dontUpdateURL)
-				updateCurrentURL();
-			
-		} else {
-			toggleDisplayByClass(".edit-block", true, true, "block"); // show
-
-			if (view_edit_button)
-				view_edit_button.innerHTML = "Switch to VIEW mode";
-			options.viewMode = false;
-
-			if (!dontUpdateURL)
-				updateCurrentURL();			
-		}
-	};
-
-
+		
 	// get a really long URL that encodes all of the notes and the rest of the state of the page.
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
 	//

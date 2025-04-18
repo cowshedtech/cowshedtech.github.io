@@ -6,7 +6,8 @@ export default {
     return {
       track: editor.track ? editor.track : null,
       midiPlayer: midiPlayer ? midiPlayer : null,
-      options: options ? options : null
+      options: options ? options : null,
+      isViewMode : options ? options.isViewMode() : true,
     }
   },
 
@@ -16,7 +17,8 @@ export default {
     })
 
     this.removeOptionsHandler = options?.addChangeHandler(() => {
-      this.options = deepCopy(options)            
+      this.options = deepCopy(options)
+      this.isViewMode = options.isViewMode()
     })
   },
 
@@ -29,7 +31,7 @@ export default {
   },
 
   template: `
-    <div id="musicalInput" class="fullWidthEle edit-block">
+    <div v-if="isViewMode === false" id="musicalInput" class="fullWidthEle">
       <div id="measureContainer">
         <template v-for="i in track.numberOfMeasures" :key="i">
           <Measure :options="options" :midiPlayer="midiPlayer" :track="track" :measureIndex="i"></Measure>

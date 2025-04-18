@@ -4,6 +4,8 @@ export default {
     data() {
         return {
             track: editor.track ? editor.track : null,
+            isDBAuthoring : options ? options.grooveDBAuthoring : true,
+            isViewMode : options ? options.isViewMode() : true,
             isPopupOpen: false,
             menuX: 0,
             menuY: 0,
@@ -11,13 +13,18 @@ export default {
     },
 
     mounted() {
-        this.removeHandler = editorClickable?.addChangeHandler(() => {
+        this.removeEditorHandler = editorClickable?.addChangeHandler(() => {
             this.track = deepCopy(editor.track)            
+        })
+        this.removeOptionsHandler = options?.addChangeHandler(() => {
+            this.isDBAuthoring = options.grooveDBAuthoring;     
+            this.isViewMode = options.isViewMode();     
         })
     },
 
     beforeUnmount() {
-        if (this.removeHandler) this.removeHandler() 
+        if (this.removeEditorHandler) this.removeEditorHandler() 
+        if (this.removeOptionsHandler) this.removeOptionsHandler() 
     },
 
     components: {
@@ -33,26 +40,35 @@ export default {
             this.isPopupOpen = false;
         },
 
-        handleClick(event) {
+        handleTimeSigClick(event) {
             this.toggleMenu();
             this.menuX = event.clientX;
             this.menuY = event.clientY;
-        }
+        },
+
+        handleViewEditClick(event) {
+            let newMode = !options.isViewMode();
+            options.setViewMode(newMode);
+        },
     },
 
     template: `
     <div id="LeftHandNav">
         <span id="divisionButtonContainer">
             <span id="logoInSubdivision" class="left-button-content"><img src="images/GScribe_Logo_lone_g.svg"></span>
-            <span class="left-button edit-block" id="timeLabel" @click="handleClick"><span class="left-button-content"><span><span id="timeSigLabel" class="buttonFraction"><sup>{{track.numBeats}}</sup>/<sub>{{track.noteValue}}</sub></span><span id="timeSubLabel">TIME</span></span></span></span>
-            <span class="left-button subdivision edit-block" id="subdivision_8ths" :class="{ buttonSelected: track?.notesPerMeasure === 8 }" onclick="myGrooveWriter.changeDivision(8);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>8</sub></span>NOTES</span></span></span>
-            <span class="left-button subdivision edit-block" id="subdivision_16ths" :class="{ buttonSelected: track?.notesPerMeasure === 16 }" onclick="myGrooveWriter.changeDivision(16);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>16</sub></span>NOTES</span></span></span>
-            <span class="left-button subdivision edit-block" id="subdivision_32ths" :class="{ buttonSelected: track?.notesPerMeasure === 32 }" onclick="myGrooveWriter.changeDivision(32);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>32</sub></span>NOTES</span></span></span>
-            <span class="left-button subdivision edit-block" id="subdivision_12ths" :class="{ buttonSelected: track?.notesPerMeasure === 12 }" onclick="myGrooveWriter.changeDivision(12);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>8</sub></span>TRIPLETS</span></span></span>
-            <span class="left-button subdivision edit-block" id="subdivision_24ths" :class="{ buttonSelected: track?.notesPerMeasure === 24 }" onclick="myGrooveWriter.changeDivision(24);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>16</sub></span>TRIPLETS</span></span></span>
-            <span class="left-button subdivision edit-block" id="subdivision_48ths" :class="{ buttonSelected: track?.notesPerMeasure === 48 }" onclick="myGrooveWriter.changeDivision(48);"><span class="left-button-content"><span>MIXED<br>Division</span></span></span>
-
-            <span class="left-button edit-block" id="undoButton" onclick="undoCommand();"><span class="left-button-content"><i class="fa fa-undo"></i>&nbsp;&nbsp;Undo</span></span>
+            <span v-if="isViewMode === false" class="left-button" id="timeLabel" @click="handleTimeSigClick"><span class="left-button-content"><span><span id="timeSigLabel" class="buttonFraction"><sup>{{track.numBeats}}</sup>/<sub>{{track.noteValue}}</sub></span><span id="timeSubLabel">TIME</span></span></span></span>
+            <span v-if="isViewMode === false" class="left-button subdivision" id="subdivision_8ths" :class="{ buttonSelected: track?.notesPerMeasure === 8 }" onclick="myGrooveWriter.changeDivision(8);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>8</sub></span>NOTES</span></span></span>
+            <span v-if="isViewMode === false" class="left-button subdivision" id="subdivision_16ths" :class="{ buttonSelected: track?.notesPerMeasure === 16 }" onclick="myGrooveWriter.changeDivision(16);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>16</sub></span>NOTES</span></span></span>
+            <span v-if="isViewMode === false" class="left-button subdivision" id="subdivision_32ths" :class="{ buttonSelected: track?.notesPerMeasure === 32 }" onclick="myGrooveWriter.changeDivision(32);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>32</sub></span>NOTES</span></span></span>
+            <span v-if="isViewMode === false" class="left-button subdivision" id="subdivision_12ths" :class="{ buttonSelected: track?.notesPerMeasure === 12 }" onclick="myGrooveWriter.changeDivision(12);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>8</sub></span>TRIPLETS</span></span></span>
+            <span v-if="isViewMode === false" class="left-button subdivision" id="subdivision_24ths" :class="{ buttonSelected: track?.notesPerMeasure === 24 }" onclick="myGrooveWriter.changeDivision(24);"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>16</sub></span>TRIPLETS</span></span></span>
+            <span v-if="isViewMode === false" class="left-button subdivision" id="subdivision_48ths" :class="{ buttonSelected: track?.notesPerMeasure === 48 }" onclick="myGrooveWriter.changeDivision(48);"><span class="left-button-content"><span>MIXED<br>Division</span></span></span>
+            <span v-if="isDBAuthoring == false" class="left-button" @click="handleViewEditClick" >
+                <span class="left-button-content">
+                    <span id="view-edit-switch">Switch to {{ isViewMode === false ? 'VIEW' : 'EDIT' }} mode</span>
+                </span>
+            </span>
+            <span v-if="isViewMode === false" class="left-button" id="undoButton" onclick="undoCommand();"><span class="left-button-content"><i class="fa fa-undo"></i>&nbsp;&nbsp;Undo</span></span>
         </span>
 
     </div>
@@ -61,14 +77,11 @@ export default {
   }
 
 
-//   <script>
-//   if (!options.grooveDBAuthoring) {
-//       document.write('<span class="left-button" onclick="myGrooveWriter.updateViewEdit();"><span class="left-button-content"><span id="view-edit-switch" >Switch to EDIT mode</span></span></span>');
-//   }
-// </script>
-
 // <script>
 //   if (isTouchDevice()) {
 //       document.write('<span class="left-button edit-block" id="advancedEditAnchor" onclick="event.preventDefault(); myGrooveWriter.toggleAdvancedEdit()"><span class="left-button-content">Advanced Edit</span></span>');
 //   }
 // </script>
+
+
+

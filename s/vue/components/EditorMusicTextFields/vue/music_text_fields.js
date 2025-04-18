@@ -1,7 +1,8 @@
 export default {
   data() {
     return {
-      track: editor.track ? editor.track : null
+      track: editor.track ? editor.track : null,
+      isViewMode : options ? options.isViewMode() : true,            
     }
   },
 
@@ -36,6 +37,10 @@ export default {
     this.removeHandler = this.track?.addChangeHandler(() => {
       this.track = deepCopy(editor.track)            
     })
+    this.removeOptionsHandler = options?.addChangeHandler(() => {
+      this.isDBAuthoring = options.grooveDBAuthoring;     
+      this.isViewMode = options.isViewMode();     
+  })
   },
 
   beforeUnmount() {
@@ -43,7 +48,7 @@ export default {
   },
 
   template: `
-    <div id="sheetMusicTextFields" class="fullWidthEle grooveDB_hidden edit-block">
+    <div v-if="isViewMode === false" id="sheetMusicTextFields" class="fullWidthEle grooveDB_hidden">
       <span class="sheetMusicTextField">
         <b>Title:</b> 
         <input 
