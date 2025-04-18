@@ -6,12 +6,13 @@ import TomLabelMenu from "./label_menu_tom.js"
 export default {
   data() {
     return {
+      tomsVisible: false,
       labels: [
-        { instrument: 'hh', class: 'hh-label', id: 'hh-label', text: 'Hi-hat' },
-        { instrument: 'tom1', class: 'tom-label', id: 'tom1-label', text: 'Tom' },
-        { instrument: 'snare', class: 'snare-label', id: 'snare-label', text: 'Snare' },
-        { instrument: 'tom4', class: 'tom-label', id: 'tom4-label', text: 'Tom' },
-        { instrument: 'kick', class: 'kick-label', id: 'kick-label', text: 'Kick' }
+        { instrument: 'hh', class: 'hh-label', id: 'hh-label', text: 'Hi-hat', visible: true },
+        { instrument: 'tom1', class: 'tom-label', id: 'tom1-label', text: 'Tom', visible: false },
+        { instrument: 'snare', class: 'snare-label', id: 'snare-label', text: 'Snare', visible: true },
+        { instrument: 'tom4', class: 'tom-label', id: 'tom4-label', text: 'Tom', visible: false },
+        { instrument: 'kick', class: 'kick-label', id: 'kick-label', text: 'Kick', visible: true },
       ],
       isHighHatPopupOpen: false,
       isKickPopupOpen: false,
@@ -36,6 +37,19 @@ export default {
 
   components: {
     HighHatLabelMenu, KickLabelMenu, SnareLabelMenu, TomLabelMenu
+  },
+
+  mounted() {
+    this.tomsVisible = options.areTomsVisible();
+    this.removeHandler = options.addChangeHandler(() => {
+      this.tomsVisible = options.areTomsVisible();
+      this.labels.find(l => l.instrument === 'tom1').visible = this.tomsVisible;
+      this.labels.find(l => l.instrument === 'tom4').visible = this.tomsVisible;
+    });
+  },
+
+  beforeUnmount() {
+    if (this.removeHandler) this.removeHandler()
   },
 
   methods: {
@@ -64,9 +78,10 @@ export default {
 
   template: `
     <div class="line-labels">
-      <div v-for="label in labels"
+      <div v-for="label in labels" 
            :key="label.id"
            :class="label.class"
+           :style="{ visibility: label.visible ? 'visible' : 'hidden' }"           
            :id="label.id"
            @click="handleClick($event, label.instrument)"
            @contextmenu.prevent="handleClick">

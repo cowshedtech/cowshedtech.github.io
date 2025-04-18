@@ -58,10 +58,10 @@ export default {
         editor.track.setStickingState(this.noteIndex, new_state);        
     },
     handleRightClick(event) {
-        noteRightClick(event, 'sticking', this.noteIndex)
+        // noteRightClick(event, 'sticking', this.noteIndex)
     },
     handleMouseEnter(event) {
-        noteOnMouseEnter(event, 'sticking', this.noteIndex)
+        // noteOnMouseEnter(event, 'sticking', this.noteIndex)
     },
   },
 

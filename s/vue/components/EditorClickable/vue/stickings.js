@@ -39,7 +39,6 @@ export default {
   },
 
   mounted() {
-    console.log('Stickings mounted, initial visibility:', this.stickingVisible);
     this.removeHandler = options.addChangeHandler(() => {
       this.stickingVisible = options.isStickingVisible();      
     })
