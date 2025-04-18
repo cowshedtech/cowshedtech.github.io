@@ -1062,10 +1062,14 @@ function generate_ABC(renderWidth) {
 	var num_notes = get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
 
 	// abc header boilerplate
-	var tuneTitle = document.getElementById("tuneTitle").value;
-	var tuneAuthor = document.getElementById("tuneAuthor").value;
-	var tuneComments = document.getElementById("tuneComments").value;
-	var showLegend = document.getElementById("showLegend").checked;
+	// var tuneTitle = document.getElementById("tuneTitle").value;
+	// var tuneAuthor = document.getElementById("tuneAuthor").value;
+	// var tuneComments = document.getElementById("tuneComments").value;
+	// var showLegend = document.getElementById("showLegend").checked;
+	var tuneTitle = editor.track.getTitle();
+	var tuneAuthor = editor.track.getAuthor();
+	var tuneComments = editor.track.getComments();
+	// var showLegend = document.getElementById("showLegend").checked;
 
 	var fullABC = "";
 
