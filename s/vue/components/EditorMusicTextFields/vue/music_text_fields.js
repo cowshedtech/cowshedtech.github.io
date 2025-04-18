@@ -12,7 +12,7 @@ export default {
         return this.track?.getTitle() || ''
       },
       set(value) {
-        this.track?.setTitle(value)
+        editor.track?.setTitle(value)
       }
     },
     author: {
@@ -20,7 +20,7 @@ export default {
         return this.track?.getAuthor() || ''
       },
       set(value) {
-        this.track?.setAuthor(value)
+        editor.track?.setAuthor(value)
       }
     },
     comments: {
@@ -28,7 +28,7 @@ export default {
         return this.track?.getComments() || ''
       },
       set(value) {
-        this.track?.setComments(value)
+        editor.track?.setComments(value)
       }
     }
   },

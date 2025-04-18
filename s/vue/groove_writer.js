@@ -155,7 +155,6 @@ function GrooveWriter() {
 				sheetMusic.clearHighlight();
 				editorClickable.clearHighlight();
 			}
-			// showHideToms(true, options.areTomsVisible(), true);
 			updateCurrentURL();
 		})
 		
