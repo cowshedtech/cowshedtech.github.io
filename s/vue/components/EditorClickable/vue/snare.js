@@ -86,7 +86,7 @@ export default {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_SN_Accent
         if (this.midiPlayer && newMode === constant_ABC_SN_Accent) this.midiPlayer.playSingleNote(constant_OUR_MIDI_SNARE_ACCENT);                
-        this.track.setSnareState(this.noteIndex, newMode, true);        
+        editor.track.setSnareState(this.noteIndex, newMode, true);        
     },
     handleRightClick(event) {
       this.menuX = event.clientX;
@@ -98,10 +98,10 @@ export default {
       if (event.ctrlKey) action = "on";
       if (event.altKey) action = "off";  
       if (action)
-        this.track.setSnareState(this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_SN_Accent, true);    
+        editor.track.setSnareState(this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_SN_Accent, true);    
     },
     handleAction(action) {
-      this.track.setSnareState(this.noteIndex, action, true);  
+      editor.track.setSnareState(this.noteIndex, action, true);  
       if (this.midiPlayer) {
         let note = this.noteConfig[action]?.midiNote;        
         if (note) this.midiPlayer.playSingleNote(note);                

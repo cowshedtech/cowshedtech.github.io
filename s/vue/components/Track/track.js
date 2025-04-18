@@ -287,7 +287,8 @@ function Track() {
 	 *
 	 */
 	root.setKickState = function(id, mode, make_sound) {
-		this.kick_array[id] = mode;			
+		this.kick_array[id] = mode;		
+		this.notifyHandlers();	
 	}
 
 	/*

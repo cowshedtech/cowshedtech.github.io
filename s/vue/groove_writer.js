@@ -66,7 +66,13 @@ function GrooveWriter() {
 	 */	
 	root.runsOnPageLoad = function () {
 
-		// If track changes then update sheet music and url
+		// load the groove from URL data
+		getGrooveDataFromUrlString(window.location.search, root.track, options, midiPlayer, metronome, options.debugMode);
+		editorClickable.update(editor.track);
+		root.updateSheetMusic();		
+
+
+		// If track changes then update all the dependent components
 		root.track?.addChangeHandler(() => {
             updateCurrentURL(); 
 			root.updateSheetMusic();
@@ -74,12 +80,13 @@ function GrooveWriter() {
 			editorClickable.update(editor.track);
         })
 		
+		// If metronome then update all the dependent components		
 		metronome?.addChangeHandler(() => {
             if (midiPlayer) midiPlayer.noteHasChanged();
 			updateCurrentURL();      
         })
 	
- 		// initialise our midi player
+		// If the midiplayer changes then update all the dependent components		
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 		midiPlayer?.subscribe(EventTypes.PARAMETERS_UPDATE, () => {
 			// if there is a timeout running clear it
@@ -93,6 +100,7 @@ function GrooveWriter() {
 			}, 300);
 		})
 
+		// If the midiplayer stops playing then update all the dependent components		
 		midiPlayer?.subscribe(EventTypes.PLAY_STATE, () => {
 			if (midiPlayer.getState() == PlayerState.STOPPED) {
 				sheetMusic.stop();
@@ -100,6 +108,7 @@ function GrooveWriter() {
 			}
 		})
 
+		// If the midiplayer plays a note then update all the dependent components		
 		midiPlayer?.subscribe(EventTypes.PLAY_PROGRESS, (data) => {			
 			if (data?.percentComplete && options.isHighlightOn()) {
 				sheetMusic.highlightNote(data.percentComplete)			
@@ -107,6 +116,7 @@ function GrooveWriter() {
 			} 
 		})
 
+		// If the midiplayer completes a track then update all the dependent components		
 		midiPlayer.eventCallbacks.notePlaying = function (note_type, percent_complete) {
 			if (note_type !== "complete") return
 			if (!metronome.isAutoSpeedUpActive()) return
@@ -115,6 +125,7 @@ function GrooveWriter() {
 			root.metronomeAutoSpeedUpTempoUpdate();			
 		};
 
+		// If the midiplayer starts playing then update all the dependent components			
 		midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
 			var midiURL;
 
@@ -136,6 +147,7 @@ function GrooveWriter() {
 			updateGrooveDBSource();
 		};
 
+		// If options are changed then update all the dependent components		
 		options.addChangeHandler(() => {
 			if (!options.isHighlightOn()) {
 				sheetMusic.clearHighlight();
@@ -145,11 +157,7 @@ function GrooveWriter() {
 			updateCurrentURL();
 		})
 		
-		// load the groove from the URL data if it was passed in.
-		root.updateFromURL(window.location.search);
-		root.updateSheetMusic();
-		// editorClickable.update(editor.track);
-
+		
 		// TODO
 		setupPermutationMenu();
 		// setTimeSigLabel();
@@ -338,14 +346,8 @@ function GrooveWriter() {
 	// OMG this needs to be refactored really bad.   There is a GrooveData struct from groove utils that
 	//      would make this whole thing much easier.  :(
 	root.changeDivisionWithNotes = function(newDivision, Stickings, HH, Tom1, Tom4, Snare, Kick) {
-		var oldDivision = root.track.timeDivision;
-		var wasStickingsVisable = options.isStickingVisible();
-		var wasTomsVisable = options.areTomsVisible();
-
 		root.track.timeDivision = newDivision;
 		root.track.notesPerMeasure = calc_notes_per_measure(root.track.timeDivision, root.track.numBeats, root.track.noteValue);
-
-		editorClickable.update(editor.track);		
 
 		var newHTML = "";
 		// change the Permutation options too
@@ -361,12 +363,6 @@ function GrooveWriter() {
 			setNotesFromURLData("S", Snare, root.track.numberOfMeasures);
 			setNotesFromURLData("K", Kick, root.track.numberOfMeasures);
 		}
-
-		// un-highlight the old div
-		// unselectButton(document.getElementById("subdivision_" + oldDivision + "ths"));
-
-		// highlight the new div
-		// selectButton(document.getElementById("subdivision_" + root.track.timeDivision + "ths"));
 
 		// This may disable or enable the menu
 		setupPermutationMenu();

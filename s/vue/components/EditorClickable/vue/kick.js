@@ -44,7 +44,7 @@ export default {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_KI_Normal
         if (this.midiPlayer && newMode === constant_ABC_KI_Normal) this.midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);                
-        this.track.setKickState(this.noteIndex, newMode, true);                
+        editor.track.setKickState(this.noteIndex, newMode, true);                
     },
     handleRightClick(event) {
       this.menuX = event.clientX;
@@ -56,10 +56,10 @@ export default {
       if (event.ctrlKey) action = "on";
       if (event.altKey) action = "off";  
       if (action) 
-        this.track.setKickState(this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_KI_Normal, true);     
+        editor.track.setKickState(this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_KI_Normal, true);     
     },
     handleAction(action) {
-      this.track.setKickState(this.noteIndex, action, true);  
+      editor.track.setKickState(this.noteIndex, action, true);  
       if (this.midiPlayer) {
         if (action === constant_ABC_KI_Normal) midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
         if (action === constant_ABC_KI_Splash) midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);

@@ -53,7 +53,7 @@ export default {
     handleLeftClick(event) {
       let newMode = this.noteABC ? constant_ABC_OFF : this.abcOn
       if (this.midiPlayer && newMode === this.abcOn) this.midiPlayer.playSingleNote(this.midiNormal);                
-      this.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);      
+      editor.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);      
     },
     handleRightClick(event) {
       this.menuX = event.clientX;
@@ -65,13 +65,13 @@ export default {
       if (event.ctrlKey) action = "on";
       if (event.altKey) action = "off";  
       if (action)
-        this.track.setTomState(this.tomIndex, this.noteIndex, action == "off" ? constant_ABC_OFF : this.abcOn, true);    
+        editor.track.setTomState(this.tomIndex, this.noteIndex, action == "off" ? constant_ABC_OFF : this.abcOn, true);    
     },
     handleAction(action) {
       if (this.midiPlayer) {
         if (action === this.abcOn) this.midiPlayer.playSingleNote(this.midiNormal);                
       }    
-      this.track.setTomState(this.tomIndex, this.noteIndex, action, true);  
+      editor.track.setTomState(this.tomIndex, this.noteIndex, action, true);  
       this.isPopupOpen = false;
     }
   },
