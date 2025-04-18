@@ -74,6 +74,16 @@ function GrooveWriter() {
 		sheetMusic.updateFromTrack(root.track);
 
 
+		// If options are changed then update all the dependent components		
+		options.addChangeHandler(() => {
+			if (!options.isHighlightOn()) {
+				sheetMusic.clearHighlight();
+				editorClickable.clearHighlight();
+			}
+			sheetMusic.updateFromTrack(editor.track);
+			updateCurrentURL();
+		})
+		
 		// If track changes then update all the dependent components
 		root.track?.addChangeHandler(() => {
             updateCurrentURL(); 
@@ -149,15 +159,7 @@ function GrooveWriter() {
 			updateGrooveDBSource();
 		};
 
-		// If options are changed then update all the dependent components		
-		options.addChangeHandler(() => {
-			if (!options.isHighlightOn()) {
-				sheetMusic.clearHighlight();
-				editorClickable.clearHighlight();
-			}
-			sheetMusic.updateFromTrack(editor.track);
-			updateCurrentURL();
-		})
+		
 		
 		
 		// TODO
