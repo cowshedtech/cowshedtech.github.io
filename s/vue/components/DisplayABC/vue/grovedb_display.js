@@ -1,8 +1,22 @@
 export default {
   data() {
-    return { }
+    return {
+        isDebugMode : options ? options.debugMode : false,
+        browserInfo : getBrowserInfo()
+    }
   },
-  props: { },
+
+  mounted() {
+    this.removeOptionsHandler = options?.addChangeHandler(() => {
+        this.isDebugMode = options.debugMode;             
+    })
+  },
+
+  beforeUnmount() {
+      if (this.removeOptionsHandler) this.removeOptionsHandler() 
+  },  
+  
+  
   template: `
   <div id="debugDisplayArea">
     <span id="undoStack"></span>
@@ -22,7 +36,9 @@ export default {
         <button type="button" onclick="update();">Re-render the music</button>
         <button type="button" onclick="myGrooveWriter.saveABCtoFile();">Save ABC to file</button>
     </div>
-    <span id="debugOutput"></span>
+    <span v-if="isDebugMode === true" id="debugOutput">
+      <div>This browser has been detected as: {{ browserInfo.browser }} ver: {{ browserInfo.version }} <br> {{ browserInfo.uastring }} <br> Running on: {{ browserInfo.platform }}</div>
+    </span>
     </div>
 `
 }

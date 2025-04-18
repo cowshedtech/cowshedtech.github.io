@@ -57,7 +57,9 @@ function GrooveWriter() {
 	root.class_permutation_type = "none";
 	
 	// set debugMode immediately so we can use it in index.html
-	options.debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
+	let debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
+	if (debugMode !== 0) options.debugMode = true;
+
 	let grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
 	if (grooveDBAuthoring !== 0) options.grooveDBAuthoring = true;
 
@@ -167,21 +169,13 @@ function GrooveWriter() {
 		// enable or disable swing
 		// midiPlayer.swingEnabled(midiPlayer.doesDivisionSupportSwing(root.track.notesPerMeasure));
 
-		// window.onresize = root.updateSheetMusic();
-
 		root.browserInfo = getBrowserInfo();
 		if (root.browserInfo.browser == "MSIE" && root.browserInfo.version < 10) {
 			window.alert("This browser has been detected as: " + root.browserInfo.browser + " ver: " + root.browserInfo.version + ".\n" + 'This version of IE is unsupported.   Please use Chrome or Firefox instead');
 		} else if (root.browserInfo.browser == "Safari" && root.browserInfo.platform == "windows" && root.browserInfo.version < 535) {
 			window.alert("This browser has been detected as: " + root.browserInfo.browser + " ver: " + root.browserInfo.version + ".\n" + 'This version of Safari is unsupported.   Please use Chrome instead');
 		}
-		if (options.debugMode) {
-			var debugOutput = document.getElementById("debugOutput");
-			if (debugOutput) {
-				debugOutput.innerHTML += "<div>This browser has been detected as: " + root.browserInfo.browser + " ver: " + root.browserInfo.version + ".<br>" + root.browserInfo.uastring + "<br>Running on: " + root.browserInfo.platform + "</div>";
-			}
-		}
-
+		
 		if (isTouchDevice()) {
 			setTimeout(function () {
 				window.scrollTo(0, 1);

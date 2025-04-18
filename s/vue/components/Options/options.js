@@ -28,7 +28,7 @@ class Options {
     viewMode = false;
 
     /** @type {boolean} Whether debug mode is enabled */
-    debugMode;
+    debugMode = false;
 
     /** @type {boolean} Whether groove database authoring is enabled */
     grooveDBAuthoring = false;
