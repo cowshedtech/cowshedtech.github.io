@@ -1,6 +1,12 @@
 import BottomNavigationButton from '../../BaseButtonNavigationButton/vue/base_button_bottom_navigation.js'
 
 export default {
+    data() {
+        return {
+            isViewMode : options ? options.isViewMode() : true            
+        }
+    },
+    
     components: {
         BottomNavigationButton
     },
@@ -11,8 +17,18 @@ export default {
         }
     },
 
+    mounted() {
+        this.removeOptionsHandler = options?.addChangeHandler(() => {
+            this.isViewMode = options.isViewMode();     
+        })
+    },
+
+    beforeUnmount() {
+        if (this.removeOptionsHandler) this.removeOptionsHandler() 
+    },
+
     template: `
-        <BottomNavigationButton button-id="clearAllNotesButton" button-text="CLEAR ALL" @click="handleClick">
+        <BottomNavigationButton v-if="isViewMode === false" button-id="clearAllNotesButton" button-text="CLEAR ALL" @click="handleClick">
             <i class="fa fa-trash fa-2x"></i>
         </BottomNavigationButton>
         `
