@@ -3,6 +3,7 @@ export default {
     return { }
   },
   props: { },
+  
   template: `
     <!-- this is used by the metronome auto speed up option menu, and is hidden by default -->
 	<div id="metronomeAutoSpeedupConfiguration">
@@ -25,3 +26,11 @@ export default {
 	</div>
 `
 }
+
+// root.updateRangeLabel = function (event, idToUpdate) {
+// 	var element = document.getElementById(idToUpdate);
+
+// 	if (element) {
+// 		element.innerHTML = event.currentTarget.value;
+// 	}
+// };

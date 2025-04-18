@@ -71,13 +71,13 @@ function GrooveWriter() {
 		// load the groove from URL data
 		getGrooveDataFromUrlString(window.location.search, root.track, options, midiPlayer, metronome, options.debugMode);
 		editorClickable.update(root.track);
-		root.updateSheetMusic();		
+		sheetMusic.updateFromTrack(root.track);
 
 
 		// If track changes then update all the dependent components
 		root.track?.addChangeHandler(() => {
             updateCurrentURL(); 
-			root.updateSheetMusic();
+			sheetMusic.updateFromTrack(editor.track);
 			midiPlayer.noteHasChanged();
 			editorClickable.update(editor.track);
         })
@@ -245,26 +245,6 @@ function GrooveWriter() {
 	};
 
 
-	// this is called by a bunch of places anytime we modify the musical notes on the page
-	// this will recreate the ABC code and will then use the ABC to rerender the sheet music
-	// on the page.
-	root.updateSheetMusic = function () {
-		var renderWidth = 600;
-		var svgTarget = document.getElementById("svgTarget");
-		if (svgTarget) {
-			renderWidth = svgTarget.offsetWidth - 100;
-			renderWidth = Math.floor(renderWidth * 0.8);  // reduce width by 20% (This actually makes the notes bigger, because we scale up everything to max width)
-		}
-
-		var fullABC = generate_ABC(renderWidth);
-		// document.getElementById("ABCsource").value = fullABC;
-		
-		// TODO
-		// updateGrooveDBSource();
-
-		sheetMusic.update(editor.track, fullABC);
-	}
-		
 	// get a really long URL that encodes all of the notes and the rest of the state of the page.
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
 	//
@@ -273,15 +253,6 @@ function GrooveWriter() {
 		return getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_destination)
 	}
 	
-
-	root.updateRangeLabel = function (event, idToUpdate) {
-		var element = document.getElementById(idToUpdate);
-
-		if (element) {
-			element.innerHTML = event.currentTarget.value;
-		}
-	};
-
 
 	root.updateFromURL = function (encodedURLData) {
 
@@ -409,7 +380,7 @@ function GrooveWriter() {
 
 		root.changeDivisionWithNotes(newDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
-		root.updateSheetMusic();
+		sheetMusic.updateFromTrack(root.track);
 	};
 
 } // end of class

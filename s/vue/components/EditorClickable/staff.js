@@ -57,7 +57,7 @@ function closeMeasureButtonClick(measureNum) {
         noteData.kick
     );
 
-    editor.updateSheetMusic();
+    sheetMusic.updateFromTrack(editor.track);
 };
 
 
@@ -107,7 +107,7 @@ function repeatMeasureIncButtonClick(measureNum) {
     const addMeasureButton = document.getElementById("addMeasureButton");
     addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
 
-    editor.updateSheetMusic();
+    sheetMusic.updateFromTrack(editor.track);
 };
 
 
@@ -146,7 +146,7 @@ function repeatMeasureDecButtonClick(measureNum) {
     const addMeasureButton = document.getElementById("addMeasureButton");
     addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
 
-    editor.updateSheetMusic();
+    sheetMusic.updateFromTrack(editor.track);
 };
 
 /**
@@ -210,7 +210,7 @@ function duplicateMeasureButtonClick(measureNum) {
     const addMeasureButton = document.getElementById("addMeasureButton");
     addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
 
-    editor.updateSheetMusic();
+    sheetMusic.updateFromTrack(editor.track);
 };
 
 
@@ -284,7 +284,7 @@ function addMeasureButtonClick(event) {
     const addMeasureButton = document.getElementById("addMeasureButton");
     addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
 
-    editor.updateSheetMusic();
+    sheetMusic.updateFromTrack(editor.track);
 };
 
 
@@ -358,7 +358,7 @@ function addMeasureMiddleButtonClick(measureNum) {
     if (add_measure_button)
         add_measure_button.scrollIntoView({ block: "start", behavior: "smooth" });
 
-    editor.updateSheetMusic();
+    sheetMusic.updateFromTrack(editor.track);
 };
 
 
@@ -416,7 +416,7 @@ function addMeasurePrevButtonClick (event) {
 
     editor.changeDivisionWithNotes(editor.track.timeDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 
-    editor.updateSheetMusic();
+    sheetMusic.updateFromTrack(editor.track);
 };
 
 
@@ -440,7 +440,7 @@ function clearAllNotes() {
 
     editor.notify();
 
-    editor.updateSheetMusic();
+    sheetMusic.updateFromTrack(editor.track);
 
     var uiStickings = "";
     var uiHH = "";

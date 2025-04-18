@@ -188,7 +188,7 @@ function noteLabelPopupClick(instrument, action, measureIndex) {
     measureForNoteLabelClick = 0; // reset
 
     editor.noify();
-    editor.updateSheetMusic();
+    sheetMusic.updateFromTrack(editor.track);
 
     return false;
 };

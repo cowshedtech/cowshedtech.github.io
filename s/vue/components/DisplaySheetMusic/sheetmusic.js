@@ -54,6 +54,31 @@ class SheetMusic {
         this.#notifyHandlers();    
     };
 
+    /**
+     * Update our sheet music 
+     * @param {string} abc_source - The abc notation for our track
+     */    
+    updateFromTrack(track) {
+        
+        var renderWidth = 600;
+        var svgTarget = document.getElementById("svgTarget");
+        if (svgTarget) {
+            renderWidth = svgTarget.offsetWidth - 100;
+            renderWidth = Math.floor(renderWidth * 0.8);  // reduce width by 20% (This actually makes the notes bigger, because we scale up everything to max width)
+        }
+
+        var abc_source = generate_ABC(renderWidth);    
+        var svg_return = renderABCtoSVG(editor.track, abc_source);
+
+        var diverr = document.getElementById("diverr");
+        diverr.innerHTML = svg_return.error_html;        
+        
+        // this.setSVG()    
+        this.#svg = svg_return.svg;
+        this.#track = track;
+        this.#notifyHandlers();    
+    };
+
 
     /**
      * Gets the current svg

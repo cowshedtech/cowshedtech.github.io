@@ -55,7 +55,6 @@ export default {
           class="sheetMusicInputField" 
           id="tuneTitle" 
           v-model="title"
-          onchange="editor.updateSheetMusic();" 
           type="text">
       </span>
       <span class="sheetMusicTextField">
@@ -63,8 +62,7 @@ export default {
         <input 
           class="sheetMusicInputField" 
           id="tuneAuthor"
-          v-model="author" 
-          onchange="editor.updateSheetMusic();" 
+          v-model="author"
           type="text">
       </span>
       <span class="sheetMusicTextField">
@@ -72,16 +70,14 @@ export default {
         <input 
           class="sheetMusicInputField" 
           id="tuneComments" 
-          v-model="comments" 
-          onchange="editor.updateSheetMusic();" 
+          v-model="comments"
           type="text">
       </span>
       <span id='KeyButton'>
         <input 
           type="checkbox"
           class="hiddenCheckbox" 
-          id="showLegend" 
-          onclick="editor.updateSheetMusic();">
+          id="showLegend">
             <label
               id="LegendLabel" 
               for="showLegend">
