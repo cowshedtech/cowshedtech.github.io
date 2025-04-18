@@ -22,7 +22,7 @@ class Options {
     #stickingsVisible = false;
 
     /** @type {boolean} Whether the legend is displayed */
-    showLegend;
+    showLegend = false;
 
     /** @type {boolean} Whether the editor is in view-only mode */
     viewMode = false;
@@ -132,6 +132,23 @@ class Options {
      */
     setViewMode(isViewMode) {
         this.viewMode = isViewMode;
+        this.#notifyHandlers();
+    }
+
+     /**
+     * should we show legend
+     * @returns {boolean} true if show legend
+     */
+    isShowLegend() {
+        return this.showLegend;
+    }
+
+    /**
+     * Sets whether we should show legend
+     * @param {boolean} showLegend - is view only mode
+     */
+    setShowLegend(showLegend) {
+        this.showLegend = showLegend;
         this.#notifyHandlers();
     }
 

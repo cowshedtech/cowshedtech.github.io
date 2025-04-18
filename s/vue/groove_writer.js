@@ -155,6 +155,7 @@ function GrooveWriter() {
 				sheetMusic.clearHighlight();
 				editorClickable.clearHighlight();
 			}
+			sheetMusic.updateFromTrack(editor.track);
 			updateCurrentURL();
 		})
 		

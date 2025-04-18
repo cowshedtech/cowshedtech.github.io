@@ -30,6 +30,14 @@ export default {
       set(value) {
         editor.track?.setComments(value)
       }
+    },
+    showLegend: {
+      get() {
+        return options?.isShowLegend() || false
+      },
+      set(value) {
+        options.setShowLegend(value)
+      }
     }
   },
 
@@ -76,7 +84,8 @@ export default {
       <span id='KeyButton'>
         <input 
           type="checkbox"
-          class="hiddenCheckbox" 
+          class="hiddenCheckbox"
+          v-model="showLegend" 
           id="showLegend">
             <label
               id="LegendLabel" 

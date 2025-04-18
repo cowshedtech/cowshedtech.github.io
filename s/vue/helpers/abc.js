@@ -1069,7 +1069,7 @@ function generate_ABC(renderWidth) {
 	var tuneTitle = editor.track.getTitle();
 	var tuneAuthor = editor.track.getAuthor();
 	var tuneComments = editor.track.getComments();
-	// var showLegend = document.getElementById("showLegend").checked;
+	var showLegend = options.showLegend;
 
 	var fullABC = "";
 
