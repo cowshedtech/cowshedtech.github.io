@@ -18,7 +18,29 @@ export default {
 
 	methods: {
 		handleClick(action) {
-			noteLabelPopupClick("hh", action, this.measureIndex)
+			if (action !== "cancel") {
+				var startIndex = editor.track.notesPerMeasure * (this.measureIndex - 1);
+				for (var i = startIndex; i - startIndex < editor.track.notesPerMeasure; i++) {
+					let newMode = constant_ABC_OFF;
+					if (action == "all_off") {
+						newMode = constant_ABC_OFF;
+					} else if (action == "downbeats") {
+						newMode = i % 2 === 0 ? constant_ABC_HH_Normal : constant_ABC_OFF;
+					} else if (action == "upbeats") {
+						newMode = i % 2 === 0 ? constant_ABC_OFF : constant_ABC_HH_Normal;						
+					} else if (action == "all_on") {
+						newMode = constant_ABC_HH_Normal;
+					}
+					editor.track.setHighHatStateNoNotify(i, newMode);
+				}
+				editor.track.notify();
+			}
+    
+			// if (action == "mute") {
+			// 	muteInstrument(instrument, measureForNoteLabelClick, true);
+			// 	return false;
+			// }
+
 			this.$emit('close')
 		}
 	},
@@ -36,3 +58,6 @@ export default {
 	</div>
 `
 }
+
+
+    

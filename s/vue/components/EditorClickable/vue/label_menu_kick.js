@@ -18,7 +18,38 @@ export default {
 
 	methods: {
 		handleClick(action) {
-			noteLabelPopupClick("kick", action, this.measureIndex)
+	
+			if (action !== "cancel") {
+				var startIndex = editor.track.notesPerMeasure * (this.measureIndex - 1);
+				for (var i = startIndex; i - startIndex < editor.track.notesPerMeasure; i++) {
+					let newState = constant_ABC_OFF;
+
+					var numNotesPerCount = editor.track.timeDivision / editor.track.noteValue
+					var currentState = editor.track.getKickState(i, "ABC");
+					var kickIsOn = false;
+					if (currentState == constant_ABC_KI_SandK || currentState == constant_ABC_KI_Normal)
+						kickIsOn = true;
+
+					if (action == "all_off") {
+						newState = constant_ABC_OFF;
+					} else if (action == "hh_foot_nums_on") {
+						newState = (i % numNotesPerCount === 0 ? (kickIsOn ? constant_ABC_KI_SandK : constant_ABC_KI_Splash) : (kickIsOn ? constant_ABC_KI_Normal : constant_ABC_OFF))
+					} else if (action == "hh_foot_ands_on") {
+						newState = (i % numNotesPerCount === (numNotesPerCount / 2) ? (kickIsOn ? constant_ABC_KI_SandK: constant_ABC_KI_Splash) : (kickIsOn ? constant_ABC_KI_Normal : constant_ABC_OFF))
+					} else if (action == "all_on") {
+						newState = constant_ABC_KI_Normal;
+					}
+					editor.track.setKickStateNoNotify(i, newState);       
+				}
+
+				editor.track.notify();
+			}
+			
+			// if (action == "mute") {
+			// 	muteInstrument(instrument, measureForNoteLabelClick, true);
+			// 	return false;
+			// }
+		
 			this.$emit('close')
 		}
 	},
@@ -36,3 +67,8 @@ export default {
 	</div>
 `
 }
+
+
+
+	
+

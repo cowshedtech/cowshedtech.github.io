@@ -92,7 +92,10 @@ function Track() {
         this.changeHandlers.forEach(handler => handler());
     }
 
-	root.notify = function() {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.notify = function() {
 		this.notifyHandlers();
 	}
 
@@ -104,7 +107,10 @@ function Track() {
 		this.notifyHandlers();
 	}
 
-	root.setStickingStateNoNotify = function(id, new_state) {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.setStickingStateNoNotify = function(id, new_state) {
 		this.sticking_array[id] = new_state;		
 	}
 	
@@ -177,7 +183,10 @@ function Track() {
 		this.notifyHandlers();
 	}
 
-	root.setHighHatStateNoNotify = function(id, mode) {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.setHighHatStateNoNotify = function(id, mode) {
 		this.hh_array[id] = mode;			
 	}
 
@@ -242,7 +251,10 @@ function Track() {
 		this.snare_array[id] = mode;			
 	}
 
-	root.getDefaultSnareGroove = function() {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.getDefaultSnareGroove = function() {
 		var retString = "";
 		var oneMeasureString = "|";
 		var i;
@@ -366,54 +378,87 @@ function Track() {
 
 	}
 
-	root.setTomState = function(tomId, id, mode, make_sound) {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.setTomState = function(tomId, id, mode, make_sound) {
 		this.toms_array[tomId-1][id] = mode;			
 		this.notifyHandlers();
 	}
 
-	root.setTom1StateNoNotify = function(id, mode, make_sound) {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.setTom1StateNoNotify = function(id, mode, make_sound) {
 		this.setTomState(0, id, mode)
 	}
 
-	root.setTom4StateNoNotify = function(id, mode, make_sound) {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.setTom4StateNoNotify = function(id, mode, make_sound) {
 		this.setTomState(3, id, mode)
 	}
 
-	root.getDefaultTomGroove = function() {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.getDefaultTomGroove = function() {
 		return this.getEmptyGroove()
 	}
 
-	root.getEmptyGroove = function() {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.getEmptyGroove = function() {
 		var oneMeasureString = "|" + "-".repeat(this.notesPerMeasure) + "|"; // Optimized measure string creation
 		var retString = oneMeasureString.repeat(this.numMeasures); // Use repeat to create the full string
 	
 		return retString;
 	};
 
-	root.setTitle = function(title) {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.setTitle = function(title) {
 		this.title = title;
 		this.notifyHandlers();
 	}
 
-	root.getTitle = function() {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.getTitle = function() {
 		return this.title
 	}
 
-	root.setAuthor = function(author) {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.setAuthor = function(author) {
 		this.author = author;
 		this.notifyHandlers();
 	}
 
-	root.getAuthor = function() {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.getAuthor = function() {
 		return this.author
 	}
 
-	root.setComments = function(comments) {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.setComments = function(comments) {
 		this.comments = comments;
 		this.notifyHandlers();
 	}
 
-	root.getComments = function() {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.getComments = function() {
 		return this.comments
 	}
 	
