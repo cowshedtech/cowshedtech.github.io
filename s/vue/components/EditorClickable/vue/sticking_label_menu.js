@@ -18,7 +18,37 @@ export default {
 
 	methods: {
 		handleClick(action) {
-			noteLabelPopupClick("stickings", action, this.measureIndex)
+			if (action !== "cancel") {
+				var startIndex = editor.track.notesPerMeasure * (this.measureIndex - 1);
+				for (var i = startIndex; i - startIndex < editor.track.notesPerMeasure; i++) {
+					let newState = constant_ABC_STICK_OFF;					
+					switch (action) {
+						case "all_off":
+							newState = constant_ABC_STICK_OFF;
+							break;
+						case "all_right":
+							newState = constant_ABC_STICK_R;
+							break;
+						case "all_left":
+							newState = constant_ABC_STICK_L;
+							break;
+						case "alternate":
+							newState = (i % 2 === 0) ? constant_ABC_STICK_R : constant_ABC_STICK_L;						
+							break;
+						case "all_count":
+							newState = constant_ABC_STICK_COUNT;
+							break;					
+					}
+					editor.track.setStickingStateNoNotify(i, newState);											
+				}
+				editor.track.notify();
+			}			
+		
+			// if (action == "mute") {
+			//     muteInstrument(instrument, measureForNoteLabelClick, true);
+			//     return false;
+			// }
+
 			this.$emit('close')
 		}
 	},
@@ -36,3 +66,5 @@ export default {
 	</div>
 	`
 }
+
+	
