@@ -14,6 +14,10 @@ export default {
         { instrument: 'tom4', class: 'tom-label', id: 'tom4-label', text: 'Tom', visible: false },
         { instrument: 'kick', class: 'kick-label', id: 'kick-label', text: 'Kick', visible: true },
       ],
+      constants: {
+        TOM1_ON: constant_ABC_T1_Normal,
+        TOM4_ON: constant_ABC_T4_Normal,        
+      },
       isHighHatPopupOpen: false,
       isKickPopupOpen: false,
       isSnarePopupOpen: false,
@@ -108,16 +112,18 @@ export default {
         :y="menuY"
         @close="closeMenu">
       </SnareLabelMenu>
-      <TomLabelMenu v-if="options.areTomsVisible"
+      <TomLabelMenu
         :tomIndex="1"
+        :midiNormal="constants.TOM1_ON"
         :measureIndex="measureIndex"
         :is-open="isTom1PopupOpen" 
         :x="menuX" 
         :y="menuY"
         @close="closeMenu">
       </TomLabelMenu>
-      <TomLabelMenu v-if="options.areTomsVisible"
-        :tomIndex="2"
+      <TomLabelMenu
+        :tomIndex="4"
+        :midiNormal="constants.TOM4_ON"
         :measureIndex="measureIndex"
         :is-open="isTom4PopupOpen" 
         :x="menuX" 

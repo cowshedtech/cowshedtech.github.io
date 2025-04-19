@@ -389,6 +389,13 @@ function Track() {
 	/**
      * Notifies all registered handlers of a change
      */
+    root.setTomStateNoNotify = function(tomId, id, mode, make_sound) {
+		this.toms_array[tomId-1][id] = mode;					
+	}
+
+	/**
+     * Notifies all registered handlers of a change
+     */
     root.setTom1StateNoNotify = function(id, mode, make_sound) {
 		this.setTomState(0, id, mode)
 	}

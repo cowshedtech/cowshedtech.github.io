@@ -18,12 +18,36 @@ export default {
         },
         y: {
             type: Number
+        },
+        midiNormal: {
+            type: String,
+            required: true
         }
 	},
 
 	methods: {
 		handleClick(action) {
-            noteLabelPopupClick("tom" + this.tomIndex, action, this.measureIndex)
+            if (action !== "cancel") {
+                var startIndex = editor.track.notesPerMeasure * (this.measureIndex - 1);
+                for (var i = startIndex; i - startIndex < editor.track.notesPerMeasure; i++) {
+                    let newMode = constant_ABC_OFF;
+        
+                    if (action == "all_off") {
+                        newMode = constant_ABC_OFF
+                    } else if (action == "all_on") {
+                        newMode = this.midiNormal
+                    }
+                    editor.track.setTomStateNoNotify(this.tomIndex, i, newMode)
+                }
+        
+                editor.track.notify();
+            }
+        
+            // if (action == "mute") {
+            //     muteInstrument(instrument, measureForNoteLabelClick, true);
+            //     return false;
+            // }
+
             this.$emit('close')
         }
     },
@@ -39,4 +63,3 @@ export default {
 	</div>
 `
 }
-

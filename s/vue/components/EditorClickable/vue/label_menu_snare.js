@@ -19,7 +19,31 @@ export default {
 
 	methods: {
 		handleClick(action) {
-			noteLabelPopupClick("snare", action, this.measureIndex)
+			if (action !== "cancel") {
+				var startIndex = editor.track.notesPerMeasure * (this.measureIndex - 1);
+				for (var i = startIndex; i - startIndex < editor.track.notesPerMeasure; i++) {
+					let newMode = constant_ABC_OFF;
+			
+					if (action == "all_off") {
+						newMode = constant_ABC_OFF;
+					} else if (action == "all_on") {
+						newMode = constant_ABC_SN_Accent;            
+					} else if (action == "all_on_normal") {
+						newMode = constant_ABC_SN_Normal;
+					} else if (action == "all_on_ghost") {
+						newMode = constant_ABC_SN_Ghost;            
+					}        
+					editor.track.setSnareStateNoNotify(i, newMode)
+				}
+				editor.track.notify();
+			}
+			
+			// if (action == "mute") {
+			// 	muteInstrument(instrument, measureForNoteLabelClick, true);
+			// 	return false;
+			// }
+
+			
 			this.$emit('close')
 		}
 	},
