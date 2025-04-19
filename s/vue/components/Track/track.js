@@ -483,5 +483,74 @@ function Track() {
 		this.notifyHandlers();
 		// editor.changeDivisionWithNotes(editor.track.timeDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
 	}
+
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.addMeasure = function() {
+		this.numberOfMeasures++;
+		this.sticking_array.push(...class_empty_note_array.slice(0));
+		this.hh_array.push(...class_empty_note_array.slice(0));   
+		this.snare_array.push(...class_empty_note_array.slice(0));
+		this.kick_array.push(...class_empty_note_array.slice(0)); 
+		this.toms_array[0].push(...class_empty_note_array.slice(0));
+		this.toms_array[1].push(...class_empty_note_array.slice(0)); 
+		this.toms_array[2].push(...class_empty_note_array.slice(0)); 
+		this.toms_array[3].push(...class_empty_note_array.slice(0)); 
+		this.notifyHandlers();
+	}
+
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.deleteMeasure = function(measureNum) {
+		const noteData = {
+			stickings: [],
+			hh: [],
+			tom1: [],
+			tom4: [],
+			snare: [],
+			kick: []
+		};
+
+		const measureStart = (measureNum - 1) * this.notesPerMeasure;
+		const measureEnd = measureNum * this.notesPerMeasure;
+		const totalNotes = this.notesPerMeasure * this.numberOfMeasures;
+
+		for (let i = 0; i < totalNotes; i++) {
+			if (i < measureStart || i >= measureEnd) {
+				noteData.stickings.push(editor.track.getStickingState(i, "ABC"))
+				noteData.hh.push(editor.track.getHighHatState(i, "ABC"))
+				noteData.tom1.push(editor.track.getTomState(1, i, "ABC"))
+				noteData.tom4.push(editor.track.getTomState(4, i, "ABC"))
+				noteData.snare.push(editor.track.getSnareState(i, "ABC"))
+				noteData.kick.push(editor.track.getKickState(i, "ABC"))
+			}
+		}
+
+		this.sticking_array = noteData.stickings
+		this.hh_array = noteData.hh
+		this.snare_array = noteData.snare
+		this.kick_array = noteData.kick
+		this.toms_array[0] = noteData.tom1
+		this.toms_array[4] = noteData.tom4
+		
+		this.repeatedMeasures.delete(measureNum - 1);
+		shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
+		this.numberOfMeasures--;
+
+		this.notifyHandlers();
+
+		// // editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
+		// this.changeDivisionWithNotes(
+		// 	editor.track.timeDivision,
+		// 	noteData.stickings,
+		// 	noteData.hh,
+		// 	noteData.tom1,
+		// 	noteData.tom4,
+		// 	noteData.snare,
+		// 	noteData.kick
+		// );
+	}
 	
 } // end of class

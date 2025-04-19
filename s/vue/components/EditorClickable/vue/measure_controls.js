@@ -17,7 +17,8 @@ export default {
 
   methods: {
     handleCloseMeasure() {
-      closeMeasureButtonClick(this.measureIndex);
+      // closeMeasureButtonClick(this.measureIndex);
+      editor.track.deleteMeasure(this.measureIndex);
     },
     handleRepeatInc() {
       repeatMeasureIncButtonClick(this.measureIndex);
@@ -29,7 +30,8 @@ export default {
       duplicateMeasureButtonClick(this.measureIndex);
     },
     handleAddMiddle() {
-      addMeasureMiddleButtonClick(this.measureIndex);
+      // addMeasureMiddleButtonClick(this.measureIndex);
+      editor.track.addMeasure();
     }
   },
 
@@ -53,5 +55,12 @@ export default {
         </div>    
    </div>`
 }
+
+
+
+
+// const addMeasureButton = document.getElementById("addMeasureButton");
+//     addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
+
 
 

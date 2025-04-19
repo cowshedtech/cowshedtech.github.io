@@ -421,40 +421,6 @@ function addMeasurePrevButtonClick (event) {
 
 
 /**
- * Clears all notes from all measures in the score.
- * Resets the score to its initial empty state while preserving measure structure.
- * 
- * @requires editor.track - Track object containing score state
- */
-function clearAllNotes() {
-    editor.track.repeatedMeasures.clear();
-    for (var i = 0; i < editor.track.numberOfMeasures * editor.track.notesPerMeasure; i++) {
-        editor.track.setStickingStateNoNotify(i, 'off');
-        editor.track.setHighHatStateNoNotify(i, 'off');
-        editor.track.setTom1StateNoNotify(i, 'off');
-        editor.track.setTom4StateNoNotify(i, 'off');
-        editor.track.setSnareStateNoNotify(i, 'off');
-        editor.track.setKickStateNoNotify(i, 'off');
-    }
-    editor.track.numberOfMeasures = 1;
-
-    editor.notify();
-
-    sheetMusic.updateFromTrack(editor.track);
-
-    var uiStickings = "";
-    var uiHH = "";
-    var uiTom1 = "";
-    var uiTom4 = "";
-    var uiSnare = "";
-    var uiKick = "";
-    var i;
-
-    editor.changeDivisionWithNotes(editor.track.timeDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
-}
-
-
-/**
  * Shifts the repeated measures map entries after a given index.
  * Used when adding or removing measures to maintain correct repeat counts.
  * 

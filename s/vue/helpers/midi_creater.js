@@ -529,7 +529,6 @@ function createMidiUrlFromClickableUI(MIDI_type) {
             }
 
             for (i = 1; i < editor.track.numberOfMeasures; i++) {
-e
                 // reset arrays
                 Sticking_Array = get_empty_note_array_in_32nds();
                 HH_Array = get_empty_note_array_in_32nds();
