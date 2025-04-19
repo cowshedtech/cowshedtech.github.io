@@ -48,12 +48,12 @@ export default {
   template: `
 	<div class="noteContextMenuNew" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="hhLabelContextMenu" class="list">
-			<li @click='handleClick("all_off")'>all Hi-hats <b>Off</b></li>
-			<li @click='handleClick("all_on")'>all Hi-hats <b>On</b></li>
-			<li @click='handleClick("downbeats")'>downbeats</li>
-			<li @click='handleClick("upbeats")'>upbeats</li>
-			<li id='mute_hh_menu_item' @click='handleClick("mute")'>mute HH sound</li>
-			<li @click='handleClick("cancel")'>cancel</li>
+			<li @click='handleClick("all_off")'>Measure off</li>
+			<li @click='handleClick("all_on")'>Measure on</li>
+			<li @click='handleClick("downbeats")'>Measure downbeats</li>
+			<li @click='handleClick("upbeats")'>Measure upbeats</li>
+			<li id='mute_hh_menu_item' @click='handleClick("mute")'>Measure muted</li>
+			<li @click='handleClick("cancel")'>Cancel</li>
 		</ul>
 	</div>
 `

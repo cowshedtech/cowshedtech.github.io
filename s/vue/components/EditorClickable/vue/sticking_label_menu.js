@@ -67,13 +67,13 @@ export default {
 	template: `
 	<div class="noteContextMenuNew" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="stickingsLabelContextMenu" class="list">
-			<li @click='handleClick("all_off")'>measure <b>Off</b></li>
-			<li @click='handleClick("alternate")'>measure <b>R</b>/<b>L</b></li>
-			<li @click='handleClick("all_right")'>measure <b>R</b>s</li>
-			<li @click='handleClick("all_left")'>measure <b>L</b>s</li>
-			<li @click='handleClick("all_count")'>measure <b>C</b>ounts</li>
-			<li @click='handleClick("all_alternate")'>all <b>R</b>/<b>L</b></li>
-			<li @click='handleClick("cancel")'>cancel</li>
+			<li @click='handleClick("all_off")'>Measure <b>Off</b></li>
+			<li @click='handleClick("alternate")'>Measure <b>R</b>/<b>L</b></li>
+			<li @click='handleClick("all_right")'>Measure <b>R</b>s</li>
+			<li @click='handleClick("all_left")'>Measure <b>L</b>s</li>
+			<li @click='handleClick("all_count")'>Measure <b>C</b>ounts</li>
+			<li @click='handleClick("all_alternate")'>All <b>R</b>/<b>L</b></li>
+			<li @click='handleClick("cancel")'>Cancel</li>
 		</ul>
 	</div>
 	`

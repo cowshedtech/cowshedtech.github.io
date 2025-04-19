@@ -57,12 +57,12 @@ export default {
   template: `
 	<div class="noteContextMenuNew" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="kickLabelContextMenu" class="list">
-			<li @click='handleClick("all_off")'>all Kicks <b>Off</b></li>
-			<li @click='handleClick("all_on")'>all Kicks <b>On</b></li>
-			<li @click='handleClick("hh_foot_nums_on")'>HH foot #'s <b>On</b></li>
-			<li @click='handleClick("hh_foot_ands_on")'>HH foot &'s <b>On</b></li>
-			<li id='mute_kick_menu_item' @click='handleClick("mute")'>mute kick sound</li>
-			<li @click='handleClick("cancel")'>cancel</li>
+			<li @click='handleClick("all_off")'>Measure off</li>
+			<li @click='handleClick("all_on")'>Measure on</li>
+			<li @click='handleClick("hh_foot_nums_on")'>Measure hi-hat foot #'s on</li>
+			<li @click='handleClick("hh_foot_ands_on")'>Measure hi-hat foot &'s on</li>
+			<li id='mute_kick_menu_item' @click='handleClick("mute")'>Measure muted</li>
+			<li @click='handleClick("cancel")'>Cancel</li>
 		</ul>
 	</div>
 `
