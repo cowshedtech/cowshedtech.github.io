@@ -19,8 +19,16 @@ export default {
 	methods: {
 		handleClick(action) {
 			if (action !== "cancel") {
-				var startIndex = editor.track.notesPerMeasure * (this.measureIndex - 1);
-				for (var i = startIndex; i - startIndex < editor.track.notesPerMeasure; i++) {
+
+				// Determine start and end of loop based on action on single measure or all notes
+				var startIndex = 0;
+				var endIndex = editor.track.notesPerMeasure * editor.track.numberOfMeasures
+				if (action !== 'all_alternate') {
+					startIndex = editor.track.notesPerMeasure * (this.measureIndex - 1);
+					endIndex = startIndex + editor.track.notesPerMeasure;
+				} 
+				
+				for (var i = startIndex; i < endIndex; i++) {
 					let newState = constant_ABC_STICK_OFF;					
 					switch (action) {
 						case "all_off":
@@ -35,6 +43,9 @@ export default {
 						case "alternate":
 							newState = (i % 2 === 0) ? constant_ABC_STICK_R : constant_ABC_STICK_L;						
 							break;
+						case "all_alternate":
+							newState = (i % 2 === 0) ? constant_ABC_STICK_R : constant_ABC_STICK_L;						
+							break;	
 						case "all_count":
 							newState = constant_ABC_STICK_COUNT;
 							break;					
@@ -56,11 +67,12 @@ export default {
 	template: `
 	<div class="noteContextMenuNew" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="stickingsLabelContextMenu" class="list">
-			<li @click='handleClick("all_off")'>all <b>Off</b></li>
-			<li @click='handleClick("alternate")'>alternate <b>R</b>/<b>L</b></li>
-			<li @click='handleClick("all_right")'>all <b>R</b>s</li>
-			<li @click='handleClick("all_left")'>all <b>L</b>s</li>
-			<li @click='handleClick("all_count")'><b>C</b>ounts</li>
+			<li @click='handleClick("all_off")'>measure <b>Off</b></li>
+			<li @click='handleClick("alternate")'>measure <b>R</b>/<b>L</b></li>
+			<li @click='handleClick("all_right")'>measure <b>R</b>s</li>
+			<li @click='handleClick("all_left")'>measure <b>L</b>s</li>
+			<li @click='handleClick("all_count")'>measure <b>C</b>ounts</li>
+			<li @click='handleClick("all_alternate")'>all <b>R</b>/<b>L</b></li>
 			<li @click='handleClick("cancel")'>cancel</li>
 		</ul>
 	</div>

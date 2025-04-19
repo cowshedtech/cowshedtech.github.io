@@ -30,52 +30,6 @@ function muteInstrument(instrument, measure, muteElseUnmute) {
 }
 
 
-var measureForNoteLabelClick = 0;
-
-// context menu for labels;
-function noteLabelClick(event, instrument, measure) {
-    var contextMenu = false;
-
-    // store this in a global, there can only ever be one context menu open at a time.
-    // Yes, I agree this sucks
-    measureForNoteLabelClick = measure;
-
-    switch (instrument) {
-        case "stickings":
-            contextMenu = document.getElementById("stickingsLabelContextMenu");
-            break;
-        case "hh":
-            contextMenu = document.getElementById("hhLabelContextMenu");
-            break;
-        case "tom1":
-            contextMenu = document.getElementById("tom1LabelContextMenu");
-            break;
-        case "tom4":
-            contextMenu = document.getElementById("tom4LabelContextMenu");
-            break;
-        case "snare":
-            contextMenu = document.getElementById("snareLabelContextMenu");
-            break;
-        case "kick":
-            contextMenu = document.getElementById("kickLabelContextMenu");
-            break;
-        default:
-            console.log("bad case in noteLabelClick: " + instrument);
-            break;
-    }
-
-    if (contextMenu) {
-        if (!event)
-            event = window.event;
-        if (event.clientX || event.clientY) {
-            contextMenu.style.top = event.clientY - 30 + "px";
-            contextMenu.style.left = event.clientX - 35 + "px";
-        }
-        showContextMenu(contextMenu);
-    }
-
-    return false;
-};
 
 
 // each of the instruments can be muted.   Check the UI and zero out the array if the instrument is marked as muted

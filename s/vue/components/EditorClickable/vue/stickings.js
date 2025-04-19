@@ -67,7 +67,7 @@ export default {
   template: `
     <div class="stickings-row-container">
         <div class="line-labels">
-            <div class="stickings-label" @click="handleClick" @contextmenu.prevent="handleClick">STICKINGS</div>
+            <div class="stickings-label" :style="{ display: stickingVisible ? 'block' : 'none' }" @click="handleClick" @contextmenu.prevent="handleClick">STICKINGS</div>
             <StickingLabelMenu
               :measureIndex="measureIndex"
               :is-open="isPopupOpen" 

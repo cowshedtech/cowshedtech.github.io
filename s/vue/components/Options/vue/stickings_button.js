@@ -25,9 +25,10 @@ export default {
         },
 
         handleClick(event) {
-            this.toggleMenu();
-            this.menuX = event.clientX;
-            this.menuY = event.clientY;
+            options.setStickingVisible(!options.isStickingVisible())             
+            // this.toggleMenu();
+            // this.menuX = event.clientX;
+            // this.menuY = event.clientY;
         }
     },
 

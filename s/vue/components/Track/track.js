@@ -468,5 +468,20 @@ function Track() {
     root.getComments = function() {
 		return this.comments
 	}
+
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.clearAllNotes = function() {
+		this.repeatedMeasures.clear();
+		this.numberOfMeasures = 1;
+		this.sticking_array = class_empty_note_array.slice(0);
+		this.hh_array = class_empty_note_array.slice(0);   
+		this.snare_array = class_empty_note_array.slice(0);
+		this.kick_array = class_empty_note_array.slice(0); 
+		this.toms_array = [class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0)];
+		this.notifyHandlers();
+		// editor.changeDivisionWithNotes(editor.track.timeDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+	}
 	
 } // end of class

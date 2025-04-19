@@ -13,7 +13,7 @@ export default {
 
     methods: {
         handleClick(event) {
-            clearAllNotes();
+            editor.track.clearAllNotes();
         }
     },
 
