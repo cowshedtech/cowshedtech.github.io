@@ -9,10 +9,20 @@ export default {
     },
   },
 
-  setup(props) {
-    const repeatCount = ref("")
-    repeatCount.value = editor.track.repeatedMeasures.get(props.measureIndex - 1) || 1;
-    return { repeatCount }
+  data(props) {
+    return {
+      repeatCount: editor?.track?.repeatedMeasures.get(props.measureIndex - 1) || 1
+    }
+  },
+
+  mounted() {
+    this.removeHandler = editor?.track?.addChangeHandler(() => {
+      this.repeatCount = editor?.track?.repeatedMeasures.get(this.measureIndex - 1) || 1
+    })    
+  },
+
+  beforeUnmount() {
+      if (this.removeHandler) this.removeHandler() 
   },
 
   methods: {
