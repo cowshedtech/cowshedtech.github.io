@@ -12,7 +12,33 @@ export default {
 		}
 	},
 
+	data() {
+		return {
+			timeSigTop: '4',
+			timeSigBottom: '4'
+		}
+	},
+
 	methods: {
+		handleTimeSig(action) {
+			if (usingTriplets() && this.timeSigBottom != 4) {
+				editor.track.changeDivision(16);  // switch to a non triplet division since they are not supported in this time signature
+			}
+
+			editor.track.numBeats = this.timeSigTop;
+			editor.track.noteValue = this.timeSigBottom;
+			var newNotesPerMeasure = calc_notes_per_measure(editor.track.timeDivision, editor.track.numBeats, editor.track.noteValue);
+			
+			// If new_notes_per_measure is greater it will cause the changeDivision code to error
+			// as it tries to read the notes from the UI.   Setting it lower will allow the code to truncate
+			// the groove properly to something smaller rather than interpolating the groove into something weird
+			if (newNotesPerMeasure < editor.track.notesPerMeasure)
+				editor.track.notesPerMeasure = newNotesPerMeasure;
+			
+			editor.track.changeDivision(editor.track.timeDivision);   // use this function because it will relayout everything						
+			
+			this.$emit('close-clicked');
+		},
 
 		/*
 		 *
@@ -27,7 +53,7 @@ export default {
 	<div id="timeSigPopup" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<div id="timeSigPopupTitle">Choose a Time Signature</div>
 		<div id="timeSigPopupOptions">
-			<select id="timeSigPopupTimeSigTop">
+			<select id="timeSigPopupTimeSigTop" v-model="timeSigTop">
 			<option value="2">2</option>
 			<option value="3">3</option>
 			<option selected value="4">4</option>
@@ -44,7 +70,7 @@ export default {
 			<option value="15">15</option>
 		</select>
 		<b id="timeSigPopupSlash">/</b>
-		<select id="timeSigPopupTimeSigBottom">
+		<select id="timeSigPopupTimeSigBottom" v-model="timeSigBottom">
 			<option selected value="4">4</option>
 			<option value="8">8</option>
 			<option value="16">16</option>
@@ -52,7 +78,7 @@ export default {
 		</div>
 		<div id="timeSigPopupButtons">
 		<button id="timeSigPopupCancel"  @click="close();">Cancel</button>
-		<button id="timeSigPopupOK" onclick="myGrooveWriter.timeSigPopupClose('ok');">Done</button>
+		<button id="timeSigPopupOK" @click="handleTimeSig">Done</button>
 		</div>
 	</div>
 `
