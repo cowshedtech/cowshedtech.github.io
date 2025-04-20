@@ -503,6 +503,64 @@ function Track() {
 	/**
      * Notifies all registered handlers of a change
      */
+    root.duplicateMeasure = function(measureNum) {		
+
+		let root = this;
+		// Helper function to collect notes for a given range
+		function collectNotes(start, end, target) {
+			for (let i = start; i < end; i++) {
+				target.stickings.push(root.getStickingState(i, "ABC"));
+				target.hh.push(root.getHighHatState(i, "ABC"));
+				target.tom1.push(root.getTomState(1, i, "ABC"));
+				target.tom4.push(root.getTomState(4, i, "ABC"));
+				target.snare.push(root.getSnareState(i, "ABC"));
+				target.kick.push(root.getKickState(i, "ABC"));
+			}
+		}
+	
+		const notes = {
+			stickings: [],
+			hh: [],
+			tom1: [],
+			tom4: [],
+			snare: [],
+			kick: []
+		};
+	
+		// Collect notes before the measure to be duplicated
+		collectNotes(0, (measureNum - 1) * this.notesPerMeasure, notes);
+	
+		// Collect notes for the measure to be duplicated (twice)
+		const measureStart = (measureNum - 1) * this.notesPerMeasure;
+		const measureEnd = measureStart + this.notesPerMeasure;
+		collectNotes(measureStart, measureEnd, notes);
+		collectNotes(measureStart, measureEnd, notes);
+	
+		// Collect notes after the measure to be duplicated
+		collectNotes(measureNum * this.notesPerMeasure, this.notesPerMeasure * this.numberOfMeasures, notes);
+
+		this.sticking_array = notes.stickings
+		this.hh_array = notes.hh
+		this.snare_array = notes.snare
+		this.kick_array = notes.kick
+		this.toms_array[0] = notes.tom1
+		this.toms_array[4] = notes.tom4
+	
+		// Update measure count and repeated measures
+		this.numberOfMeasures++;
+		shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
+		this.repeatedMeasures.set(measureNum, this.repeatedMeasures.get(measureNum - 1) || 1);
+	
+		// Update UI and sheet music
+		// editor.expandAuthoringViewWhenNecessary(this.notesPerMeasure, this.numberOfMeasures);
+		// editor.changeDivisionWithNotes(this.timeDivision, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
+	
+		this.notifyHandlers();
+	};
+
+	/**
+     * Notifies all registered handlers of a change
+     */
     root.deleteMeasure = function(measureNum) {
 		const noteData = {
 			stickings: [],
@@ -552,5 +610,17 @@ function Track() {
 		// 	noteData.kick
 		// );
 	}
+
+    root.repeatMeasureInc = function(measureNum) {
+		const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
+		editor.track.repeatedMeasures.set(measureNum - 1, count + 1);
+		this.notifyHandlers();		
+	};
+	
+	root.repeatMeasureDec = function(measureNum) {
+		const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
+		editor.track.repeatedMeasures.set(measureNum - 1, count - 1);
+		this.notifyHandlers();		
+	};
 	
 } // end of class

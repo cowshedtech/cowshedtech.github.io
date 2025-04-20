@@ -17,21 +17,19 @@ export default {
 
   methods: {
     handleCloseMeasure() {
-      // closeMeasureButtonClick(this.measureIndex);
       editor.track.deleteMeasure(this.measureIndex);
     },
     handleRepeatInc() {
-      repeatMeasureIncButtonClick(this.measureIndex);
+      editor.track.repeatMeasureInc(this.measureIndex);
     },
     handleRepeatDec() {
-      repeatMeasureDecButtonClick(this.measureIndex);
+      editor.track.repeatMeasureDec(this.measureIndex);
     },
     handleDuplicate() {
-      duplicateMeasureButtonClick(this.measureIndex);
+      editor.track.duplicateMeasure(this.measureIndex);
     },
     handleAddMiddle() {
-      // addMeasureMiddleButtonClick(this.measureIndex);
-      editor.track.addMeasure();
+      editor.track.addMeasure(this.measureIndex);
     }
   },
 
