@@ -475,29 +475,45 @@ function Track() {
     root.clearAllNotes = function() {
 		this.repeatedMeasures.clear();
 		this.numberOfMeasures = 1;
-		this.sticking_array = class_empty_note_array.slice(0);
-		this.hh_array = class_empty_note_array.slice(0);   
-		this.snare_array = class_empty_note_array.slice(0);
-		this.kick_array = class_empty_note_array.slice(0); 
-		this.toms_array = [class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0)];
+		this.sticking_array = Array(this.notesPerMeasure).fill(false);.slice(0);
+		this.hh_array = Array(this.notesPerMeasure).slice(0);   
+		this.snare_array = Array(this.notesPerMeasure).slice(0);
+		this.kick_array = Array(this.notesPerMeasure).slice(0); 
+		this.toms_array = [Array(this.notesPerMeasure).slice(0), Array(this.notesPerMeasure).slice(0), Array(this.notesPerMeasure).slice(0), Array(this.notesPerMeasure).slice(0)];
 		this.notifyHandlers();		
 	}
 
 	/**
-     * Notifies all registered handlers of a change
-     */
-    root.addMeasure = function() {
-		this.numberOfMeasures++;
-		this.sticking_array.push(...class_empty_note_array.slice(0));
-		this.hh_array.push(...class_empty_note_array.slice(0));   
-		this.snare_array.push(...class_empty_note_array.slice(0));
-		this.kick_array.push(...class_empty_note_array.slice(0)); 
-		this.toms_array[0].push(...class_empty_note_array.slice(0));
-		this.toms_array[1].push(...class_empty_note_array.slice(0)); 
-		this.toms_array[2].push(...class_empty_note_array.slice(0)); 
-		this.toms_array[3].push(...class_empty_note_array.slice(0)); 
+	 * Adds a new empty measure after the specified measure.
+	 * Collects notes before and after the insertion point and adds an empty measure.
+	 * 
+	 * @param {number} measureNum - Index of the measure after which to add (1-based)
+	 * @requires Functions:
+	 * - get_sticking_state - Gets sticking notation for a note
+	 * - editor.track.getHighHatState - Gets hi-hat state for a note
+	 * - editor.track.getTomState - Gets tom state for a note
+	 * - editor.track.getSnareState - Gets snare state for a note
+	 * - editor.track.getKickState - Gets kick state for a note
+	 * - shiftRepeatedMeasuresAfterIndex - Updates repeat counts after insertion
+	 * @requires editor.track - Track object containing score state
+	 */
+	root.addMeasure = function(measureNum) {
+		var insertIndex = (measureNum) * editor.track.notesPerMeasure
+		this.sticking_array.splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
+		this.hh_array.splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
+		this.snare_array.splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
+		this.kick_array.splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
+		this.toms_array[0].splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
+		this.toms_array[1].splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
+		this.toms_array[2].splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
+		this.toms_array[3].splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
+		editor.track.numberOfMeasures++;
+
+		// We need to move all the repeate measures after this measure up 1 
+		shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
+
 		this.notifyHandlers();
-	}
+	};
 
 	/**
      * Notifies all registered handlers of a change
@@ -547,7 +563,7 @@ function Track() {
 	
 		// Update measure count and repeated measures
 		this.numberOfMeasures++;
-		shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
+		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 		this.repeatedMeasures.set(measureNum, this.repeatedMeasures.get(measureNum - 1) || 1);
 	
 		this.notifyHandlers();
@@ -589,7 +605,7 @@ function Track() {
 		this.toms_array[3] = noteData.tom4
 		
 		this.repeatedMeasures.delete(measureNum - 1);
-		shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
+		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
 		this.numberOfMeasures--;
 
 		this.notifyHandlers();		
@@ -692,5 +708,27 @@ function Track() {
 		}
 
 		return updatedNotes;
+	}
+
+	/**
+	 * Shifts the repeated measures map entries after a given index.
+	 * Used when adding or removing measures to maintain correct repeat counts.
+	 * 
+	 * @param {number} measureIndex - Index of the measure to start shifting from (0-based)
+	 * @param {number} direction - Direction to shift (1 for right, -1 for left)
+	 * @requires editor.track.repeatedMeasures - Map containing measure repeat counts
+	 */
+	root.shiftRepeatedMeasuresAfterIndex = function(measureIndex, direction) {
+		// Convert Map to array of entries and sort by measure index
+		const sortedEntries = [...this.repeatedMeasures.entries()].sort((a, b) => a[0] - b[0]);
+		
+		// Process in reverse order to avoid overwriting
+		for (let i = sortedEntries.length - 1; i >= 0; i--) {
+			const [key, value] = sortedEntries[i];
+			if (key > measureIndex) {
+				this.repeatedMeasures.set(key + direction, value);
+				this.repeatedMeasures.delete(key);
+			}
+		}
 	}
 } // end of class

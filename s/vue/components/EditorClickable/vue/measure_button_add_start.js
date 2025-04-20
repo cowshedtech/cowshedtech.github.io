@@ -7,8 +7,14 @@ export default {
     },
   },
 
+  methods: {
+    handleAddStart() {
+      editor.track.addMeasure(0);
+    }
+  },
+
   template: `
-    <span v-if="measureIndex === '1'" id="addMeasureButtonStart" title="Add measure" onClick="addMeasurePrevButtonClick(event)">
+    <span v-if="measureIndex === 1" id="addMeasureButtonStart" title="Add measure" @click="handleAddStart">
         <i class="fa fa-plus"></i>
     </span>`
 }
