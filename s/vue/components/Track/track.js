@@ -591,7 +591,7 @@ function Track() {
 		this.snare_array = noteData.snare
 		this.kick_array = noteData.kick
 		this.toms_array[0] = noteData.tom1
-		this.toms_array[4] = noteData.tom4
+		this.toms_array[3] = noteData.tom4
 		
 		this.repeatedMeasures.delete(measureNum - 1);
 		shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
@@ -611,16 +611,102 @@ function Track() {
 		// );
 	}
 
+    /**
+     * Notifies all registered handlers of a change
+     */
     root.repeatMeasureInc = function(measureNum) {
 		const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
 		editor.track.repeatedMeasures.set(measureNum - 1, count + 1);
 		this.notifyHandlers();		
 	};
 	
-	root.repeatMeasureDec = function(measureNum) {
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.repeatMeasureDec = function(measureNum) {
 		const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
 		editor.track.repeatedMeasures.set(measureNum - 1, count - 1);
 		this.notifyHandlers();		
 	};
+
+	/**
+     * Notifies all registered handlers of a change
+     */
+	var haveShownMixedDivisionMessage = false;
+    root.changeDivisionNew = function (newDivision) {
+		if (newDivision == 48 && !haveShownMixedDivisionMessage) {
+			haveShownMixedDivisionMessage = true;
+			alert("The MIXED subdivision allows you to create a combination of triplets and non-triplet notes in one measure.  Set every 3rd note for 16ths and every 6th note for 8th notes")
+		}
+
+		var isOldDivisionTriplets = isTripletDivision(this.timeDivision);
+		var isNewDivisionTriplets = isTripletDivision(newDivision);
+		var new_notes_per_measure = calc_notes_per_measure((isNewDivisionTriplets ? 48 : 32), this.numBeats, this.noteValue);
+
+		// check for incompatible odd time signature division   9/8 and 1/4notes for instance or 9/16 and 1/8notes
+		if ((newDivision * this.numBeats / this.noteValue) % 1 != 0) {
+			alert("1/" + newDivision + " notes are disabled in " + this.numBeats + "/" + this.noteValue + " time.  This combination would result in a half note.");
+			return;
+		}
+		if (isNewDivisionTriplets && this.noteValue != 4) {
+			alert("Triplets are disabled in " + this.numBeats + "/" + this.noteValue + " time.  Use x/4 time for triplets.");
+			return;
+		}
+
+		this.timeDivision = newDivision;
+		this.notesPerMeasure = calc_notes_per_measure(this.timeDivision, this.numBeats, this.noteValue);		
+
+		if (isOldDivisionTriplets !== isNewDivisionTriplets) {
+			// changing from or changing to a triplet division
+			// triplets don't scale well, so use defaults when we change
+			this.sticking_array = noteArraysFromURLData("Stickings", this.getEmptyGroove(), this.notesPerMeasure, this.numberOfMeasures);
+			this.hh_array = noteArraysFromURLData("H", this.getDefaultHHGroove(), this.notesPerMeasure, this.numberOfMeasures);
+			this.snare_array = noteArraysFromURLData("S", this.getDefaultSnareGroove(this.notesPerMeasure, this.numBeats, this.noteValue, this.numberOfMeasures), this.notesPerMeasure, this.numberOfMeasures);
+			this.kick_array = noteArraysFromURLData("K", this.getDefaultKickGroove(), this.notesPerMeasure, this.numberOfMeasures);
+			this.toms_array[0] = noteArraysFromURLData("T1", this.getEmptyGroove(), this.notesPerMeasure, this.numberOfMeasures);
+			this.toms_array[3] = noteArraysFromURLData("T4", this.getEmptyGroove(), this.notesPerMeasure, this.numberOfMeasures);
+
+			// reset the metronome click, since it has different options
+			// metronome.resetOptionsMenuOffsetClick();
+		}
+
+		this.sticking_array = this.adjustNotesForNewDivision(this.sticking_array)
+		this.hh_array = this.adjustNotesForNewDivision(this.hh_array)
+		this.snare_array = this.adjustNotesForNewDivision(this.snare_array)
+		this.kick_array = this.adjustNotesForNewDivision(this.kick_array)
+		this.toms_array[0] = this.adjustNotesForNewDivision(this.toms_array[0])
+		this.toms_array[3] = this.adjustNotesForNewDivision(this.toms_array[3])
+
+		this.notifyHandlers();	
+	};
+
+	/**
+     * 
+     */
+	root.adjustNotesForNewDivision = function(notes) {
+
+		// multiple measures of "how_many_notes"
+		var notesOnScreen = this.notesPerMeasure * this.numberOfMeasures;
+
+		var noteStringScaler = 1;
+		var displayScaler = 1;
+		if (notes.length > notesOnScreen && notes.length / notesOnScreen >= 2) {
+			// if we encounter a 16th note groove for an 8th note board, let's scale it	down
+			noteStringScaler = Math.ceil(notes.length / notesOnScreen);
+		} else if (notes.length < notesOnScreen && notesOnScreen / notes.length >= 2) {
+			// if we encounter a 8th note groove for an 16th note board, let's scale it up
+			displayScaler = Math.ceil(notesOnScreen / notes.length);
+		}
 	
+		let updatedNotes = Array(notesOnScreen).fill(false).slice(0);
+
+		//  DisplayIndex is the index into the notes on the HTML page  starts at 1/32\n%%flatbeams
+		var displayIndex = 0;
+		var topDisplay = this.notesPerMeasure * this.numberOfMeasures;
+		for (var i = 0; i < notes.length && displayIndex < topDisplay; i += noteStringScaler, displayIndex += displayScaler) {
+			updatedNotes[displayIndex] = notes[i];			
+		}
+
+		return updatedNotes;
+	}
 } // end of class
