@@ -480,8 +480,7 @@ function Track() {
 		this.snare_array = class_empty_note_array.slice(0);
 		this.kick_array = class_empty_note_array.slice(0); 
 		this.toms_array = [class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0)];
-		this.notifyHandlers();
-		// editor.changeDivisionWithNotes(editor.track.timeDivision, uiStickings, uiHH, uiTom1, uiTom4, uiSnare, uiKick);
+		this.notifyHandlers();		
 	}
 
 	/**
@@ -551,10 +550,6 @@ function Track() {
 		shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 		this.repeatedMeasures.set(measureNum, this.repeatedMeasures.get(measureNum - 1) || 1);
 	
-		// Update UI and sheet music
-		// editor.expandAuthoringViewWhenNecessary(this.notesPerMeasure, this.numberOfMeasures);
-		// editor.changeDivisionWithNotes(this.timeDivision, notes.stickings, notes.hh, notes.tom1, notes.tom4, notes.snare, notes.kick);
-	
 		this.notifyHandlers();
 	};
 
@@ -597,18 +592,7 @@ function Track() {
 		shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
 		this.numberOfMeasures--;
 
-		this.notifyHandlers();
-
-		// // editor.expandAuthoringViewWhenNecessary(editor.track.notesPerMeasure, editor.track.numberOfMeasures);
-		// this.changeDivisionWithNotes(
-		// 	editor.track.timeDivision,
-		// 	noteData.stickings,
-		// 	noteData.hh,
-		// 	noteData.tom1,
-		// 	noteData.tom4,
-		// 	noteData.snare,
-		// 	noteData.kick
-		// );
+		this.notifyHandlers();		
 	}
 
     /**
@@ -690,11 +674,11 @@ function Track() {
 
 		var noteStringScaler = 1;
 		var displayScaler = 1;
+		// if we encounter a 16th note groove for an 8th note board, let's scale it	down
+		// if we encounter a 8th note groove for an 16th note board, let's scale it up			
 		if (notes.length > notesOnScreen && notes.length / notesOnScreen >= 2) {
-			// if we encounter a 16th note groove for an 8th note board, let's scale it	down
 			noteStringScaler = Math.ceil(notes.length / notesOnScreen);
-		} else if (notes.length < notesOnScreen && notesOnScreen / notes.length >= 2) {
-			// if we encounter a 8th note groove for an 16th note board, let's scale it up
+		} else if (notes.length < notesOnScreen && notesOnScreen / notes.length >= 2) {			
 			displayScaler = Math.ceil(notesOnScreen / notes.length);
 		}
 	
