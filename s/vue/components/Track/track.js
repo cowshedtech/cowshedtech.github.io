@@ -475,11 +475,11 @@ function Track() {
     root.clearAllNotes = function() {
 		this.repeatedMeasures.clear();
 		this.numberOfMeasures = 1;
-		this.sticking_array = Array(this.notesPerMeasure).fill(false);.slice(0);
-		this.hh_array = Array(this.notesPerMeasure).slice(0);   
-		this.snare_array = Array(this.notesPerMeasure).slice(0);
-		this.kick_array = Array(this.notesPerMeasure).slice(0); 
-		this.toms_array = [Array(this.notesPerMeasure).slice(0), Array(this.notesPerMeasure).slice(0), Array(this.notesPerMeasure).slice(0), Array(this.notesPerMeasure).slice(0)];
+		this.sticking_array = Array(this.notesPerMeasure).fill(false).slice(0);
+		this.hh_array = Array(this.notesPerMeasure).fill(false).slice(0);   
+		this.snare_array = Array(this.notesPerMeasure).fill(false).slice(0);
+		this.kick_array = Array(this.notesPerMeasure).fill(false).slice(0); 
+		this.toms_array = [Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0)];
 		this.notifyHandlers();		
 	}
 
@@ -520,46 +520,16 @@ function Track() {
      */
     root.duplicateMeasure = function(measureNum) {		
 
-		let root = this;
-		// Helper function to collect notes for a given range
-		function collectNotes(start, end, target) {
-			for (let i = start; i < end; i++) {
-				target.stickings.push(root.getStickingState(i, "ABC"));
-				target.hh.push(root.getHighHatState(i, "ABC"));
-				target.tom1.push(root.getTomState(1, i, "ABC"));
-				target.tom4.push(root.getTomState(4, i, "ABC"));
-				target.snare.push(root.getSnareState(i, "ABC"));
-				target.kick.push(root.getKickState(i, "ABC"));
-			}
-		}
-	
-		const notes = {
-			stickings: [],
-			hh: [],
-			tom1: [],
-			tom4: [],
-			snare: [],
-			kick: []
-		};
-	
-		// Collect notes before the measure to be duplicated
-		collectNotes(0, (measureNum - 1) * this.notesPerMeasure, notes);
-	
-		// Collect notes for the measure to be duplicated (twice)
 		const measureStart = (measureNum - 1) * this.notesPerMeasure;
 		const measureEnd = measureStart + this.notesPerMeasure;
-		collectNotes(measureStart, measureEnd, notes);
-		collectNotes(measureStart, measureEnd, notes);
-	
-		// Collect notes after the measure to be duplicated
-		collectNotes(measureNum * this.notesPerMeasure, this.notesPerMeasure * this.numberOfMeasures, notes);
-
-		this.sticking_array = notes.stickings
-		this.hh_array = notes.hh
-		this.snare_array = notes.snare
-		this.kick_array = notes.kick
-		this.toms_array[0] = notes.tom1
-		this.toms_array[4] = notes.tom4
+		this.sticking_array.splice(measureEnd, 0 , ...this.sticking_array.slice(measureStart, measureEnd));
+		this.hh_array.splice(measureEnd, 0 , ...this.hh_array.slice(measureStart, measureEnd));
+		this.snare_array.splice(measureEnd, 0 , ...this.snare_array.slice(measureStart, measureEnd));
+		this.kick_array.splice(measureEnd, 0 , ...this.kick_array.slice(measureStart, measureEnd));
+		this.toms_array[0].splice(measureEnd, 0 , ...this.toms_array[0].slice(measureStart, measureEnd));
+		this.toms_array[1].splice(measureEnd, 0 , ...this.toms_array[1].slice(measureStart, measureEnd));
+		this.toms_array[2].splice(measureEnd, 0 , ...this.toms_array[2].slice(measureStart, measureEnd));
+		this.toms_array[3].splice(measureEnd, 0 , ...this.toms_array[3].slice(measureStart, measureEnd));
 	
 		// Update measure count and repeated measures
 		this.numberOfMeasures++;
@@ -573,36 +543,15 @@ function Track() {
      * Notifies all registered handlers of a change
      */
     root.deleteMeasure = function(measureNum) {
-		const noteData = {
-			stickings: [],
-			hh: [],
-			tom1: [],
-			tom4: [],
-			snare: [],
-			kick: []
-		};
-
 		const measureStart = (measureNum - 1) * this.notesPerMeasure;
-		const measureEnd = measureNum * this.notesPerMeasure;
-		const totalNotes = this.notesPerMeasure * this.numberOfMeasures;
-
-		for (let i = 0; i < totalNotes; i++) {
-			if (i < measureStart || i >= measureEnd) {
-				noteData.stickings.push(editor.track.getStickingState(i, "ABC"))
-				noteData.hh.push(editor.track.getHighHatState(i, "ABC"))
-				noteData.tom1.push(editor.track.getTomState(1, i, "ABC"))
-				noteData.tom4.push(editor.track.getTomState(4, i, "ABC"))
-				noteData.snare.push(editor.track.getSnareState(i, "ABC"))
-				noteData.kick.push(editor.track.getKickState(i, "ABC"))
-			}
-		}
-
-		this.sticking_array = noteData.stickings
-		this.hh_array = noteData.hh
-		this.snare_array = noteData.snare
-		this.kick_array = noteData.kick
-		this.toms_array[0] = noteData.tom1
-		this.toms_array[3] = noteData.tom4
+		this.sticking_array.splice(measureStart, this.notesPerMeasure);
+		this.hh_array.splice(measureStart, this.notesPerMeasure);
+		this.snare_array.splice(measureStart, this.notesPerMeasure);
+		this.kick_array.splice(measureStart, this.notesPerMeasure);
+		this.toms_array[0].splice(measureStart, this.notesPerMeasure);
+		this.toms_array[1].splice(measureStart, this.notesPerMeasure);
+		this.toms_array[2].splice(measureStart, this.notesPerMeasure);
+		this.toms_array[3].splice(measureStart, this.notesPerMeasure);
 		
 		this.repeatedMeasures.delete(measureNum - 1);
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
