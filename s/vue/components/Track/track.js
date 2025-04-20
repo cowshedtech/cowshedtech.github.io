@@ -509,7 +509,7 @@ function Track() {
 		this.toms_array[3].splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
 		editor.track.numberOfMeasures++;
 
-		// We need to move all the repeate measures after this measure up 1 
+		// We need to move all the repeated measuresafter this measure up 1 
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 
 		this.notifyHandlers();
