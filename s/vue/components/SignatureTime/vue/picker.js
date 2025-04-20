@@ -52,7 +52,7 @@ export default {
         },
 
         handleChangeDivisionClick(division) {
-            editor.track.changeDivisionNew(division)
+            editor.track.changeDivision(division)
         },
     },
 

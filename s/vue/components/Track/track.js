@@ -582,7 +582,7 @@ function Track() {
      * Notifies all registered handlers of a change
      */
 	var haveShownMixedDivisionMessage = false;
-    root.changeDivisionNew = function (newDivision) {
+    root.changeDivision = function (newDivision) {
 		if (newDivision == 48 && !haveShownMixedDivisionMessage) {
 			haveShownMixedDivisionMessage = true;
 			alert("The MIXED subdivision allows you to create a combination of triplets and non-triplet notes in one measure.  Set every 3rd note for 16ths and every 6th note for 8th notes")
