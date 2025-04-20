@@ -510,7 +510,7 @@ function Track() {
 		editor.track.numberOfMeasures++;
 
 		// We need to move all the repeate measures after this measure up 1 
-		shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
+		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 
 		this.notifyHandlers();
 	};
