@@ -6,6 +6,19 @@
  */
 
 export default {
+  props: {
+    isOpen: {
+        type: Boolean,
+        default: false
+    },
+    x: {
+        type: Number
+    },
+    y: {
+        type: Number
+    }
+	},
+  
   data() {
     /** @type {{ options: MetronomeOption[] }} */
     return {
@@ -41,6 +54,7 @@ export default {
       ]
     }
   },
+
   methods: {
     /**
      * Handle click on a metronome option
@@ -49,8 +63,10 @@ export default {
     handleOptionClick(optionId) {
       let option = this.options.find(option => option.id === optionId)
       option.handler(!option.checked)
+      this.$emit('close')
     }
   },
+
   computed: {
     /**
      * Get the ID for a menu item
@@ -72,6 +88,7 @@ export default {
       })
     }
   },
+
   mounted() {
     // Subscribe to metronome changes
     this.removeHandler = metronome?.addChangeHandler(() => {
@@ -81,12 +98,14 @@ export default {
       // this.options[3].checked = metronome ? metronome.isOffsetClick() : false
     })
   },
+
   beforeUnmount() {
     // Cleanup event handler
     if (this.removeHandler) this.removeHandler()
   },
+
   template: `
-    <nav class="noteContextMenu" aria-label="Metronome options">
+    <span class="noteContextMenuNew" id="metronomeOptionsContextMenuContainer" aria-label="Metronome options" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
       <ul id="metronomeOptionsContextMenu" class="list" role="menu">
         <li v-for="option in options"
             :key="option.id"
@@ -101,6 +120,6 @@ export default {
             :aria-checked="option.checked"
         >{{ option.label }}</li>
       </ul>
-    </nav>
+    </span>
   `
 }

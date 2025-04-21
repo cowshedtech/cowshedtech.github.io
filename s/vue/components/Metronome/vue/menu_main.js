@@ -1,7 +1,12 @@
+import OptionsMenu from './menu_options.js'
+
 export default {
     data() {
         return {
-            freq: metronome ? metronome.getFrequency() : 0
+            freq: metronome ? metronome.getFrequency() : 0,
+            isPopupOpen: false,
+            menuX: 0,
+            menuY: 0,
         }
     },
     computed: {
@@ -17,8 +22,13 @@ export default {
             metronome.setFrequency(value)
         },
         handleOptions(event) {
-            metronome.optionsAnchorClick(event)
-        }
+            this.menuX = event.clientX;
+            this.menuY = event.clientY;
+            this.isPopupOpen = !this.isPopupOpen;
+        },
+        closeMenu() {
+            this.isPopupOpen = false;
+        },
     },
     mounted() {
         // Subscribe to metronome changes
@@ -30,6 +40,11 @@ export default {
         // Cleanup event handler
         if (this.removeHandler) this.removeHandler() 
     },
+
+    components: {
+        OptionsMenu
+    },
+
     template: `
             <span id="metronomeContainer">
                 <span id="metronomeLabel">METRONOME:</span>
@@ -43,8 +58,14 @@ export default {
                 <span 
                     class="metronomeButton Options grooveDB_hidden" 
                     id="metronomeOptionsAnchor"
-                    @click="handleOptions"
-                >Options</span>
+                    @click="handleOptions"                    
+                >Options</span>                                                    
             </span>
+            <OptionsMenu
+                :is-open="isPopupOpen" 
+                :x="menuX" 
+                :y="menuY"
+                @close="closeMenu">
+            </OptionsMenu>
   `
   }
