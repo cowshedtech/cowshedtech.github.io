@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       trackData: editor.track ? editor.track : null,
-      groupSize: 4
+      groupSize: editor.track ? editor.track.noteGroupingSize() : 4
     }
   },
 
@@ -27,11 +27,6 @@ export default {
       },
       deep: true
     },    
-  },
-
-  onBeforeMount() {
-    const { notesPerMeasure, numBeats, noteValue } = editor.track;
-    this.groupSize = editor.track.noteGroupingSize();
   },
 
   template: `

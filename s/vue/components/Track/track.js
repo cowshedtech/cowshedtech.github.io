@@ -590,7 +590,7 @@ function Track() {
 
 		var isOldDivisionTriplets = isTripletDivision(this.timeDivision);
 		var isNewDivisionTriplets = isTripletDivision(newDivision);
-		var new_notes_per_measure = calc_notes_per_measure((isNewDivisionTriplets ? 48 : 32), this.numBeats, this.noteValue);
+		// var new_notes_per_measure = calc_notes_per_measure((isNewDivisionTriplets ? 48 : 32), this.numBeats, this.noteValue);
 
 		// check for incompatible odd time signature division   9/8 and 1/4notes for instance or 9/16 and 1/8notes
 		if ((newDivision * this.numBeats / this.noteValue) % 1 != 0) {
@@ -692,7 +692,7 @@ function Track() {
 			// triplets  ( we only support 2/4 here )
 			if(this.numBeats != 2 && this.noteValue != 4)
 				console.log("Triplets are only supported in 2/4 and 4/4 time");
-			note_grouping = notes_per_measure / (this.numBeats * (4/this.noteValue));
+			note_grouping = this.notesPerMeasure / (this.numBeats * (4/this.noteValue));
 		} else if(this.numBeats == 3) {
 			// 3/4, 3/8, 3/16
 			// 3 groups
