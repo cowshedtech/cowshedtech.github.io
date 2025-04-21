@@ -141,12 +141,18 @@ function GrooveWriter() {
 		midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
 			var midiURL;
 
+			console.log(`loadMidiDataEvent start`)
+
 			if (playStarting && metronome.getCountInActive()) {
+				console.log(`loadMidiDataEvent build count in track`)
 
 				midiURL = buildMIDICountInTrack(root.track.numBeats, root.track.noteValue, midiPlayer.getTempo());
 				midiPlayer.noteHasChanged();
 				metronome.setCountInIsPlaying(true);
+
+				console.log(`loadMidiDataEvent build count in track complete`)
 			} else {
+				console.log(`loadMidiDataEvent build track`)
 				if (metronome.countInIsPlaying) {
 					// we saved the state above so that we could reset the Offset click start, otherwise it starts on the 'e'
 					metronome.setCountInIsPlaying(false);
@@ -154,9 +160,14 @@ function GrooveWriter() {
 				}
 				midiURL = createMidiUrlFromClickableUI("our_MIDI");
 				midiPlayer.resetNoteHasChanged();
+				console.log(`loadMidiDataEvent build track completed`)
 			}
 			midiPlayer.loadFromURL(midiURL, midiPlayer.getTempo());
-			updateGrooveDBSource();
+
+			//
+			// TODO
+			//
+			// updateGrooveDBSource();
 		};
 
 		
