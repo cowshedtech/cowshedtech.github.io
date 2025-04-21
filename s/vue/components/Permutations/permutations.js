@@ -610,11 +610,11 @@ function setupPermutationMenu() {
 
     if (editor.track.numBeats == 4 && editor.track.noteValue == 4) {
 
-        addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", true);
+        // addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", true);
 
     } else {
         // permutations disabled except in 4/4 time
-        addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", false);
+        // addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", false);
         //root.permutationPopupClick("none");  // make sure permutation is off
     }
 }
