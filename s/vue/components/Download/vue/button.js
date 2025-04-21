@@ -1,40 +1,27 @@
 import BottomNavigationButton from '../../BaseButtonNavigationButton/vue/base_button_bottom_navigation.js'
+import Menu from "./menu.js"
 
 export default {
   name: 'DownloadButton',
 
-  components: {
-    BottomNavigationButton
+  data() {
+    return {
+      isPopupOpen: false,
+      menuX: 0,
+      menuY: 0,
+    }
   },
 
-  setup() {
-    /**
-     * Handles the download button click
-     * @param {MouseEvent} event - The click event
-     */
-    const handleDownloadClick = (event) => {
-      event.preventDefault();
-      // window.downloadAnchorClick?.(); // Safely call the global function if it exists
-        const contextMenu = document.getElementById('downloadContextMenu');
-        if (!contextMenu) return;
-    
-        // Normalize event object for cross-browser compatibility
-        const e = event || window.event;
-        if (!e) return;
-    
-        // Position menu relative to click coordinates with a 150px offset
-        const OFFSET = 150;
-        if (typeof e.clientX === 'number' && typeof e.clientY === 'number') {
-            contextMenu.style.top = `${e.clientY - OFFSET}px`;
-            contextMenu.style.left = `${e.clientX - OFFSET}px`;
-        }
-    
-        showContextMenu(contextMenu);
-    };
+  components: {
+    BottomNavigationButton, Menu
+  },
 
-    return {
-      handleDownloadClick
-    };
+  methods: {
+    handleDownloadClick(event) {
+      this.menuX = event.clientX;
+      this.menuY = event.clientY;
+      this.isPopupOpen = !this.isPopupOpen
+    }    
   },
 
   template: `
@@ -47,6 +34,11 @@ export default {
       <span class="bottomButtonIcon">
         <i class="fa fa-download fa-2x"></i>
       </span>
+      <Menu
+        :is-open="isPopupOpen" 
+        :x="menuX" 
+        :y="menuY">
+      </Menu>
     </BottomNavigationButton>
   `
 }

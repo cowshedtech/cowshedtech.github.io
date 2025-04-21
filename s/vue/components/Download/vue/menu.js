@@ -4,6 +4,19 @@ import { reactive, computed } from 'vue'
 export default {
   name: 'DownloadMenu',
 
+  props: {
+		isOpen: {
+			type: Boolean,
+			default: false
+		},
+		x: {
+			type: Number
+		},
+		y: {
+			type: Number
+		}
+	},
+  
   setup() {
     const DEFAULTS = {
       MENU_WIDTH: '200px',
@@ -129,7 +142,10 @@ export default {
   },
 
   template: `
-    <div class="noteContextMenu">
+    <div class="noteContextMenuNew" 
+         v-if="isOpen" 
+		     :style="{ top: y + 'px', left: x + 'px' }" 
+			>
       <ul 
         id="downloadContextMenu" 
         class="list" 
