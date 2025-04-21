@@ -1,11 +1,11 @@
 import { ref } from 'vue'
 
-function buildHighlights(track) {
+function buildHighlights(track, measureIndex) {
     const { notesPerMeasure, numBeats, noteValue } = track;
     const groupSize = noteGroupingSize(notesPerMeasure, numBeats, noteValue)
 
     const highlights = ref([])
-    for (let i = 0; i < notesPerMeasure; i++) {
+    for (let i = (measureIndex - 1) * notesPerMeasure; i < (measureIndex - 1) * notesPerMeasure + notesPerMeasure; i++) {
         highlights.value.push({
             id: i,
             shouldAddSpace: (i + 1) % groupSize === 0 && i < notesPerMeasure - 1
@@ -36,7 +36,7 @@ export default {
     watch: {
         track: {
             handler(newVal, oldVal) {
-                let highlights = buildHighlights(newVal)
+                let highlights = buildHighlights(newVal, this.measureIndex)
                 this.highlights = highlights;
                 this.$forceUpdate();
             },
