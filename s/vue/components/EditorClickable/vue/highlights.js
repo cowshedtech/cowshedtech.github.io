@@ -40,8 +40,8 @@ export default {
 
     watch: {
         track: {
-            handler(newVal, oldVal) {
-                this.highlights = buildHighlights(newVal, this.measureIndex);                
+            handler(newTrack) {
+                this.highlights = buildHighlights(newTrack, this.measureIndex);                
             },
             deep: true
         },

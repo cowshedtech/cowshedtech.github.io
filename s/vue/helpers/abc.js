@@ -577,11 +577,6 @@ function snare_HH_kick_ABC_for_triplets(sticking_array,
 	var kick_voice_string = "V:Feet stem=down\n%%voicemap drum\n";
 	var all_drum_array_of_array;
 
-	// console.log(HH_array);
-	// console.log(kick_array);
-	// console.log(notes_per_measure);
-	// console.log(sub_division);
-
 	if (kick_stems_up) {
 		all_drum_array_of_array = [snare_array, HH_array, kick_array];
 	} else {

@@ -48,13 +48,7 @@ export default {
         this.trackData = newVal;                
       },
       deep: true
-    },    
-    options: {
-      handler(newVal, oldVal) { 
-        console.log(newVal);
-      },
-      deep: true
-    },    
+    }    
   },
 
   components: {
