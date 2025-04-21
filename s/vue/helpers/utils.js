@@ -2,16 +2,6 @@
 
 var class_empty_note_array = Array(32).fill(false); // Optimized initialization
 
-// build a string that looks like this
-//  |----------------|----------------|
-function GetEmptyGroove(notes_per_measure, numMeasures) {
-	var oneMeasureString = "|" + "-".repeat(notes_per_measure) + "|"; // Optimized measure string creation
-	var retString = oneMeasureString.repeat(numMeasures); // Use repeat to create the full string
-
-	return retString;
-};
-
-
 // takes two drum tab lines and merges them.    "-" are blanks so they will get overwritten in a merge.
 // if there are two non "-" positions to merge, the dominateLine takes priority.
 //

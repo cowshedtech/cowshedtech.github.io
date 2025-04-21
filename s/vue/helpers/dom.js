@@ -137,49 +137,10 @@ const getTagPosition = (element) => {
 };
 
 
-/**
- * Toggles the visibility of elements matching a CSS class selector by changing their display property.
- * 
- * @param {string} className - CSS selector for target elements (e.g., '.my-class' or '#my-id')
- * @param {boolean} force - If true, forces the display state instead of toggling
- * @param {boolean} showElseHide - When forcing, true shows elements, false hides them
- * @param {string} showState - The display value to use when showing elements (e.g., 'block', 'flex')
- * @returns {boolean} The new display state (true if elements are shown, false if hidden)
- */
-function toggleDisplayByClass(className, force, showElseHide, showState) {
-    const elements = document.querySelectorAll(className);
-
-    if (!elements.length) return false;
-
-    const newState = force ? showElseHide : elements[0].style.display !== showState;
-
-    elements.forEach(element => {
-        element.style.display = newState ? showState : 'none';
-    });
-
-    return newState;
-}
 
 
-/**
- * Toggles the CSS visibility property of elements matching a CSS class selector.
- * Unlike display:none, visibility:hidden preserves the element's space in the layout.
- * 
- * @param {string} className - CSS selector for target elements (e.g., '.my-class' or '#my-id')
- * @param {boolean} force - If true, forces the visibility state instead of toggling
- * @param {boolean} showElseHide - When forcing, true makes elements visible, false hides them
- */
-function toggleVisibilityByClass(className, force, showElseHide) {
-    const elements = document.querySelectorAll(className);
 
-    elements.forEach(element => {
-        if (force) {
-            element.style.visibility = showElseHide ? "visible" : "hidden";
-        } else {
-            element.style.visibility = element.style.visibility === "visible" ? "hidden" : "visible";
-        }
-    });
-}
+
 
 
 /**

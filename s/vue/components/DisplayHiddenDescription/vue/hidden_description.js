@@ -1,8 +1,4 @@
 export default {
-  data() {
-    return { }
-  },
-  props: { },
   template: `
   <span id="hiddenDescription">
     GrooveScribe allows drummers to easily create grooves, listen, share, print sheet music, and more.

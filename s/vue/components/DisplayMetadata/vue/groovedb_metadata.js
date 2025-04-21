@@ -1,8 +1,4 @@
 export default {
-  data() {
-    return { }
-  },
-  props: { },
   template: `
     <!-- GrooveDB output area -->
     <div id="GrooveDB_MetaData" class="grooveDB_show" style="display:none;">
