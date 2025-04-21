@@ -1,13 +1,14 @@
 import { ref } from 'vue'
 
 function buildHighlights(track, measureIndex) {
-    const { notesPerMeasure, numBeats, noteValue } = track;
-    const groupSize = noteGroupingSize(notesPerMeasure, numBeats, noteValue);
-    const startIndex = (measureIndex - 1) * notesPerMeasure;
-    const endIndex = startIndex + notesPerMeasure;
+    if (!track || !measureIndex) return null;
+    
+    const groupSize = track.noteGroupingSize();
+    const startIndex = (measureIndex - 1) * track.notesPerMeasure;
+    const endIndex = startIndex + track.notesPerMeasure;
 
     const highlights = ref(
-        Array.from({ length: notesPerMeasure }, (_, i) => {
+        Array.from({ length: track.notesPerMeasure }, (_, i) => {
             const id = startIndex + i;
             return {
                 id,
@@ -33,24 +34,17 @@ export default {
 
     data() {
         return {
-            highlights: null,
+            highlights: buildHighlights(this.track, this.measureIndex)
         }
     },
 
     watch: {
         track: {
             handler(newVal, oldVal) {
-                let highlights = buildHighlights(newVal, this.measureIndex)
-                this.highlights = highlights;
-                this.$forceUpdate();
+                this.highlights = buildHighlights(newVal, this.measureIndex);                
             },
             deep: true
         },
-    },
-
-    onBeforeMount() {
-        let highlights = buildHighlights(this.track)
-        this.highlights = highlights;
     },
 
     template: `

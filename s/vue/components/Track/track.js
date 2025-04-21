@@ -680,4 +680,35 @@ function Track() {
 			}
 		}
 	}
+
+	/**
+     * 
+     */
+	root.noteGroupingSize = function() {
+		var note_grouping;
+		var usingTriplets = isTripletDivisionFromNotesPerMeasure(this.notesPerMeasure, this.numBeats, this.noteValue);
+	
+		if(usingTriplets) {
+			// triplets  ( we only support 2/4 here )
+			if(this.numBeats != 2 && this.noteValue != 4)
+				console.log("Triplets are only supported in 2/4 and 4/4 time");
+			note_grouping = notes_per_measure / (this.numBeats * (4/this.noteValue));
+		} else if(this.numBeats == 3) {
+			// 3/4, 3/8, 3/16
+			// 3 groups
+			// not triplets
+			note_grouping =  (this.notesPerMeasure) / 3
+		} else if(this.numBeats % 6 == 0 && this.noteValue % 8 == 0) {
+			// 6/8, 12/8
+			// 2 groups in 6/8 rather than 3 groups
+			// 4 groups in 12/8
+			// not triplets
+			note_grouping = this.notesPerMeasure / (2 * this.numBeats/6)
+		} else {
+			// figure it out from the time signature
+			// not triplets
+			note_grouping = (this.notesPerMeasure / this.numBeats) * (this.noteValue/4);
+		}
+		return note_grouping;
+	};
 } // end of class
