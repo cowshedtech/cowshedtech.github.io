@@ -606,18 +606,7 @@ function get_permutation_post_ABC(section, usingTriplets) {
 
 
 
-function setupPermutationMenu() {
 
-    if (editor.track.numBeats == 4 && editor.track.noteValue == 4) {
-
-        // addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", true);
-
-    } else {
-        // permutations disabled except in 4/4 time
-        // addOrRemoveKeywordFromClassById("permutationAnchor", "enabled", false);
-        //root.permutationPopupClick("none");  // make sure permutation is off
-    }
-}
 
 // root.permutationPopupClick = function (perm_type) {
 
