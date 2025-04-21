@@ -165,7 +165,7 @@ function GrooveWriter() {
 
 		
 		// TODO
-		setupPermutationMenu();
+		// setupPermutationMenu();
 		// setTimeSigLabel();
 
 		midiPlayer.initialise();
