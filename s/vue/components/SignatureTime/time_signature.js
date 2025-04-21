@@ -50,39 +50,6 @@ function isTripletDivisionFromNotesPerMeasure(notesPerMeasure, timeSigTop, timeS
 
 };
 
-// the note grouping size is how groups of notes within a measure group
-// for 8ths and 16th we group with 4
-// for triplets we group with 3
-// This function is for laying out the HTML
-// see abc_gen_note_grouping_size for the sheet music layout grouping size
-function noteGroupingSize(notes_per_measure, timeSigTop, timeSigBottom) {
-    var note_grouping;
-    var usingTriplets = isTripletDivisionFromNotesPerMeasure(notes_per_measure, timeSigTop, timeSigBottom);
-
-    if(usingTriplets) {
-        // triplets  ( we only support 2/4 here )
-        if(timeSigTop != 2 && timeSigBottom != 4)
-            console.log("Triplets are only supported in 2/4 and 4/4 time");
-        note_grouping = notes_per_measure / (timeSigTop * (4/timeSigBottom));
-    } else if(timeSigTop == 3) {
-        // 3/4, 3/8, 3/16
-        // 3 groups
-        // not triplets
-        note_grouping =  (notes_per_measure) / 3
-    } else if(timeSigTop % 6 == 0 && timeSigBottom % 8 == 0) {
-        // 6/8, 12/8
-        // 2 groups in 6/8 rather than 3 groups
-        // 4 groups in 12/8
-        // not triplets
-        note_grouping = notes_per_measure / (2 * timeSigTop/6)
-    } else {
-        // figure it out from the time signature
-        // not triplets
-        note_grouping = (notes_per_measure / timeSigTop) * (timeSigBottom/4);
-    }
-    return note_grouping;
-};
-
 
 function notesPerMeasureInFullSizeArray(is_triplet_division, timeSigTop, timeSigBottom) {
     // a full measure will be defined as 8 * timeSigTop.   (4 = 32, 5 = 40, 6 = 48, etc.)

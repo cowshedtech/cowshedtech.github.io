@@ -22,7 +22,7 @@ export default {
       handler(newVal, oldVal) { 
         this.trackData = newVal;
         const { notesPerMeasure, numBeats, noteValue } = editor.track;
-        this.groupSize = noteGroupingSize(notesPerMeasure, numBeats, noteValue)
+        this.groupSize = editor.track.noteGroupingSize();
         this.$forceUpdate(); 
       },
       deep: true
@@ -31,7 +31,7 @@ export default {
 
   onBeforeMount() {
     const { notesPerMeasure, numBeats, noteValue } = editor.track;
-    this.groupSize = noteGroupingSize(notesPerMeasure, numBeats, noteValue)
+    this.groupSize = editor.track.noteGroupingSize();
   },
 
   template: `
