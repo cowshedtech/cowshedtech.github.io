@@ -2,17 +2,21 @@ import { ref } from 'vue'
 
 function buildHighlights(track, measureIndex) {
     const { notesPerMeasure, numBeats, noteValue } = track;
-    const groupSize = noteGroupingSize(notesPerMeasure, numBeats, noteValue)
+    const groupSize = noteGroupingSize(notesPerMeasure, numBeats, noteValue);
+    const startIndex = (measureIndex - 1) * notesPerMeasure;
+    const endIndex = startIndex + notesPerMeasure;
 
-    const highlights = ref([])
-    for (let i = (measureIndex - 1) * notesPerMeasure; i < (measureIndex - 1) * notesPerMeasure + notesPerMeasure; i++) {
-        highlights.value.push({
-            id: i,
-            shouldAddSpace: (i + 1) % groupSize === 0 && i < notesPerMeasure - 1
+    const highlights = ref(
+        Array.from({ length: notesPerMeasure }, (_, i) => {
+            const id = startIndex + i;
+            return {
+                id,
+                shouldAddSpace: (id + 1) % groupSize === 0 && id < endIndex - 1
+            };
         })
-    }
+    );
 
-    return highlights
+    return highlights;
 }
 
 export default {
