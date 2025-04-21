@@ -1,7 +1,6 @@
 import RightHandContent from './components/TheContentRightHand/vue/right_hand_content.js'
 import TimeSignature from './components/SignatureTime/vue/picker.js'
 import TopNavigation from './components/TheNavigationTop/vue/top_navigation.js'
-import MetronomeOptionsSpeedMenu from './components/metronome/vue/menu_options_speed.js'
 import MidiPlayer from './components/player/vue/controls.js'
 
 const KEYS = {
@@ -41,7 +40,7 @@ export default {
   },
   
   components: {
-    RightHandContent, MetronomeOptionsSpeedMenu, TimeSignature, TopNavigation, MidiPlayer
+    RightHandContent, TimeSignature, TopNavigation, MidiPlayer
   },
   
   template: `
@@ -50,7 +49,6 @@ export default {
       <TopNavigation></TopNavigation>		      
       <MidiPlayer></MidiPlayer>
     </div>			
-    <RightHandContent></RightHandContent>		
-    <MetronomeOptionsSpeedMenu></MetronomeOptionsSpeedMenu>
+    <RightHandContent></RightHandContent>		    
 	`
   }

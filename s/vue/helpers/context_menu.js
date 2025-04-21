@@ -32,34 +32,3 @@ function showContextMenu(contextMenu) {
         document.body.style.cursor = "pointer"; // Enable click events on iPad
     });
 }
-
-
-/**
- * Hides the context menu and resets document click handling
- * @param {HTMLElement} contextMenu - The context menu element to hide
- */
-function hideContextMenu(contextMenu) {
-    // Reset document click handling
-    document.onclick = null;
-    document.body.style.cursor = "auto";
-
-    // Hide menu if it exists
-    if (contextMenu) {
-        contextMenu.style.display = "none";
-        isContextMenuVisible = false;
-    }
-}
-
-
-/**
- * Global click handler to close context menu when clicking outside
- * @param {MouseEvent} event - The click event
- */
-function documentOnClickHandlerCloseContextMenu(event) {
-    if (!isContextMenuVisible) return;
-
-    const isClickOutsideMenu = !isContextMenuVisible.contains(event.target);
-    if (isClickOutsideMenu) {
-        hideContextMenu(isContextMenuVisible);
-    }
-}

@@ -711,4 +711,14 @@ function Track() {
 		}
 		return note_grouping;
 	};
+
+	/**
+     * 
+     */
+	root.isTripletDivision = function() {
+		if(this.timeDivision % 12 === 0)  // we only support 12 & 24 & 48  1/8th, 1/16, & 1/32 note triplets
+			return true;
+	
+		return false;
+	};
 } // end of class

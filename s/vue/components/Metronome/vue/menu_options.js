@@ -148,6 +148,6 @@ export default {
         :x="menuX" 
         :y="menuY"
         @close="closeMenu">
-    </OptionsOffsetClickMenu>   
+    </OptionsOffsetClickMenu>            
   `
 }
