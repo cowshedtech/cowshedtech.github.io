@@ -9,6 +9,7 @@ export default {
             menuY: 0,
         }
     },
+
     computed: {
         buttonClasses() {
             return (value) => [
@@ -17,6 +18,7 @@ export default {
             ]
         }
     },
+
     methods: {
         setFrequency(value) {
             metronome.setFrequency(value)
@@ -30,12 +32,14 @@ export default {
             this.isPopupOpen = false;
         },
     },
+
     mounted() {
         // Subscribe to metronome changes
         this.removeHandler = metronome?.addChangeHandler(() => {
             this.freq = metronome.getFrequency()
         })
     },
+    
     beforeUnmount() {
         // Cleanup event handler
         if (this.removeHandler) this.removeHandler() 
@@ -66,6 +70,6 @@ export default {
                 :x="menuX" 
                 :y="menuY"
                 @close="closeMenu">
-            </OptionsMenu>
+            </OptionsMenu>             
   `
   }

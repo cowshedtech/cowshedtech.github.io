@@ -1,3 +1,5 @@
+import OptionsOffsetClickMenu from './menu_options_offset_click.js'
+
 /**
  * @typedef {Object} MetronomeOption
  * @property {('Solo'|'SpeedUp'|'CountIn'|'OffTheOne')} id - The option identifier
@@ -49,10 +51,14 @@ export default {
           title: 'Click on the e, &, or a',
           label: 'Offset click',
           //checked: metronome ? metronome.isOffsetClick() : false
+          handler: (checked) => this.handleOffsetClick(),
           checked: false
         }
-      ]
-    }
+      ],
+      isOffsetClickPopupOpen: false,
+      menuX: 0,
+      menuY: 0,      
+    }    
   },
 
   methods: {
@@ -64,6 +70,17 @@ export default {
       let option = this.options.find(option => option.id === optionId)
       option.handler(!option.checked)
       this.$emit('close')
+    },
+
+    handleOffsetClick(optionId) {
+      this.menuX = event.clientX;
+      this.menuY = event.clientY;
+      this.isOffsetClickPopupOpen = !this.isOffsetClickPopupOpen;
+      this.$emit('close')
+    },
+
+    closeMenu() {
+      this.isOffsetClickPopupOpen = false;
     }
   },
 
@@ -76,6 +93,7 @@ export default {
     getMenuItemId() {
       return (option) => `metronomeOptionsContextMenu${option.id}`
     },
+
     /**
      * Get classes for a menu item
      * @param {MetronomeOption} option - The menu option
@@ -104,6 +122,10 @@ export default {
     if (this.removeHandler) this.removeHandler()
   },
 
+  components: {
+    OptionsOffsetClickMenu
+  },
+
   template: `
     <span class="noteContextMenuNew" id="metronomeOptionsContextMenuContainer" aria-label="Metronome options" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
       <ul id="metronomeOptionsContextMenu" class="list" role="menu">
@@ -121,5 +143,11 @@ export default {
         >{{ option.label }}</li>
       </ul>
     </span>
+    <OptionsOffsetClickMenu
+        :is-open="isOffsetClickPopupOpen" 
+        :x="menuX" 
+        :y="menuY"
+        @close="closeMenu">
+    </OptionsOffsetClickMenu>   
   `
 }

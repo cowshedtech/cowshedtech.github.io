@@ -132,7 +132,7 @@ class Metronome {
      * @returns {string} The current offset click start value
      */    
     getOffsetClickStart() {
-        return this.offsetClickStart;
+        return this.#offsetClickStart;
     };
     
     /**
@@ -140,7 +140,7 @@ class Metronome {
      * @returns {boolean} True if the offset click start is set to rotate, false otherwise
      */    
     getOffsetClickStartIsRotating() {
-        return this.offsetClickStart == 'ROTATE';
+        return this.#offsetClickStart === 'ROTATE';
     };
     
     /**
@@ -148,7 +148,7 @@ class Metronome {
      * @param {string} value - The new offset click start value
      */    
     setOffsetClickStart(value) {
-        this.offsetClickStart = value;
+        this.#offsetClickStart = value;
         this.#notifyHandlers();
     };
 
@@ -159,7 +159,7 @@ class Metronome {
      */    
     advanceOptionsOffsetClickStartRotation(isTriplets) {
         if (this.getOffsetClickStartIsRotating()) {
-            this.offsetClickStartRotation++;
+            this.#offsetClickStartRotation++;
             return true;
         } else {
             return false;
@@ -172,12 +172,12 @@ class Metronome {
     getOptionsOffsetClickStartRotation(isTriplets) {
         if (this.getOffsetClickStartIsRotating()) {
             // constrain the rotation
-            if (isTriplets && this.offsetClickStartRotation > 2)
-                this.offsetClickStartRotation = 0;
-            else if (this.offsetClickStartRotation > 3)
-                this.offsetClickStartRotation = 0;
+            if (isTriplets && this.#offsetClickStartRotation > 2)
+                this.#offsetClickStartRotation = 0;
+            else if (this.#offsetClickStartRotation > 3)
+                this.#offsetClickStartRotation = 0;
     
-            switch (this.offsetClickStartRotation) {
+            switch (this.#offsetClickStartRotation) {
                 case 0:
                     return '1';
                 case 1:
@@ -203,66 +203,14 @@ class Metronome {
      */    
     resetOptionsOffsetClickStartRotation(value) {
         // start with last in the rotation so the next rotation brings it to '1'
-        return this.offsetClickStartRotation = 0;
+        return this.#offsetClickStartRotation = 0;
     };
 
     //
     //
     //
-
-	// the user has clicked on the metronome options button
-	optionsAnchorClick(event) {
-
-		var contextMenu = document.getElementById("metronomeOptionsContextMenu");
-		if (contextMenu) {
-
-			var anchorPoint = document.getElementById("metronomeOptionsAnchor");
-
-			if (anchorPoint) {
-				var anchorPos = getTagPosition(anchorPoint);
-				contextMenu.style.top = anchorPos.y + anchorPoint.offsetHeight + "px";
-				contextMenu.style.left = anchorPos.x + anchorPoint.offsetWidth - 150 + "px";
-			}
-
-			showContextMenu(contextMenu);
-		}
-	};
-
-
-
+	
     /**
-     * 
-     */    
-    optionsMenuOffsetClickPopupClick(option_type) {
-
-		this.setOffsetClickStart(option_type);
-
-		// clear other and select
-		var myElements = document.querySelectorAll(".metronomeOptionsOffsetClickContextMenuItem");
-		for (var i = 0; i < myElements.length; i++) {
-			var thisItem = myElements[i];
-			// remove active status
-			addOrRemoveKeywordFromClass(thisItem, "menuChecked", false);
-
-		}
-
-		// turn on the new one selected
-		addOrRemoveKeywordFromClassById("metronomeOptionsOffsetClickContextMenuOnThe" + option_type, "menuChecked", true);
-
-
-		if (option_type != "1") { // 1 is the default state
-			// add a check to the menu
-			addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuOffTheOne", "menuChecked", true);
-		} else {
-
-			addOrRemoveKeywordFromClassById("metronomeOptionsContextMenuOffTheOne", "menuChecked", false);
-		}
-
-		this.eventCallbacks.changed();
-		// this.optionsMenuSetSelectedState();
-	};
-
-	/**
      * 
      */    
     resetOptionsMenuOffsetClick() {

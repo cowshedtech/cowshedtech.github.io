@@ -1,7 +1,6 @@
 import RightHandContent from './components/TheContentRightHand/vue/right_hand_content.js'
 import TimeSignature from './components/SignatureTime/vue/picker.js'
 import TopNavigation from './components/TheNavigationTop/vue/top_navigation.js'
-import MetronomeOptionsOffsetClickMenu from './components/metronome/vue/menu_options_offset_click.js'
 import MetronomeOptionsSpeedMenu from './components/metronome/vue/menu_options_speed.js'
 import MidiPlayer from './components/player/vue/controls.js'
 
@@ -42,7 +41,7 @@ export default {
   },
   
   components: {
-    RightHandContent, MetronomeOptionsOffsetClickMenu, MetronomeOptionsSpeedMenu, TimeSignature, TopNavigation, MidiPlayer
+    RightHandContent, MetronomeOptionsSpeedMenu, TimeSignature, TopNavigation, MidiPlayer
   },
   
   template: `
@@ -52,7 +51,6 @@ export default {
       <MidiPlayer></MidiPlayer>
     </div>			
     <RightHandContent></RightHandContent>		
-    <MetronomeOptionsOffsetClickMenu></MetronomeOptionsOffsetClickMenu>
     <MetronomeOptionsSpeedMenu></MetronomeOptionsSpeedMenu>
 	`
   }
