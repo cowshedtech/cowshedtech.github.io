@@ -10,7 +10,7 @@
  */
 class Options {
     /** @type {boolean} Whether advanced editing features are enabled */
-    advancedEditIsOn;
+    #advancedEditIsOn;
 
     /** @type {boolean} Whether note highlighting is enabled */
     #highlightOn;
@@ -152,24 +152,20 @@ class Options {
         this.#notifyHandlers();
     }
 
-    
-    /**
-     * Toggles the advanced edit mode and updates the button state accordingly.
-     * When enabled, provides access to additional editing features.
-     * 
-     * @requires DOM elements:
-     * - #advancedEditAnchor - The advanced edit button element
-     * @requires Functions:
-     * - selectButton - Function to visually select a button
-     * - unselectButton - Function to visually unselect a button
+     /**
+     * Is advanced edit enabled
+     * @returns {boolean} true if show legend
      */
-    toggleAdvancedEdit() {
-        if (this.advancedEditIsOn) {
-            this.advancedEditIsOn = false;
-            unselectButton(document.getElementById("advancedEditAnchor"));
-        } else {
-            this.advancedEditIsOn = true;
-            selectButton(document.getElementById("advancedEditAnchor"));
-        }
-    };
+    isAdvancedEdit() {
+        return this.#advancedEditIsOn;
+    }
+
+    /**
+     * Sets whether advanced edit enabled
+     * @param {boolean} advancedEdit - is avanced edit
+     */
+    setAdvancedEdit(advancedEdit) {
+        this.#advancedEditIsOn = advancedEdit;
+        this.#notifyHandlers();
+    }
 }

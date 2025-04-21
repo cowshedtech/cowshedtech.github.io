@@ -8,6 +8,8 @@ export default {
             disabledTriplets : editor.track.noteValue != 4,
             isDBAuthoring : options ? options.grooveDBAuthoring : true,
             isViewMode : options ? options.isViewMode() : true,
+            isAdvancedEdit : options ? options.isAdvancedEdit() : false,
+            isTouchDevice : isTouchDevice(),
             isPopupOpen: false,
             menuX: 0,
             menuY: 0,
@@ -23,6 +25,7 @@ export default {
         this.removeOptionsHandler = options?.addChangeHandler(() => {
             this.isDBAuthoring = options.grooveDBAuthoring;     
             this.isViewMode = options.isViewMode();     
+            this.isAdvancedEdit = options.isAdvancedEdit()
         })
     },
 
@@ -58,6 +61,11 @@ export default {
         handleChangeDivisionClick(division) {
             editor.track.changeDivision(division)
         },
+
+        handleAdvancedClick() {
+            let newMode = !options.isAdvancedEdit();
+            options.setAdvancedEdit(newMode);            
+        },
     },
 
     template: `
@@ -76,17 +84,23 @@ export default {
                     <span id="view-edit-switch">Switch to {{ isViewMode === false ? 'VIEW' : 'EDIT' }} mode</span>
                 </span>
             </span>
-            <span v-if="isViewMode === false" class="left-button" id="undoButton" onclick="undoCommand();"><span class="left-button-content"><i class="fa fa-undo"></i>&nbsp;&nbsp;Undo</span></span>
+            <span 
+                v-if="isTouchDevice && isViewMode === false" 
+                class="left-button" 
+                :class="{ buttonSelected: isAdvancedEdit }"
+                id="advancedEditAnchor" 
+                @click="handleAdvancedClick">
+                <span class="left-button-content">Advanced Edit</span>
+            </span>
+            <span 
+                v-if="isViewMode === false" 
+                class="left-button" 
+                id="undoButton" 
+                onclick="undoCommand();">
+                <span class="left-button-content"><i class="fa fa-undo"></i>&nbsp;&nbsp;Undo</span>
+            </span>
         </span>
-
     </div>
     <Menu :is-open="isPopupOpen" :x="menuX" :y="menuY" @close-clicked="closeMenu"></Menu>
   `
-  }
-
-
-// <script>
-//   if (isTouchDevice()) {
-//       document.write('<span class="left-button edit-block" id="advancedEditAnchor" onclick="event.preventDefault(); myGrooveWriter.toggleAdvancedEdit()"><span class="left-button-content">Advanced Edit</span></span>');
-//   }
-// </script>
+}
