@@ -233,12 +233,6 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
  * @requires linkGrooveScribe - Optional global link element for external GrooveScribe URL
  */
 function updateCurrentURL() {
-    // Update temporary link out to GS
-    var newURLGS = get_GSURLForPage();
-    if (linkGrooveScribe)
-        linkGrooveScribe.href = newURLGS;
-    // Update temporary link out to GS
-
     var newURL = editor.get_FullURLForPage();
     
     addFullURLToUndoStack(newURL);
