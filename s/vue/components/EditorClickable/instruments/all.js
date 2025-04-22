@@ -84,50 +84,6 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
 }
 
 
-// creates a grooveData class from the clickable UI elements of the page
-//
-grooveDataFromClickableUI = function () {
-    return editor.track;
-    
-    // //var track = new editor.track.trackNew();
-    // track = editor.track;
-
-    // options.showLegend = document.getElementById("showLegend").checked;
-    // track.kickStemsUp = true;
-
-    // for (var i = 0; i < editor.track.numberOfMeasures; i++) {
-    //     var total_notes = editor.track.notesPerMeasure * editor.track.numberOfMeasures;
-    //     // track.sticking_array = [];
-    //     // track.hh_array = [];
-    //     // track.snare_array = [];
-    //     // track.kick_array = [];
-    //     track.toms_array = [[], [], [], []];
-
-    //     // query the clickable UI and generate a arrays representing the notes of all measures
-    //     for (var i = 0; i < total_notes; i++) {
-
-    //         // only grab the stickings if they are visible
-    //         // if (options.isStickingVisible())
-    //         //     track.sticking_array.push(editor.track.getStickingState(i, "ABC"));
-
-    //         // track.hh_array.push(editor.track.getHighHatState(i, "ABC"));
-    //         // track.snare_array.push(editor.track.getSnareState(i, "ABC"));
-    //         // track.kick_array.push(editor.track.getKickState(i, "ABC"));
-
-    //         // if (options.areTomsVisible()) {
-    //         //     track.toms_array[0].push(editor.track.getTomState(1, i, "ABC"));
-    //         //     track.toms_array[3].push(editor.track.getTomState(4, i, "ABC"));
-    //         // } else {
-    //         //     track.toms_array[0].push(false);
-    //         //     track.toms_array[3].push(false);
-    //         // }
-    //     }
-    // }
-
-    // return track;
-};
-
-
 // takes a string of notes encoded in a serialized string and sets the notes on or off
 // uses drum tab format adapted from wikipedia: http://en.wikipedia.org/wiki/Drum_tablature
 //

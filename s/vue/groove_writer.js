@@ -253,8 +253,8 @@ function GrooveWriter() {
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
 	//
 	root.get_FullURLForPage= function (url_destination) {
-		var track = grooveDataFromClickableUI()
-		return getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_destination)
+		// var track = grooveDataFromClickableUI()
+		return getUrlStringFromGrooveData(editor.track, options, midiPlayer, metronome, url_destination)
 	}
 	
 
