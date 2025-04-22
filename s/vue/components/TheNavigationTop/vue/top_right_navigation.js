@@ -1,3 +1,4 @@
+import TrackButton from '../../Track/vue/button.js'
 import OptionsButton from '../../Options/vue/button.js'
 import PermutationButton from '../../Permutations/vue/button.js'
 import GroovesButton from '../../Grooves/vue/button.js'
@@ -11,7 +12,7 @@ export default {
     },
 
     components: {
-        OptionsButton, GroovesButton, PermutationButton, HelpButton
+        TrackButton, OptionsButton, GroovesButton, PermutationButton, HelpButton
     },
 
     mounted() {
@@ -22,6 +23,7 @@ export default {
 
     template: `
         <span id="upperRight">
+            <TrackButton></TrackButton>
             <OptionsButton></OptionsButton>
             <PermutationButton :track="track"></PermutationButton>
             <GroovesButton></GroovesButton>
