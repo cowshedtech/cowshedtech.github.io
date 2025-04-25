@@ -1,7 +1,7 @@
 import RightHandContent from './components/TheContentRightHand/vue/right_hand_content.js'
 import TimeSignature from './components/SignatureTime/vue/picker.js'
 import TopNavigation from './components/TheNavigationTop/vue/top_navigation.js'
-import MidiPlayer from './components/player/vue/controls.js'
+import MidiPlayer from './components/Player/vue/controls.js'
 
 const KEYS = {
   Z: 'Z',

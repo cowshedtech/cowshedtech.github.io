@@ -46,7 +46,16 @@ export default {
 			editor.track.appendTrack(newTrack);
 			this.urlInput = '';
 			this.$emit('close');
-		}		
+		},
+
+		handleImportTrack() {
+			if (!this.urlImportInput) return;
+			let oldPrefix = "https://www.mikeslessons.com/groove/"
+			let newPrefix = window.location.protocol + "//" + window.location.host + window.location.pathname
+			let newUrl = this.urlImportInput.replace(oldPrefix, newPrefix)
+			window.open(newUrl, "_self");
+			this.$emit('close');
+		}	
 	},
 
 	mounted() {
@@ -66,7 +75,25 @@ export default {
 				id="trackContextMenuHighlight" 
 				@click="handleGSLink"
 			>
-				<b>GrooveScribe Link</b>
+				<b>Export to GrooveScribe</b>
+			</li>
+			<li class="metronometrackContextMenuItem">
+				<b>Import from GrooveSrcibe</b>
+				<div style="display: flex; gap: 4px; padding: 4px;">
+					<input 
+						type="text" 
+						v-model="urlImportInput" 
+						placeholder="Enter URL" 
+						style="flex: 1; padding: 4px;"
+						@keyup.enter="handleImportTrack"
+					>
+					<button 
+						@click="handleImportTrack"
+						style="padding: 4px 8px;"
+					>
+						Add
+					</button>
+				</div>
 			</li>
 			<li class="metronometrackContextMenuItem">
 				<b>Append Track</b>
