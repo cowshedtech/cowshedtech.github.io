@@ -30,6 +30,7 @@ export default {
 
 	beforeDestroy() {
 		// Clean up event listener
+		if (this.removeHandler) this.removeHandler();
 	},
 
 	mounted() {
