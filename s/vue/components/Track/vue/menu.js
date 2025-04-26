@@ -43,6 +43,17 @@ export default {
 				newMetronome, 
 				newOptions.debugMode);
 
+			console.log(`original [${editor.track.timeDivision}]`)	;
+			console.log(`new [${newTrack.timeDivision}]`)	;
+
+			if (editor.track.timeDivision < newTrack.timeDivision) {
+				console.log(`increasing time division for original`)
+				editor.track.changeDivision(newTrack.timeDivision)
+			} else {
+				console.log(`increasing time division for new`)
+				newTrack.changeDivision(editor.track.timeDivision)
+			}
+
 			editor.track.appendTrack(newTrack);
 			this.urlInput = '';
 			this.$emit('close');
@@ -50,9 +61,10 @@ export default {
 
 		handleImportTrack() {
 			if (!this.urlImportInput) return;
-			let oldPrefix = "https://www.mikeslessons.com/groove/"
-			let newPrefix = window.location.protocol + "//" + window.location.host + window.location.pathname
-			let newUrl = this.urlImportInput.replace(oldPrefix, newPrefix)
+
+			let urlParts = this.urlImportInput.split('?');
+			let queryString = urlParts.length > 1 ? '?' + urlParts[1] : '';
+			let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + queryString;
 			window.open(newUrl, "_self");
 			this.$emit('close');
 		}	
