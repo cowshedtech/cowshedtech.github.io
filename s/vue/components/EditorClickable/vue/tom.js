@@ -1,4 +1,5 @@
 import Menu from "./tom_menu.js"
+import eventBus from '../../../eventBus.js'
 
 export default {
   props: {
@@ -56,6 +57,7 @@ export default {
       editor.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);      
     },
     handleRightClick(event) {
+      eventBus.$emit('close-all-menus');
       this.menuX = event.clientX;
       this.menuY = event.clientY;
       this.isPopupOpen = true;
@@ -74,6 +76,18 @@ export default {
       editor.track.setTomState(this.tomIndex, this.noteIndex, action, true);  
       this.isPopupOpen = false;
     }
+  },
+
+  created() {
+    // Listen for close-all event
+    eventBus.$on('close-all-menus', () => {
+        this.isPopupOpen = false;
+    });
+  },
+
+  beforeDestroy() {
+      // Clean up event listener
+      eventBus.$off('close-all-menus');
   },
 
   components: {

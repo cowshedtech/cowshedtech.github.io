@@ -2,6 +2,7 @@ import HighHatLabelMenu from "./label_menu_highhat.js"
 import KickLabelMenu from "./label_menu_kick.js"
 import SnareLabelMenu from "./label_menu_snare.js"
 import TomLabelMenu from "./label_menu_tom.js"
+import eventBus from '../../../eventBus.js'
 
 export default {
   data() {
@@ -58,11 +59,46 @@ export default {
 
   methods: {
     toggleMenu(instrument) {
-      if (instrument === "hh") this.isHighHatPopupOpen = !this.isHighHatPopupOpen;
-      if (instrument === "kick") this.isKickPopupOpen = !this.isKickPopupOpen;
-      if (instrument === "snare") this.isSnarePopupOpen = !this.isSnarePopupOpen;
-      if (instrument === "tom1") this.isTom1PopupOpen = !this.isTom1PopupOpen;
-      if (instrument === "tom4") this.isTom4PopupOpen = !this.isTom4PopupOpen;
+      if (instrument === "hh") {
+        if (!this.isHighHatPopupOpen) {
+          eventBus.$emit('close-all-menus');
+          this.isHighHatPopupOpen = true;
+        } else {
+            this.isHighHatPopupOpen = false;
+        } 
+      }
+      if (instrument === "kick") {
+        if (!this.isKickPopupOpen) {
+          eventBus.$emit('close-all-menus');
+          this.isKickPopupOpen = true;
+        } else {
+            this.isKickPopupOpen = false;
+        } 
+      }
+      if (instrument === "snare") {
+        if (!this.isSnarePopupOpen) {
+          eventBus.$emit('close-all-menus');
+          this.isSnarePopupOpen = true;
+        } else {
+            this.isSnarePopupOpen = false;
+        } 
+      }
+      if (instrument === "tom1") {
+        if (!this.isTom1PopupOpen) {
+          eventBus.$emit('close-all-menus');
+          this.isTom1PopupOpen = true;
+        } else {
+            this.isTom1PopupOpen = false;
+        } 
+      }
+      if (instrument === "tom4") {
+        if (!this.isTom4PopupOpen) {
+          eventBus.$emit('close-all-menus');
+          this.isTom4PopupOpen = true;
+        } else {
+            this.isTom4PopupOpen = false;
+        } 
+      }
     },
 
     closeMenu() {
@@ -78,6 +114,18 @@ export default {
       this.menuY = event.clientY;
       this.toggleMenu(instrument);      
     }
+  },
+
+  created() {
+    // Listen for close-all event
+    eventBus.$on('close-all-menus', () => {
+        this.closeMenu();
+    });
+  },
+
+  beforeDestroy() {
+      // Clean up event listener
+      eventBus.$off('close-all-menus');
   },
 
   template: `

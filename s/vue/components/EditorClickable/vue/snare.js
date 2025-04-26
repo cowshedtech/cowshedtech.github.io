@@ -1,6 +1,7 @@
 import SnareFlam from './snare_flam.js'
 import SnareDrag from './snare_drag.js'
 import Menu from "./snare_menu.js"
+import eventBus from '../../../eventBus.js'
 
 export default {
   props: {
@@ -89,6 +90,7 @@ export default {
         editor.track.setSnareState(this.noteIndex, newMode, true);        
     },
     handleRightClick(event) {
+      eventBus.$emit('close-all-menus');
       this.menuX = event.clientX;
       this.menuY = event.clientY;
       this.isPopupOpen = true;
@@ -108,6 +110,18 @@ export default {
       }            
       this.isPopupOpen = false;
     }
+  },
+
+  created() {
+    // Listen for close-all event
+    eventBus.$on('close-all-menus', () => {
+        this.isPopupOpen = false;
+    });
+  },
+
+  beforeDestroy() {
+      // Clean up event listener
+      eventBus.$off('close-all-menus');
   },
 
   components: {

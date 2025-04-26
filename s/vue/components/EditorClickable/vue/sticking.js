@@ -1,3 +1,5 @@
+import eventBus from '../../../eventBus.js'
+
 export default {
   props: {
     track: {

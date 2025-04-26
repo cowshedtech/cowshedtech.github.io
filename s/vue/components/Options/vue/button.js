@@ -1,4 +1,5 @@
 import Menu from './menu.js'
+import eventBus from '../../../eventBus.js'
 
 export default {
     data() {
@@ -15,14 +16,38 @@ export default {
 
     methods: {
         toggleMenu() {
-            this.isPopupOpen = !this.isPopupOpen;
+            // Emit event to close all other menus
+            if (!this.isPopupOpen) {
+                eventBus.$emit('close-all-menus');
+                this.isPopupOpen = true;
+            } else {
+                this.isPopupOpen = false;
+            }            
         },
 
         handleClick(event) {
-            this.toggleMenu();
             this.menuX = event.clientX;
             this.menuY = event.clientY;
-        }
+            this.toggleMenu();
+        },
+
+        closeMenu() {
+            this.isPopupOpen = false;
+        },
+    },
+
+    created() {
+        // Listen for close-all event
+        eventBus.$on('close-all-menus', () => {
+            if (this.isPopupOpen) {
+                this.isPopupOpen = false;
+            }
+        });
+    },
+
+    beforeDestroy() {
+        // Clean up event listener
+        eventBus.$off('close-all-menus');
     },
 
     template: `
@@ -31,6 +56,6 @@ export default {
             class="rightButtons"
             @click="handleClick">
             <i class="fa fa-bars"></i>Options
-        </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY"></Menu>
+        </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY" @close="closeMenu"></Menu>
         `
 }

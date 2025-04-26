@@ -1,3 +1,5 @@
+import eventBus from '../../../eventBus.js'
+
 export default {
 
 	data() {
@@ -26,13 +28,14 @@ export default {
 		},
 	},
 
+	beforeDestroy() {
+		// Clean up event listener
+	},
+
 	mounted() {
 		this.removeHandler = options?.addChangeHandler(() => {
 			this.highlight = options.isHighlightOn()
 		})
-	},
-	beforeUnmount() {
-		if (this.removeHandler) this.removeHandler()
 	},
 
 	template: `
