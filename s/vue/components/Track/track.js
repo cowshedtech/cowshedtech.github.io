@@ -726,13 +726,20 @@ function Track() {
      * 
      */
 	root.appendTrack = function(track) {
+
 		this.sticking_array.push(...track.sticking_array)
 		this.hh_array.push(...track.hh_array)
 		this.snare_array.push(...track.snare_array)
 		this.kick_array.push(...track.kick_array)
 		this.toms_array[0].push(...track.toms_array[0])
 		this.toms_array[3].push(...track.toms_array[3])
+		
+		for (let measureIndex of track.repeatedMeasures.keys()) {
+			this.repeatedMeasures.set(this.numberOfMeasures + measureIndex, track.repeatedMeasures.get(measureIndex))
+		}
+
 		this.numberOfMeasures = this.numberOfMeasures + track.numberOfMeasures;
+
 		this.notifyHandlers();	
 	}
 	

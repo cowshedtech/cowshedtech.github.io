@@ -43,14 +43,9 @@ export default {
 				newMetronome, 
 				newOptions.debugMode);
 
-			console.log(`original [${editor.track.timeDivision}]`)	;
-			console.log(`new [${newTrack.timeDivision}]`)	;
-
 			if (editor.track.timeDivision < newTrack.timeDivision) {
-				console.log(`increasing time division for original`)
 				editor.track.changeDivision(newTrack.timeDivision)
 			} else {
-				console.log(`increasing time division for new`)
 				newTrack.changeDivision(editor.track.timeDivision)
 			}
 
