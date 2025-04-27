@@ -162,7 +162,7 @@ class MIDIPlayer {
     setState(newState) {
         if (newState !== this.#state) {
             this.#state = newState;
-            this.#notifySubscribers(EventTypes.PLAY_STATE, { isPlaying: this.isPlaying });
+            window.eventBus.$emit(EventTypes.PLAY_STATE, { isPlaying: this.isPlaying });
         }
     }
     
@@ -371,7 +371,7 @@ class MIDIPlayer {
 
         this.#swing = swingAmount
 		this.noteHasChanged();
-        this.#notifySubscribers(EventTypes.PARAMETERS_UPDATE, { swingAmount });       
+        window.eventBus.$emit(EventTypes.PARAMETERS_UPDATE, { swingAmount });
 	};
 
 
@@ -393,7 +393,7 @@ class MIDIPlayer {
 		if (newTempo < 19 && newTempo > 281) return;
 
         this.#tempo = newTempo;
-        this.#notifySubscribers(EventTypes.PARAMETERS_UPDATE, { newTempo });   
+        window.eventBus.$emit(EventTypes.PARAMETERS_UPDATE, { newTempo });
         this.noteHasChanged();        
 	};
 
@@ -483,7 +483,7 @@ class MIDIPlayer {
                 midiPlayer.totalNotes++;
                 midiPlayer.eventCallbacks.notePlaying(note_type, percentComplete);
                 // TODO Fix midiPlayer
-                midiPlayer.#notifySubscribers(EventTypes.PLAY_PROGRESS, { percentComplete: percentComplete });
+                window.eventBus.$emit(EventTypes.PLAY_PROGRESS, { percentComplete: percentComplete });
                 // if (editor.oteCallback) {
                 // if (midiPlayer.root.noteCallback) {
                 //     midiPlayer.root.noteCallback(note_type);

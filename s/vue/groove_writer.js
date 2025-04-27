@@ -95,8 +95,8 @@ function GrooveWriter() {
 		})
 	
 		// If the midiplayer changes then update all the dependent components		
-		midiPlayer.eventCallbacks = new midiEventCallbackClass();
-		midiPlayer?.subscribe(EventTypes.PARAMETERS_UPDATE, () => {
+		midiPlayer.eventCallbacks = new midiEventCallbackClass();		
+		eventBus.$on(EventTypes.PARAMETERS_UPDATE, () => {
 			// if there is a timeout running clear it
 			if (this.changeCallbackTimeout != null)
 				window.clearTimeout(this.changeCallbackTimeout);
@@ -108,21 +108,20 @@ function GrooveWriter() {
 			}, 300);
 		})
 
-		// If the midiplayer stops playing then update all the dependent components		
-		midiPlayer?.subscribe(EventTypes.PLAY_STATE, () => {
+		eventBus.$on(EventTypes.PLAY_STATE, () => {
 			if (midiPlayer.getState() == PlayerState.STOPPED) {
 				sheetMusic.stop();
 				editorClickable.stop();
 			}
 		})
 
-		// If the midiplayer plays a note then update all the dependent components		
-		midiPlayer?.subscribe(EventTypes.PLAY_PROGRESS, (data) => {			
+		eventBus.$on(EventTypes.PLAY_PROGRESS, (data) => {
 			if (data?.percentComplete && options.isHighlightOn()) {
 				sheetMusic.highlightNote(data.percentComplete)			
 				editorClickable.hilight_note(null, data?.percentComplete, root.class_permutation_type, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures, root.track.notesPerMeasure, root.track.repeatedMeasures, usingTriplets());
 			} 
 		})
+
 
 		// If the midiplayer completes a track then update all the dependent components		
 		midiPlayer.eventCallbacks.notePlaying = function (note_type, percent_complete) {

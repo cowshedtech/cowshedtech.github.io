@@ -47,7 +47,7 @@ export default {
         if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
             this.containerIndex = midiPlayer.containerIndex
         }
-        this.removeSubscriber = midiPlayer?.subscribe(EventTypes.PARAMETERS_UPDATE, () => {
+        eventBus.$on(EventTypes.PARAMETERS_UPDATE, () => {
             this.update()
         })
         this.updateRangeSlider('tempoInput' + this.containerIndex, this.tempo)

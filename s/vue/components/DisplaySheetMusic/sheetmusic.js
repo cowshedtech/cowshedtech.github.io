@@ -21,7 +21,6 @@ class SheetMusic {
         // this.setSVG()    
         this.#svg = svg_return.svg;
         this.#track = track;
-        // this.#notifyHandlers();    
         window.eventBus.$emit('sheet-music-updated');
     };
 

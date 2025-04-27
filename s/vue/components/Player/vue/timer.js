@@ -20,9 +20,9 @@ export default {
     if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
       this.containerIndex = midiPlayer.containerIndex
     }
-    this.removeSubscriber = midiPlayer?.subscribe(EventTypes.PLAY_PROGRESS, () => {
-        this.updateStats()
-    })
+    eventBus.$on(EventTypes.PLAY_PROGRESS, () => {
+			this.updateStats()
+		})
   },
   beforeUnmount() {
     if (this.removeSubscriber) this.removeSubscriber()

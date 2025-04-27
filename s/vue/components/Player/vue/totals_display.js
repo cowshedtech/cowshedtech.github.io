@@ -28,9 +28,9 @@ export default {
     }
   },
   mounted() {
-    this.removeSubscriber = midiPlayer?.subscribe(EventTypes.PLAY_PROGRESS, () => {
-        this.updateStats()
-    })
+    eventBus.$on(EventTypes.PLAY_PROGRESS, () => {
+			this.updateStats()
+		})
   },
   beforeUnmount() {
     if (this.removeSubscriber) this.removeSubscriber()

@@ -54,10 +54,10 @@ export default {
     if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
       this.containerIndex = midiPlayer.containerIndex
     }
-    
-    this.removeSubscriber = midiPlayer?.subscribe(EventTypes.PLAY_STATE, () => {
-      this.updateState()
-    })
+
+    eventBus.$on(EventTypes.PLAY_STATE, () => {
+			this.updateState()
+		})
     
     document.addEventListener('keydown', this.handleKeyDown);   
   },
