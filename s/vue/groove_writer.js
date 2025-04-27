@@ -124,13 +124,20 @@ function GrooveWriter() {
 
 
 		// If the midiplayer completes a track then update all the dependent components		
-		midiPlayer.eventCallbacks.notePlaying = function (note_type, percent_complete) {
-			if (note_type !== "complete") return
+		// midiPlayer.eventCallbacks.notePlaying = function (note_type, percent_complete) {
+		// 	if (note_type !== "complete") return
+		// 	if (!metronome.isAutoSpeedUpActive()) return
+		// 	// reload with new tempo
+		// 	midiPlayer.noteHasChanged();
+		// 	root.metronomeAutoSpeedUpTempoUpdate();			
+		// };
+
+		eventBus.$on(EventTypes.PLAY_COMPLETE, (data) => {
 			if (!metronome.isAutoSpeedUpActive()) return
 			// reload with new tempo
 			midiPlayer.noteHasChanged();
-			root.metronomeAutoSpeedUpTempoUpdate();			
-		};
+			root.metronomeAutoSpeedUpTempoUpdate();	
+		})
 
 		// If the midiplayer starts playing then update all the dependent components			
 		midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
@@ -159,10 +166,6 @@ function GrooveWriter() {
 		};
 
 		
-		// TODO
-		// setupPermutationMenu();
-		// setTimeSigLabel();
-
 		midiPlayer.initialise();
 
 		// enable or disable swing
@@ -179,10 +182,7 @@ function GrooveWriter() {
 			setTimeout(function () {
 				window.scrollTo(0, 1);
 			}, 1000);
-		}
-
-		// get updates when the tempo changes
-		// root.track.tempoChangeCallback = root.tempoChangeCallback
+		}		
 	};
 
 	// called right before the midi reloads for the next replay

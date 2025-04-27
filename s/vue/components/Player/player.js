@@ -18,7 +18,8 @@ const PlayerState = {
 const EventTypes = {
     PARAMETERS_UPDATE: 'parametersUpdate',
     PLAY_STATE: 'playState',
-    PLAY_PROGRESS: 'playProgress'
+    PLAY_PROGRESS: 'playProgress',
+    PLAY_COMPLETE: 'playComplete'
 };
 
 class MIDIPlayer {
@@ -244,7 +245,8 @@ class MIDIPlayer {
                 
         MIDI.Player.pause();
         this.setState(PlayerState.PAUSED);
-        this.eventCallbacks.notePlaying("clear", -1);
+        // this.eventCallbacks.notePlaying("clear", -1);
+        window.eventBus.$emit(EventTypes.PLAY_STATE);
     };
     
 
@@ -258,7 +260,7 @@ class MIDIPlayer {
         this.setState(PlayerState.STOPPED);
         MIDI.Player.stop();
     
-        this.eventCallbacks.notePlaying("clear", -1);
+        // this.eventCallbacks.notePlaying("clear", -1);
         metronome.resetOptionsOffsetClickStartRotation();
     };
 
@@ -399,7 +401,8 @@ class MIDIPlayer {
         if (data.now == data.end) {
 
             // at the end of a song
-            midiPlayer.eventCallbacks.notePlaying("complete", 1);
+            // midiPlayer.eventCallbacks.notePlaying("complete", 1);
+            window.eventBus.$emit(EventTypes.PLAY_COMPLETE);
 
             if (midiPlayer.#shouldRepeat) {
 
@@ -440,7 +443,7 @@ class MIDIPlayer {
             }
             if (note_type) {
                 midiPlayer.totalNotes++;
-                midiPlayer.eventCallbacks.notePlaying(note_type, percentComplete);
+                // midiPlayer.eventCallbacks.notePlaying(note_type, percentComplete);
                 // TODO Fix midiPlayer
                 window.eventBus.$emit(EventTypes.PLAY_PROGRESS, { percentComplete: percentComplete });
                 // if (editor.oteCallback) {
