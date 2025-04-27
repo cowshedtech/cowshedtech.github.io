@@ -97,6 +97,7 @@ function Track() {
      */
     root.notify = function() {
 		this.notifyHandlers();
+		window.eventBus.$emit('track-updated');
 	}
 
 	/*
@@ -105,6 +106,7 @@ function Track() {
 	root.setStickingState = function(id, new_state) {
 		this.sticking_array[id] = new_state;
 		this.notifyHandlers();
+		window.eventBus.$emit('track-updated');
 	}
 
 	/**
@@ -181,6 +183,7 @@ function Track() {
 	root.setHighHatState = function(id, mode, make_sound) {
 		this.hh_array[id] = mode;	
 		this.notifyHandlers();
+		window.eventBus.$emit('track-updated');
 	}
 
 	/**
@@ -242,6 +245,7 @@ function Track() {
 	root.setSnareState = function(id, mode, make_sound) {
 		this.snare_array[id] = mode;	
 		this.notifyHandlers();
+		window.eventBus.$emit('track-updated');
 	}
 
 	/*
@@ -301,6 +305,7 @@ function Track() {
 	root.setKickState = function(id, mode, make_sound) {
 		this.kick_array[id] = mode;		
 		this.notifyHandlers();	
+		window.eventBus.$emit('track-updated');
 	}
 
 	/*
@@ -384,6 +389,7 @@ function Track() {
     root.setTomState = function(tomId, id, mode, make_sound) {
 		this.toms_array[tomId-1][id] = mode;			
 		this.notifyHandlers();
+		window.eventBus.$emit('track-updated');
 	}
 
 	/**
@@ -430,6 +436,7 @@ function Track() {
     root.setTitle = function(title) {
 		this.title = title;
 		this.notifyHandlers();
+		window.eventBus.$emit('track-updated');
 	}
 
 	/**
@@ -445,6 +452,7 @@ function Track() {
     root.setAuthor = function(author) {
 		this.author = author;
 		this.notifyHandlers();
+		window.eventBus.$emit('track-updated');
 	}
 
 	/**
@@ -460,6 +468,7 @@ function Track() {
     root.setComments = function(comments) {
 		this.comments = comments;
 		this.notifyHandlers();
+		window.eventBus.$emit('track-updated');
 	}
 
 	/**
@@ -481,6 +490,7 @@ function Track() {
 		this.kick_array = Array(this.notesPerMeasure).fill(false).slice(0); 
 		this.toms_array = [Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0)];
 		this.notifyHandlers();		
+		window.eventBus.$emit('track-updated');
 	}
 
 	/**
@@ -513,6 +523,7 @@ function Track() {
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 
 		this.notifyHandlers();
+		window.eventBus.$emit('track-updated');
 	};
 
 	/**
@@ -537,6 +548,7 @@ function Track() {
 		this.repeatedMeasures.set(measureNum, this.repeatedMeasures.get(measureNum - 1) || 1);
 	
 		this.notifyHandlers();
+		window.eventBus.$emit('track-updated');
 	};
 
 	/**
@@ -558,6 +570,7 @@ function Track() {
 		this.numberOfMeasures--;
 
 		this.notifyHandlers();		
+		window.eventBus.$emit('track-updated');
 	}
 
     /**
@@ -567,6 +580,7 @@ function Track() {
 		const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
 		editor.track.repeatedMeasures.set(measureNum - 1, count + 1);
 		this.notifyHandlers();		
+		window.eventBus.$emit('track-updated');
 	};
 	
 	/**
@@ -576,6 +590,7 @@ function Track() {
 		const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
 		editor.track.repeatedMeasures.set(measureNum - 1, count - 1);
 		this.notifyHandlers();		
+		window.eventBus.$emit('track-updated');
 	};
 
 	/**
@@ -627,6 +642,7 @@ function Track() {
 		this.toms_array[3] = this.adjustNotesForNewDivision(this.toms_array[3])
 
 		this.notifyHandlers();	
+		window.eventBus.$emit('track-updated');
 	};
 
 	/**
@@ -741,6 +757,7 @@ function Track() {
 		this.numberOfMeasures = this.numberOfMeasures + track.numberOfMeasures;
 
 		this.notifyHandlers();	
+		window.eventBus.$emit('track-updated');
 	}
 	
 

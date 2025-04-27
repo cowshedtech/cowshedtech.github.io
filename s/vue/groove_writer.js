@@ -82,13 +82,12 @@ function GrooveWriter() {
 			updateCurrentURL();
 		});
 		
-		// If track changes then update all the dependent components
-		root.track?.addChangeHandler(() => {
-            updateCurrentURL(); 
+		eventBus.$on('track-updated', () => {
+			updateCurrentURL(); 
 			sheetMusic.updateFromTrack(editor.track);
 			midiPlayer.noteHasChanged();
 			editorClickable.update(editor.track);
-        })
+		})
 		
 		eventBus.$on('metronome-updated', () => {
 			if (midiPlayer) midiPlayer.noteHasChanged();

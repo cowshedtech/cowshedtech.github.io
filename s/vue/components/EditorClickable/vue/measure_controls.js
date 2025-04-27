@@ -16,13 +16,13 @@ export default {
   },
 
   mounted() {
-    this.removeHandler = editor?.track?.addChangeHandler(() => {
-      this.repeatCount = editor?.track?.repeatedMeasures.get(this.measureIndex - 1) || 1
-    })    
+    eventBus.$on('track-updated', () => {
+			this.repeatCount = editor?.track?.repeatedMeasures.get(this.measureIndex - 1) || 1
+		})
   },
 
   beforeUnmount() {
-      if (this.removeHandler) this.removeHandler() 
+    eventBus.$off('track-updated');
   },
 
   methods: {

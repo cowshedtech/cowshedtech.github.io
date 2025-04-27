@@ -42,9 +42,9 @@ export default {
   },
 
   mounted() {
-    this.removeHandler = this.track?.addChangeHandler(() => {
-      this.track = deepCopy(editor.track)            
-    })
+    eventBus.$on('track-updated', () => {
+			this.track = deepCopy(editor.track)            
+		})
     eventBus.$on('options-updated', () => {
       this.isDBAuthoring = options.grooveDBAuthoring;     
       this.isViewMode = options.isViewMode();     
@@ -52,7 +52,7 @@ export default {
   },
 
   beforeUnmount() {
-      if (this.removeHandler) this.removeHandler() 
+      eventBus.$off('track-updated');
   },
 
   template: `
