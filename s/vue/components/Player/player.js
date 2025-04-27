@@ -228,7 +228,6 @@ class MIDIPlayer {
             MIDI.Player.ctx.resume();
             this.resetStartTime();
             this.#lastUpdateTime = 0;
-            // this.eventCallbacks.loadMidiDataEvent(true);
             window.eventBus.$emit(EventTypes.LOAD_MIDI, { isPlaying: true });
             MIDI.Player.loop(this.#shouldRepeat); // set the loop parameter
             MIDI.Player.start();
@@ -408,7 +407,6 @@ class MIDIPlayer {
                 // advanceOptionsOffsetClickStartRotation will return false if not rotating
                 if (metronome.advanceOptionsOffsetClickStartRotation() || midiPlayer.doesMidiDataNeedRefresh()) {
                     MIDI.Player.stop();
-                    // midiPlayer.eventCallbacks.loadMidiDataEvent(midiPlayer.eventCallbacks.classRoot, false);
                     window.eventBus.$emit(EventTypes.LOAD_MIDI, { isPlaying: false });
                     MIDI.Player.start();                    
                 }                
