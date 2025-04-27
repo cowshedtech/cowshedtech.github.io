@@ -34,6 +34,7 @@ export default {
 	template: `
 	  <div 
 	  	v-if="isOpen" 
+		style="position: absolute; z-index: 9999; display: block" 
 		:style="{ top: y + 'px', left: x + 'px' }" 
 		class="noteContextMenuNew" >
 		  	<ul :id="element" class="list">

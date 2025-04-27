@@ -18,7 +18,7 @@ export default {
 
   methods: {
     handleDownloadClick(event) {
-      this.menuX = event.clientX;
+      this.menuX = event.clientX - 90;
       this.menuY = event.clientY;
       this.isPopupOpen = !this.isPopupOpen
     }    

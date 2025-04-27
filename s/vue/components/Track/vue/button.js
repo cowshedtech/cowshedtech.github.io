@@ -25,9 +25,9 @@ export default {
         },
 
         handleClick(event) {
-            this.toggleMenu();
-            this.menuX = event.clientX;
+            this.menuX = event.clientX - 90;
             this.menuY = event.clientY;
+            this.toggleMenu();            
         },
         closeMenu() {
             this.isPopupOpen = false;

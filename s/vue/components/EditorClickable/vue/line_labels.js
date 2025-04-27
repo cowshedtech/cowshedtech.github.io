@@ -110,7 +110,7 @@ export default {
     },
 
     handleClick(event, instrument) {
-      this.menuX = event.clientX;
+      this.menuX = event.clientX - 90;
       this.menuY = event.clientY;
       this.toggleMenu(instrument);      
     }

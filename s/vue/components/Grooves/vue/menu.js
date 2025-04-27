@@ -59,7 +59,7 @@ export default {
   },
 
   template: `
-    <div id="grooveListWrapper" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
+    <div id="grooveListWrapper" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
       <ul class="grooveListUL">
 
         <span 

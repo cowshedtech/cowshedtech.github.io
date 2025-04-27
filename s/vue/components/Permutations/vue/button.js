@@ -45,7 +45,7 @@ export default {
         handleClick(event) {
             if (!this.isEnabled) return
             this.toggleMenu();
-            this.menuX = event.clientX;
+            this.menuX = event.clientX - 90;
             this.menuY = event.clientY;
         }
     },

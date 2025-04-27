@@ -50,7 +50,7 @@ export default {
 
 	template: `
 	<!-- dialog for the TIME label, hidden by default -->
-	<div id="timeSigPopup" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
+	<div id="timeSigPopup" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
 		<div id="timeSigPopupTitle">Choose a Time Signature</div>
 		<div id="timeSigPopupOptions">
 			<select id="timeSigPopupTimeSigTop" v-model="timeSigTop">

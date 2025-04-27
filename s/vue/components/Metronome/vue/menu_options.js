@@ -73,7 +73,7 @@ export default {
     },
 
     handleOffsetClick(optionId) {
-      this.menuX = event.clientX;
+      this.menuX = event.clientX - 90;
       this.menuY = event.clientY;
       this.isOffsetClickPopupOpen = !this.isOffsetClickPopupOpen;
       this.$emit('close')
@@ -127,7 +127,7 @@ export default {
   },
 
   template: `
-    <span class="noteContextMenuNew" id="metronomeOptionsContextMenuContainer" aria-label="Metronome options" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
+    <span class="noteContextMenuNew" id="metronomeOptionsContextMenuContainer" aria-label="Metronome options" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
       <ul id="metronomeOptionsContextMenu" class="list" role="menu">
         <li v-for="option in options"
             :key="option.id"
