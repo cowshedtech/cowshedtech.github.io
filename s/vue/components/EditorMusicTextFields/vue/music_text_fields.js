@@ -45,10 +45,10 @@ export default {
     this.removeHandler = this.track?.addChangeHandler(() => {
       this.track = deepCopy(editor.track)            
     })
-    this.removeOptionsHandler = options?.addChangeHandler(() => {
+    eventBus.$on('options-updated', () => {
       this.isDBAuthoring = options.grooveDBAuthoring;     
       this.isViewMode = options.isViewMode();     
-  })
+    });
   },
 
   beforeUnmount() {

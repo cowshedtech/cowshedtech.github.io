@@ -16,10 +16,10 @@ export default {
       this.track = deepCopy(editor.track)            
     })
 
-    this.removeOptionsHandler = options?.addChangeHandler(() => {
+   eventBus.$on('options-updated', () => {
       this.options = deepCopy(options)
       this.isViewMode = options.isViewMode()
-    })
+    });
   },
 
   beforeUnmount() {

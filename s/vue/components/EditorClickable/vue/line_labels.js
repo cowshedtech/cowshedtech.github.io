@@ -46,15 +46,15 @@ export default {
 
   mounted() {
     this.tomsVisible = options.areTomsVisible();
-    this.removeHandler = options.addChangeHandler(() => {
-      this.tomsVisible = options.areTomsVisible();
+    eventBus.$on('options-updated', () => {
+			this.tomsVisible = options.areTomsVisible();
       this.labels.find(l => l.instrument === 'tom1').visible = this.tomsVisible;
       this.labels.find(l => l.instrument === 'tom4').visible = this.tomsVisible;
-    });
+		});
   },
 
   beforeUnmount() {
-    if (this.removeHandler) this.removeHandler()
+    eventBus.$off('options-updated');
   },
 
   methods: {

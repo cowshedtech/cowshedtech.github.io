@@ -57,25 +57,4 @@ export default {
     </div>			
     <RightHandContent></RightHandContent>		    
 	`
-  }
-
-
-  // mounted() {
-	// 	this.removeHandler = options?.addChangeHandler(() => {
-	// 		this.highlight = options.isHighlightOn()
-	// 	})
-		
-	// 	// Add click handler to close menu when clicking outside
-	// 	this.handleClickOutside = (event) => {
-	// 		const menu = document.getElementById('trackContextMenuContainter');
-	// 		if (menu && !menu.contains(event.target)) {
-	// 			this.$emit('close');
-	// 		}
-	// 	};
-	// 	document.addEventListener('click', this.handleClickOutside);
-	// },
-	// beforeUnmount() {
-	// 	if (this.removeHandler) this.removeHandler()
-	// 	// Remove click handler when component is destroyed
-	// 	document.removeEventListener('click', this.handleClickOutside);
-	// },
+}

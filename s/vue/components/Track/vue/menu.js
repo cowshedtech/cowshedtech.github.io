@@ -68,12 +68,12 @@ export default {
 	},
 
 	mounted() {
-		this.removeHandler = options?.addChangeHandler(() => {
-			this.highlight = options.isHighlightOn()
-		})
+		eventBus.$on('options-updated', () => {
+            this.highlight = options.isHighlightOn()
+        });	
 	},
 	beforeUnmount() {
-		if (this.removeHandler) this.removeHandler()
+		eventBus.$off('options-updated');
 	},
 
 	template: `

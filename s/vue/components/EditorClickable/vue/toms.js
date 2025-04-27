@@ -54,7 +54,7 @@ export default {
   },
 
   beforeUnmount() {
-    eventBus.$off('close-all-menus');
+    eventBus.$off('options-updated');
   },
   
   components: {

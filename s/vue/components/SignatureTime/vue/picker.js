@@ -22,16 +22,16 @@ export default {
             this.disabledEight = ((8 * editor.track.numBeats / editor.track.noteValue) % 1 != 0)
             this.disabledTriplets = editor.track.noteValue != 4
         })
-        this.removeOptionsHandler = options?.addChangeHandler(() => {
+        eventBus.$on('options-updated', () => {
             this.isDBAuthoring = options.grooveDBAuthoring;     
             this.isViewMode = options.isViewMode();     
             this.isAdvancedEdit = options.isAdvancedEdit()
-        })
+        });	
     },
 
     beforeUnmount() {
         if (this.removeEditorHandler) this.removeEditorHandler() 
-        if (this.removeOptionsHandler) this.removeOptionsHandler() 
+        eventBus.$off('options-updated');
     },
 
     components: {

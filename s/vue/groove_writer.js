@@ -73,16 +73,14 @@ function GrooveWriter() {
 		editorClickable.update(root.track);
 		sheetMusic.updateFromTrack(root.track);
 
-
-		// If options are changed then update all the dependent components		
-		options.addChangeHandler(() => {
+		eventBus.$on('options-updated', () => {
 			if (!options.isHighlightOn()) {
 				sheetMusic.clearHighlight();
 				editorClickable.clearHighlight();
 			}
 			sheetMusic.updateFromTrack(editor.track);
 			updateCurrentURL();
-		})
+		});
 		
 		// If track changes then update all the dependent components
 		root.track?.addChangeHandler(() => {

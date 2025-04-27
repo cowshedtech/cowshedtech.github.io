@@ -7,13 +7,13 @@ export default {
   },
 
   mounted() {
-    this.removeOptionsHandler = options?.addChangeHandler(() => {
-        this.isDebugMode = options.debugMode;             
-    })
+    eventBus.$on('options-updated', () => {
+      this.isDebugMode = options.debugMode;             
+    });
   },
 
   beforeUnmount() {
-      if (this.removeOptionsHandler) this.removeOptionsHandler() 
+    eventBus.$off('options-updated');
   },  
   
   

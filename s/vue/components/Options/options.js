@@ -33,39 +33,10 @@ class Options {
     /** @type {boolean} Whether groove database authoring is enabled */
     grooveDBAuthoring = false;
 
-    #changeHandlers = [];
-
     /**
      * Initializes a new Options instance with default settings
      */
     constructor() {}
-
-    /**
-     * Adds a new change event handler
-     * @param {Function} handler - The callback function to be called when changes occur
-     * @returns {Function} - A function to remove this handler
-     */
-    addChangeHandler(handler) {
-        this.#changeHandlers.push(handler);
-        return () => this.removeChangeHandler(handler);
-    }
-
-    /**
-     * Removes a change event handler
-     * @param {Function} handler - The callback function to remove
-     */
-    removeChangeHandler(handler) {
-        const index = this.#changeHandlers.indexOf(handler);
-        if (index !== -1) this.#changeHandlers.splice(index, 1);
-    }
-
-    /**
-     * Notifies all registered handlers of a change
-     */
-    #notifyHandlers() {
-        this.#changeHandlers.forEach(handler => handler());
-    }
-
 
     /**
      * is note highlighting on
@@ -81,7 +52,7 @@ class Options {
      */
     setHighlightOn(isOn) {
         this.#highlightOn = isOn;
-        this.#notifyHandlers();
+        window.eventBus.$emit('options-updated');
     }
 
     /**
@@ -98,7 +69,7 @@ class Options {
      */
     setStickingVisible(isVisible) {
         this.#stickingsVisible = isVisible;
-        this.#notifyHandlers();
+        window.eventBus.$emit('options-updated');
     }
 
     /**
@@ -115,7 +86,6 @@ class Options {
      */
     setTomsVisible(isVisible) {
         this.#tomsVisible = isVisible;
-        this.#notifyHandlers();
         window.eventBus.$emit('options-updated');
     }
 
@@ -133,7 +103,7 @@ class Options {
      */
     setViewMode(isViewMode) {
         this.viewMode = isViewMode;
-        this.#notifyHandlers();
+        window.eventBus.$emit('options-updated');
     }
 
      /**
@@ -150,7 +120,7 @@ class Options {
      */
     setShowLegend(showLegend) {
         this.showLegend = showLegend;
-        this.#notifyHandlers();
+        window.eventBus.$emit('options-updated');
     }
 
      /**
@@ -167,6 +137,6 @@ class Options {
      */
     setAdvancedEdit(advancedEdit) {
         this.#advancedEditIsOn = advancedEdit;
-        this.#notifyHandlers();
+        window.eventBus.$emit('options-updated');
     }
 }

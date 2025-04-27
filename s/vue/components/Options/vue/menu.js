@@ -29,14 +29,13 @@ export default {
 	},
 
 	beforeDestroy() {
-		// Clean up event listener
-		if (this.removeHandler) this.removeHandler();
+		eventBus.$off('options-updated');
 	},
 
 	mounted() {
-		this.removeHandler = options?.addChangeHandler(() => {
+		eventBus.$on('options-updated', () => {
 			this.highlight = options.isHighlightOn()
-		})
+		});		
 	},
 
 	template: `

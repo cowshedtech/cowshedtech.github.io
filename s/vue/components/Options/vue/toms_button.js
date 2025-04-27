@@ -18,13 +18,13 @@ export default {
   },
 
   mounted() {
-      this.removeOptionsHandler = options?.addChangeHandler(() => {
-          this.isViewMode = options.isViewMode();     
-      })
+      eventBus.$on('options-updated', () => {
+        this.isViewMode = options.isViewMode();     
+      });	
   },
 
   beforeUnmount() {
-      if (this.removeOptionsHandler) this.removeOptionsHandler() 
+    eventBus.$off('options-updated');
   },
 
   template: `
