@@ -19,7 +19,8 @@ const EventTypes = {
     PARAMETERS_UPDATE: 'parametersUpdate',
     PLAY_STATE: 'playState',
     PLAY_PROGRESS: 'playProgress',
-    PLAY_COMPLETE: 'playComplete'
+    PLAY_COMPLETE: 'playComplete',
+    LOAD_MIDI: 'loadMidi'
 };
 
 class MIDIPlayer {
@@ -227,8 +228,8 @@ class MIDIPlayer {
             MIDI.Player.ctx.resume();
             this.resetStartTime();
             this.#lastUpdateTime = 0;
-            this.eventCallbacks.loadMidiDataEvent(true);
-            MIDI.Player.stop();
+            // this.eventCallbacks.loadMidiDataEvent(true);
+            window.eventBus.$emit(EventTypes.LOAD_MIDI, { isPlaying: true });
             MIDI.Player.loop(this.#shouldRepeat); // set the loop parameter
             MIDI.Player.start();
         }
@@ -245,7 +246,6 @@ class MIDIPlayer {
                 
         MIDI.Player.pause();
         this.setState(PlayerState.PAUSED);
-        // this.eventCallbacks.notePlaying("clear", -1);
         window.eventBus.$emit(EventTypes.PLAY_STATE);
     };
     
@@ -260,7 +260,6 @@ class MIDIPlayer {
         this.setState(PlayerState.STOPPED);
         MIDI.Player.stop();
     
-        // this.eventCallbacks.notePlaying("clear", -1);
         metronome.resetOptionsOffsetClickStartRotation();
     };
 
@@ -385,9 +384,6 @@ class MIDIPlayer {
     callback(data) {
         var percentComplete = (data.now / data.end);
         
-        let parent = this;
-        // this.eventCallbacks.percentProgress(this.eventCallbacks.classRoot, percentComplete * 100);
-
         if (midiPlayer.#lastMidiTimeUpdate && midiPlayer.#lastMidiTimeUpdate < (data.now + 800)) {
             midiPlayer.#lastMidiTimeUpdate = data.now;
         }
@@ -412,7 +408,8 @@ class MIDIPlayer {
                 // advanceOptionsOffsetClickStartRotation will return false if not rotating
                 if (metronome.advanceOptionsOffsetClickStartRotation() || midiPlayer.doesMidiDataNeedRefresh()) {
                     MIDI.Player.stop();
-                    midiPlayer.eventCallbacks.loadMidiDataEvent(midiPlayer.eventCallbacks.classRoot, false);
+                    // midiPlayer.eventCallbacks.loadMidiDataEvent(midiPlayer.eventCallbacks.classRoot, false);
+                    window.eventBus.$emit(EventTypes.LOAD_MIDI, { isPlaying: false });
                     MIDI.Player.start();                    
                 }                
             } else {

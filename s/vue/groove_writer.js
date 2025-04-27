@@ -140,10 +140,35 @@ function GrooveWriter() {
 		})
 
 		// If the midiplayer starts playing then update all the dependent components			
-		midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
+		// midiPlayer.eventCallbacks.loadMidiDataEvent = function (playStarting) {
+		// 	var midiURL;
+
+		// 	if (playStarting && metronome.getCountInActive()) {
+		// 		midiURL = buildMIDICountInTrack(root.track.numBeats, root.track.noteValue, midiPlayer.getTempo());
+		// 		midiPlayer.noteHasChanged();
+		// 		metronome.setCountInIsPlaying(true);
+
+		// 	} else {
+		// 		if (metronome.countInIsPlaying) {
+		// 			// we saved the state above so that we could reset the Offset click start, otherwise it starts on the 'e'
+		// 			metronome.setCountInIsPlaying(false);
+		// 			metronome.resetOptionsOffsetClickStartRotation();
+		// 		}
+		// 		midiURL = createMidiUrlFromClickableUI("our_MIDI");
+		// 		midiPlayer.resetNoteHasChanged();
+		// 	}
+		// 	midiPlayer.loadFromURL(midiURL, midiPlayer.getTempo());
+
+		// 	//
+		// 	// TODO
+		// 	//
+		// 	// updateGrooveDBSource();
+		// };
+
+		eventBus.$on(EventTypes.LOAD_MIDI, (data) => {
 			var midiURL;
 
-			if (playStarting && metronome.getCountInActive()) {
+			if (data?.playStarting && metronome.getCountInActive()) {
 				midiURL = buildMIDICountInTrack(root.track.numBeats, root.track.noteValue, midiPlayer.getTempo());
 				midiPlayer.noteHasChanged();
 				metronome.setCountInIsPlaying(true);
@@ -158,12 +183,7 @@ function GrooveWriter() {
 				midiPlayer.resetNoteHasChanged();
 			}
 			midiPlayer.loadFromURL(midiURL, midiPlayer.getTempo());
-
-			//
-			// TODO
-			//
-			// updateGrooveDBSource();
-		};
+		})
 
 		
 		midiPlayer.initialise();
