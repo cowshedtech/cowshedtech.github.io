@@ -1,5 +1,3 @@
-
-
 export default {
 
 	data() {
@@ -77,7 +75,7 @@ export default {
 	},
 
 	template: `
-	<span class="noteContextMenuNew" id="trackContextMenuContainter" v-if="isOpen" style="position: absolute; z-index: 9999; display: block" :style="{ top: y + 'px', left: x + 'px' }">
+	<span class="noteContextMenuNew" id="trackContextMenuContainter" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="trackContextMenu" class="list">
 			<li 
 				class="metronometrackContextMenuItem" 

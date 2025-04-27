@@ -1,6 +1,5 @@
 import Menu from './menu.js'
 
-
 export default {
     data() {
         return {

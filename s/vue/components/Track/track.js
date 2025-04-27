@@ -109,6 +109,20 @@ function Track() {
 	/*
 	 *
 	 */
+	root.stickingsReverseRL = function() {
+		for (var i = 0; i < this.numberOfMeasures * this.notesPerMeasure; i++) {
+			var cur_state = this.getStickingState(i, "URL");
+			if (cur_state === "R") {
+				this.setStickingState(i, "left", false, this.notesPerMeasure, this.timeDivision, this.noteValue);
+			} else if (cur_state === "L") {
+				this.setStickingState(i, "right", false, this.notesPerMeasure, this.timeDivision, this.noteValue);
+			}
+		}		
+	}
+
+	/*
+	 *
+	 */
 	root.getHighHatState = function(id, returnType) {
 
 		let abcState = this.hh_array[id] ? this.hh_array[id] : constant_ABC_OFF;
@@ -132,19 +146,7 @@ function Track() {
 		return result;        
 	}
 
-	/*
-	 *
-	 */
-	root.stickingsReverseRL = function() {
-		for (var i = 0; i < this.numberOfMeasures * this.notesPerMeasure; i++) {
-			var cur_state = this.getStickingState(i, "URL");
-			if (cur_state === "R") {
-				this.setStickingState(i, "left", false, this.notesPerMeasure, this.timeDivision, this.noteValue);
-			} else if (cur_state === "L") {
-				this.setStickingState(i, "right", false, this.notesPerMeasure, this.timeDivision, this.noteValue);
-			}
-		}		
-	}
+	
 	
 	
 	/*

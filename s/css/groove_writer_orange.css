@@ -843,7 +843,9 @@
 	}
 	/* Context Menu */
 	.noteContextMenu {
-
+		position: absolute; 
+		z-index: 9999; 
+		display: block;
 	}
 	#permutationContextMenu, #metronomeOptionsContextMenu, #metronomeOptionsOffsetClickContextMenu {
 		position: fixed;
@@ -863,6 +865,11 @@
 		content: "\f00c";
 		letter-spacing: 5px;
 	} /* checked icon */
+	.noteContextMenuNew {
+		position: absolute; 
+		z-index: 9999; 
+		display: block;
+	}
 	.noteContextMenuNew>ul.list  {
 		position:fixed;
 		z-index:999;
