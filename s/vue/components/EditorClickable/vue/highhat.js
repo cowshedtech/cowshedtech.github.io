@@ -1,5 +1,4 @@
 import Menu from "./highhat_menu.js"
-import eventBus from '../../../eventBus.js'
 
 export default {
   props: {

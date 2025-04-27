@@ -116,6 +116,7 @@ class Options {
     setTomsVisible(isVisible) {
         this.#tomsVisible = isVisible;
         this.#notifyHandlers();
+        window.eventBus.$emit('options-updated');
     }
 
     /**

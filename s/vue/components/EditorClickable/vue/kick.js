@@ -1,5 +1,5 @@
 import Menu from "./kick_menu.js"
-import eventBus from '../../../eventBus.js'
+
 
 export default {
   props: {

@@ -1,5 +1,5 @@
 import OptionsMenu from './menu_options.js'
-import eventBus from '../../../eventBus.js'
+
 
 export default {
     data() {

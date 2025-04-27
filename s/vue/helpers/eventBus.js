@@ -1,5 +1,3 @@
-import { ref } from 'vue';
-
 // Create a simple event emitter
 const listeners = new Map();
 
@@ -30,4 +28,5 @@ const eventBus = {
     }
 };
 
-export default eventBus; 
+// Make eventBus globally available
+window.eventBus = eventBus; 

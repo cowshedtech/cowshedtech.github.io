@@ -2,7 +2,6 @@ import RightHandContent from './components/TheContentRightHand/vue/right_hand_co
 import TimeSignature from './components/SignatureTime/vue/picker.js'
 import TopNavigation from './components/TheNavigationTop/vue/top_navigation.js'
 import MidiPlayer from './components/Player/vue/controls.js'
-import eventBus from './eventBus.js'
 
 const KEYS = {
   Z: 'Z',
@@ -42,12 +41,7 @@ export default {
     },
 
     handleClickOutside(event){
-      console.log(`close-all-menus`)
       eventBus.$emit('close-all-menus');
-			// const menu = document.getElementById('trackContextMenuContainter');
-			// if (menu && !menu.contains(event.target)) {
-			// 	this.$emit('close');
-			// }
 		}
   },
   

@@ -2,7 +2,7 @@ import HighHatLabelMenu from "./label_menu_highhat.js"
 import KickLabelMenu from "./label_menu_kick.js"
 import SnareLabelMenu from "./label_menu_snare.js"
 import TomLabelMenu from "./label_menu_tom.js"
-import eventBus from '../../../eventBus.js'
+
 
 export default {
   data() {

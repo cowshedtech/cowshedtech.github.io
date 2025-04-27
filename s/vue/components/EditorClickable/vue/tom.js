@@ -1,5 +1,5 @@
 import Menu from "./tom_menu.js"
-import eventBus from '../../../eventBus.js'
+
 
 export default {
   props: {

@@ -1,7 +1,7 @@
 import SnareFlam from './snare_flam.js'
 import SnareDrag from './snare_drag.js'
 import Menu from "./snare_menu.js"
-import eventBus from '../../../eventBus.js'
+
 
 export default {
   props: {
