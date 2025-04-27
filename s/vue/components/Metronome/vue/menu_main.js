@@ -40,15 +40,13 @@ export default {
     },
 
     mounted() {
-        // Subscribe to metronome changes
-        this.removeHandler = metronome?.addChangeHandler(() => {
-            this.freq = metronome.getFrequency()
-        })
+        eventBus.$on('metronome-updated', () => {
+			this.freq = metronome.getFrequency()
+		})
     },
     
     beforeUnmount() {
-        // Cleanup event handler
-        if (this.removeHandler) this.removeHandler() 
+        eventBus.$off('metronome-updated');
     },
 
     components: {

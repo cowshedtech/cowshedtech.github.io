@@ -108,18 +108,15 @@ export default {
   },
 
   mounted() {
-    // Subscribe to metronome changes
-    this.removeHandler = metronome?.addChangeHandler(() => {
-      this.options[0].checked = metronome ? metronome.getSolo() : false
+    eventBus.$on('metronome-updated', () => {
+			this.options[0].checked = metronome ? metronome.getSolo() : false
       this.options[1].checked = metronome ? metronome.isAutoSpeedUpActive() : false
       this.options[2].checked = metronome ? metronome.getCountInActive() : false
-      // this.options[3].checked = metronome ? metronome.isOffsetClick() : false
-    })
+		})
   },
 
   beforeUnmount() {
-    // Cleanup event handler
-    if (this.removeHandler) this.removeHandler()
+    eventBus.$off('metronome-updated');
   },
 
   components: {

@@ -90,11 +90,10 @@ function GrooveWriter() {
 			editorClickable.update(editor.track);
         })
 		
-		// If metronome then update all the dependent components		
-		metronome?.addChangeHandler(() => {
-            if (midiPlayer) midiPlayer.noteHasChanged();
+		eventBus.$on('metronome-updated', () => {
+			if (midiPlayer) midiPlayer.noteHasChanged();
 			updateCurrentURL();      
-        })
+		})
 	
 		// If the midiplayer changes then update all the dependent components		
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();

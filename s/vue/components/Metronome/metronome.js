@@ -11,35 +11,7 @@ class Metronome {
     #countInActive = false;
     #countInIsPlaying = false;
 	
-    #changeHandlers = [];
-
     constructor(containerIndex) { }
-
-    /**
-     * Adds a new change event handler
-     * @param {Function} handler - The callback function to be called when changes occur
-     * @returns {Function} - A function to remove this handler
-     */
-    addChangeHandler(handler) {
-        this.#changeHandlers.push(handler);
-        return () => this.removeChangeHandler(handler);
-    }
-
-    /**
-     * Removes a change event handler
-     * @param {Function} handler - The callback function to remove
-     */
-    removeChangeHandler(handler) {
-        const index = this.#changeHandlers.indexOf(handler);
-        if (index !== -1) this.#changeHandlers.splice(index, 1);
-    }
-
-    /**
-     * Notifies all registered handlers of a change
-     */
-    #notifyHandlers() {
-        this.#changeHandlers.forEach(handler => handler());
-    }
 
     /**
      * Gets the current frequency
@@ -55,7 +27,7 @@ class Metronome {
      */
     setFrequency(newFrequency) {
         this.#frequency = newFrequency;
-        this.#notifyHandlers();
+        window.eventBus.$emit('metronome-updated');
     }
 
 
@@ -74,7 +46,7 @@ class Metronome {
         if (this.#solo && this.getFrequency() === 0)
             this.setFrequency(4);
 
-        this.#notifyHandlers();
+        window.eventBus.$emit('metronome-updated');
     };
 
     /**
@@ -91,7 +63,7 @@ class Metronome {
      */
     setAutoSpeedUpActive(active) {
         this.#autoSpeedUpActive = active;
-        this.#notifyHandlers();
+        window.eventBus.$emit('metronome-updated');
     }
 
     /**
@@ -108,7 +80,7 @@ class Metronome {
      */
     setCountInActive(active) {
         this.#countInActive = active;
-        this.#notifyHandlers();
+        window.eventBus.$emit('metronome-updated');
     }
 
     /**
@@ -149,7 +121,7 @@ class Metronome {
      */    
     setOffsetClickStart(value) {
         this.#offsetClickStart = value;
-        this.#notifyHandlers();
+        window.eventBus.$emit('metronome-updated');
     };
 
     /**

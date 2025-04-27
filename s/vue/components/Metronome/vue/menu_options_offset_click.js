@@ -62,8 +62,7 @@ export default {
 	},
 
 	mounted() {
-		// Subscribe to metronome changes
-		this.removeHandler = metronome?.addChangeHandler(() => {
+		eventBus.$on('metronome-updated', () => {
 			if (!this.menuItems) return;
 			
 			this.menuItems.forEach((item, index) => {
@@ -79,12 +78,11 @@ export default {
 					item.isVisible = editor?.track?.isTripletDivision();
 				}
 			});
-		});
+		})
 	},
 	
 	beforeUnmount() {
-		// Cleanup event handler
-		if (this.removeHandler) this.removeHandler();
+		eventBus.$off('metronome-updated');
 	},
 
 	template: `
