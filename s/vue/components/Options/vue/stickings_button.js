@@ -16,7 +16,7 @@ export default {
         button-class=" grooveDB_hidden pageBottomButton" 
         button-id="stickingsButton" 
         button-text="STICKINGS" 
-        @click="handleClick">
+        @click.stop.prevent="handleClick">
     </BottomNavigationButton>
     `
 }

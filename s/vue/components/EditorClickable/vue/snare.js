@@ -129,7 +129,7 @@ export default {
   },
 
   template: `
-    <div :id="'snare' + noteIndex" class="snare" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">
+    <div :id="'snare' + noteIndex" class="snare" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">
       <template v-if="currentNoteConfig">
         <template v-if="currentNoteConfig.primary">
           <div :class="[currentNoteConfig.primary.class, 'note_part']" :style="currentNoteConfig.primary.style" :id="currentNoteConfig.primary.class + noteIndex" v-html="currentNoteConfig.primary.content"></div>

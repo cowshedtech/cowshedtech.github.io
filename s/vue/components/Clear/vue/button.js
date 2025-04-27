@@ -28,7 +28,7 @@ export default {
     },
 
     template: `
-        <BottomNavigationButton v-if="isViewMode === false" button-id="clearAllNotesButton" button-text="CLEAR ALL" @click="handleClick">
+        <BottomNavigationButton v-if="isViewMode === false" button-id="clearAllNotesButton" button-text="CLEAR ALL" @click.stop.prevent="handleClick">
             <i class="fa fa-trash fa-2x"></i>
         </BottomNavigationButton>
         `

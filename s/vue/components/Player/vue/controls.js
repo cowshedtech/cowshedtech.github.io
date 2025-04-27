@@ -85,7 +85,7 @@ export default {
                   title="Metronome controls" 
                   class="midiMetronomeMenu" 
                   :id="'midiMetronomeMenu' + containerIndex"
-                  @click="handleMetronomeMenu"
+                  @click.stop.prevent="handleMetronomeMenu"
               >
               ${addInlineMetronomeSVG()}
               </span>
@@ -98,7 +98,7 @@ export default {
                   title="Expand full screen in GrooveScribe" 
                   class="midiGSLogo" 
                   :id="'midiGSLogo' + containerIndex"
-                  @click="handleFullScreen">
+                  @click.stop.prevent="handleFullScreen">
                   <svg width="20" height="30" viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg">
                     <g>
                       <title>Layer 1</title>
@@ -115,7 +115,7 @@ export default {
                     </g>
                   </svg>
               </span>
-              <span v-if="expandable" title="Expand/Retract player" class="midiExpandImage" :id="'midiExpandImage' + containerIndex" @click="handleExpand">Hello</span>              
+              <span v-if="expandable" title="Expand/Retract player" class="midiExpandImage" :id="'midiExpandImage' + containerIndex" @click.stop.prevent="handleExpand">Hello</span>              
             </div>    
         </div>
    </div>

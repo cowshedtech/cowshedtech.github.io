@@ -79,7 +79,7 @@ export default {
       button-class="grooveDB_hidden pageBottomButton"
       button-id="printButton"
       button-text="PRINT"
-      @click="handlePrint"
+      @click.stop.prevent="handlePrint"
     >
       <i class="fa fa-print fa-2x"></i>
     </BottomNavigationButton>

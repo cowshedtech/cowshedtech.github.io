@@ -26,7 +26,7 @@ export default {
         },
 
         handleClick(event) {
-            this.menuX = event.clientX - 90;
+            this.menuX = event.clientX - 75;
             this.menuY = event.clientY;
             this.toggleMenu();
         },
@@ -54,7 +54,7 @@ export default {
         <span key="optionsAnchor"
             id="optionsAnchor"
             class="rightButtons"
-            @click="handleClick">
+            @click.stop.prevent="handleClick">
             <i class="fa fa-bars"></i>Options
         </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY" @close="closeMenu"></Menu>
         `

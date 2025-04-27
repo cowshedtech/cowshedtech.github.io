@@ -78,7 +78,7 @@ export default {
 		</div>
 		<div id="timeSigPopupButtons">
 		<button id="timeSigPopupCancel"  @click="close();">Cancel</button>
-		<button id="timeSigPopupOK" @click="handleTimeSig">Done</button>
+		<button id="timeSigPopupOK" @click.stop.prevent="handleTimeSig">Done</button>
 		</div>
 	</div>
 `

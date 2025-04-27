@@ -98,7 +98,7 @@ export default {
     <div 
       :id="'toms' + tomIndex + '-' + noteIndex" 
       class="tom" 
-      @click="handleLeftClick" 
+      @click.stop.prevent="handleLeftClick" 
       @contextmenu.prevent="handleRightClick" 
       @mouseenter="handleMouseEnter">
         <div v-if="noteABC === constants.TOM_OFF"

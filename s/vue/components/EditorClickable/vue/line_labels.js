@@ -135,7 +135,7 @@ export default {
            :class="label.class"
            :style="{ visibility: label.visible ? 'visible' : 'hidden' }"           
            :id="label.id"
-           @click="handleClick($event, label.instrument)"
+           @click.stop.prevent="handleClick($event, label.instrument)"
            @contextmenu.prevent="handleClick">
         {{ label.text }}
       </div>

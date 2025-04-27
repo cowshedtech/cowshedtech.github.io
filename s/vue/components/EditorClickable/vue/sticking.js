@@ -69,11 +69,11 @@ export default {
 
   template: `
     <div :id="'sticking' + noteIndex" class="sticking">
-        <div v-if="noteABC === constants.STICK_OFF" class="sticking_right note_part" :id="'sticking_right' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R</div>
-        <div v-if="noteABC === constants.STICK_R" class="sticking_right note_part" style="color:rgb(36, 132, 192)" :id="'sticking_right' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R</div>
-        <div v-if="noteABC === constants.STICK_L" class="sticking_left note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_left' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">L</div>
-        <div v-if="noteABC === constants.STICK_BOTH" class="sticking_both note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_both' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R/L</div>
-        <div v-if="noteABC === constants.STICK_COUNT" class="sticking_count note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_count' + noteIndex" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">C</div>
+        <div v-if="noteABC === constants.STICK_OFF" class="sticking_right note_part" :id="'sticking_right' + noteIndex" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R</div>
+        <div v-if="noteABC === constants.STICK_R" class="sticking_right note_part" style="color:rgb(36, 132, 192)" :id="'sticking_right' + noteIndex" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R</div>
+        <div v-if="noteABC === constants.STICK_L" class="sticking_left note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_left' + noteIndex" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">L</div>
+        <div v-if="noteABC === constants.STICK_BOTH" class="sticking_both note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_both' + noteIndex" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R/L</div>
+        <div v-if="noteABC === constants.STICK_COUNT" class="sticking_count note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_count' + noteIndex" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">C</div>
     </div>
   `,
 }

@@ -73,7 +73,7 @@ export default {
 			<li
 				v-for="item in menuItems"
 				:key="item.action"
-				@click="handleMenuClick(item.action)"
+				@click.stop.prevent="handleMenuClick(item.action)"
 			>
 				{{ item.label }}
 			</li>

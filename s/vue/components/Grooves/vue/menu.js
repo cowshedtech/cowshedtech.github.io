@@ -71,7 +71,7 @@ export default {
             v-for="(pattern, name) in items" 
             :key="name" 
             class="grooveListLI"
-            @click="handleGrooveClick(name, pattern)"
+            @click.stop.prevent="handleGrooveClick(name, pattern)"
           >
             {{ name }}
           </li>

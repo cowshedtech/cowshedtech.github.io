@@ -111,7 +111,7 @@ export default {
   },
 
   template: `
-    <div :id="'hi-hat' + noteIndex" class="hi-hat" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">
+    <div :id="'hi-hat' + noteIndex" class="hi-hat" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">
       <template v-if="currentNoteConfig">
         <template v-if="currentNoteConfig.primary">
           <div :class="[currentNoteConfig.primary.class, 'note_part']" :style="{ color: currentNoteConfig.primary.color }" :id="currentNoteConfig.primary.class + noteIndex">

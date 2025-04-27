@@ -29,7 +29,7 @@ export default {
       button-class="grooveDB_hidden pageBottomButton"
       button-id="downloadButton"
       button-text="DOWNLOAD"
-      @click="handleDownloadClick"
+      @click.stop.prevent="handleDownloadClick"
     >
       <span class="bottomButtonIcon">
         <i class="fa fa-download fa-2x"></i>

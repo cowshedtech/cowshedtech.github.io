@@ -80,7 +80,7 @@ export default {
 			<li 
 				class="metronometrackContextMenuItem" 
 				id="trackContextMenuHighlight" 
-				@click="handleGSLink"
+				@click.stop.prevent="handleGSLink"
 			>
 				<b>Export to GrooveScribe</b>
 			</li>
@@ -95,7 +95,7 @@ export default {
 						@keyup.enter="handleImportTrack"
 					>
 					<button 
-						@click="handleImportTrack"
+						@click.stop.prevent="handleImportTrack"
 						style="padding: 4px 8px;"
 					>
 						Add
@@ -113,7 +113,7 @@ export default {
 						@keyup.enter="handleAppendTrack"
 					>
 					<button 
-						@click="handleAppendTrack"
+						@click.stop.prevent="handleAppendTrack"
 						style="padding: 4px 8px;"
 					>
 						Add

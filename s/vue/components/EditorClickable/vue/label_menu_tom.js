@@ -55,10 +55,10 @@ export default {
 	template: `
 	<div class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
 		<ul :id="'tom' + tomIndex + 'LabelContextMenu'" class="list">
-			<li @click="handleClick('all_of')">Measure off</li>
-			<li @click="handleClick('all_on')">Measure on</li>
-			<li id='mute_tom1_menu_item' @click="handleClick('mute')">Measure muted</li>
-			<li @click="handleClick('cancel')">Cancel</li>
+			<li @click.stop.prevent="handleClick('all_of')">Measure off</li>
+			<li @click.stop.prevent="handleClick('all_on')">Measure on</li>
+			<li id='mute_tom1_menu_item' @click.stop.prevent="handleClick('mute')">Measure muted</li>
+			<li @click.stop.prevent="handleClick('cancel')">Cancel</li>
 		</ul>
 	</div>
 `

@@ -2,6 +2,7 @@ import RightHandContent from './components/TheContentRightHand/vue/right_hand_co
 import TimeSignature from './components/SignatureTime/vue/picker.js'
 import TopNavigation from './components/TheNavigationTop/vue/top_navigation.js'
 import MidiPlayer from './components/Player/vue/controls.js'
+import eventBus from './eventBus.js'
 
 const KEYS = {
   Z: 'Z',
@@ -11,10 +12,12 @@ const KEYS = {
 export default {
   mounted() {
     document.addEventListener('keydown', this.handleKeyDown);   
+    document.addEventListener('click', this.handleClickOutside);
   },
 
   beforeUnmount() {
     document.removeEventListener('keydown', this.handleKeyDown);          
+    document.removeEventListener('click', this.handleClickOutside);
   },
 
   methods: {
@@ -36,7 +39,16 @@ export default {
         }
       }
       return true;
-    }  
+    },
+
+    handleClickOutside(event){
+      console.log(`close-all-menus`)
+      eventBus.$emit('close-all-menus');
+			// const menu = document.getElementById('trackContextMenuContainter');
+			// if (menu && !menu.contains(event.target)) {
+			// 	this.$emit('close');
+			// }
+		}
   },
   
   components: {
@@ -52,3 +64,24 @@ export default {
     <RightHandContent></RightHandContent>		    
 	`
   }
+
+
+  // mounted() {
+	// 	this.removeHandler = options?.addChangeHandler(() => {
+	// 		this.highlight = options.isHighlightOn()
+	// 	})
+		
+	// 	// Add click handler to close menu when clicking outside
+	// 	this.handleClickOutside = (event) => {
+	// 		const menu = document.getElementById('trackContextMenuContainter');
+	// 		if (menu && !menu.contains(event.target)) {
+	// 			this.$emit('close');
+	// 		}
+	// 	};
+	// 	document.addEventListener('click', this.handleClickOutside);
+	// },
+	// beforeUnmount() {
+	// 	if (this.removeHandler) this.removeHandler()
+	// 	// Remove click handler when component is destroyed
+	// 	document.removeEventListener('click', this.handleClickOutside);
+	// },

@@ -134,7 +134,7 @@ export default {
             :class="getMenuItemClasses(option)"
             :id="getMenuItemId(option)"
             :title="option.title"
-            @click="handleOptionClick(option.id)"
+            @click.stop.prevent="handleOptionClick(option.id)"
             role="menuitem"
             tabindex="0"
             @keyup.enter="handleOptionClick(option.id)"

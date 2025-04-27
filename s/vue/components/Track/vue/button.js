@@ -25,7 +25,7 @@ export default {
         },
 
         handleClick(event) {
-            this.menuX = event.clientX - 90;
+            this.menuX = event.clientX - 63;
             this.menuY = event.clientY;
             this.toggleMenu();            
         },
@@ -52,7 +52,7 @@ export default {
         <span key="trackAnchor"
             id="trackAnchor"
             class="rightButtons"
-            @click="handleClick">
+            @click.stop.prevent="handleClick">
             <i class="fa fa-bars"></i> Track
         </span>
         <Menu 

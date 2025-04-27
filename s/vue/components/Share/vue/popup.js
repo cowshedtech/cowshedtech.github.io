@@ -135,7 +135,7 @@ export default {
 						type="checkbox" 
 						id="shortenerCheckbox"
 						v-model="isShortURL"
-						@click="handleShortUrlChange"
+						@click.stop.prevent="handleShortUrlChange"
 					>Short URL
 				</label>
 			</span>
@@ -145,7 +145,7 @@ export default {
 						type="checkbox" 
 						id="embedCodeCheckbox"
 						v-model="isEmbedCode"
-						@click="handleEmbedUrlChange"
+						@click.stop.prevent="handleEmbedUrlChange"
 					>Embed Code
 				</label>
 			</span>
@@ -161,7 +161,7 @@ export default {
 		<div id="shareButtonContainer">
 			<button 
 				id="fullURLPopupCopyButton"
-				@click="handleCopyClick"
+				@click.stop.prevent="handleCopyClick"
 				class="copy-button"
 			>
 				<i class="fa fa-copy"></i>

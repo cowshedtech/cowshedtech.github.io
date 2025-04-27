@@ -37,7 +37,7 @@ export default {
       button-class="grooveDB_hidden shareSaveButton"
       button-id="shareButton"
       button-text="SHARE"
-      @click="handleClick"
+      @click.stop.prevent="handleClick"
     >
       <i class="fa fa-share fa-2x"></i>      
     </BottomNavigationButton>

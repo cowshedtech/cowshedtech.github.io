@@ -69,7 +69,7 @@ export default {
             id="permutationAnchor"
             class="rightButtons grooveDB_hidden"
             :class="{ enabled: isEnabled }"
-            @click="handleClick">
+            @click.stop.prevent="handleClick">
             <i class="fa fa-bars"></i>Permutations
         </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY"></Menu>
         `

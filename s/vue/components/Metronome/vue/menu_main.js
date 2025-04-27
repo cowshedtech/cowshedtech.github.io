@@ -82,7 +82,7 @@ export default {
                 <span 
                     class="metronomeButton Options grooveDB_hidden" 
                     id="metronomeOptionsAnchor"
-                    @click="handleOptions"                    
+                    @click.stop.prevent="handleOptions"                    
                 >Options</span>                                                    
             </span>
             <OptionsMenu

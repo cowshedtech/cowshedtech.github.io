@@ -91,7 +91,7 @@ export default {
   },
 
   template: `
-    <div :id="'kick' + noteIndex" class="kick" @click="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">
+    <div :id="'kick' + noteIndex" class="kick" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">
         <div v-if="noteABC === constants.KICK_SPLASH || noteABC === constants.KICK_SPLASH_AND_KICK" class="kick_splash note_part" style="color: #000000" :id="'kick_splash' + noteIndex"><i class="fa fa-times"></i></div>
         <div v-if="noteABC === constants.KICK_NORMAL || noteABC === constants.KICK_SPLASH_AND_KICK" class="kick_circle note_part" style="backgroundColor: #000000; borderColor: #999" :id="'kick_circle' + noteIndex"></div>
         <div v-if="noteABC === constants.KICK_OFF" class="kick_circle note_part" style="borderColor: #999" :id="'kick_circle' + noteIndex"></div>

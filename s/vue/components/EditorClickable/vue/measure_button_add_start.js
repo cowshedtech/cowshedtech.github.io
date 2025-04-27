@@ -14,7 +14,7 @@ export default {
   },
 
   template: `
-    <span v-if="measureIndex === 1" id="addMeasureButtonStart" title="Add measure" @click="handleAddStart">
+    <span v-if="measureIndex === 1" id="addMeasureButtonStart" title="Add measure" @click.stop.prevent="handleAddStart">
         <i class="fa fa-plus"></i>
     </span>`
 }

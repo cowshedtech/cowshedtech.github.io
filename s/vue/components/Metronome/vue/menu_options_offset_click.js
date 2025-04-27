@@ -102,7 +102,7 @@ export default {
 					:class="{ menuChecked: item.isChecked }"
 					:style="{ display: item.isVisible ? 'block' : 'none' }"
 					:id="'metronomeOptionsOffsetClickContextMenuOnThe' + item.id"
-					@click="handleOffsetClick(item.id)"
+					@click.stop.prevent="handleOffsetClick(item.id)"
 				>
 					{{ item.label }}
 				</li>

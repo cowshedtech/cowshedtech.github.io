@@ -46,7 +46,7 @@ export default {
 				class="metronomeOptionsContextMenuItem" 
 				:class="{ 'menuChecked': highlight }"
 				id="optionsContextMenuHighlight" 
-				@click="handleToggleHighlight"
+				@click.stop.prevent="handleToggleHighlight"
 			>
 				<b>Highlighting</b>
 			</li>
