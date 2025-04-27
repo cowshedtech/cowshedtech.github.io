@@ -36,8 +36,7 @@ function Track() {
 
 	var root = this;
     root.trackID = trackID;
-	root.changeHandlers = [];
-
+	
 	root.trackNew = function () {
 		this.notesPerMeasure = 16;
 		this.timeDivision = 16;
@@ -65,38 +64,9 @@ function Track() {
 	root.track = root.trackNew();
 
 	/**
-     * Adds a new change event handler
-     * @param {Function} handler - The callback function to be called when changes occur
-     * @returns {Function} - A function to remove this handler
-     */
-    root.addChangeHandler = function(handler) {
-        this.changeHandlers.push(handler);
-        return () => this.removeChangeHandler(handler);
-    }
-
-
-    /**
-     * Removes a change event handler
-     * @param {Function} handler - The callback function to remove
-     */
-    root.removeChangeHandler = function(handler) {
-        const index = this.changeHandlers.indexOf(handler);
-        if (index !== -1) this.changeHandlers.splice(index, 1);
-    }
-
-
-    /**
-     * Notifies all registered handlers of a change
-     */
-    root.notifyHandlers = function() {
-        this.changeHandlers.forEach(handler => handler());
-    }
-
-	/**
      * Notifies all registered handlers of a change
      */
     root.notify = function() {
-		this.notifyHandlers();
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -105,7 +75,7 @@ function Track() {
 	 */
 	root.setStickingState = function(id, new_state) {
 		this.sticking_array[id] = new_state;
-		this.notifyHandlers();
+		
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -182,7 +152,6 @@ function Track() {
 	 */
 	root.setHighHatState = function(id, mode, make_sound) {
 		this.hh_array[id] = mode;	
-		this.notifyHandlers();
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -244,7 +213,7 @@ function Track() {
 	 */
 	root.setSnareState = function(id, mode, make_sound) {
 		this.snare_array[id] = mode;	
-		this.notifyHandlers();
+		
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -304,7 +273,7 @@ function Track() {
 	 */
 	root.setKickState = function(id, mode, make_sound) {
 		this.kick_array[id] = mode;		
-		this.notifyHandlers();	
+			
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -388,7 +357,7 @@ function Track() {
      */
     root.setTomState = function(tomId, id, mode, make_sound) {
 		this.toms_array[tomId-1][id] = mode;			
-		this.notifyHandlers();
+		
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -435,7 +404,7 @@ function Track() {
      */
     root.setTitle = function(title) {
 		this.title = title;
-		this.notifyHandlers();
+		
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -451,7 +420,7 @@ function Track() {
      */
     root.setAuthor = function(author) {
 		this.author = author;
-		this.notifyHandlers();
+		
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -467,7 +436,7 @@ function Track() {
      */
     root.setComments = function(comments) {
 		this.comments = comments;
-		this.notifyHandlers();
+		
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -489,7 +458,7 @@ function Track() {
 		this.snare_array = Array(this.notesPerMeasure).fill(false).slice(0);
 		this.kick_array = Array(this.notesPerMeasure).fill(false).slice(0); 
 		this.toms_array = [Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0)];
-		this.notifyHandlers();		
+				
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -522,7 +491,7 @@ function Track() {
 		// We need to move all the repeated measuresafter this measure up 1 
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 
-		this.notifyHandlers();
+		
 		window.eventBus.$emit('track-updated');
 	};
 
@@ -547,7 +516,7 @@ function Track() {
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 		this.repeatedMeasures.set(measureNum, this.repeatedMeasures.get(measureNum - 1) || 1);
 	
-		this.notifyHandlers();
+		
 		window.eventBus.$emit('track-updated');
 	};
 
@@ -569,7 +538,7 @@ function Track() {
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
 		this.numberOfMeasures--;
 
-		this.notifyHandlers();		
+				
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -579,7 +548,7 @@ function Track() {
     root.repeatMeasureInc = function(measureNum) {
 		const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
 		editor.track.repeatedMeasures.set(measureNum - 1, count + 1);
-		this.notifyHandlers();		
+				
 		window.eventBus.$emit('track-updated');
 	};
 	
@@ -589,7 +558,7 @@ function Track() {
     root.repeatMeasureDec = function(measureNum) {
 		const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
 		editor.track.repeatedMeasures.set(measureNum - 1, count - 1);
-		this.notifyHandlers();		
+				
 		window.eventBus.$emit('track-updated');
 	};
 
@@ -641,7 +610,7 @@ function Track() {
 		this.toms_array[0] = this.adjustNotesForNewDivision(this.toms_array[0])
 		this.toms_array[3] = this.adjustNotesForNewDivision(this.toms_array[3])
 
-		this.notifyHandlers();	
+			
 		window.eventBus.$emit('track-updated');
 	};
 
@@ -756,7 +725,7 @@ function Track() {
 
 		this.numberOfMeasures = this.numberOfMeasures + track.numberOfMeasures;
 
-		this.notifyHandlers();	
+			
 		window.eventBus.$emit('track-updated');
 	}
 	
