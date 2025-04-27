@@ -39,12 +39,9 @@ class MIDIPlayer {
     totalRepeats = 0;
     #shouldRepeat = true;
     
-    
     eventCallbacks;
-    #eventHandlers = new Map();
     noteHasChangedSinceLastDataLoad = false;
     
-
     /**
      * 
      */    
@@ -99,43 +96,6 @@ class MIDIPlayer {
     //
     //
 
-    /**
-     * Subscribe to specific event type
-     */
-    subscribe(eventType, handler) {
-        if (!this.#eventHandlers.has(eventType)) {
-            this.#eventHandlers.set(eventType, new Set());
-        }
-        this.#eventHandlers.get(eventType).add(handler);
-
-        // Return unsubscribe function
-        return () => this.unsubscribe(eventType, handler);
-    }
-
-    /**
-     * Unsubscribe from specific event type
-     */
-    unsubscribe(eventType, handler) {
-        const handlers = this.#eventHandlers.get(eventType);
-        if (handlers) {
-            handlers.delete(handler);
-        }
-    }
-
-    /**
-     * Notify subscribers of specific event type
-     */
-    #notifySubscribers(eventType, data) {
-        const handlers = this.#eventHandlers.get(eventType);
-        if (handlers) {
-            handlers.forEach(handler => handler(data));
-        }
-    }
-
-    //
-    //
-    //
-    
     
     /**
      * 
@@ -427,7 +387,6 @@ class MIDIPlayer {
         // this.eventCallbacks.percentProgress(this.eventCallbacks.classRoot, percentComplete * 100);
 
         if (midiPlayer.#lastMidiTimeUpdate && midiPlayer.#lastMidiTimeUpdate < (data.now + 800)) {
-            // midiPlayer.#notifySubscribers(EventTypes.PLAY_PROGRESS);
             midiPlayer.#lastMidiTimeUpdate = data.now;
         }
 

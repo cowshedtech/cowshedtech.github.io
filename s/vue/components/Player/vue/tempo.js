@@ -54,7 +54,7 @@ export default {
     },
     
     beforeUnmount() {
-        if (this.removeSubscriber) this.removeSubscriber()
+        eventBus.$off(EventTypes.PARAMETERS_UPDATE);
     },
     
     template: `

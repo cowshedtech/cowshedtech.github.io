@@ -63,7 +63,6 @@ export default {
   },
   
   beforeUnmount() {
-    if (this.removeSubscriber) this.removeSubscriber()
     document.removeEventListener('keydown', this.handleKeyDown);          
   },
   

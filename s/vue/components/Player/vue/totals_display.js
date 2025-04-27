@@ -5,7 +5,7 @@ export default {
       stats: this.getInitialStats()
     }
   },
-  props: { },
+  
   methods: {
     getInitialStats() {
       return {
@@ -27,14 +27,17 @@ export default {
       }
     }
   },
+  
   mounted() {
     eventBus.$on(EventTypes.PLAY_PROGRESS, () => {
 			this.updateStats()
 		})
   },
+
   beforeUnmount() {
-    if (this.removeSubscriber) this.removeSubscriber()
+    eventBus.$off(EventTypes.PLAY_PROGRESS);
   },
+
   template: `
    <div id="totalPlayTime">
       Total Play Time: <span class="totalTimeNum">{{ stats.formattedTime }}</span>
