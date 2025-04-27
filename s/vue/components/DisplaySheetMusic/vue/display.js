@@ -6,13 +6,13 @@ export default {
   },
   
   mounted() {
-    this.removeHandler = sheetMusic?.addChangeHandler(() => {
-        this.svg = sheetMusic ? sheetMusic.getSVG() : 0;
-      })
+    eventBus.$on('sheet-music-updated', () => {
+      this.svg = sheetMusic ? sheetMusic.getSVG() : 0;
+    })
   },
 
   beforeUnmount() {
-      if (this.removeHandler) this.removeHandler() 
+    eventBus.$off('sheet-music-updated');
   },
 
   template: `
