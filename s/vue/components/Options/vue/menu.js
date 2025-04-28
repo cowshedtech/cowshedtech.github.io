@@ -1,5 +1,3 @@
-
-
 export default {
 
 	data() {
@@ -20,6 +18,8 @@ export default {
 			type: Number
 		}
 	},
+
+	emits: ['close'],
 
 	methods: {
 		handleToggleHighlight() {

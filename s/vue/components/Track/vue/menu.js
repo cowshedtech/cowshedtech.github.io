@@ -2,11 +2,11 @@ export default {
 
 	data() {
 		return {
-			highlight: options ? options.isHighlightOn() : false,
-			urlInput: ''
+			urlInput: '',
+			urlImportInput: ''
 		}
 	},
-
+	
 	props: {
 		isOpen: {
 			type: Boolean,
@@ -65,15 +65,6 @@ export default {
 		}	
 	},
 
-	mounted() {
-		eventBus.$on('options-updated', () => {
-            this.highlight = options.isHighlightOn()
-        });	
-	},
-	beforeUnmount() {
-		eventBus.$off('options-updated');
-	},
-
 	template: `
 	<span class="noteContextMenuNew" id="trackContextMenuContainter" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="trackContextMenu" class="list">
@@ -93,6 +84,7 @@ export default {
 						placeholder="Enter URL" 
 						style="flex: 1; padding: 4px;"
 						@keyup.enter="handleImportTrack"
+						@click.stop.prevent=""
 					>
 					<button 
 						@click.stop.prevent="handleImportTrack"
@@ -111,6 +103,7 @@ export default {
 						placeholder="Enter URL" 
 						style="flex: 1; padding: 4px;"
 						@keyup.enter="handleAppendTrack"
+						@click.stop.prevent=""
 					>
 					<button 
 						@click.stop.prevent="handleAppendTrack"
