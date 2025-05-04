@@ -961,8 +961,6 @@
 		border-radius: 5px;
 	}
 	#metronomeAutoSpeedupConfiguration {
-		/visibility: hidden;
-		display: none;
 		position:absolute; left:300px; top:250px; z-index:999;
 		background-color: #FFF;
 		width: 400px;

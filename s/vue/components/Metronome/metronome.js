@@ -8,6 +8,9 @@ class Metronome {
     #offsetClickStartRotation = 0;
     
     #autoSpeedUpActive = false;
+    #autoSpeedUpForEver = false;
+    #autoSpeedUpTempoIncreaseAmount = 5
+    #autoSpeedUpTempoIncreaseInterval = 2
     #countInActive = false;
     #countInIsPlaying = false;
 	
@@ -65,7 +68,53 @@ class Metronome {
         this.#autoSpeedUpActive = active;
         window.eventBus.$emit('metronome-updated');
     }
+    
+    /**
+     * Sets a new frequency and notifies handlers
+     * @param {number} newFrequency - The new frequency to set
+     */
+    setAutoSpeedUpForever(forever) {
+        this.#autoSpeedUpForEver = active;
+        window.eventBus.$emit('metronome-updated');
+    }
 
+    /**
+     *     
+     */
+    getAutoSpeedUpForever() {
+        return this.#autoSpeedUpForEver;
+    }
+
+    /**
+     *     
+     */
+    setAutoSpeedUpTempoIncreaseAmount(amount) {
+        this.#autoSpeedUpTempoIncreaseAmount = amount
+        window.eventBus.$emit('metronome-updated');
+    }
+
+    /**
+     *     
+     */
+    getAutoSpeedUpTempoIncreaseAmount() {
+        return this.#autoSpeedUpTempoIncreaseAmount
+    }
+
+    /**
+     *     
+     */
+    setAutoSpeedUpTempoIncreaseInterval(amount) {
+        this.#autoSpeedUpTempoIncreaseInterval = amount
+        window.eventBus.$emit('metronome-updated');
+    }
+
+    /**
+     *     
+     */
+    getAutoSpeedUpTempoIncreaseInterval() {
+        return this.#autoSpeedUpTempoIncreaseInterval
+    }
+    
     /**
      * Gets the current frequency
      * @returns {number} The current frequency
@@ -193,26 +242,26 @@ class Metronome {
 	/**
      * 
      */    
-    showAutoSpeedupConfiguration() {
-		var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
+    // showAutoSpeedupConfiguration() {
+	// 	var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
 
-		if (popup) {
-			popup.style.display = "block";
-		}
+	// 	if (popup) {
+	// 		popup.style.display = "block";
+	// 	}
 
-		document.getElementById('metronomeAutoSpeedupTempoIncreaseAmountOutput').innerHTML = document.getElementById('metronomeAutoSpeedupTempoIncreaseAmount').value;
-		document.getElementById('metronomeAutoSpeedupTempoIncreaseIntervalOutput').innerHTML = document.getElementById('metronomeAutoSpeedupTempoIncreaseInterval').value;
-	};
+	// 	document.getElementById('metronomeAutoSpeedupTempoIncreaseAmountOutput').innerHTML = document.getElementById('metronomeAutoSpeedupTempoIncreaseAmount').value;
+	// 	document.getElementById('metronomeAutoSpeedupTempoIncreaseIntervalOutput').innerHTML = document.getElementById('metronomeAutoSpeedupTempoIncreaseInterval').value;
+	// };
 
-	/**
-     * 
-     */    
-    closeAutoSpeedupConfiguration(type) {
-		var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
+	// /**
+    //  * 
+    //  */    
+    // closeAutoSpeedupConfiguration(type) {
+	// 	var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
 
-		if (popup)
-			popup.style.display = "none";
-	};
+	// 	if (popup)
+	// 		popup.style.display = "none";
+	// };
 }
 
 

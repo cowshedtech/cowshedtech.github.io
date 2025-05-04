@@ -25,7 +25,7 @@ export default {
             metronome.setFrequency(value)
         },
         handleOptions(event) {
-            this.menuX = event.clientX - 90;
+            this.menuX = event.clientX;
             this.menuY = event.clientY;
             if (!this.isPopupOpen) {
                 eventBus.$emit('close-all-menus');

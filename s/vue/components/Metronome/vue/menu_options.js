@@ -1,4 +1,5 @@
 import OptionsOffsetClickMenu from './menu_options_offset_click.js'
+import OptionsSpeedMenu from './menu_speed.js'
 
 /**
  * @typedef {Object} MetronomeOption
@@ -36,7 +37,7 @@ export default {
           id: 'SpeedUp',
           title: 'Increase the tempo automatically',
           label: 'Auto speed up',
-          handler: (checked) => metronome.setAutoSpeedUpActive(checked),
+          handler: (checked) => this.handleSpeedClick(),
           checked: metronome ? metronome.isAutoSpeedUpActive() : false
         },
         {
@@ -56,6 +57,7 @@ export default {
         }
       ],
       isOffsetClickPopupOpen: false,
+      isSpeedPopupOpen: false,
       menuX: 0,
       menuY: 0,      
     }    
@@ -79,8 +81,17 @@ export default {
       this.$emit('close')
     },
 
+    handleSpeedClick(optionId) {
+      this.menuX = event.clientX - 90;
+      this.menuY = event.clientY;
+      this.isSpeedPopupOpen = !this.isSpeedPopupOpen;
+      metronome.setAutoSpeedUpActive(!metronome.isAutoSpeedUpActive()),          
+      this.$emit('close')
+    },
+
     closeMenu() {
       this.isOffsetClickPopupOpen = false;
+      this.isSpeedPopupOpen = false;
     }
   },
 
@@ -120,7 +131,7 @@ export default {
   },
 
   components: {
-    OptionsOffsetClickMenu
+    OptionsOffsetClickMenu, OptionsSpeedMenu
   },
 
   template: `
@@ -145,6 +156,12 @@ export default {
         :x="menuX" 
         :y="menuY"
         @close="closeMenu">
-    </OptionsOffsetClickMenu>            
+    </OptionsOffsetClickMenu>
+    <OptionsSpeedMenu
+        :is-open="isSpeedPopupOpen" 
+        :x="menuX" 
+        :y="menuY"
+        @close="closeMenu">
+    </OptionsSpeedMenu>            
   `
 }
