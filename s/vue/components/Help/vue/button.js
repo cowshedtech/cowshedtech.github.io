@@ -1,5 +1,5 @@
+import ContextMenu from '../../BaseContextMenu/vue/base_context_menu.js'
 import Menu from './menu.js'
-
 
 export default {
     data() {
@@ -11,7 +11,7 @@ export default {
     },
 
     components: {
-        Menu
+        ContextMenu, Menu
     },
 
     methods: {
@@ -28,21 +28,11 @@ export default {
             this.toggleMenu();
             this.menuX = event.clientX - 90;
             this.menuY = event.clientY;
-        }
-    },
+        },
 
-    created() {
-        // Listen for close-all event
-        eventBus.$on('close-all-menus', () => {
-            if (this.isPopupOpen) {
-                this.isPopupOpen = false;
-            }
-        });
-    },
-
-    beforeDestroy() {
-        // Clean up event listener
-        eventBus.$off('close-all-menus');
+        closeMenu() {
+            this.isPopupOpen = false;
+        },
     },
 
     template: `
@@ -51,6 +41,13 @@ export default {
             class="rightButtons"
             @click.stop.prevent="handleClick">
             <i class="fa fa-bars"></i> Help
-        </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY"></Menu>
+        </span>
+        <ContextMenu 
+            :is-open="isPopupOpen" 
+            :x="menuX" 
+            :y="menuY" 
+            @close="closeMenu">
+            <Menu></Menu>
+        </ContextMenu>
         `
 }

@@ -1,5 +1,5 @@
-import Menu from './menu.js'
 import ContextMenu from '../../BaseContextMenu/vue/base_context_menu.js'
+import Menu from './menu.js'
 
 export default {
     data() {

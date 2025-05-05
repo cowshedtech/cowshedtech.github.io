@@ -12,19 +12,6 @@ export default {
     }
   },
 
-  props: {
-    isOpen: {
-      type: Boolean,
-      default: false
-    },
-    x: {
-      type: Number
-    },
-    y: {
-      type: Number
-    }
-  },
-
   methods: {
     /**
      * Handles clicks on help menu items. Opens help/about pages in new windows or triggers undo/redo actions.
@@ -53,6 +40,7 @@ export default {
       }
 
       action();
+      window.eventBus.$emit('close-all-menus');
     },
 
 
@@ -63,12 +51,12 @@ export default {
     openHelpWindow(url) {
       const win = window.open(url, '_blank');
       if (win) win.focus();
+      window.eventBus.$emit('close-all-menus');
     }
 
   },
 
   template: `
-	<span class="noteContextMenuNew"v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="helpContextMenu" class="list">
 			<li
 				v-for="item in menuItems"
@@ -77,7 +65,6 @@ export default {
 			>
 				{{ item.label }}
 			</li>
-		</ul>
-	</span>
+		</ul>	
 `
 }

@@ -34,20 +34,6 @@ export default {
         },
     },
 
-    // created() {
-    //     // Listen for close-all event
-    //     eventBus.$on('close-all-menus', () => {
-    //         if (this.isPopupOpen) {
-    //             this.isPopupOpen = false;
-    //         }
-    //     });
-    // },
-
-    // beforeDestroy() {
-    //     // Clean up event listener
-    //     eventBus.$off('close-all-menus');
-    // },
-
     template: `
         <span key="trackAnchor"
             id="trackAnchor"
