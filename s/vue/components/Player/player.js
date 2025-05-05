@@ -40,6 +40,12 @@ class MIDIPlayer {
     totalNotes = 0;
     totalRepeats = 0;
     #shouldRepeat = true;
+
+    #autoSpeedUpActive = false;
+    #autoSpeedUpForEver = false;
+    #autoSpeedUpTempoIncreaseAmount = 5
+    #autoSpeedUpTempoIncreaseInterval = 2
+    
     
     eventCallbacks;
     noteHasChangedSinceLastDataLoad = false;
@@ -375,6 +381,69 @@ class MIDIPlayer {
 		tempo--;
 		this.setTempo(tempo);
 	};
+
+    /**
+     * Gets the current frequency
+     * @returns {number} The current frequency
+     */
+    isAutoSpeedUpActive() {
+        return this.#autoSpeedUpActive;
+    }
+
+    /**
+     * Sets a new frequency and notifies handlers
+     * @param {number} newFrequency - The new frequency to set
+     */
+    setAutoSpeedUpActive(active) {
+        this.#autoSpeedUpActive = active;
+        window.eventBus.$emit(EventTypes.PARAMETERS_UPDATE);
+    }
+    
+    /**
+     * Sets a new frequency and notifies handlers
+     * @param {number} newFrequency - The new frequency to set
+     */
+    setAutoSpeedUpForever(forever) {
+        this.#autoSpeedUpForEver = active;
+        window.eventBus.$emit(EventTypes.PARAMETERS_UPDATE);
+    }
+
+    /**
+     *     
+     */
+    getAutoSpeedUpForever() {
+        return this.#autoSpeedUpForEver;
+    }
+
+    /**
+     *     
+     */
+    setAutoSpeedUpTempoIncreaseAmount(amount) {
+        this.#autoSpeedUpTempoIncreaseAmount = amount
+        window.eventBus.$emit(EventTypes.PARAMETERS_UPDATE);
+    }
+
+    /**
+     *     
+     */
+    getAutoSpeedUpTempoIncreaseAmount() {
+        return this.#autoSpeedUpTempoIncreaseAmount
+    }
+
+    /**
+     *     
+     */
+    setAutoSpeedUpTempoIncreaseInterval(amount) {
+        this.#autoSpeedUpTempoIncreaseInterval = amount
+        window.eventBus.$emit(EventTypes.PARAMETERS_UPDATE);
+    }
+
+    /**
+     *     
+     */
+    getAutoSpeedUpTempoIncreaseInterval() {
+        return this.#autoSpeedUpTempoIncreaseInterval
+    }
     
 
     /**

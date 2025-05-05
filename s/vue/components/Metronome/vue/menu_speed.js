@@ -14,26 +14,26 @@ export default {
 
 	data() {
 		return {
-			keepIncreasingForever: metronome ? metronome.getAutoSpeedUpForever() : false,
-			tempoIncrease: metronome ? metronome.getAutoSpeedUpTempoIncreaseAmount() : 5,
-			tempoIncreaseInterval: metronome ? metronome.getAutoSpeedUpTempoIncreaseInterval() : 2
+			keepIncreasingForever: midiPlayer ? midiPlayer.getAutoSpeedUpForever() : false,
+			tempoIncrease: midiPlayer ? midiPlayer.getAutoSpeedUpTempoIncreaseAmount() : 5,
+			tempoIncreaseInterval: midiPlayer ? midiPlayer.getAutoSpeedUpTempoIncreaseInterval() : 2
 		}
 	},
 
 	watch: {
 		keepIncreasingForever(newValue) {
-			if (metronome) {
-				metronome.setAutoSpeedUpForever(newValue);
+			if (midiPlayer) {
+				midiPlayer.setAutoSpeedUpForever(newValue);
 			}
 		},
 		tempoIncrease(newValue) {
-			if (metronome) {
-				metronome.setAutoSpeedUpTempoIncreaseAmount(newValue);
+			if (midiPlayer) {
+				midiPlayer.setAutoSpeedUpTempoIncreaseAmount(newValue);
 			}
 		},
 		tempoIncreaseInterval(newValue) {
-			if (metronome) {
-				metronome.setAutoSpeedUpTempoIncreaseInterval(newValue);
+			if (midiPlayer) {
+				midiPlayer.setAutoSpeedUpTempoIncreaseInterval(newValue);
 			}
 		}
 	},
@@ -45,15 +45,15 @@ export default {
 	},
 
 	mounted() {
-        eventBus.$on('metronome-updated', () => {
-			this.keepIncreasingForever = metronome ? metronome.getAutoSpeedUpForever() : false
-			this.tempoIncrease = metronome ? metronome.getAutoSpeedUpTempoIncreaseAmount() : 5
-			this.tempoIncreaseInterval = metronome ? metronome.getAutoSpeedUpTempoIncreaseInterval() : 2			
+        eventBus.$on(EventTypes.PARAMETERS_UPDATE, () => {
+			this.keepIncreasingForever = midiPlayer ? midiPlayer.getAutoSpeedUpForever() : false
+			this.tempoIncrease = midiPlayer ? midiPlayer.getAutoSpeedUpTempoIncreaseAmount() : 5
+			this.tempoIncreaseInterval = midiPlayer ? midiPlayer.getAutoSpeedUpTempoIncreaseInterval() : 2			
 		})
     },
     
     beforeUnmount() {
-        eventBus.$off('metronome-updated');
+        eventBus.$off(EventTypes.PARAMETERS_UPDATE);
     },
   
   	template: `

@@ -123,7 +123,7 @@ function GrooveWriter() {
 		})
 
 		eventBus.$on(EventTypes.PLAY_COMPLETE, (data) => {
-			if (!metronome.isAutoSpeedUpActive()) return
+			if (!midiPlayer.isAutoSpeedUpActive()) return
 			// reload with new tempo
 			midiPlayer.noteHasChanged();
 			root.metronomeAutoSpeedUpTempoUpdate();	
@@ -177,9 +177,9 @@ function GrooveWriter() {
 	var class_our_last_midi_tempo_increase_remainder = 0;
 	root.metronomeAutoSpeedUpTempoUpdate = function () {
 
-		var totalTempoIncreaseAmount = metronome.getAutoSpeedUpTempoIncreaseAmount();
-		var tempoIncreaseInterval = metronome.getAutoSpeedUpTempoIncreaseInterval() * 60;
-		var keepIncreasingForever = metronome.getAutoSpeedUpForever();
+		var totalTempoIncreaseAmount = midiPlayer.getAutoSpeedUpTempoIncreaseAmount();
+		var tempoIncreaseInterval = midiPlayer.getAutoSpeedUpTempoIncreaseInterval() * 60;
+		var keepIncreasingForever = midiPlayer.getAutoSpeedUpForever();
 
 		var curTempo = midiPlayer.getTempo();
 

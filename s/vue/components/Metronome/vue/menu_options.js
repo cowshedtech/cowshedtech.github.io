@@ -38,7 +38,7 @@ export default {
           title: 'Increase the tempo automatically',
           label: 'Auto speed up',
           handler: (checked) => this.handleSpeedClick(),
-          checked: metronome ? metronome.isAutoSpeedUpActive() : false
+          checked: midiPlayer ? midiPlayer.isAutoSpeedUpActive() : false
         },
         {
           id: 'CountIn',
@@ -85,7 +85,7 @@ export default {
       this.menuX = event.clientX - 90;
       this.menuY = event.clientY;
       this.isSpeedPopupOpen = !this.isSpeedPopupOpen;
-      metronome.setAutoSpeedUpActive(!metronome.isAutoSpeedUpActive()),          
+      midiPlayer.setAutoSpeedUpActive(!midiPlayer.isAutoSpeedUpActive()),          
       this.$emit('close')
     },
 
@@ -121,7 +121,7 @@ export default {
   mounted() {
     eventBus.$on('metronome-updated', () => {
 			this.options[0].checked = metronome ? metronome.getSolo() : false
-      this.options[1].checked = metronome ? metronome.isAutoSpeedUpActive() : false
+      this.options[1].checked = metronome ? midiPlayer.isAutoSpeedUpActive() : false
       this.options[2].checked = metronome ? metronome.getCountInActive() : false
 		})
   },

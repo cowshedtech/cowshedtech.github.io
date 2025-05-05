@@ -7,10 +7,6 @@ class Metronome {
     #offsetClickStart = "1";
     #offsetClickStartRotation = 0;
     
-    #autoSpeedUpActive = false;
-    #autoSpeedUpForEver = false;
-    #autoSpeedUpTempoIncreaseAmount = 5
-    #autoSpeedUpTempoIncreaseInterval = 2
     #countInActive = false;
     #countInIsPlaying = false;
 	
@@ -52,69 +48,6 @@ class Metronome {
         window.eventBus.$emit('metronome-updated');
     };
 
-    /**
-     * Gets the current frequency
-     * @returns {number} The current frequency
-     */
-    isAutoSpeedUpActive() {
-        return this.#autoSpeedUpActive;
-    }
-
-    /**
-     * Sets a new frequency and notifies handlers
-     * @param {number} newFrequency - The new frequency to set
-     */
-    setAutoSpeedUpActive(active) {
-        this.#autoSpeedUpActive = active;
-        window.eventBus.$emit('metronome-updated');
-    }
-    
-    /**
-     * Sets a new frequency and notifies handlers
-     * @param {number} newFrequency - The new frequency to set
-     */
-    setAutoSpeedUpForever(forever) {
-        this.#autoSpeedUpForEver = active;
-        window.eventBus.$emit('metronome-updated');
-    }
-
-    /**
-     *     
-     */
-    getAutoSpeedUpForever() {
-        return this.#autoSpeedUpForEver;
-    }
-
-    /**
-     *     
-     */
-    setAutoSpeedUpTempoIncreaseAmount(amount) {
-        this.#autoSpeedUpTempoIncreaseAmount = amount
-        window.eventBus.$emit('metronome-updated');
-    }
-
-    /**
-     *     
-     */
-    getAutoSpeedUpTempoIncreaseAmount() {
-        return this.#autoSpeedUpTempoIncreaseAmount
-    }
-
-    /**
-     *     
-     */
-    setAutoSpeedUpTempoIncreaseInterval(amount) {
-        this.#autoSpeedUpTempoIncreaseInterval = amount
-        window.eventBus.$emit('metronome-updated');
-    }
-
-    /**
-     *     
-     */
-    getAutoSpeedUpTempoIncreaseInterval() {
-        return this.#autoSpeedUpTempoIncreaseInterval
-    }
-    
     /**
      * Gets the current frequency
      * @returns {number} The current frequency
