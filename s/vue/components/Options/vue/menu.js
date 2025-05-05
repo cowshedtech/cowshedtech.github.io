@@ -1,5 +1,3 @@
-import BaseContextMenu from '../../BaseContextMenu/base_context_menu.js'
-
 export default {
 	
 	data() {

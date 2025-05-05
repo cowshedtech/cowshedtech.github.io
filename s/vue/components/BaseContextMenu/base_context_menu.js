@@ -14,6 +14,18 @@ export default {
     }
   },
 
+  created() {
+    // Listen for close-all event
+    eventBus.$on('close-all-menus', () => {
+      if (this.isOpen) this.$emit('close');      
+    });
+  },
+
+  beforeDestroy() {
+    // Clean up event listener
+    eventBus.$off('close-all-menus');
+  },
+
   template: `
     <span 
         class="noteContextMenuNew" 

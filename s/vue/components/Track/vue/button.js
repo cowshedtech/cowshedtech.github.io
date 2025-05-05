@@ -1,3 +1,4 @@
+import ContextMenu from '../../BaseContextMenu/vue/base_context_menu.js'
 import Menu from './menu.js'
 
 export default {
@@ -10,7 +11,7 @@ export default {
     },
 
     components: {
-        Menu
+        ContextMenu, Menu
     },
 
     methods: {
@@ -33,19 +34,19 @@ export default {
         },
     },
 
-    created() {
-        // Listen for close-all event
-        eventBus.$on('close-all-menus', () => {
-            if (this.isPopupOpen) {
-                this.isPopupOpen = false;
-            }
-        });
-    },
+    // created() {
+    //     // Listen for close-all event
+    //     eventBus.$on('close-all-menus', () => {
+    //         if (this.isPopupOpen) {
+    //             this.isPopupOpen = false;
+    //         }
+    //     });
+    // },
 
-    beforeDestroy() {
-        // Clean up event listener
-        eventBus.$off('close-all-menus');
-    },
+    // beforeDestroy() {
+    //     // Clean up event listener
+    //     eventBus.$off('close-all-menus');
+    // },
 
     template: `
         <span key="trackAnchor"
@@ -54,11 +55,12 @@ export default {
             @click.stop.prevent="handleClick">
             <i class="fa fa-bars"></i> Track
         </span>
-        <Menu 
+       <ContextMenu 
             :is-open="isPopupOpen" 
             :x="menuX" 
             :y="menuY" 
             @close="closeMenu">
-        </Menu>
+            <Menu></Menu>
+        </ContextMenu> 
         `
 }

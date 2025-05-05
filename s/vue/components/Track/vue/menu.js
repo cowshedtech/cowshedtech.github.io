@@ -7,24 +7,11 @@ export default {
 		}
 	},
 	
-	props: {
-		isOpen: {
-			type: Boolean,
-			default: false
-		},
-		x: {
-			type: Number
-		},
-		y: {
-			type: Number
-		}
-	},
-
 	methods: {
 		handleGSLink() {
 			let url = get_GSURLForPage();
 			window.open(url, '_blank');
-			this.$emit('close')
+			window.eventBus.$emit('close-all-menus');
 		},
 
 		handleAppendTrack() {
@@ -51,7 +38,7 @@ export default {
 
 			editor.track.appendTrack(newTrack);
 			this.urlInput = '';
-			this.$emit('close');
+			window.eventBus.$emit('close-all-menus');
 		},
 
 		handleImportTrack() {
@@ -61,12 +48,11 @@ export default {
 			let queryString = urlParts.length > 1 ? '?' + urlParts[1] : '';
 			let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + queryString;
 			window.open(newUrl, "_self");
-			this.$emit('close');
+			window.eventBus.$emit('close-all-menus');
 		}	
 	},
 
 	template: `
-	<span class="noteContextMenuNew" id="trackContextMenuContainter" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="trackContextMenu" class="list">
 			<li 
 				class="metronometrackContextMenuItem" 
@@ -114,6 +100,6 @@ export default {
 				</div>
 			</li>
 		</ul>
-	</span>
+	
 `
 }
