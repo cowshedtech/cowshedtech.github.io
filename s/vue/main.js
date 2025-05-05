@@ -9,6 +9,17 @@ const KEYS = {
 };
 
 export default {
+  props: {
+    midiPlayer: {
+      type: Object,
+      required: true
+    },
+    eventBus: {
+      type: Object,
+      required: true
+    }
+  },
+
   mounted() {
     document.addEventListener('keydown', this.handleKeyDown);   
     document.addEventListener('click', this.handleClickOutside);
@@ -41,7 +52,7 @@ export default {
     },
 
     handleClickOutside(event){
-      eventBus.$emit('close-all-menus');
+      this.eventBus.$emit('close-all-menus');
 		}
   },
   
@@ -52,7 +63,10 @@ export default {
   template: `
     <div class="nonPrintable">
 			<TimeSignature></TimeSignature>		
-      <TopNavigation></TopNavigation>		      
+      <TopNavigation
+        :midiPlayer="midiPlayer"
+        :eventBus="eventBus">
+      </TopNavigation>		      
       <MidiPlayer></MidiPlayer>
     </div>			
     <RightHandContent></RightHandContent>		    

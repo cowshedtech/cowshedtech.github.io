@@ -19,6 +19,14 @@ export default {
     },
     y: {
         type: Number
+    },
+    midiPlayer: {
+        type: Object,
+        required: true
+    },
+    eventBus: {
+        type: Object,
+        required: true
     }
 	},
   
@@ -38,7 +46,7 @@ export default {
           title: 'Increase the tempo automatically',
           label: 'Auto speed up',
           handler: (checked) => this.handleSpeedClick(),
-          checked: midiPlayer ? midiPlayer.isAutoSpeedUpActive() : false
+          checked: this.midiPlayer ? this.midiPlayer.isAutoSpeedUpActive() : false
         },
         {
           id: 'CountIn',
@@ -85,7 +93,7 @@ export default {
       this.menuX = event.clientX;
       this.menuY = event.clientY;
       this.isSpeedPopupOpen = !this.isSpeedPopupOpen;
-      midiPlayer.setAutoSpeedUpActive(!midiPlayer.isAutoSpeedUpActive()),          
+      this.midiPlayer.setAutoSpeedUpActive(!this.midiPlayer.isAutoSpeedUpActive()),          
       this.$emit('close')
     },
 
@@ -119,15 +127,15 @@ export default {
   },
 
   mounted() {
-    eventBus.$on('metronome-updated', () => {
+    this.eventBus.$on('metronome-updated', () => {
 			this.options[0].checked = metronome ? metronome.getSolo() : false
-      this.options[1].checked = metronome ? midiPlayer.isAutoSpeedUpActive() : false
+      this.options[1].checked = this.midiPlayer ? this.midiPlayer.isAutoSpeedUpActive() : false
       this.options[2].checked = metronome ? metronome.getCountInActive() : false
 		})
   },
 
   beforeUnmount() {
-    eventBus.$off('metronome-updated');
+    this.eventBus.$off('metronome-updated');
   },
 
   components: {
@@ -158,6 +166,8 @@ export default {
         @close="closeMenu">
     </OptionsOffsetClickMenu>
     <OptionsSpeedMenu
+        :midiPlayer="midiPlayer"
+        :eventBus="eventBus"
         :is-open="isSpeedPopupOpen" 
         :x="menuX" 
         :y="menuY"

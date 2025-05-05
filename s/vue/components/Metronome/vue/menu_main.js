@@ -1,7 +1,17 @@
 import OptionsMenu from './menu_options.js'
 
-
 export default {
+    props: {
+        midiPlayer: {
+            type: Object,
+            required: true
+        },
+        eventBus: {
+            type: Object,
+            required: true
+        }
+    },
+
     data() {
         return {
             freq: metronome ? metronome.getFrequency() : 0,
@@ -28,7 +38,7 @@ export default {
             this.menuX = event.clientX;
             this.menuY = event.clientY;
             if (!this.isPopupOpen) {
-                eventBus.$emit('close-all-menus');
+                this.eventBus.$emit('close-all-menus');
                 this.isPopupOpen = true;
             } else {
                 this.isPopupOpen = false;
@@ -40,31 +50,23 @@ export default {
     },
 
     mounted() {
-        eventBus.$on('metronome-updated', () => {
+        this.eventBus.$on('metronome-updated', () => {
 			this.freq = metronome.getFrequency()
 		})
-    },
-    
-    beforeUnmount() {
-        eventBus.$off('metronome-updated');
-    },
-
-    components: {
-        OptionsMenu
-    },
-
-    created() {
-        // Listen for close-all event
-        eventBus.$on('close-all-menus', () => {
+        this.eventBus.$on('close-all-menus', () => {
             if (this.isPopupOpen) {
                 this.isPopupOpen = false;
             }
         });
     },
+    
+    beforeUnmount() {
+        this.eventBus.$off('metronome-updated');
+        this.eventBus.$off('close-all-menus');
+    },
 
-    beforeDestroy() {
-        // Clean up event listener
-        eventBus.$off('close-all-menus');
+    components: {
+        OptionsMenu
     },
 
     template: `
@@ -87,7 +89,9 @@ export default {
                 :is-open="isPopupOpen" 
                 :x="menuX" 
                 :y="menuY"
+                :midiPlayer="midiPlayer"
+                :eventBus="eventBus"
                 @close="closeMenu">
             </OptionsMenu>             
   `
-  }
+}
