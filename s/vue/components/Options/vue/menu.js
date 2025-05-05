@@ -1,11 +1,13 @@
-export default {
+import BaseContextMenu from '../../BaseContextMenu/base_context_menu.js'
 
+export default {
+	
 	data() {
 		return {
 			highlight: options ? options.isHighlightOn() : false
 		}
 	},
-
+	
 	methods: {
 		handleToggleHighlight() {
 			let higlightOn = options.isHighlightOn();
