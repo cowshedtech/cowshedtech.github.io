@@ -52,7 +52,7 @@ export default {
             id="groovesAnchor"
             class="rightButtons"
             @click.stop.prevent="handleClick">
-            <i class="fa fa-bars"></i>Grooves
+            <i class="fa fa-bars"></i> Grooves
         </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY"></Menu>
         `
 }

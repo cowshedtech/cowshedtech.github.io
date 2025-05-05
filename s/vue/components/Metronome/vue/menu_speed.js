@@ -1,3 +1,12 @@
+/**
+ * @typedef {Object} MenuSpeedProps
+ * @property {boolean} isOpen - Whether the menu is open
+ * @property {number} x - X coordinate for menu positioning
+ * @property {number} y - Y coordinate for menu positioning
+ * @property {Object} midiPlayer - The MIDI player instance
+ * @property {Object} eventBus - The event bus instance
+ */
+
 export default {
 	props: {
 		isOpen: {
@@ -5,35 +14,61 @@ export default {
 			default: false
 		},
 		x: {
-			type: Number
+			type: Number,
+			required: true,
+			validator: (value) => value >= 0
 		},
 		y: {
-			type: Number
+			type: Number,
+			required: true,
+			validator: (value) => value >= 0
+		},
+		midiPlayer: {
+			type: Object,
+			required: true
+		},
+		eventBus: {
+			type: Object,
+			required: true
 		}
 	},
 
 	data() {
 		return {
-			keepIncreasingForever: midiPlayer ? midiPlayer.getAutoSpeedUpForever() : false,
-			tempoIncrease: midiPlayer ? midiPlayer.getTempoIncreaseAmount() : 5,
-			tempoIncreaseInterval: midiPlayer ? midiPlayer.getTempoIncreaseInterval() : 2
+			keepIncreasingForever: this.midiPlayer?.getAutoSpeedUpForever() ?? false,
+			tempoIncrease: this.midiPlayer?.getTempoIncreaseAmount() ?? 5,
+			tempoIncreaseInterval: this.midiPlayer?.getTempoIncreaseInterval() ?? 2
 		}
 	},
 
 	watch: {
 		keepIncreasingForever(newValue) {
-			if (midiPlayer) {
-				midiPlayer.setAutoSpeedUpForever(newValue);
+			try {
+				this.midiPlayer.setAutoSpeedUpForever(newValue);
+			} catch (error) {
+				console.error('Failed to set auto speed up forever:', error);
 			}
 		},
 		tempoIncrease(newValue) {
-			if (midiPlayer) {
-				midiPlayer.setAutoSpeedUpTempoIncreaseAmount(Number(newValue));
+			try {
+				const value = Number(newValue);
+				if (isNaN(value) || value < 1 || value > 100) {
+					throw new Error('Tempo increase must be between 1 and 100');
+				}
+				this.midiPlayer.setAutoSpeedUpTempoIncreaseAmount(value);
+			} catch (error) {
+				console.error('Failed to set tempo increase:', error);
 			}
 		},
 		tempoIncreaseInterval(newValue) {
-			if (midiPlayer) {
-				midiPlayer.setAutoSpeedUpTempoIncreaseInterval(Number(newValue));
+			try {
+				const value = Number(newValue);
+				if (isNaN(value) || value < 1 || value > 20) {
+					throw new Error('Tempo increase interval must be between 1 and 20');
+				}
+				this.midiPlayer.setAutoSpeedUpTempoIncreaseInterval(value);
+			} catch (error) {
+				console.error('Failed to set tempo increase interval:', error);
 			}
 		}
 	},
@@ -41,29 +76,32 @@ export default {
 	methods: {
 		handleClose() {
 			this.$emit('close');
+		},
+
+		updateParameters() {
+			this.keepIncreasingForever = this.midiPlayer?.getAutoSpeedUpForever() ?? false;
+			this.tempoIncrease = this.midiPlayer?.getTempoIncreaseAmount() ?? 5;
+			this.tempoIncreaseInterval = this.midiPlayer?.getTempoIncreaseInterval() ?? 2;
 		}
 	},
 
 	mounted() {
-        eventBus.$on('parametersUpdate', () => {
-			this.keepIncreasingForever = midiPlayer ? midiPlayer.getAutoSpeedUpForever() : false
-			this.tempoIncrease = midiPlayer ? midiPlayer.getTempoIncreaseAmount() : 5
-			this.tempoIncreaseInterval = midiPlayer ? midiPlayer.getTempoIncreaseInterval() : 2			
-		})
-    },
+		this.eventBus.$on('parametersUpdate', this.updateParameters);
+	},
     
-    beforeUnmount() {
-        eventBus.$off('parametersUpdate');
-    },
+	beforeUnmount() {
+		this.eventBus.$off('parametersUpdate', this.updateParameters);
+	},
   
-  	template: `
+	template: `
 		<div id="metronomeAutoSpeedupConfiguration" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
 			<div id="metronomeAutoSpeedupOutputText">
 				Increase <span id="metronomeAutoSpeedupTempoIncreaseAmountOutput">{{ tempoIncrease }}</span> bpm in
 				<span id="metronomeAutoSpeedupTempoIncreaseIntervalOutput">{{ tempoIncreaseInterval }}</span> min
 			</div>
 			<div id="metronomeAutoSpeedupConfigurationKeepIncreasing">
-				<input type="checkbox" v-model="keepIncreasingForever" checked id="metronomeAutoSpeedUpKeepGoingForever"><label for="metronomeAutoSpeedUpKeepGoingForever">Keep increasing after the first interval</label>
+				<input type="checkbox" v-model="keepIncreasingForever" checked id="metronomeAutoSpeedUpKeepGoingForever">
+				<label for="metronomeAutoSpeedUpKeepGoingForever">Keep increasing after the first interval</label>
 			</div>
 			<div id="metronomeAutoSpeedupConfigurationSliders">
 				<div id="metronomeAutoSpeedupConfigurationAmountLable">Amount in BPM</div>

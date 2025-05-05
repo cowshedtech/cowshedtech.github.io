@@ -847,11 +847,6 @@
 		z-index: 9999; 
 		display: block;
 	}
-	#permutationContextMenu, #metronomeOptionsContextMenu, #metronomeOptionsOffsetClickContextMenu {
-		position: fixed;
-		top: 0px;
-		right: 0px;
-	}
 	#helpContextMenu {
 		position: fixed;		
 	}

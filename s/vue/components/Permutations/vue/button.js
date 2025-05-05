@@ -70,7 +70,7 @@ export default {
             class="rightButtons grooveDB_hidden"
             :class="{ enabled: isEnabled }"
             @click.stop.prevent="handleClick">
-            <i class="fa fa-bars"></i>Permutations
+            <i class="fa fa-bars"></i> Permutations
         </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY"></Menu>
         `
 }

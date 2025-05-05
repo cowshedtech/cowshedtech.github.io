@@ -82,7 +82,7 @@ export default {
     },
 
     handleSpeedClick(optionId) {
-      this.menuX = event.clientX - 90;
+      this.menuX = event.clientX;
       this.menuY = event.clientY;
       this.isSpeedPopupOpen = !this.isSpeedPopupOpen;
       midiPlayer.setAutoSpeedUpActive(!midiPlayer.isAutoSpeedUpActive()),          

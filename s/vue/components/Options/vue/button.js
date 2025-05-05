@@ -55,7 +55,7 @@ export default {
             id="optionsAnchor"
             class="rightButtons"
             @click.stop.prevent="handleClick">
-            <i class="fa fa-bars"></i>Options
+            <i class="fa fa-bars"></i> Options
         </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY" @close="closeMenu"></Menu>
         `
 }

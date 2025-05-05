@@ -50,7 +50,7 @@ export default {
             id="helpAnchor"
             class="rightButtons"
             @click.stop.prevent="handleClick">
-            <i class="fa fa-bars"></i>Help
+            <i class="fa fa-bars"></i> Help
         </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY"></Menu>
         `
 }
