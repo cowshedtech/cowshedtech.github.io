@@ -177,20 +177,11 @@ function GrooveWriter() {
 	var class_our_last_midi_tempo_increase_remainder = 0;
 	root.metronomeAutoSpeedUpTempoUpdate = function () {
 
-		var totalTempoIncreaseAmount = 1;
-		if (document.getElementById("metronomeAutoSpeedupTempoIncreaseAmount"))
-			totalTempoIncreaseAmount = parseInt(document.getElementById("metronomeAutoSpeedupTempoIncreaseAmount").value, 10);
-		var tempoIncreaseInterval = 60;
-		if (document.getElementById("metronomeAutoSpeedupTempoIncreaseInterval")) {
-			tempoIncreaseInterval = parseInt(document.getElementById("metronomeAutoSpeedupTempoIncreaseInterval").value, 10);
-			tempoIncreaseInterval = tempoIncreaseInterval * 60; // turn mins to secs
-		}
+		var totalTempoIncreaseAmount = metronome.getAutoSpeedUpTempoIncreaseAmount();
+		var tempoIncreaseInterval = metronome.getAutoSpeedUpTempoIncreaseInterval() * 60;
+		var keepIncreasingForever = metronome.getAutoSpeedUpForever();
 
-		var keepIncreasingForever = false;
-		if (document.getElementById("metronomeAutoSpeedUpKeepGoingForever"))
-			keepIncreasingForever = document.getElementById("metronomeAutoSpeedUpKeepGoingForever").checked;
-
-		var curTempo = root.track.getTempo();
+		var curTempo = midiPlayer.getTempo();
 
 		var midiStartTime = midiPlayer.getStartTime();
 		if (class_our_midi_start_time != midiStartTime) {
@@ -224,7 +215,7 @@ function GrooveWriter() {
 		}
 
 		if (tempoDiffInt > 0)
-			root.track.setTempo(root.track.getTempo() + tempoDiffInt);
+			midiPlayer.setTempo(midiPlayer.getTempo() + tempoDiffInt);
 	};
 
 
