@@ -45,7 +45,7 @@ export default {
 	},
 
 	mounted() {
-        eventBus.$on(EventTypes.PARAMETERS_UPDATE, () => {
+        eventBus.$on('parametersUpdate', () => {
 			this.keepIncreasingForever = midiPlayer ? midiPlayer.getAutoSpeedUpForever() : false
 			this.tempoIncrease = midiPlayer ? midiPlayer.getAutoSpeedUpTempoIncreaseAmount() : 5
 			this.tempoIncreaseInterval = midiPlayer ? midiPlayer.getAutoSpeedUpTempoIncreaseInterval() : 2			
@@ -53,7 +53,7 @@ export default {
     },
     
     beforeUnmount() {
-        eventBus.$off(EventTypes.PARAMETERS_UPDATE);
+        eventBus.$off('parametersUpdate');
     },
   
   	template: `

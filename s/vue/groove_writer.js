@@ -122,13 +122,6 @@ function GrooveWriter() {
 			} 
 		})
 
-		eventBus.$on(EventTypes.PLAY_COMPLETE, (data) => {
-			if (!midiPlayer.isAutoSpeedUpActive()) return
-			// reload with new tempo
-			midiPlayer.noteHasChanged();
-			root.metronomeAutoSpeedUpTempoUpdate();	
-		})
-
 		eventBus.$on(EventTypes.LOAD_MIDI, (data) => {
 			var midiURL;
 
@@ -169,56 +162,7 @@ function GrooveWriter() {
 		}		
 	};
 
-	// called right before the midi reloads for the next replay
-	// set the new tempo based on the delta required for the time interval
-	var class_our_midi_start_time = null;
-	var class_our_midi_start_tempo = 0;
-	var class_our_last_midi_tempo_increase_time = null;
-	var class_our_last_midi_tempo_increase_remainder = 0;
-	root.metronomeAutoSpeedUpTempoUpdate = function () {
-
-		var totalTempoIncreaseAmount = midiPlayer.getAutoSpeedUpTempoIncreaseAmount();
-		var tempoIncreaseInterval = midiPlayer.getAutoSpeedUpTempoIncreaseInterval() * 60;
-		var keepIncreasingForever = midiPlayer.getAutoSpeedUpForever();
-
-		var curTempo = midiPlayer.getTempo();
-
-		var midiStartTime = midiPlayer.getStartTime();
-		if (class_our_midi_start_time != midiStartTime) {
-			class_our_midi_start_time = midiStartTime;
-			class_our_last_midi_tempo_increase_remainder = 0;
-			class_our_last_midi_tempo_increase_time = new Date(0);
-			class_our_midi_start_tempo = curTempo;
-
-		} else if (!keepIncreasingForever) {
-			if (curTempo >= class_our_midi_start_tempo + totalTempoIncreaseAmount) {
-				return; // don't increase any more after we have gone up the total amount
-			}
-		}
-		var totalMidiPlayTime = midiPlayer.getPlayTimeThisPlay();
-		var timeDiffMilliseconds = totalMidiPlayTime.getTime() - class_our_last_midi_tempo_increase_time.getTime();
-		var tempoDiffFloat = (totalTempoIncreaseAmount) * (timeDiffMilliseconds / (tempoIncreaseInterval * 1000));
-
-		// round the number down, but keep track of the remainder so we carry it forward.   Otherwise
-		// rounding errors cause us to be way off.
-		tempoDiffFloat += class_our_last_midi_tempo_increase_remainder;
-		var tempoDiffInt = Math.floor(tempoDiffFloat);
-		class_our_last_midi_tempo_increase_remainder = tempoDiffFloat - tempoDiffInt;
-
-		class_our_last_midi_tempo_increase_time = totalMidiPlayTime;
-
-		if (!keepIncreasingForever) {
-			if (curTempo + tempoDiffInt > class_our_midi_start_tempo + totalTempoIncreaseAmount) {
-				// increase to the total max amount, then we are done
-				tempoDiffInt = (class_our_midi_start_tempo + totalTempoIncreaseAmount) - curTempo;
-			}
-		}
-
-		if (tempoDiffInt > 0)
-			midiPlayer.setTempo(midiPlayer.getTempo() + tempoDiffInt);
-	};
-
-
+	
 	// get a really long URL that encodes all of the notes and the rest of the state of the page.
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
 	//
