@@ -6,21 +6,6 @@ export default {
 		}
 	},
 
-	props: {
-		isOpen: {
-			type: Boolean,
-			default: false
-		},
-		x: {
-			type: Number
-		},
-		y: {
-			type: Number
-		}
-	},
-
-	emits: ['close'],
-
 	methods: {
 		handleToggleHighlight() {
 			let higlightOn = options.isHighlightOn();
@@ -39,7 +24,6 @@ export default {
 	},
 
 	template: `
-	<span class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="optionsContextMenu" class="list">
 			<li 
 				class="metronomeOptionsContextMenuItem" 
@@ -49,7 +33,6 @@ export default {
 			>
 				<b>Highlighting</b>
 			</li>
-		</ul>
-	</span>
+		</ul>	
 `
 }

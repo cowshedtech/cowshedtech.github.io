@@ -1,5 +1,5 @@
 import Menu from './menu.js'
-
+import ContextMenu from '../../BaseContextMenu/vue/base_context_menu.js'
 
 export default {
     data() {
@@ -11,7 +11,7 @@ export default {
     },
 
     components: {
-        Menu
+        ContextMenu, Menu
     },
 
     methods: {
@@ -56,6 +56,13 @@ export default {
             class="rightButtons"
             @click.stop.prevent="handleClick">
             <i class="fa fa-bars"></i> Options
-        </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY" @close="closeMenu"></Menu>
+        </span>
+        <ContextMenu 
+            :is-open="isPopupOpen" 
+            :x="menuX" 
+            :y="menuY" 
+            @close="closeMenu">
+            <Menu></Menu>
+        </ContextMenu>        
         `
 }
