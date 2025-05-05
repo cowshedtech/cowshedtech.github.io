@@ -46,10 +46,10 @@ class MIDIPlayer {
     #autoSpeedUpTempoIncreaseAmount = 5
     #autoSpeedUpTempoIncreaseInterval = 2
 
-    #class_our_midi_start_time = null;
-    #class_our_midi_start_tempo = 0;
-    #class_our_last_midi_tempo_increase_time = null;
-    #class_our_last_midi_tempo_increase_remainder = 0;
+    #tempoIncreaseStartTime = null;
+    #tempoIncreaseStartTempo = 0;
+    #tempoIncreaseTime = null;
+    #tempoIncreaseRemainder = 0;
     
     
     eventCallbacks;
@@ -431,7 +431,7 @@ class MIDIPlayer {
     /**
      *     
      */
-    getAutoSpeedUpTempoIncreaseAmount() {
+    getTempoIncreaseAmount() {
         return this.#autoSpeedUpTempoIncreaseAmount
     }
 
@@ -446,7 +446,7 @@ class MIDIPlayer {
     /**
      *     
      */
-    getAutoSpeedUpTempoIncreaseInterval() {
+    getTempoIncreaseInterval() {
         return this.#autoSpeedUpTempoIncreaseInterval
     }
     
@@ -457,65 +457,60 @@ class MIDIPlayer {
     callback(data) {
         var percentComplete = (data.now / data.end);
         
-        if (midiPlayer.#lastMidiTimeUpdate && midiPlayer.#lastMidiTimeUpdate < (data.now + 800)) {
-            midiPlayer.#lastMidiTimeUpdate = data.now;
+        if (this.#lastMidiTimeUpdate && this.#lastMidiTimeUpdate < (data.now + 800)) {
+            this.#lastMidiTimeUpdate = data.now;
         }
 
         if (data.now < 16) {
             // this is considered the start.   It doesn't come in at zero for some reason
             // The second note should always be at least 16 ms behind the first
-            //class_midi_note_num = 0;
-            midiPlayer.#lastMidiTimeUpdate = -1;
+            this.#lastMidiTimeUpdate = -1;
         }
         if (data.now == data.end) {
 
             // at the end of a song
             window.eventBus.$emit(EventTypes.PLAY_COMPLETE);
 
-            var totalTempoIncreaseAmount = midiPlayer.getAutoSpeedUpTempoIncreaseAmount();
-            var tempoIncreaseInterval = midiPlayer.getAutoSpeedUpTempoIncreaseInterval() * 60;
-            var keepIncreasingForever = midiPlayer.getAutoSpeedUpForever();
-            var curTempo = midiPlayer.getTempo();
-
-            var midiStartTime = midiPlayer.getStartTime();
-            if (this.#class_our_midi_start_time != midiStartTime) {
-                this.#class_our_midi_start_time = midiStartTime;
-                this.#class_our_last_midi_tempo_increase_remainder = 0;
-                this.#class_our_last_midi_tempo_increase_time = new Date(0);
-                this.#class_our_midi_start_tempo = curTempo;
-            } else if (!keepIncreasingForever) {
-                if (curTempo >= this.#class_our_midi_start_tempo + totalTempoIncreaseAmount) {
-                    return; // don't increase any more after we have gone up the total amount
-                }
-            }
-            var totalMidiPlayTime = midiPlayer.getPlayTimeThisPlay();
-            var timeDiffMilliseconds = totalMidiPlayTime.getTime() - this.#class_our_last_midi_tempo_increase_time.getTime();
-            var tempoDiffFloat = (totalTempoIncreaseAmount) * (timeDiffMilliseconds / (tempoIncreaseInterval * 1000));
-
-            // round the number down, but keep track of the remainder so we carry it forward. Otherwise rounding errors cause us to be way off.
-            tempoDiffFloat += this.#class_our_last_midi_tempo_increase_remainder;
-            var tempoDiffInt = Math.floor(tempoDiffFloat);
-            this.#class_our_last_midi_tempo_increase_remainder = tempoDiffFloat - tempoDiffInt;
-
-            this.#class_our_last_midi_tempo_increase_time = totalMidiPlayTime;
-
-            if (!keepIncreasingForever) {
-                if (curTempo + tempoDiffInt > this.#class_our_midi_start_tempo + totalTempoIncreaseAmount) {
-                    // increase to the total max amount, then we are done
-                    tempoDiffInt = (this.#class_our_midi_start_tempo + totalTempoIncreaseAmount) - curTempo;
-                }
-            }
-
-            if (tempoDiffInt > 0)
-                midiPlayer.setTempo(midiPlayer.getTempo() + tempoDiffInt);
+            // First time round so reset tracking vars
+            if (this.#tempoIncreaseStartTime != this.getStartTime()) {
+                this.#tempoIncreaseStartTime = this.getStartTime();
+                this.#tempoIncreaseRemainder = 0;
+                this.#tempoIncreaseTime = new Date(0);
+                this.#tempoIncreaseStartTempo = this.getTempo();
+            } 
             
-            if (midiPlayer.#shouldRepeat) {
+            // We are already past our target increase and not speeding up forever
+            if (!this.getAutoSpeedUpForever() && this.getTempo() >= this.#tempoIncreaseStartTempo + this.getTempoIncreaseAmount()) {
+                return; // don't increase any more after we have gone up the total amount                
+            }
 
-                midiPlayer.totalRepeats++;
+            // Calc duration since last increase and amount to increase by
+            var msSinceLastIncrease = this.getPlayTimeThisPlay().getTime() - this.#tempoIncreaseTime.getTime();
+            var tempoIncFloat = (this.getTempoIncreaseAmount()) * (msSinceLastIncrease / (this.getTempoIncreaseInterval() * 60 * 1000));
+
+            // We want to increase by a whole number but need to track our remainder (and use our prev remainder) so we dont lose time
+            tempoIncFloat += this.#tempoIncreaseRemainder;
+            var tempoIncInt = Math.floor(tempoIncFloat);
+            this.#tempoIncreaseRemainder = tempoIncFloat - tempoIncInt;
+            this.#tempoIncreaseTime = this.getPlayTimeThisPlay();
+
+            // If tempo increment takes us past our increase amount and we are not increasing forever limit to increase amount
+            if (!this.getAutoSpeedUpForever()) {
+                if (this.getTempo() + tempoIncInt > this.#tempoIncreaseStartTempo + this.getTempoIncreaseAmount()) {
+                    tempoIncInt = (this.#tempoIncreaseStartTempo + this.getTempoIncreaseAmount()) - this.getTempo();
+                }
+            }
+
+            if (tempoIncInt > 0)
+                this.setTempo(this.getTempo() + tempoIncInt);
+            
+            if (this.#shouldRepeat) {
+
+                this.totalRepeats++;
 
                 // regenerate the MIDI if the data needs refreshing or the OffsetClick is rotating every time
                 // advanceOptionsOffsetClickStartRotation will return false if not rotating
-                if (metronome.advanceOptionsOffsetClickStartRotation() || midiPlayer.doesMidiDataNeedRefresh()) {
+                if (metronome.advanceOptionsOffsetClickStartRotation() || this.doesMidiDataNeedRefresh()) {
                     MIDI.Player.stop();
                     window.eventBus.$emit(EventTypes.LOAD_MIDI, { isPlaying: false });
                     MIDI.Player.start();                    
@@ -547,9 +542,8 @@ class MIDIPlayer {
                 note_type = "tom";
             }
             if (note_type) {
-                midiPlayer.totalNotes++;
-                // midiPlayer.eventCallbacks.notePlaying(note_type, percentComplete);
-                // TODO Fix midiPlayer
+                this.totalNotes++;
+                // TODO Fix this
                 window.eventBus.$emit(EventTypes.PLAY_PROGRESS, { percentComplete: percentComplete });
                 // if (editor.oteCallback) {
                 // if (midiPlayer.root.noteCallback) {

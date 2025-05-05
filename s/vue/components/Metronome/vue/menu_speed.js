@@ -15,8 +15,8 @@ export default {
 	data() {
 		return {
 			keepIncreasingForever: midiPlayer ? midiPlayer.getAutoSpeedUpForever() : false,
-			tempoIncrease: midiPlayer ? midiPlayer.getAutoSpeedUpTempoIncreaseAmount() : 5,
-			tempoIncreaseInterval: midiPlayer ? midiPlayer.getAutoSpeedUpTempoIncreaseInterval() : 2
+			tempoIncrease: midiPlayer ? midiPlayer.getTempoIncreaseAmount() : 5,
+			tempoIncreaseInterval: midiPlayer ? midiPlayer.getTempoIncreaseInterval() : 2
 		}
 	},
 
@@ -47,8 +47,8 @@ export default {
 	mounted() {
         eventBus.$on('parametersUpdate', () => {
 			this.keepIncreasingForever = midiPlayer ? midiPlayer.getAutoSpeedUpForever() : false
-			this.tempoIncrease = midiPlayer ? midiPlayer.getAutoSpeedUpTempoIncreaseAmount() : 5
-			this.tempoIncreaseInterval = midiPlayer ? midiPlayer.getAutoSpeedUpTempoIncreaseInterval() : 2			
+			this.tempoIncrease = midiPlayer ? midiPlayer.getTempoIncreaseAmount() : 5
+			this.tempoIncreaseInterval = midiPlayer ? midiPlayer.getTempoIncreaseInterval() : 2			
 		})
     },
     
