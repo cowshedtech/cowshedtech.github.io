@@ -28,12 +28,12 @@ export default {
 		},
 		tempoIncrease(newValue) {
 			if (midiPlayer) {
-				midiPlayer.setAutoSpeedUpTempoIncreaseAmount(newValue);
+				midiPlayer.setAutoSpeedUpTempoIncreaseAmount(Number(newValue));
 			}
 		},
 		tempoIncreaseInterval(newValue) {
 			if (midiPlayer) {
-				midiPlayer.setAutoSpeedUpTempoIncreaseInterval(newValue);
+				midiPlayer.setAutoSpeedUpTempoIncreaseInterval(Number(newValue));
 			}
 		}
 	},

@@ -35,6 +35,7 @@ class MIDIPlayer {
     
     #totalPlayTimeMsecs = 0;  // Culmative play time
     #currentStartTime = 0;  // Start time of most recent play
+    #currentStartTempo = 0;
     #lastUpdateTime = 0;
     #lastMidiTimeUpdate = 0;
     totalNotes = 0;
@@ -46,8 +47,6 @@ class MIDIPlayer {
     #autoSpeedUpTempoIncreaseAmount = 5
     #autoSpeedUpTempoIncreaseInterval = 2
 
-    #tempoIncreaseStartTime = null;
-    #tempoIncreaseStartTempo = 0;
     #tempoIncreaseTime = null;
     #tempoIncreaseRemainder = 0;
     
@@ -156,6 +155,9 @@ class MIDIPlayer {
      */
     resetStartTime() {
         this.#currentStartTime = new Date();
+        this.#tempoIncreaseRemainder = 0;
+        this.#tempoIncreaseTime = new Date(0);
+        this.#currentStartTempo = this.getTempo();
     };
 
 
@@ -471,39 +473,33 @@ class MIDIPlayer {
             // at the end of a song
             window.eventBus.$emit(EventTypes.PLAY_COMPLETE);
 
-            // First time round so reset tracking vars
-            if (this.#tempoIncreaseStartTime != this.getStartTime()) {
-                this.#tempoIncreaseStartTime = this.getStartTime();
-                this.#tempoIncreaseRemainder = 0;
-                this.#tempoIncreaseTime = new Date(0);
-                this.#tempoIncreaseStartTempo = this.getTempo();
-            } 
-            
-            // We are already past our target increase and not speeding up forever
-            if (!this.getAutoSpeedUpForever() && this.getTempo() >= this.#tempoIncreaseStartTempo + this.getTempoIncreaseAmount()) {
-                return; // don't increase any more after we have gone up the total amount                
-            }
+            if (this.#autoSpeedUpActive) {
+                // We are speeding up forver or currently below our target tempo
+                var belowTarget = this.getTempo() < this.#currentStartTempo + this.getTempoIncreaseAmount()
+                if (this.getAutoSpeedUpForever() || belowTarget) {
+                    
+                    // Calc duration since last increase and amount to increase by
+                    var msSinceLastIncrease = this.getPlayTimeThisPlay().getTime() - this.#tempoIncreaseTime.getTime();
+                    var tempoIncFloat = (this.getTempoIncreaseAmount()) * (msSinceLastIncrease / (this.getTempoIncreaseInterval() * 60 * 1000));
 
-            // Calc duration since last increase and amount to increase by
-            var msSinceLastIncrease = this.getPlayTimeThisPlay().getTime() - this.#tempoIncreaseTime.getTime();
-            var tempoIncFloat = (this.getTempoIncreaseAmount()) * (msSinceLastIncrease / (this.getTempoIncreaseInterval() * 60 * 1000));
+                    // We want to increase by a whole number but need to track our remainder (and use our prev remainder) so we dont lose time
+                    tempoIncFloat += this.#tempoIncreaseRemainder;
+                    var tempoIncInt = Math.floor(tempoIncFloat);
+                    this.#tempoIncreaseRemainder = tempoIncFloat - tempoIncInt;
+                    this.#tempoIncreaseTime = this.getPlayTimeThisPlay();
 
-            // We want to increase by a whole number but need to track our remainder (and use our prev remainder) so we dont lose time
-            tempoIncFloat += this.#tempoIncreaseRemainder;
-            var tempoIncInt = Math.floor(tempoIncFloat);
-            this.#tempoIncreaseRemainder = tempoIncFloat - tempoIncInt;
-            this.#tempoIncreaseTime = this.getPlayTimeThisPlay();
+                    // If tempo increment takes us past our increase amount and we are not increasing forever limit to increase amount
+                    if (!this.getAutoSpeedUpForever()) {
+                        if (this.getTempo() + tempoIncInt > this.#currentStartTempo + this.getTempoIncreaseAmount()) {
+                            tempoIncInt = (this.#currentStartTempo + this.getTempoIncreaseAmount()) - this.getTempo();
+                        }
+                    }
 
-            // If tempo increment takes us past our increase amount and we are not increasing forever limit to increase amount
-            if (!this.getAutoSpeedUpForever()) {
-                if (this.getTempo() + tempoIncInt > this.#tempoIncreaseStartTempo + this.getTempoIncreaseAmount()) {
-                    tempoIncInt = (this.#tempoIncreaseStartTempo + this.getTempoIncreaseAmount()) - this.getTempo();
+                    if (tempoIncInt > 0)
+                        this.setTempo(this.getTempo() + tempoIncInt);
                 }
             }
 
-            if (tempoIncInt > 0)
-                this.setTempo(this.getTempo() + tempoIncInt);
-            
             if (this.#shouldRepeat) {
 
                 this.totalRepeats++;
