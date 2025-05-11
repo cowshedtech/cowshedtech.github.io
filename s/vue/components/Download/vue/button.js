@@ -1,4 +1,5 @@
 import BottomNavigationButton from '../../BaseButtonNavigationButton/vue/base_button_bottom_navigation.js'
+import ContextMenu from '../../BaseContextMenu/vue/base_context_menu.js'
 import Menu from "./menu.js"
 
 export default {
@@ -13,12 +14,12 @@ export default {
   },
 
   components: {
-    BottomNavigationButton, Menu
+    BottomNavigationButton, ContextMenu, Menu
   },
 
   methods: {
     handleDownloadClick(event) {
-      this.menuX = event.clientX - 90;
+      this.menuX = event.clientX;
       this.menuY = event.clientY;
       this.isPopupOpen = !this.isPopupOpen
     }    
@@ -34,11 +35,13 @@ export default {
       <span class="bottomButtonIcon">
         <i class="fa fa-download fa-2x"></i>
       </span>
-      <Menu
-        :is-open="isPopupOpen" 
-        :x="menuX" 
-        :y="menuY">
-      </Menu>
+      <ContextMenu 
+          :is-open="isPopupOpen" 
+          :x="menuX" 
+          :y="menuY" 
+          @close="closeMenu">
+          <Menu></Menu>
+      </ContextMenu>       
     </BottomNavigationButton>
   `
 }

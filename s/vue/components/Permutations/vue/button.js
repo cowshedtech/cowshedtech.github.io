@@ -1,5 +1,5 @@
+import ContextMenu from '../../BaseContextMenu/vue/base_context_menu.js'
 import Menu from './menu.js'
-
 
 export default {
     props: {
@@ -19,7 +19,7 @@ export default {
     },
     
     components: {
-        Menu
+        ContextMenu, Menu
     },
 
     watch: { 
@@ -71,6 +71,13 @@ export default {
             :class="{ enabled: isEnabled }"
             @click.stop.prevent="handleClick">
             <i class="fa fa-bars"></i> Permutations
-        </span><Menu :is-open="isPopupOpen" :x="menuX" :y="menuY"></Menu>
+        </span>
+        <ContextMenu 
+            :is-open="isPopupOpen" 
+            :x="menuX" 
+            :y="menuY" 
+            @close="closeMenu">
+            <Menu></Menu>
+        </ContextMenu>
         `
 }

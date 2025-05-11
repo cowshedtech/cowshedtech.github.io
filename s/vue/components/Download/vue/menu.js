@@ -1,21 +1,7 @@
 import { reactive, computed } from 'vue'
-// import download from '../download.js'
 
 export default {
   name: 'DownloadMenu',
-
-  props: {
-		isOpen: {
-			type: Boolean,
-			default: false
-		},
-		x: {
-			type: Number
-		},
-		y: {
-			type: Number
-		}
-	},
   
   setup() {
     const DEFAULTS = {
@@ -142,26 +128,20 @@ export default {
   },
 
   template: `
-    <div class="noteContextMenuNew" 
-         v-if="isOpen" 
-         style="position: absolute; z-index: 9999; display: block" 
-		     :style="{ top: y + 'px', left: x + 'px' }" 
-			>
-      <ul 
-        id="downloadContextMenu" 
-        class="list" 
-        :style="{ width: menuWidth }"
-      >
-        <li @click="downloadSVG">
-          <b>Download SVG Images</b>
-        </li>
-        <li @click="downloadPNG">
-          <b>Download PNG Images</b>
-        </li>
-        <li @click="downloadMIDI">
-          <b>Download MIDI file</b>
-        </li>
-      </ul>
-    </div>
+    <ul 
+      id="downloadContextMenu" 
+      class="list" 
+      :style="{ width: menuWidth }"
+    >
+      <li @click="downloadSVG">
+        <b>Download SVG Images</b>
+      </li>
+      <li @click="downloadPNG">
+        <b>Download PNG Images</b>
+      </li>
+      <li @click="downloadMIDI">
+        <b>Download MIDI file</b>
+      </li>
+    </ul>    
   `
 }

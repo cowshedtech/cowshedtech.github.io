@@ -9,20 +9,6 @@
 
 export default {
 	props: {
-		isOpen: {
-			type: Boolean,
-			default: false
-		},
-		x: {
-			type: Number,
-			required: true,
-			validator: (value) => value >= 0
-		},
-		y: {
-			type: Number,
-			required: true,
-			validator: (value) => value >= 0
-		},
 		midiPlayer: {
 			type: Object,
 			required: true
@@ -94,7 +80,7 @@ export default {
 	},
   
 	template: `
-		<div id="metronomeAutoSpeedupConfiguration" v-if="isOpen" :style="{ top: y + 'px', left: x + 'px' }">
+		<div id="metronomeAutoSpeedupConfiguration">
 			<div id="metronomeAutoSpeedupOutputText">
 				Increase <span id="metronomeAutoSpeedupTempoIncreaseAmountOutput">{{ tempoIncrease }}</span> bpm in
 				<span id="metronomeAutoSpeedupTempoIncreaseIntervalOutput">{{ tempoIncreaseInterval }}</span> min

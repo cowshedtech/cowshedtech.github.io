@@ -1,17 +1,4 @@
 export default {
-	props: {
-		isOpen: {
-			type: Boolean,
-			default: false
-		},
-		x: {
-			type: Number
-		},
-		y: {
-			type: Number
-		}
-	},
-
 	data() {
 		return {
 			menuItems: [
@@ -86,26 +73,19 @@ export default {
 	},
 
 	template: `
-		<span 
-			class="noteContextMenuNew" 
-			v-if="isOpen" 
-			style="position: absolute; z-index: 9999; display: block" 
-			:style="{ top: y + 'px', left: x + 'px' }"
-		>
-			<ul id="metronomeOptionsOffsetClickContextMenu" class="list">
-				<li 
-					v-for="item in menuItems"
-					:key="item.id"
-					class="metronomeOptionsOffsetClickContextMenuItem"
-					:class="{ menuChecked: item.isChecked }"
-					:style="{ display: item.isVisible ? 'block' : 'none' }"
-					:id="'metronomeOptionsOffsetClickContextMenuOnThe' + item.id"
-					@click.stop.prevent="handleOffsetClick(item.id)"
-				>
-					{{ item.label }}
-				</li>
-			</ul>
-		</span>
+		<ul id="metronomeOptionsOffsetClickContextMenu" class="list">
+			<li 
+				v-for="item in menuItems"
+				:key="item.id"
+				class="metronomeOptionsOffsetClickContextMenuItem"
+				:class="{ menuChecked: item.isChecked }"
+				:style="{ display: item.isVisible ? 'block' : 'none' }"
+				:id="'metronomeOptionsOffsetClickContextMenuOnThe' + item.id"
+				@click.stop.prevent="handleOffsetClick(item.id)"
+			>
+				{{ item.label }}
+			</li>
+		</ul>
 	`
 }
 

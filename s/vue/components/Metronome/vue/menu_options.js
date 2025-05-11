@@ -1,3 +1,4 @@
+import ContextMenu from '../../BaseContextMenu/vue/base_context_menu.js'
 import OptionsOffsetClickMenu from './menu_options_offset_click.js'
 import OptionsSpeedMenu from './menu_speed.js'
 
@@ -10,16 +11,6 @@ import OptionsSpeedMenu from './menu_speed.js'
 
 export default {
   props: {
-    isOpen: {
-        type: Boolean,
-        default: false
-    },
-    x: {
-        type: Number
-    },
-    y: {
-        type: Number
-    },
     midiPlayer: {
         type: Object,
         required: true
@@ -139,39 +130,40 @@ export default {
   },
 
   components: {
-    OptionsOffsetClickMenu, OptionsSpeedMenu
+    ContextMenu, OptionsOffsetClickMenu, OptionsSpeedMenu
   },
 
   template: `
-    <span class="noteContextMenuNew" id="metronomeOptionsContextMenuContainer" aria-label="Metronome options" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
-      <ul id="metronomeOptionsContextMenu" class="list" role="menu">
-        <li v-for="option in options"
-            :key="option.id"
-            :class="getMenuItemClasses(option)"
-            :id="getMenuItemId(option)"
-            :title="option.title"
-            @click.stop.prevent="handleOptionClick(option.id)"
-            role="menuitem"
-            tabindex="0"
-            @keyup.enter="handleOptionClick(option.id)"
-            @keyup.space="handleOptionClick(option.id)"
-            :aria-checked="option.checked"
-        >{{ option.label }}</li>
-      </ul>
-    </span>
-    <OptionsOffsetClickMenu
+    <ul id="metronomeOptionsContextMenu" class="list" role="menu">
+      <li v-for="option in options"
+          :key="option.id"
+          :class="getMenuItemClasses(option)"
+          :id="getMenuItemId(option)"
+          :title="option.title"
+          @click.stop.prevent="handleOptionClick(option.id)"
+          role="menuitem"
+          tabindex="0"
+          @keyup.enter="handleOptionClick(option.id)"
+          @keyup.space="handleOptionClick(option.id)"
+          :aria-checked="option.checked"
+      >{{ option.label }}</li>
+    </ul>
+    <ContextMenu 
         :is-open="isOffsetClickPopupOpen" 
         :x="menuX" 
-        :y="menuY"
+        :y="menuY" 
         @close="closeMenu">
-    </OptionsOffsetClickMenu>
-    <OptionsSpeedMenu
-        :midiPlayer="midiPlayer"
-        :eventBus="eventBus"
+        <OptionsOffsetClickMenu></OptionsOffsetClickMenu>        
+    </ContextMenu> 
+    <ContextMenu 
         :is-open="isSpeedPopupOpen" 
         :x="menuX" 
-        :y="menuY"
+        :y="menuY" 
         @close="closeMenu">
-    </OptionsSpeedMenu>            
+         <OptionsSpeedMenu
+            :midiPlayer="midiPlayer"
+            :eventBus="eventBus">
+        </OptionsSpeedMenu>          
+    </ContextMenu>              
   `
 }
