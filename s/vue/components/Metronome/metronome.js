@@ -171,30 +171,7 @@ class Metronome {
 		// call with the default option
 		root.optionsMenuOffsetClickPopupClick("1");
 	};
-
-	/**
-     * 
-     */    
-    // showAutoSpeedupConfiguration() {
-	// 	var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
-
-	// 	if (popup) {
-	// 		popup.style.display = "block";
-	// 	}
-
-	// 	document.getElementById('metronomeAutoSpeedupTempoIncreaseAmountOutput').innerHTML = document.getElementById('metronomeAutoSpeedupTempoIncreaseAmount').value;
-	// 	document.getElementById('metronomeAutoSpeedupTempoIncreaseIntervalOutput').innerHTML = document.getElementById('metronomeAutoSpeedupTempoIncreaseInterval').value;
-	// };
-
-	// /**
-    //  * 
-    //  */    
-    // closeAutoSpeedupConfiguration(type) {
-	// 	var popup = document.getElementById("metronomeAutoSpeedupConfiguration");
-
-	// 	if (popup)
-	// 		popup.style.display = "none";
-	// };
+	
 }
 
 
