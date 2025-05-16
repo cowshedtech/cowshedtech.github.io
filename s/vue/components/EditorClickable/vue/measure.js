@@ -55,8 +55,7 @@ export default {
     MeasureButtonAddStart, MeasureControls, Stickings, LineLabels, HighHats, Toms, Snares, Kick, Highlights, StaffLines
   },
 
-  template: `
-    <div>
+  template: `    
       <MeasureButtonAddStart :measureIndex="measureIndex" />
       <div class="staff-container" id="staff-container1">
         <Stickings :track="track" :measureIndex="measureIndex" />
@@ -78,6 +77,6 @@ export default {
         </span>
       </div>
       <MeasureControls :measureIndex="measureIndex"/>
-    </div>
+
   `
 }
