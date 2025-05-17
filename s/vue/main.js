@@ -1,5 +1,6 @@
 import RightHandContent from './components/TheContentRightHand/vue/right_hand_content.js'
 import TimeSignature from './components/SignatureTime/vue/picker.js'
+import LeftNavigation from './components/TheNavigationLeft/vue/navigation.js'
 import TopNavigation from './components/TheNavigationTop/vue/top_navigation.js'
 import MidiPlayer from './components/Player/vue/controls.js'
 
@@ -57,12 +58,12 @@ export default {
   },
   
   components: {
-    RightHandContent, TimeSignature, TopNavigation, MidiPlayer
+    LeftNavigation, RightHandContent, TimeSignature, TopNavigation, MidiPlayer
   },
   
   template: `
     <div class="nonPrintable">
-			<TimeSignature></TimeSignature>		
+			<LeftNavigation></LeftNavigation>
       <TopNavigation
         :midiPlayer="midiPlayer"
         :eventBus="eventBus">
