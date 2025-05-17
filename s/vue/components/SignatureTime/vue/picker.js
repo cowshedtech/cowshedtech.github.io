@@ -1,4 +1,6 @@
 import Menu from './menu.js'
+import ViewEditButton from './../../Options/vue/viewedit_button.js'
+import UndoButton from './../../Undo/vue/button.js'
 
 export default {
     data() {
@@ -6,7 +8,6 @@ export default {
             track: editor.track ? editor.track : null,
             disabledEight : ((8 * editor.track.numBeats / editor.track.noteValue) % 1 != 0),
             disabledTriplets : editor.track.noteValue != 4,
-            isDBAuthoring : options ? options.grooveDBAuthoring : true,
             isViewMode : options ? options.isViewMode() : true,
             isAdvancedEdit : options ? options.isAdvancedEdit() : false,
             isTouchDevice : isTouchDevice(),
@@ -23,7 +24,6 @@ export default {
             this.disabledTriplets = editor.track.noteValue != 4
         })
         eventBus.$on('options-updated', () => {
-            this.isDBAuthoring = options.grooveDBAuthoring;     
             this.isViewMode = options.isViewMode();     
             this.isAdvancedEdit = options.isAdvancedEdit()
         });	
@@ -35,7 +35,7 @@ export default {
     },
 
     components: {
-        Menu
+        Menu, ViewEditButton, UndoButton
     },
 
     methods: {
@@ -79,11 +79,7 @@ export default {
             <span v-if="isViewMode === false" class="left-button subdivision" id="subdivision_12ths" :class="{ buttonSelected: track?.notesPerMeasure === 12, disabled: disabledTriplets }" @click.stop.prevent="handleChangeDivisionClick(12)"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>8</sub></span>TRIPLETS</span></span></span>
             <span v-if="isViewMode === false" class="left-button subdivision" id="subdivision_24ths" :class="{ buttonSelected: track?.notesPerMeasure === 24, disabled: disabledTriplets }" @click.stop.prevent="handleChangeDivisionClick(24)"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>16</sub></span>TRIPLETS</span></span></span>
             <span v-if="isViewMode === false" class="left-button subdivision" id="subdivision_48ths" :class="{ buttonSelected: track?.notesPerMeasure === 48, disabled: disabledTriplets }" @click.stop.prevent="handleChangeDivisionClick(48)"><span class="left-button-content"><span>MIXED<br>Division</span></span></span>
-            <span v-if="isDBAuthoring == false" class="left-button" @click.stop.prevent="handleViewEditClick" >
-                <span class="left-button-content">
-                    <span id="view-edit-switch">Switch to {{ isViewMode === false ? 'VIEW' : 'EDIT' }} mode</span>
-                </span>
-            </span>
+            <ViewEditButton></ViewEditButton>
             <span 
                 v-if="isTouchDevice && isViewMode === false" 
                 class="left-button" 
@@ -92,13 +88,7 @@ export default {
                 @click.stop.prevent="handleAdvancedClick">
                 <span class="left-button-content">Advanced Edit</span>
             </span>
-            <span 
-                v-if="isViewMode === false" 
-                class="left-button" 
-                id="undoButton" 
-                onclick="undoCommand();">
-                <span class="left-button-content"><i class="fa fa-undo"></i>&nbsp;&nbsp;Undo</span>
-            </span>
+            <UndoButton></UndoButton>
         </span>
     </div>
     <Menu :is-open="isPopupOpen" :x="menuX" :y="menuY" @close-clicked="closeMenu"></Menu>
