@@ -18,14 +18,14 @@ export default {
   },
 
   mounted() {
-      eventBus.$on('options-updated', () => {
+    this.removeHandler = eventBus.$on('options-updated', () => {
         this.isViewMode = options.isViewMode();     
       });	
   },
 
   beforeUnmount() {
-    eventBus.$off('options-updated');
-  },
+    if (this.removeHandler) this.removeHandler() 
+  },  
 
   template: `
     <BottomNavigationButton v-if="isViewMode === false" button-id="showHideTomsButton" button-text="TOMS" @click="toggleToms">

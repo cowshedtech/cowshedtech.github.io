@@ -48,13 +48,13 @@ export default {
   },
 
   mounted() {
-    eventBus.$on('options-updated', () => {
+    this.removeHandler = eventBus.$on('options-updated', () => {
       this.tomsVisible = options.areTomsVisible()
     });
   },
 
   beforeUnmount() {
-    eventBus.$off('options-updated');
+    if (this.removeHandler) this.removeHandler() 
   },
   
   components: {

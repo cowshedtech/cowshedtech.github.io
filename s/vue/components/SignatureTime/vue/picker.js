@@ -19,14 +19,14 @@ export default {
             this.disabledEight = ((8 * editor.track.numBeats / editor.track.noteValue) % 1 != 0)
             this.disabledTriplets = editor.track.noteValue != 4
         })
-        eventBus.$on('options-updated', () => {
+        this.removeOptionsHandler = eventBus.$on('options-updated', () => {
             this.isViewMode = options.isViewMode();                 
         });	
     },
 
     beforeUnmount() {
         if (this.removeEditorHandler) this.removeEditorHandler() 
-        eventBus.$off('options-updated');
+        if (this.removeOptionsHandler) this.removeOptionsHandler() 
     },
 
     components: {

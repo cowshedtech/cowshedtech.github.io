@@ -46,7 +46,7 @@ export default {
 
   mounted() {
     this.tomsVisible = options.areTomsVisible();
-    eventBus.$on('options-updated', () => {
+    this.removeHandler = eventBus.$on('options-updated', () => {
 			this.tomsVisible = options.areTomsVisible();
       this.labels.find(l => l.instrument === 'tom1').visible = this.tomsVisible;
       this.labels.find(l => l.instrument === 'tom4').visible = this.tomsVisible;
@@ -54,7 +54,7 @@ export default {
   },
 
   beforeUnmount() {
-    eventBus.$off('options-updated');
+    if (this.removeHandler) this.removeHandler() 
   },
 
   methods: {

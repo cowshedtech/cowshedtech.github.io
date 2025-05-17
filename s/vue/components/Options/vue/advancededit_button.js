@@ -6,13 +6,13 @@ export default {
     },
 
     mounted() {
-        eventBus.$on('options-updated', () => {
+        this.removeHandler = eventBus.$on('options-updated', () => {
             this.isAdvancedEdit = options.isAdvancedEdit()
         });	
     },
 
     beforeUnmount() {
-        eventBus.$off('options-updated');
+        if (this.removeHandler) this.removeHandler() 
     },
 
     methods: {

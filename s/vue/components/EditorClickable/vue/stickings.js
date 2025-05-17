@@ -39,13 +39,13 @@ export default {
   },
 
   mounted() {
-    eventBus.$on('options-updated', () => {
+    this.removeHandler = eventBus.$on('options-updated', () => {
       this.stickingVisible = options.isStickingVisible();      
     });
   },
 
   beforeUnmount() {
-    eventBus.$off('options-updated');
+    if (this.removeHandler) this.removeHandler() 
   },
 
   methods: {

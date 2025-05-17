@@ -7,16 +7,15 @@ export default {
   },
 
   mounted() {
-    eventBus.$on('options-updated', () => {
+    this.removeHandler = eventBus.$on('options-updated', () => {
       this.isDebugMode = options.debugMode;             
     });
   },
 
   beforeUnmount() {
-    eventBus.$off('options-updated');
+    if (this.removeHandler) this.removeHandler() 
   },  
-  
-  
+
   template: `
   <div id="debugDisplayArea">
     <span id="undoStack"></span>

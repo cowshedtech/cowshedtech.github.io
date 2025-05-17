@@ -13,15 +13,15 @@ export default {
 		},
 	},
 
-	beforeDestroy() {
-		eventBus.$off('options-updated');
-	},
-
 	mounted() {
-		eventBus.$on('options-updated', () => {
+		this.removeHandler = eventBus.$on('options-updated', () => {
 			this.highlight = options.isHighlightOn()
 		});		
 	},
+
+	beforeUnmount() {
+        if (this.removeHandler) this.removeHandler() 
+    },
 
 	template: `
 		<ul id="optionsContextMenu" class="list">
