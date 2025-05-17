@@ -1,8 +1,7 @@
 export default {
   data() {
     return {
-      track: editor.track ? editor.track : null,
-      isViewMode : options ? options.isViewMode() : true,            
+      track: editor.track ? editor.track : null,      
     }
   },
 
@@ -46,8 +45,7 @@ export default {
 			this.track = deepCopy(editor.track)            
 		})
     eventBus.$on('options-updated', () => {
-      this.isDBAuthoring = options.grooveDBAuthoring;     
-      this.isViewMode = options.isViewMode();     
+      this.isDBAuthoring = options.grooveDBAuthoring;           
     });
   },
 
@@ -56,7 +54,7 @@ export default {
   },
 
   template: `
-    <div v-if="isViewMode === false" id="sheetMusicTextFields" class="fullWidthEle grooveDB_hidden">
+    <div id="sheetMusicTextFields" class="fullWidthEle grooveDB_hidden">
       <span class="sheetMusicTextField">
         <b>Title:</b> 
         <input 

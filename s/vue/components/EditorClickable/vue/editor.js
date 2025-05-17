@@ -6,8 +6,7 @@ export default {
     return {
       track: editor.track ? editor.track : null,
       midiPlayer: midiPlayer ? midiPlayer : null,
-      options: options ? options : null,
-      isViewMode : options ? options.isViewMode() : true,
+      options: options ? options : null,      
     }
   },
 
@@ -17,8 +16,7 @@ export default {
     })
 
    eventBus.$on('options-updated', () => {
-      this.options = deepCopy(options)
-      this.isViewMode = options.isViewMode()
+      this.options = deepCopy(options)      
     });
   },
 
@@ -31,7 +29,7 @@ export default {
   },
 
   template: `
-    <div v-if="isViewMode === false" id="musicalInput" class="fullWidthEle">
+    <div id="musicalInput" class="fullWidthEle">
       <div id="measureContainer">
         <template v-for="i in track.numberOfMeasures" :key="i">
           <Measure :options="options" :midiPlayer="midiPlayer" :track="track" :measureIndex="i"></Measure>

@@ -24,7 +24,7 @@ export default {
 
     template: `
         <span 
-            v-if="isTouchDevice && isViewMode === false" 
+            v-if="isTouchDevice" 
             class="left-button" 
             :class="{ buttonSelected: isAdvancedEdit }"
             id="advancedEditAnchor" 

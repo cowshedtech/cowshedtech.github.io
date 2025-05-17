@@ -1,3 +1,4 @@
+import Editable from '../../BaseEditableComponent/vue/editable.js'
 import BottomNavigation from '../../TheNavigationBottom/vue/the_navigation_bottom.js'
 import HiddenDiscription from '../../DisplayHiddenDescription/vue/hidden_description.js'
 import GrooveDBMetaData from '../../DisplayMetadata/vue/groovedb_metadata.js'
@@ -13,9 +14,11 @@ export default {
   data() {
     return {}
   },
+  
   components: {
-    BottomNavigation,HiddenDiscription,GrooveDBMetaData,GrooveDBDisplay, TotalPlayTime, MeasureContainer, MusicTextFields, Warnings, SheetMusic, PermutationOptions
+    Editable, BottomNavigation,HiddenDiscription,GrooveDBMetaData,GrooveDBDisplay, TotalPlayTime, MeasureContainer, MusicTextFields, Warnings, SheetMusic, PermutationOptions
   },
+  
   template: `  
     <div id="RightHandContent">
       <PermutationOptions></PermutationOptions>
@@ -25,8 +28,12 @@ export default {
 
         <Warnings></Warnings>
 
-        <MusicTextFields></MusicTextFields>
-        <MeasureContainer></MeasureContainer>	
+        <Editable>
+          <MusicTextFields></MusicTextFields>
+        </Editable>  
+        <Editable>
+          <MeasureContainer></MeasureContainer>	
+        </Editable>  
         <BottomNavigation></BottomNavigation>
       
         <div id="midiTextOutput"></div>
