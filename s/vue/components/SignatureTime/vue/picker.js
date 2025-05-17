@@ -1,6 +1,8 @@
 import Menu from './menu.js'
+import AdvancedEditButton from './../../Options/vue/advancededit_button.js'
 import ViewEditButton from './../../Options/vue/viewedit_button.js'
 import UndoButton from './../../Undo/vue/button.js'
+
 
 export default {
     data() {
@@ -35,7 +37,7 @@ export default {
     },
 
     components: {
-        Menu, ViewEditButton, UndoButton
+        Menu, AdvancedEditButton, ViewEditButton, UndoButton
     },
 
     methods: {
@@ -80,14 +82,7 @@ export default {
             <span v-if="isViewMode === false" class="left-button subdivision" id="subdivision_24ths" :class="{ buttonSelected: track?.notesPerMeasure === 24, disabled: disabledTriplets }" @click.stop.prevent="handleChangeDivisionClick(24)"><span class="left-button-content"><span><span class="buttonFraction"><sup>1</sup>/<sub>16</sub></span>TRIPLETS</span></span></span>
             <span v-if="isViewMode === false" class="left-button subdivision" id="subdivision_48ths" :class="{ buttonSelected: track?.notesPerMeasure === 48, disabled: disabledTriplets }" @click.stop.prevent="handleChangeDivisionClick(48)"><span class="left-button-content"><span>MIXED<br>Division</span></span></span>
             <ViewEditButton></ViewEditButton>
-            <span 
-                v-if="isTouchDevice && isViewMode === false" 
-                class="left-button" 
-                :class="{ buttonSelected: isAdvancedEdit }"
-                id="advancedEditAnchor" 
-                @click.stop.prevent="handleAdvancedClick">
-                <span class="left-button-content">Advanced Edit</span>
-            </span>
+            <AdvancedEditButton></AdvancedEditButton>
             <UndoButton></UndoButton>
         </span>
     </div>
