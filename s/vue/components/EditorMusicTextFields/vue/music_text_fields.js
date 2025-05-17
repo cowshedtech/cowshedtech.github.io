@@ -1,7 +1,7 @@
 export default {
   data() {
     return {
-      track: editor.track ? editor.track : null,      
+      track: editor.track ? editor.track : null
     }
   },
 

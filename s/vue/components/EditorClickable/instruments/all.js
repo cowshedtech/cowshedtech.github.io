@@ -64,8 +64,8 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
         var array_index = (i) * scaler;
 
         // only grab the stickings if they are visible
-        if (options.isStickingVisible())
-            Sticking_Array[array_index] = editor.track.getStickingState(i + startIndexForClickableUI, "ABC");
+        // if (options.isStickingVisible())
+        //     Sticking_Array[array_index] = editor.track.getStickingState(i + startIndexForClickableUI, "ABC");
 
         HH_Array[array_index] = editor.track.getHighHatState(i + startIndexForClickableUI, "ABC");
 

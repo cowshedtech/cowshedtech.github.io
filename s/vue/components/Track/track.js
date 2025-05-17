@@ -28,6 +28,15 @@
 
 var trackID = 0;
 
+const Instruments = {
+    STICKING: 'Sticking',
+    HIGH_HAT: 'HighHat',
+    SNARE: 'Snare',
+    KICK: 'Kick',
+	TOM1: 'Tom1',
+	TOM4: 'Tom4',
+};
+
 // GrooveUtils class.   The only one in this file.
 function Track() {
 	"use strict";
@@ -44,6 +53,9 @@ function Track() {
 		this.repeatedMeasures = new Map();
 		this.numBeats = 4;  // TimeSigTop: Top part of Time Signture 3/4, 4/4, 5/4, 6/8, etc...
 		this.noteValue = 4; // TimeSigBottom: Bottom part of Time Sig   4 = quarter notes, 8 = 8th notes, 16ths, etc..
+		this.notes = new Map();
+		this.notes.set(Instruments.STICKING, class_empty_note_array.slice(0));
+
 		this.sticking_array = class_empty_note_array.slice(0); // copy by value
 		this.hh_array = class_empty_note_array.slice(0);    // copy by value
 		this.snare_array = class_empty_note_array.slice(0); // copy by value
@@ -73,9 +85,42 @@ function Track() {
 	/*
 	 *
 	 */
+	root.setInstrumentState = function(instrument, id, new_state) {
+		let notes = this.notes.get(instrument);
+		notes[id] = new_state;
+		this.notes.set(instrument, notes);		
+	}
+
+	/*
+	 *
+	 */
+	root.getInstrumentState = function(instrument, id) {
+	
+		let result = null;
+		let instrumentNotes = this.notes 
+		if (instrumentNotes && instrumentNotes instanceof Map) {
+			let notes = instrumentNotes.get(instrument);
+			result = notes[id];				
+		}
+		else {
+			console.log(`here`)
+		}
+		return result;    
+	}
+
+	/*
+	 *
+	 */
+	root.getInstrumentNotes = function(instrument) {
+		return this.notes.get(instrument);
+	}
+
+	/*
+	 *
+	 */
 	root.setStickingState = function(id, new_state) {
-		this.sticking_array[id] = new_state;
-		
+		setInstrumentState(Instruments.STICKING, id, new_state);
+		// this.sticking_array[id] = new_state;		
 		window.eventBus.$emit('track-updated');
 	}
 
@@ -83,6 +128,7 @@ function Track() {
      * Notifies all registered handlers of a change
      */
     root.setStickingStateNoNotify = function(id, new_state) {
+		setInstrumentState(Instruments.STICKING, id, new_state);
 		this.sticking_array[id] = new_state;		
 	}
 	
@@ -90,18 +136,27 @@ function Track() {
 	 *
 	 */
 	root.getStickingState = function(id, returnType) {
+
+		let abcState2 = this.getInstrumentState(Instruments.STICKING, id)
+		console.log(`stickingN [${id}] [${abcState2}]`)
+		// if (!abcState) abcState = constant_ABC_STICK_OFF
+		// console.log(`sticking [${id}] [${abcState}]`)
+		// ? this.getInstrumentState(Instruments.STICKING, id) : constant_ABC_STICK_OFF;
 	
-		let abcState = this.sticking_array[id] ? this.sticking_array[id] : constant_ABC_STICK_OFF;
-		let result = abcState;
+		// let abcState = this.sticking_array[id] ? this.sticking_array[id] : constant_ABC_STICK_OFF;
+		let result = abcState2;
+		// console.log(`sticking [${id}] [${abcState}]`)
 		
-		if (returnType == "URL")
-		{
-			if (abcState === constant_ABC_STICK_BOTH) returnType = "B";
-			if (abcState === constant_ABC_STICK_R) returnType = "R";
-			if (abcState === constant_ABC_STICK_L) returnType = "L";
-			if (abcState === constant_ABC_STICK_COUNT) returnType = "C";
-			if (abcState === constant_ABC_STICK_OFF) returnType = "-";
-		}
+		// if (returnType == "URL")
+		// {
+		// 	if (abcState === constant_ABC_STICK_BOTH) returnType = "B";
+		// 	if (abcState === constant_ABC_STICK_R) returnType = "R";
+		// 	if (abcState === constant_ABC_STICK_L) returnType = "L";
+		// 	if (abcState === constant_ABC_STICK_COUNT) returnType = "C";
+		// 	if (abcState === constant_ABC_STICK_OFF) returnType = "-";
+		// }
+
+		console.log(`sticking [${id}] [${result}]`)
 	
 		return result;    
 	}
