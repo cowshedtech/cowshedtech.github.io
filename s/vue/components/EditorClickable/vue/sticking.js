@@ -1,5 +1,3 @@
-
-
 export default {
   props: {
     track: {
@@ -14,7 +12,7 @@ export default {
 
   data() {
     return {
-      noteABC: this.track && this.noteIndex || this.noteIndex == 0 ? this.track.getStickingState(this.noteIndex) : constant_ABC_STICK_OFF,
+      noteABC: this.track && this.noteIndex || this.noteIndex == 0 ? this.track.getInstrumentState(Instruments.STICKING, this.noteIndex) : constant_ABC_STICK_OFF,
       constants: {
         STICK_R: constant_ABC_STICK_R,
         STICK_L: constant_ABC_STICK_L,
@@ -25,18 +23,19 @@ export default {
     }
   },
 
-  watch: { 
-    track: {
-      handler(newVal, oldVal) { 
+  mounted() {
+    this.removeHandler = eventBus.$on('track-updated', () => {
         this.noteABC = constant_ABC_STICK_OFF;
-        if (this.track && (this.noteIndex || this.noteIndex == 0)) {
-          if (this.track.getStickingState(this.noteIndex)) {
-            this.noteABC = this.track.getStickingState(this.noteIndex)
+        if (editor.track && (this.noteIndex || this.noteIndex == 0)) {
+          if (editor.track.getInstrumentState(Instruments.STICKING, this.noteIndex)) {
+            this.noteABC = editor.track.getInstrumentState(Instruments.STICKING, this.noteIndex)
           }
-        }        
-      },
-      deep: true
-    },    
+        }
+    });	
+  },
+
+  beforeUnmount() {
+      if (this.removeHandler) this.removeHandler() 
   },
 
   methods: {
@@ -56,8 +55,7 @@ export default {
             new_state = constant_ABC_STICK_OFF;
         }
         this.noteABC = new_state;
-        // this.track.setStickingState(this.noteIndex, new_state);        
-        editor.track.setStickingState(this.noteIndex, new_state);        
+        editor.track.setInstrumentState(Instruments.STICKING, this.noteIndex, new_state);        
     },
     handleRightClick(event) {
         // noteRightClick(event, 'sticking', this.noteIndex)

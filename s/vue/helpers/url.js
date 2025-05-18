@@ -81,7 +81,11 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
 
     // only add if we need them.  // they are long and ugly. :)
     if (options.isStickingVisible()) {
-        var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', track.sticking_array, true, true, total_notes, track.notesPerMeasure);
+        //var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', track.sticking_array, true, true, total_notes, track.notesPerMeasure);
+
+        let notes = track.getInstrumentNotes(Instruments.STICKING)
+        var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', notes, true, true, total_notes, track.notesPerMeasure);
+        
         fullURL += Stickings;
     }
 
