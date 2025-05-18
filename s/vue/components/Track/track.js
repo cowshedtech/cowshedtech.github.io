@@ -55,9 +55,10 @@ function Track() {
 		this.noteValue = 4; // TimeSigBottom: Bottom part of Time Sig   4 = quarter notes, 8 = 8th notes, 16ths, etc..
 		this.notes = new Map();
 		this.notes.set(Instruments.STICKING, Array(32).fill(constant_ABC_STICK_OFF));
+		this.notes.set(Instruments.HIGH_HAT, Array(32).fill(constant_ABC_OFF));
 			
 		this.sticking_array = class_empty_note_array.slice(0); // copy by value
-		this.hh_array = class_empty_note_array.slice(0);    // copy by value
+		// this.hh_array = class_empty_note_array.slice(0);    // copy by value
 		this.snare_array = class_empty_note_array.slice(0); // copy by value
 		this.kick_array = class_empty_note_array.slice(0);  // copy by value
 		// toms_array contains 4 toms  T1, T2, T3, T4 index starting at zero
@@ -121,6 +122,13 @@ function Track() {
 		return this.notes.get(instrument);
 	}
 
+	/*
+	 *
+	 */
+	root.setInstrumentNotes = function(instrument, notes) {
+		return this.notes.set(instrument, notes);
+	}
+
 	/**
      * Notifies all registered handlers of a change
      */
@@ -145,45 +153,44 @@ function Track() {
 	/*
 	 *
 	 */
-	root.getHighHatState = function(id, returnType) {
+	// root.getHighHatState = function(id, returnType) {
 
-		let abcState = this.hh_array[id] ? this.hh_array[id] : constant_ABC_OFF;
-		let result = abcState;
+	// 	let abcState = this.hh_array[id] ? this.hh_array[id] : constant_ABC_OFF;
+	// 	let result = abcState;
 		
-		if (returnType == "URL")
-		{
-			if (abcState === constant_ABC_HH_Ride) returnType = "r";
-			if (abcState === constant_ABC_HH_Ride_Bell) returnType = "b";
-			if (abcState === constant_ABC_HH_Cow_Bell) returnType = "m";
-			if (abcState === constant_ABC_HH_Crash) returnType = "c";
-			if (abcState === constant_ABC_HH_Stacker) returnType = "s";
-			if (abcState === constant_ABC_HH_Metronome_Normal) returnType = "n";
-			if (abcState === constant_ABC_HH_Metronome_Accent) returnType = "N";
-			if (abcState === constant_ABC_HH_Open) returnType = "o";
-			if (abcState === constant_ABC_HH_Close) returnType = "+";
-			if (abcState === constant_ABC_HH_Accent) returnType = "X";
-			if (abcState === constant_ABC_HH_Normal) returnType = "x";
-		}
+	// 	if (returnType == "URL")
+	// 	{
+	// 		if (abcState === constant_ABC_HH_Ride) returnType = "r";
+	// 		if (abcState === constant_ABC_HH_Ride_Bell) returnType = "b";
+	// 		if (abcState === constant_ABC_HH_Cow_Bell) returnType = "m";
+	// 		if (abcState === constant_ABC_HH_Crash) returnType = "c";
+	// 		if (abcState === constant_ABC_HH_Stacker) returnType = "s";
+	// 		if (abcState === constant_ABC_HH_Metronome_Normal) returnType = "n";
+	// 		if (abcState === constant_ABC_HH_Metronome_Accent) returnType = "N";
+	// 		if (abcState === constant_ABC_HH_Open) returnType = "o";
+	// 		if (abcState === constant_ABC_HH_Close) returnType = "+";
+	// 		if (abcState === constant_ABC_HH_Accent) returnType = "X";
+	// 		if (abcState === constant_ABC_HH_Normal) returnType = "x";
+	// 	}
 	
-		return result;        
-	}
+	// 	return result;        
+	// }
 
-	
-	
-	
+
 	/*
 	 *
 	 */
-	root.setHighHatState = function(id, mode, make_sound) {
-		this.hh_array[id] = mode;	
-		window.eventBus.$emit('track-updated');
-	}
+	// root.setHighHatState = function(id, mode, make_sound) {
+	// 	this.hh_array[id] = mode;	
+	// 	window.eventBus.$emit('track-updated');
+	// }
 
 	/**
      * Notifies all registered handlers of a change
      */
     root.setHighHatStateNoNotify = function(id, mode) {
-		this.hh_array[id] = mode;			
+		// this.hh_array[id] = mode;			
+		this.setInstrumentState(Instruments.HIGH_HAT, id, mode);		
 	}
 
 
@@ -478,7 +485,8 @@ function Track() {
 		this.repeatedMeasures.clear();
 		this.numberOfMeasures = 1;
 		this.sticking_array = Array(this.notesPerMeasure).fill(false).slice(0);
-		this.hh_array = Array(this.notesPerMeasure).fill(false).slice(0);   
+		this.setInstrumentNotes(Instruments.HIGH_HAT, Array(this.notesPerMeasure).fill(false).slice(0))
+		// this.hh_array = Array(this.notesPerMeasure).fill(false).slice(0);   
 		this.snare_array = Array(this.notesPerMeasure).fill(false).slice(0);
 		this.kick_array = Array(this.notesPerMeasure).fill(false).slice(0); 
 		this.toms_array = [Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0)];
@@ -617,7 +625,8 @@ function Track() {
 			// changing from or changing to a triplet division
 			// triplets don't scale well, so use defaults when we change
 			this.sticking_array = noteArraysFromURLData("Stickings", this.getEmptyGroove(), this.notesPerMeasure, this.numberOfMeasures);
-			this.hh_array = noteArraysFromURLData("H", this.getDefaultHHGroove(), this.notesPerMeasure, this.numberOfMeasures);
+			this.setInstrumentNotes(Instruments.HIGH_HAT, noteArraysFromURLData("H", this.getDefaultHHGroove(), this.notesPerMeasure, this.numberOfMeasures))
+			// this.hh_array = noteArraysFromURLData("H", this.getDefaultHHGroove(), this.notesPerMeasure, this.numberOfMeasures);
 			this.snare_array = noteArraysFromURLData("S", this.getDefaultSnareGroove(this.notesPerMeasure, this.numBeats, this.noteValue, this.numberOfMeasures), this.notesPerMeasure, this.numberOfMeasures);
 			this.kick_array = noteArraysFromURLData("K", this.getDefaultKickGroove(), this.notesPerMeasure, this.numberOfMeasures);
 			this.toms_array[0] = noteArraysFromURLData("T1", this.getEmptyGroove(), this.notesPerMeasure, this.numberOfMeasures);
@@ -628,7 +637,9 @@ function Track() {
 		}
 
 		this.sticking_array = this.adjustNotesForNewDivision(this.sticking_array)
-		this.hh_array = this.adjustNotesForNewDivision(this.hh_array)
+		// this.hh_array = this.adjustNotesForNewDivision(this.hh_array)
+		let adjustnedNotes = this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.HIGH_HAT))
+		this.setInstrumentNotes(Instruments.HIGH_HAT, adjustnedNotes)
 		this.snare_array = this.adjustNotesForNewDivision(this.snare_array)
 		this.kick_array = this.adjustNotesForNewDivision(this.kick_array)
 		this.toms_array[0] = this.adjustNotesForNewDivision(this.toms_array[0])

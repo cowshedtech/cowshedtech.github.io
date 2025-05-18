@@ -18,7 +18,7 @@ export default {
 
   data() {
     return {
-      noteABC: this.track ? this.track.getHighHatState(this.noteIndex, "ABC") : constant_ABC_OFF,
+      noteABC: editor.track ? editor.track.getInstrumentState(Instruments.HIGH_HAT, this.noteIndex) : constant_ABC_OFF,
       isPopupOpen: false,
       menuX: 0,
       menuY: 0,
@@ -28,7 +28,7 @@ export default {
   watch: { 
     track: {
       handler(newVal, oldVal) { 
-        this.noteABC = this.track ? this.track.getHighHatState(this.noteIndex, "ABC") : constant_ABC_OFF;              
+        this.noteABC = editor.track ? editor.track.getInstrumentState(Instruments.HIGH_HAT, this.noteIndex) : constant_ABC_OFF;              
       },
       deep: true
     },    
@@ -68,7 +68,7 @@ export default {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_HH_Normal
         if (this.midiPlayer && newMode === constant_ABC_HH_Normal) this.midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_NORMAL);                
-        editor.track.setHighHatState(this.noteIndex, newMode, true);  
+        editor.track.setInstrumentState(Instruments.HIGH_HAT, this.noteIndex, newMode);  
     },
     handleRightClick(event) {
         eventBus.$emit('close-all-menus');
@@ -81,14 +81,14 @@ export default {
         if (event.ctrlKey) action = "on";
         if (event.altKey) action = "off";  
         if (action)
-          editor.track.setHighHatState(this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_HH_Normal, true);          
+          editor.track.setInstrumentState(Instruments.HIGH_HAT, this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_HH_Normal);          
     },
     handleAction(action) {
       if (this.midiPlayer) {
         let note = this.noteConfig[action]?.midiNote;        
         if (note) this.midiPlayer.playSingleNote(note);                
       }      
-      editor.track.setHighHatState(this.noteIndex, action, true);  
+      editor.track.setInstrumentState(Instruments.HIGH_HAT, this.noteIndex, action);  
       this.isPopupOpen = false;
     },
   },

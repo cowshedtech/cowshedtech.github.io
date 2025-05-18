@@ -66,7 +66,7 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
 
     // notes
     var total_notes = track.notesPerMeasure * track.numberOfMeasures;
-    var HH = "&H=|" + tabLineFromAbcNoteArray('H', track.hh_array, true, true, total_notes, track.notesPerMeasure);
+    var HH = "&H=|" + tabLineFromAbcNoteArray('H', track.getInstrumentNotes(Instruments.HIGH_HAT), true, true, total_notes, track.notesPerMeasure);
     var Snare = "&S=|" + tabLineFromAbcNoteArray('S', track.snare_array, true, true, total_notes, track.notesPerMeasure);
     var Kick = "&K=|" + tabLineFromAbcNoteArray('K', track.kick_array, true, true, total_notes, track.notesPerMeasure);
 
@@ -188,7 +188,7 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     }
 
     track.sticking_array = noteArraysFromURLData("Stickings", stickingsString, track.notesPerMeasure, track.numberOfMeasures);
-    track.hh_array = noteArraysFromURLData("H", highhatString, track.notesPerMeasure, track.numberOfMeasures);
+    track.setInstrumentNotes(Instruments.HIGH_HAT, noteArraysFromURLData("H", highhatString, track.notesPerMeasure, track.numberOfMeasures));
     track.snare_array = noteArraysFromURLData("S", snareString, track.notesPerMeasure, track.numberOfMeasures);
     track.kick_array = noteArraysFromURLData("K", kickString, track.notesPerMeasure, track.numberOfMeasures);
 
