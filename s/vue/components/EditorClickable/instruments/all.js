@@ -74,7 +74,7 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
             Toms_Array[3][array_index] = editor.track.getTomState(4, i + startIndexForClickableUI, "ABC");
         }
 
-        Snare_Array[array_index] = editor.track.getSnareState(i + startIndexForClickableUI, "ABC");
+        Snare_Array[array_index] = editor.track.getInstrumentState(Instruments.HIGH_HAT, i + startIndexForClickableUI);
 
         Kick_Array[array_index] = editor.track.getKickState(i + startIndexForClickableUI, "ABC");
     }

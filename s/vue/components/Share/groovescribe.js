@@ -61,8 +61,8 @@ function getGSUrlStringFromGrooveData(track, url_destination) {
 
     // notes
     var total_notes = track.notesPerMeasure * track.numberOfMeasures;
-    var HH = "&H=|" + tabLineFromAbcNoteArray('H', track.hh_array, true, true, total_notes, track.notesPerMeasure);
-    var Snare = "&S=|" + tabLineFromAbcNoteArray('S', track.snare_array, true, true, total_notes, track.notesPerMeasure);
+    var HH = "&H=|" + tabLineFromAbcNoteArray('H', track.getInstrumentNotes(Instruments.HIGH_HAT), true, true, total_notes, track.notesPerMeasure);
+    var Snare = "&S=|" + tabLineFromAbcNoteArray('S', track.getInstrumentNotes(Instruments.SNARE), true, true, total_notes, track.notesPerMeasure);
     var Kick = "&K=|" + tabLineFromAbcNoteArray('K', track.kick_array, true, true, total_notes, track.notesPerMeasure);
 
     fullURL += HH + Snare + Kick;

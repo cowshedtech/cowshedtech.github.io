@@ -56,10 +56,11 @@ function Track() {
 		this.notes = new Map();
 		this.notes.set(Instruments.STICKING, Array(32).fill(constant_ABC_STICK_OFF));
 		this.notes.set(Instruments.HIGH_HAT, Array(32).fill(constant_ABC_OFF));
+		this.notes.set(Instruments.SNARE, Array(32).fill(constant_ABC_OFF));
 			
 		this.sticking_array = class_empty_note_array.slice(0); // copy by value
 		// this.hh_array = class_empty_note_array.slice(0);    // copy by value
-		this.snare_array = class_empty_note_array.slice(0); // copy by value
+		// this.snare_array = class_empty_note_array.slice(0); // copy by value
 		this.kick_array = class_empty_note_array.slice(0);  // copy by value
 		// toms_array contains 4 toms  T1, T2, T3, T4 index starting at zero
 		this.toms_array = [class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0)];
@@ -133,7 +134,21 @@ function Track() {
      * Notifies all registered handlers of a change
      */
     root.setStickingStateNoNotify = function(id, new_state) {
-		this.setInstrumentState(Instruments.STICKING, id, new_state);		
+		this.setInstrumentStateNoNotify(Instruments.STICKING, id, new_state);		
+	}
+
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.setHighHatStateNoNotify = function(id, mode) {
+		this.setInstrumentStateNoNotify(Instruments.HIGH_HAT, id, mode);		
+	}
+
+	/*
+	 *
+	 */
+	root.setSnareStateNoNotify = function(id, mode, make_sound) {
+		this.setInstrumentStateNoNotify(Instruments.SNARE, id, mode);				
 	}
 	
 	/*
@@ -150,48 +165,7 @@ function Track() {
 	// 	}		
 	// }
 
-	/*
-	 *
-	 */
-	// root.getHighHatState = function(id, returnType) {
-
-	// 	let abcState = this.hh_array[id] ? this.hh_array[id] : constant_ABC_OFF;
-	// 	let result = abcState;
-		
-	// 	if (returnType == "URL")
-	// 	{
-	// 		if (abcState === constant_ABC_HH_Ride) returnType = "r";
-	// 		if (abcState === constant_ABC_HH_Ride_Bell) returnType = "b";
-	// 		if (abcState === constant_ABC_HH_Cow_Bell) returnType = "m";
-	// 		if (abcState === constant_ABC_HH_Crash) returnType = "c";
-	// 		if (abcState === constant_ABC_HH_Stacker) returnType = "s";
-	// 		if (abcState === constant_ABC_HH_Metronome_Normal) returnType = "n";
-	// 		if (abcState === constant_ABC_HH_Metronome_Accent) returnType = "N";
-	// 		if (abcState === constant_ABC_HH_Open) returnType = "o";
-	// 		if (abcState === constant_ABC_HH_Close) returnType = "+";
-	// 		if (abcState === constant_ABC_HH_Accent) returnType = "X";
-	// 		if (abcState === constant_ABC_HH_Normal) returnType = "x";
-	// 	}
 	
-	// 	return result;        
-	// }
-
-
-	/*
-	 *
-	 */
-	// root.setHighHatState = function(id, mode, make_sound) {
-	// 	this.hh_array[id] = mode;	
-	// 	window.eventBus.$emit('track-updated');
-	// }
-
-	/**
-     * Notifies all registered handlers of a change
-     */
-    root.setHighHatStateNoNotify = function(id, mode) {
-		// this.hh_array[id] = mode;			
-		this.setInstrumentState(Instruments.HIGH_HAT, id, mode);		
-	}
 
 
 	/*
@@ -219,41 +193,27 @@ function Track() {
 	/*
 	 *
 	 */
-	root.getSnareState = function(id, returnType) {
+	// root.getSnareState = function(id, returnType) {
 
-		let abcState = this.snare_array[id] ? this.snare_array[id] : constant_ABC_OFF;
-		let result = abcState;
+	// 	let abcState = this.snare_array[id] ? this.snare_array[id] : constant_ABC_OFF;
+	// 	let result = abcState;
 		
-		if (returnType == "URL")
-		{
-			if (abcState === constant_ABC_SN_Flam) returnType = "f";
-			if (abcState === constant_ABC_SN_Drag) returnType = "d";
-			if (abcState === constant_ABC_SN_Ghost) returnType = "g";
-			if (abcState === constant_ABC_SN_Accent) returnType = "O";
-			if (abcState === constant_ABC_SN_Normal) returnType = "o";
-			if (abcState === constant_ABC_SN_XStick) returnType = "x";
-			if (abcState === constant_ABC_SN_Buzz) returnType = "b";
-		}
+	// 	if (returnType == "URL")
+	// 	{
+	// 		if (abcState === constant_ABC_SN_Flam) returnType = "f";
+	// 		if (abcState === constant_ABC_SN_Drag) returnType = "d";
+	// 		if (abcState === constant_ABC_SN_Ghost) returnType = "g";
+	// 		if (abcState === constant_ABC_SN_Accent) returnType = "O";
+	// 		if (abcState === constant_ABC_SN_Normal) returnType = "o";
+	// 		if (abcState === constant_ABC_SN_XStick) returnType = "x";
+	// 		if (abcState === constant_ABC_SN_Buzz) returnType = "b";
+	// 	}
 	
-		return result;        
-	}
+	// 	return result;        
+	// }
 	
 
-	/*
-	 *
-	 */
-	root.setSnareState = function(id, mode, make_sound) {
-		this.snare_array[id] = mode;	
-		
-		window.eventBus.$emit('track-updated');
-	}
-
-	/*
-	 *
-	 */
-	root.setSnareStateNoNotify = function(id, mode, make_sound) {
-		this.snare_array[id] = mode;			
-	}
+	
 
 	/**
      * Notifies all registered handlers of a change

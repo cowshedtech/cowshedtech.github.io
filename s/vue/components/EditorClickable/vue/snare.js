@@ -21,7 +21,7 @@ export default {
 
   data() {
     return {
-      noteABC: this.track ? this.track.getSnareState(this.noteIndex, "ABC") : constant_ABC_OFF,
+      noteABC: editor.track ? editor.track.getInstrumentState(Instruments.SNARE, this.noteIndex) : constant_ABC_OFF,
       isPopupOpen: false,
       menuX: 0,
       menuY: 0,
@@ -31,7 +31,7 @@ export default {
   watch: { 
     track: {
       handler(newVal, oldVal) { 
-        this.noteABC = this.track ? this.track.getSnareState(this.noteIndex, "ABC") : constant_ABC_OFF
+        this.noteABC = editor.track ? editor.track.getInstrumentState(Instruments.SNARE, this.noteIndex) : constant_ABC_OFF
       },
       deep: true
     },    
@@ -87,7 +87,7 @@ export default {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_SN_Accent
         if (this.midiPlayer && newMode === constant_ABC_SN_Accent) this.midiPlayer.playSingleNote(constant_OUR_MIDI_SNARE_ACCENT);                
-        editor.track.setSnareState(this.noteIndex, newMode, true);        
+        editor.track.setInstrumentState(Instruments.SNARE, this.noteIndex, newMode);        
     },
     handleRightClick(event) {
       eventBus.$emit('close-all-menus');
@@ -100,10 +100,10 @@ export default {
       if (event.ctrlKey) action = "on";
       if (event.altKey) action = "off";  
       if (action)
-        editor.track.setSnareState(this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_SN_Accent, true);    
+        editor.track.setInstrumentState(Instruments.SNARE, this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_SN_Accent);    
     },
     handleAction(action) {
-      editor.track.setSnareState(this.noteIndex, action, true);  
+      editor.track.setInstrumentState(Instruments.SNARE, this.noteIndex, action);  
       if (this.midiPlayer) {
         let note = this.noteConfig[action]?.midiNote;        
         if (note) this.midiPlayer.playSingleNote(note);                
