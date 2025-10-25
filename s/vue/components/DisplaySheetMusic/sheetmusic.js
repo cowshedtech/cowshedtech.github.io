@@ -40,8 +40,9 @@ class SheetMusic {
         var abc_source = generate_ABC(renderWidth);    
         var svg_return = renderABCtoSVG(editor.track, abc_source);
 
-        var diverr = document.getElementById("diverr");
-        diverr.innerHTML = svg_return.error_html;        
+        // TODO
+        // var diverr = document.getElementById("diverr");
+        // diverr.innerHTML = svg_return.error_html;        
         
         // this.setSVG()    
         this.#svg = svg_return.svg;

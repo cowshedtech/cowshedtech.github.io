@@ -57,10 +57,12 @@ function Track() {
 		this.notes.set(Instruments.STICKING, Array(32).fill(constant_ABC_STICK_OFF));
 		this.notes.set(Instruments.HIGH_HAT, Array(32).fill(constant_ABC_OFF));
 		this.notes.set(Instruments.SNARE, Array(32).fill(constant_ABC_OFF));
-			
-		this.sticking_array = class_empty_note_array.slice(0); // copy by value
-		// this.hh_array = class_empty_note_array.slice(0);    // copy by value
-		// this.snare_array = class_empty_note_array.slice(0); // copy by value
+		this.notes.set(Instruments.KICK, Array(32).fill(constant_ABC_OFF));
+		this.notes.set(Instruments.TOM1, Array(32).fill(constant_ABC_OFF));
+		this.notes.set(Instruments.TOM4, Array(32).fill(constant_ABC_OFF));
+
+		// this.sticking_array = class_empty_note_array.slice(0); // copy by value
+		this.snare_array = class_empty_note_array.slice(0); // copy by value
 		this.kick_array = class_empty_note_array.slice(0);  // copy by value
 		// toms_array contains 4 toms  T1, T2, T3, T4 index starting at zero
 		this.toms_array = [class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0)];
@@ -126,8 +128,42 @@ function Track() {
 	/*
 	 *
 	 */
+	root.getInstrumentNotesSlice = function(instrument, start, end) {
+		return this.notes.get(instrument).slice(start, end);
+	}
+
+	/*
+	 *
+	 */
 	root.setInstrumentNotes = function(instrument, notes) {
 		return this.notes.set(instrument, notes);
+	}
+
+	/*
+	 *
+	 */
+	root.insertInstrumentNotes = function(instrument, insertIndex, notes) {
+		let existingNotes = this.notes.get(instrument)
+		existingNotes.splice(insertIndex, 0, notes);
+		this.notes.set(instrument, existingNotes)	
+	}
+
+	/*
+	 *
+	 */
+	root.appendInstrumentNotes = function(instrument, notes) {
+		let existingNotes = this.notes.get(instrument)
+		existingNotes.push(notes);
+		this.notes.set(instrument, existingNotes)	
+	}
+
+	/*
+	 *
+	 */
+	root.deleteInstrumentNotes = function(instrument, start, count) {
+		let notes = this.notes.get(instrument);
+		notes.splice(start, count);
+		this.notes.set(instrument);
 	}
 
 	/**
@@ -188,31 +224,6 @@ function Track() {
 	
 		return retString;
 	};
-	
-
-	/*
-	 *
-	 */
-	// root.getSnareState = function(id, returnType) {
-
-	// 	let abcState = this.snare_array[id] ? this.snare_array[id] : constant_ABC_OFF;
-	// 	let result = abcState;
-		
-	// 	if (returnType == "URL")
-	// 	{
-	// 		if (abcState === constant_ABC_SN_Flam) returnType = "f";
-	// 		if (abcState === constant_ABC_SN_Drag) returnType = "d";
-	// 		if (abcState === constant_ABC_SN_Ghost) returnType = "g";
-	// 		if (abcState === constant_ABC_SN_Accent) returnType = "O";
-	// 		if (abcState === constant_ABC_SN_Normal) returnType = "o";
-	// 		if (abcState === constant_ABC_SN_XStick) returnType = "x";
-	// 		if (abcState === constant_ABC_SN_Buzz) returnType = "b";
-	// 	}
-	
-	// 	return result;        
-	// }
-	
-
 	
 
 	/**
@@ -445,11 +456,12 @@ function Track() {
 		this.repeatedMeasures.clear();
 		this.numberOfMeasures = 1;
 		this.sticking_array = Array(this.notesPerMeasure).fill(false).slice(0);
-		this.setInstrumentNotes(Instruments.HIGH_HAT, Array(this.notesPerMeasure).fill(false).slice(0))
-		// this.hh_array = Array(this.notesPerMeasure).fill(false).slice(0);   
-		this.snare_array = Array(this.notesPerMeasure).fill(false).slice(0);
-		this.kick_array = Array(this.notesPerMeasure).fill(false).slice(0); 
-		this.toms_array = [Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0), Array(this.notesPerMeasure).fill(false).slice(0)];
+		this.setInstrumentNotes(Instruments.STICKING, Array(this.notesPerMeasure).fill(constant_ABC_STICK_OFF))
+		this.setInstrumentNotes(Instruments.HIGH_HAT, Array(this.notesPerMeasure).fill(constant_ABC_STICK_OFF))
+		this.setInstrumentNotes(Instruments.SNARE, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		this.setInstrumentNotes(Instruments.KICK, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		this.setInstrumentNotes(Instruments.TOM1, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		this.setInstrumentNotes(Instruments.TOM4, Array(this.notesPerMeasure).fill(constant_ABC_OFF))		
 				
 		window.eventBus.$emit('track-updated');
 	}
@@ -470,19 +482,16 @@ function Track() {
 	 */
 	root.addMeasure = function(measureNum) {
 		var insertIndex = (measureNum) * editor.track.notesPerMeasure
-		this.sticking_array.splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
-		this.hh_array.splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
-		this.snare_array.splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
-		this.kick_array.splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
-		this.toms_array[0].splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
-		this.toms_array[1].splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
-		this.toms_array[2].splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
-		this.toms_array[3].splice(insertIndex, 0 , ...Array(this.notesPerMeasure).fill(false).slice(0));
+		this.insertInstrumentNotes(Instruments.STICKING, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_STICK_OFF))
+		this.insertInstrumentNotes(Instruments.HIGH_HAT, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_STICK_OFF))
+		this.insertInstrumentNotes(Instruments.SNARE, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		this.insertInstrumentNotes(Instruments.KICK, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		this.insertInstrumentNotes(Instruments.TOM1, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		this.insertInstrumentNotes(Instruments.TOM4, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		editor.track.numberOfMeasures++;
 
 		// We need to move all the repeated measuresafter this measure up 1 
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
-
 		
 		window.eventBus.$emit('track-updated');
 	};
@@ -494,21 +503,18 @@ function Track() {
 
 		const measureStart = (measureNum - 1) * this.notesPerMeasure;
 		const measureEnd = measureStart + this.notesPerMeasure;
-		this.sticking_array.splice(measureEnd, 0 , ...this.sticking_array.slice(measureStart, measureEnd));
-		this.hh_array.splice(measureEnd, 0 , ...this.hh_array.slice(measureStart, measureEnd));
-		this.snare_array.splice(measureEnd, 0 , ...this.snare_array.slice(measureStart, measureEnd));
-		this.kick_array.splice(measureEnd, 0 , ...this.kick_array.slice(measureStart, measureEnd));
-		this.toms_array[0].splice(measureEnd, 0 , ...this.toms_array[0].slice(measureStart, measureEnd));
-		this.toms_array[1].splice(measureEnd, 0 , ...this.toms_array[1].slice(measureStart, measureEnd));
-		this.toms_array[2].splice(measureEnd, 0 , ...this.toms_array[2].slice(measureStart, measureEnd));
-		this.toms_array[3].splice(measureEnd, 0 , ...this.toms_array[3].slice(measureStart, measureEnd));
-	
+		this.insertInstrumentNotes(Instruments.STICKING, measureEnd, this.getInstrumentNotesSlice(Instruments.STICKING, measureStart, measureEnd))
+		this.insertInstrumentNotes(Instruments.HIGH_HAT, measureEnd, this.getInstrumentNotesSlice(Instruments.HIGH_HAT, measureStart, measureEnd));			
+		this.insertInstrumentNotes(Instruments.SNARE, measureEnd, this.getInstrumentNotesSlice(Instruments.SNARE, measureStart, measureEnd));			
+		this.insertInstrumentNotes(Instruments.KICK, measureEnd, this.getInstrumentNotesSlice(Instruments.KICK, measureStart, measureEnd));			
+		this.insertInstrumentNotes(Instruments.TOM1, measureEnd, this.getInstrumentNotesSlice(Instruments.TOM1, measureStart, measureEnd));			
+		this.insertInstrumentNotes(Instruments.TOM4, measureEnd, this.getInstrumentNotesSlice(Instruments.TOM4, measureStart, measureEnd));			
+		
 		// Update measure count and repeated measures
 		this.numberOfMeasures++;
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 		this.repeatedMeasures.set(measureNum, this.repeatedMeasures.get(measureNum - 1) || 1);
-	
-		
+			
 		window.eventBus.$emit('track-updated');
 	};
 
@@ -517,15 +523,14 @@ function Track() {
      */
     root.deleteMeasure = function(measureNum) {
 		const measureStart = (measureNum - 1) * this.notesPerMeasure;
-		this.sticking_array.splice(measureStart, this.notesPerMeasure);
-		this.hh_array.splice(measureStart, this.notesPerMeasure);
-		this.snare_array.splice(measureStart, this.notesPerMeasure);
-		this.kick_array.splice(measureStart, this.notesPerMeasure);
-		this.toms_array[0].splice(measureStart, this.notesPerMeasure);
-		this.toms_array[1].splice(measureStart, this.notesPerMeasure);
-		this.toms_array[2].splice(measureStart, this.notesPerMeasure);
-		this.toms_array[3].splice(measureStart, this.notesPerMeasure);
 		
+		this.deleteInstrumentNotes(Instruments.STICKING, measureStart, this.notesPerMeasure)
+		this.deleteInstrumentNotes(Instruments.HIGH_HAT, measureStart, this.notesPerMeasure)
+		this.deleteInstrumentNotes(Instruments.SNARE, measureStart, this.notesPerMeasure)
+		this.deleteInstrumentNotes(Instruments.HIGH_HAT, measureStart, this.notesPerMeasure)
+		this.deleteInstrumentNotes(Instruments.TOM1, measureStart, this.notesPerMeasure)
+		this.deleteInstrumentNotes(Instruments.TOM4, measureStart, this.notesPerMeasure)
+
 		this.repeatedMeasures.delete(measureNum - 1);
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
 		this.numberOfMeasures--;
@@ -584,27 +589,23 @@ function Track() {
 		if (isOldDivisionTriplets !== isNewDivisionTriplets) {
 			// changing from or changing to a triplet division
 			// triplets don't scale well, so use defaults when we change
-			this.sticking_array = noteArraysFromURLData("Stickings", this.getEmptyGroove(), this.notesPerMeasure, this.numberOfMeasures);
+			this.setInstrumentNotes(Instruments.STICKING, noteArraysFromURLData("Stickings", this.getEmptyGroove(), this.notesPerMeasure, this.numberOfMeasures));
 			this.setInstrumentNotes(Instruments.HIGH_HAT, noteArraysFromURLData("H", this.getDefaultHHGroove(), this.notesPerMeasure, this.numberOfMeasures))
-			// this.hh_array = noteArraysFromURLData("H", this.getDefaultHHGroove(), this.notesPerMeasure, this.numberOfMeasures);
-			this.snare_array = noteArraysFromURLData("S", this.getDefaultSnareGroove(this.notesPerMeasure, this.numBeats, this.noteValue, this.numberOfMeasures), this.notesPerMeasure, this.numberOfMeasures);
-			this.kick_array = noteArraysFromURLData("K", this.getDefaultKickGroove(), this.notesPerMeasure, this.numberOfMeasures);
-			this.toms_array[0] = noteArraysFromURLData("T1", this.getEmptyGroove(), this.notesPerMeasure, this.numberOfMeasures);
-			this.toms_array[3] = noteArraysFromURLData("T4", this.getEmptyGroove(), this.notesPerMeasure, this.numberOfMeasures);
+			this.setInstrumentNotes(Instruments.SNARE, noteArraysFromURLData("S", this.getDefaultSnareGroove(this.notesPerMeasure, this.numBeats, this.noteValue, this.numberOfMeasures), this.notesPerMeasure, this.numberOfMeasures));
+			this.setInstrumentNotes(Instruments.KICK, noteArraysFromURLData("K", this.getDefaultKickGroove(), this.notesPerMeasure, this.numberOfMeasures));
+			this.setInstrumentNotes(Instruments.TOM1, noteArraysFromURLData("T1", this.getEmptyGroove(), this.notesPerMeasure, this.numberOfMeasures));
+			this.setInstrumentNotes(Instruments.TOM4, noteArraysFromURLData("T4", this.getEmptyGroove(), this.notesPerMeasure, this.numberOfMeasures));
 
 			// reset the metronome click, since it has different options
 			// metronome.resetOptionsMenuOffsetClick();
 		}
 
-		this.sticking_array = this.adjustNotesForNewDivision(this.sticking_array)
-		// this.hh_array = this.adjustNotesForNewDivision(this.hh_array)
-		let adjustnedNotes = this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.HIGH_HAT))
-		this.setInstrumentNotes(Instruments.HIGH_HAT, adjustnedNotes)
-		this.snare_array = this.adjustNotesForNewDivision(this.snare_array)
-		this.kick_array = this.adjustNotesForNewDivision(this.kick_array)
-		this.toms_array[0] = this.adjustNotesForNewDivision(this.toms_array[0])
-		this.toms_array[3] = this.adjustNotesForNewDivision(this.toms_array[3])
-
+		this.setInstrumentNotes(Instruments.STICKING, this.adjustNotesForNewDivision(this.sticking_array))
+		this.setInstrumentNotes(Instruments.HIGH_HAT, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.HIGH_HAT)))
+		this.setInstrumentNotes(Instruments.SNARE, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.SNARE)))
+		this.setInstrumentNotes(Instruments.KICK, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.KICK)))
+		this.setInstrumentNotes(Instruments.TOM1, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM1)))
+		this.setInstrumentNotes(Instruments.TOM3, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM3)))
 			
 		window.eventBus.$emit('track-updated');
 	};
@@ -708,11 +709,13 @@ function Track() {
 	root.appendTrack = function(track) {
 
 		this.sticking_array.push(...track.sticking_array)
-		this.hh_array.push(...track.hh_array)
-		this.snare_array.push(...track.snare_array)
-		this.kick_array.push(...track.kick_array)
-		this.toms_array[0].push(...track.toms_array[0])
-		this.toms_array[3].push(...track.toms_array[3])
+
+		this.appendInstrumentNotes(Instruments.STICKING, track.getInstrumentNotes(Instruments.STICKING));	
+		this.appendInstrumentNotes(Instruments.HIGH_HAT, track.getInstrumentNotes(Instruments.HIGH_HAT));
+		this.appendInstrumentNotes(Instruments.SNARE, track.getInstrumentNotes(Instruments.SNARE));
+		this.appendInstrumentNotes(Instruments.KICK, track.getInstrumentNotes(Instruments.KICK));
+		this.appendInstrumentNotes(Instruments.TOM1, track.getInstrumentNotes(Instruments.TOM1));
+		this.appendInstrumentNotes(Instruments.TOM4, track.getInstrumentNotes(Instruments.TOM4));
 		
 		for (let measureIndex of track.repeatedMeasures.keys()) {
 			this.repeatedMeasures.set(this.numberOfMeasures + measureIndex, track.repeatedMeasures.get(measureIndex))
