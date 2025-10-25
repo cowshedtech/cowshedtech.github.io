@@ -19,7 +19,7 @@ export default {
 
   data() {
     return {
-      noteABC: this.track ? this.track.getKickState(this.noteIndex, "ABC") : constant_ABC_OFF,
+      noteABC: editor.track ? editor.track.getInstrumentState(Instruments.KICK, this.noteIndex) : constant_ABC_OFF,
       constants: {
         KICK_OFF: constant_ABC_OFF,
         KICK_NORMAL: constant_ABC_KI_Normal,
@@ -35,7 +35,7 @@ export default {
   watch: { 
     track: {
       handler(newVal, oldVal) { 
-        this.noteABC = this.track ? this.track.getKickState(this.noteIndex, "ABC") : constant_ABC_OFF;              
+        this.noteABC = editor.track ? editor.track.getInstrumentState(Instruments.KICK, this.noteIndex) : constant_ABC_OFF;              
       },
       deep: true
     },    
@@ -45,7 +45,7 @@ export default {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_KI_Normal
         if (this.midiPlayer && newMode === constant_ABC_KI_Normal) this.midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);                
-        editor.track.setKickState(this.noteIndex, newMode, true);                
+        editor.track.setInstrumentState(Instruments.KICK, this.noteIndex, newMode);           
     },
     handleRightClick(event) {
       eventBus.$emit('close-all-menus');
@@ -58,10 +58,10 @@ export default {
       if (event.ctrlKey) action = "on";
       if (event.altKey) action = "off";  
       if (action) 
-        editor.track.setKickState(this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_KI_Normal, true);     
+        editor.track.setInstrumentState(Instruments.KICK, this.noteIndex,  action == "off" ? constant_ABC_OFF : constant_ABC_KI_Normal);           
     },
     handleAction(action) {
-      editor.track.setKickState(this.noteIndex, action, true);  
+      editor.track.setInstrumentState(Instruments.KICK, this.noteIndex, action);           
       if (this.midiPlayer) {
         if (action === constant_ABC_KI_Normal) midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
         if (action === constant_ABC_KI_Splash) midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);

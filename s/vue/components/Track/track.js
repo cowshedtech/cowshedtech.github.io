@@ -61,10 +61,6 @@ function Track() {
 		this.notes.set(Instruments.TOM1, Array(32).fill(constant_ABC_OFF));
 		this.notes.set(Instruments.TOM4, Array(32).fill(constant_ABC_OFF));
 
-		// this.sticking_array = class_empty_note_array.slice(0); // copy by value
-		this.snare_array = class_empty_note_array.slice(0); // copy by value
-		this.kick_array = class_empty_note_array.slice(0);  // copy by value
-		// toms_array contains 4 toms  T1, T2, T3, T4 index starting at zero
 		this.toms_array = [class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0)];
 		this.title = "";
 		this.author = "";
@@ -190,6 +186,13 @@ function Track() {
 	/*
 	 *
 	 */
+	root.setKickStateNoNotify = function(id, mode, make_sound) {
+		this.setInstrumentStateNoNotify(Instruments.KICK, id, mode);				
+	}
+
+	/*
+	 *
+	 */
 	// root.stickingsReverseRL = function() {
 	// 	for (var i = 0; i < this.numberOfMeasures * this.notesPerMeasure; i++) {
 	// 		var cur_state = this.getStickingState(i, "URL");
@@ -255,36 +258,22 @@ function Track() {
 	/*
 	 *
 	 */
-	root.getKickState = function(id, returnType) {
+	// root.getKickState = function(id, returnType) {
 
-		let abcState = this.kick_array[id] ? this.kick_array[id] : constant_ABC_OFF;
-		let result = abcState;
+	// 	let abcState = this.kick_array[id] ? this.kick_array[id] : constant_ABC_OFF;
+	// 	let result = abcState;
 		
-		if (returnType == "URL")
-		{
-			if (abcState === constant_ABC_KI_SandK) returnType = "X";
-			if (abcState === constant_ABC_KI_Splash) returnType = "x";
-			if (abcState === constant_ABC_KI_Normal) returnType = "o";        
-		}
+	// 	if (returnType == "URL")
+	// 	{
+	// 		if (abcState === constant_ABC_KI_SandK) returnType = "X";
+	// 		if (abcState === constant_ABC_KI_Splash) returnType = "x";
+	// 		if (abcState === constant_ABC_KI_Normal) returnType = "o";        
+	// 	}
 	
-		return result;        
-	}
+	// 	return result;        
+	// }
 	
-	/*
-	 *
-	 */
-	root.setKickState = function(id, mode, make_sound) {
-		this.kick_array[id] = mode;		
-			
-		window.eventBus.$emit('track-updated');
-	}
-
-	/*
-	 *
-	 */
-	root.setKickStateNoNotify = function(id, mode, make_sound) {
-		this.kick_array[id] = mode;		
-	}
+	
 
 
 	/*

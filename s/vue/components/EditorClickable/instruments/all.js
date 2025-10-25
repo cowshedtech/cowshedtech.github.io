@@ -75,8 +75,8 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
         }
 
         Snare_Array[array_index] = editor.track.getInstrumentState(Instruments.SNARE, i + startIndexForClickableUI);
+        Kick_Array[array_index] = editor.track.getInstrumentState(Instruments.KICK, i + startIndexForClickableUI);       
 
-        Kick_Array[array_index] = editor.track.getKickState(i + startIndexForClickableUI, "ABC");
     }
 
     var num_notes = Snare_Array.length;
