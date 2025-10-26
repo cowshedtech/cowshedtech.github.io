@@ -63,20 +63,20 @@ function getGSUrlStringFromGrooveData(track, url_destination) {
     var total_notes = track.notesPerMeasure * track.numberOfMeasures;
     var HH = "&H=|" + tabLineFromAbcNoteArray('H', track.getInstrumentNotes(Instruments.HIGH_HAT), true, true, total_notes, track.notesPerMeasure);
     var Snare = "&S=|" + tabLineFromAbcNoteArray('S', track.getInstrumentNotes(Instruments.SNARE), true, true, total_notes, track.notesPerMeasure);
-    var Kick = "&K=|" + tabLineFromAbcNoteArray('K', track.kick_array, true, true, total_notes, track.notesPerMeasure);
+    var Kick = "&K=|" + tabLineFromAbcNoteArray('K', track.getInstrumentNotes(Instruments.KICK), true, true, total_notes, track.notesPerMeasure);
 
     fullURL += HH + Snare + Kick;
 
     // only add if we need them.  // they are long and ugly. :)
     if (options.areTomsVisible()) {
-        var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', track.toms_array[0], true, true, total_notes, track.notesPerMeasure);
-        var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', track.toms_array[3], true, true, total_notes, track.notesPerMeasure);
+        var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', track.getInstrumentNotes(Instruments.TOM1), true, true, total_notes, track.notesPerMeasure);
+        var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', track.getInstrumentNotes(Instruments.TOM4), true, true, total_notes, track.notesPerMeasure);
         fullURL += Tom1 + Tom4;
     }
 
     // only add if we need them.  // they are long and ugly. :)
     if (options.isStickingVisible()) {
-        var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', track.sticking_array, true, true, total_notes, track.notesPerMeasure);
+        var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', track.getInstrumentNotes(Instruments.STICKING), true, true, total_notes, track.notesPerMeasure);
         fullURL += Stickings;
     }
 

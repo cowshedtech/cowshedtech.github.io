@@ -61,7 +61,6 @@ function Track() {
 		this.notes.set(Instruments.TOM1, Array(32).fill(constant_ABC_OFF));
 		this.notes.set(Instruments.TOM4, Array(32).fill(constant_ABC_OFF));
 
-		// this.toms_array = [class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0)];
 		this.title = "";
 		this.author = "";
 		this.comments = "";
