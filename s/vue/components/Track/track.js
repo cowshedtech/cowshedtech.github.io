@@ -139,7 +139,7 @@ function Track() {
 	 */
 	root.insertInstrumentNotes = function(instrument, insertIndex, notes) {
 		let existingNotes = this.notes.get(instrument)
-		existingNotes.splice(insertIndex, 0, notes);
+		existingNotes.splice(insertIndex, 0, ...notes);
 		this.notes.set(instrument, existingNotes)	
 	}
 
