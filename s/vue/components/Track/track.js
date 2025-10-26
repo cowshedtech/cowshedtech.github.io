@@ -148,7 +148,7 @@ function Track() {
 	 */
 	root.appendInstrumentNotes = function(instrument, notes) {
 		let existingNotes = this.notes.get(instrument)
-		existingNotes.push(notes);
+		existingNotes = existingNotes.concat(notes);
 		this.notes.set(instrument, existingNotes)	
 	}
 
@@ -391,12 +391,12 @@ function Track() {
 	 */
 	root.addMeasure = function(measureNum) {
 		var insertIndex = (measureNum) * editor.track.notesPerMeasure
-		this.insertInstrumentNotes(Instruments.STICKING, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_STICK_OFF))
-		this.insertInstrumentNotes(Instruments.HIGH_HAT, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_STICK_OFF))
-		this.insertInstrumentNotes(Instruments.SNARE, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.insertInstrumentNotes(Instruments.KICK, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.insertInstrumentNotes(Instruments.TOM1, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.insertInstrumentNotes(Instruments.TOM4, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		this.appendInstrumentNotes(Instruments.STICKING, Array(this.notesPerMeasure).fill(constant_ABC_STICK_OFF))
+		this.appendInstrumentNotes(Instruments.HIGH_HAT, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		this.appendInstrumentNotes(Instruments.SNARE, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		this.appendInstrumentNotes(Instruments.KICK, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		this.appendInstrumentNotes(Instruments.TOM1, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		this.appendInstrumentNotes(Instruments.TOM4, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		editor.track.numberOfMeasures++;
 
 		// We need to move all the repeated measuresafter this measure up 1 
