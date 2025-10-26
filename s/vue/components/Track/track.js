@@ -86,7 +86,7 @@ function Track() {
 	 */
 	root.setInstrumentState = function(instrument, id, new_state) {
 		this.notes.get(instrument)[id] = new_state;		
-		window.eventBus.$emit('track-updated');
+		this.notify();
 	}
 
 	/*
@@ -315,8 +315,7 @@ function Track() {
      */
     root.setTitle = function(title) {
 		this.title = title;
-		
-		window.eventBus.$emit('track-updated');
+		this.notify();
 	}
 
 	/**
@@ -331,8 +330,7 @@ function Track() {
      */
     root.setAuthor = function(author) {
 		this.author = author;
-		
-		window.eventBus.$emit('track-updated');
+		this.notify();		
 	}
 
 	/**
@@ -347,8 +345,7 @@ function Track() {
      */
     root.setComments = function(comments) {
 		this.comments = comments;
-		
-		window.eventBus.$emit('track-updated');
+		this.notify();		
 	}
 
 	/**
@@ -372,7 +369,8 @@ function Track() {
 		this.setInstrumentNotes(Instruments.TOM1, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		this.setInstrumentNotes(Instruments.TOM4, Array(this.notesPerMeasure).fill(constant_ABC_OFF))		
 				
-		window.eventBus.$emit('track-updated');
+		// 
+		this.notify();
 	}
 
 	/**
@@ -402,7 +400,7 @@ function Track() {
 		// We need to move all the repeated measuresafter this measure up 1 
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 		
-		window.eventBus.$emit('track-updated');
+		this.notify();
 	};
 
 	/**
@@ -423,8 +421,8 @@ function Track() {
 		this.numberOfMeasures++;
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 		this.repeatedMeasures.set(measureNum, this.repeatedMeasures.get(measureNum - 1) || 1);
-			
-		window.eventBus.$emit('track-updated');
+					
+		this.notify();
 	};
 
 	/**
@@ -444,8 +442,7 @@ function Track() {
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
 		this.numberOfMeasures--;
 
-				
-		window.eventBus.$emit('track-updated');
+		this.notify();
 	}
 
     /**
@@ -454,8 +451,7 @@ function Track() {
     root.repeatMeasureInc = function(measureNum) {
 		const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
 		editor.track.repeatedMeasures.set(measureNum - 1, count + 1);
-				
-		window.eventBus.$emit('track-updated');
+		this.notify();
 	};
 	
 	/**
@@ -464,8 +460,7 @@ function Track() {
     root.repeatMeasureDec = function(measureNum) {
 		const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
 		editor.track.repeatedMeasures.set(measureNum - 1, count - 1);
-				
-		window.eventBus.$emit('track-updated');
+		this.notify();
 	};
 
 	/**
@@ -516,7 +511,7 @@ function Track() {
 		this.setInstrumentNotes(Instruments.TOM1, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM1)))
 		this.setInstrumentNotes(Instruments.TOM3, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM3)))
 			
-		window.eventBus.$emit('track-updated');
+		this.notify();
 	};
 
 	/**
@@ -631,9 +626,8 @@ function Track() {
 		}
 
 		this.numberOfMeasures = this.numberOfMeasures + track.numberOfMeasures;
-
 			
-		window.eventBus.$emit('track-updated');
+		this.notify();
 	}
 	
 
