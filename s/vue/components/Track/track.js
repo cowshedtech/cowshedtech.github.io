@@ -84,21 +84,6 @@ function Track() {
 	/*
 	 *
 	 */
-	root.setInstrumentState = function(instrument, id, new_state) {
-		this.notes.get(instrument)[id] = new_state;		
-		this.notify();
-	}
-
-	/*
-	 *
-	 */
-	root.setInstrumentStateNoNotify = function(instrument, id, new_state) {
-		this.notes.get(instrument)[id] = new_state;
-	}
-
-	/*
-	 *
-	 */
 	root.getInstrumentState = function(instrument, id) {
 	
 		let result = null;
@@ -125,6 +110,21 @@ function Track() {
 	 */
 	root.getInstrumentNotesSlice = function(instrument, start, end) {
 		return this.notes.get(instrument).slice(start, end);
+	}
+	
+	/*
+	 *
+	 */
+	root.setInstrumentState = function(instrument, id, new_state) {
+		this.notes.get(instrument)[id] = new_state;		
+		this.notify();
+	}
+
+	/*
+	 *
+	 */
+	root.setInstrumentStateNoNotify = function(instrument, id, new_state) {
+		this.notes.get(instrument)[id] = new_state;
 	}
 
 	/*
@@ -156,9 +156,9 @@ function Track() {
 	 *
 	 */
 	root.deleteInstrumentNotes = function(instrument, start, count) {
-		let notes = this.notes.get(instrument);
-		notes.splice(start, count);
-		this.notes.set(instrument);
+		let existingNotes = this.notes.get(instrument);
+		existingNotes.splice(start, count);
+		this.notes.set(instrument, existingNotes);
 	}
 
 	/**
@@ -243,7 +243,7 @@ function Track() {
 	
 
 	/**
-     * Notifies all registered handlers of a change
+     * 
      */
     root.getDefaultSnareGroove = function() {
 		var retString = "";
@@ -434,7 +434,7 @@ function Track() {
 		this.deleteInstrumentNotes(Instruments.STICKING, measureStart, this.notesPerMeasure)
 		this.deleteInstrumentNotes(Instruments.HIGH_HAT, measureStart, this.notesPerMeasure)
 		this.deleteInstrumentNotes(Instruments.SNARE, measureStart, this.notesPerMeasure)
-		this.deleteInstrumentNotes(Instruments.HIGH_HAT, measureStart, this.notesPerMeasure)
+		this.deleteInstrumentNotes(Instruments.KICK, measureStart, this.notesPerMeasure)
 		this.deleteInstrumentNotes(Instruments.TOM1, measureStart, this.notesPerMeasure)
 		this.deleteInstrumentNotes(Instruments.TOM4, measureStart, this.notesPerMeasure)
 
