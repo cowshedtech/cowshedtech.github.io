@@ -68,14 +68,14 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
     var total_notes = track.notesPerMeasure * track.numberOfMeasures;
     var HH = "&H=|" + tabLineFromAbcNoteArray('H', track.getInstrumentNotes(Instruments.HIGH_HAT), true, true, total_notes, track.notesPerMeasure);
     var Snare = "&S=|" + tabLineFromAbcNoteArray('S', track.getInstrumentNotes(Instruments.SNARE), true, true, total_notes, track.notesPerMeasure);
-    var Kick = "&K=|" + tabLineFromAbcNoteArray('K', track.kick_array, true, true, total_notes, track.notesPerMeasure);
+    var Kick = "&K=|" + tabLineFromAbcNoteArray('K', track.getInstrumentNotes(Instruments.KICK), true, true, total_notes, track.notesPerMeasure);
 
     fullURL += HH + Snare + Kick;
 
     // only add if we need them.  // they are long and ugly. :)
     if (options.areTomsVisible()) {
-        var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', track.toms_array[0], true, true, total_notes, track.notesPerMeasure);
-        var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', track.toms_array[3], true, true, total_notes, track.notesPerMeasure);
+        var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', track.getInstrumentNotes(Instruments.TOM1), true, true, total_notes, track.notesPerMeasure);
+        var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', track.getInstrumentNotes(Instruments.TOM4), true, true, total_notes, track.notesPerMeasure);
         fullURL += Tom1 + Tom4;
     }
 
@@ -184,13 +184,15 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
         }
 
         /// the toms array index starts at zero (0) the first one is T1
-        track.toms_array[i] = noteArraysFromURLData("T" + (i + 1), Tom_string, track.notesPerMeasure, track.numberOfMeasures);
+        // track.toms_array[i] = noteArraysFromURLData("T" + (i + 1), Tom_string, track.notesPerMeasure, track.numberOfMeasures);
+        // TODO
+        track.setInstrumentNotes(i == 0 ? Instruments.TOM1 : Instruments.TOM4, noteArraysFromURLData("T" + (i + 1), Tom_string, track.notesPerMeasure, track.numberOfMeasures));
     }
 
-    track.sticking_array = noteArraysFromURLData("Stickings", stickingsString, track.notesPerMeasure, track.numberOfMeasures);
+    track.setInstrumentNotes(Instruments.STICKING, noteArraysFromURLData("Stickings", stickingsString, track.notesPerMeasure, track.numberOfMeasures));
     track.setInstrumentNotes(Instruments.HIGH_HAT, noteArraysFromURLData("H", highhatString, track.notesPerMeasure, track.numberOfMeasures));
     track.setInstrumentNotes(Instruments.SNARE, noteArraysFromURLData("S", snareString, track.notesPerMeasure, track.numberOfMeasures));
-    track.kick_array = noteArraysFromURLData("K", kickString, track.notesPerMeasure, track.numberOfMeasures);
+    track.setInstrumentNotes(Instruments.KICK, noteArraysFromURLData("K", kickString, track.notesPerMeasure, track.numberOfMeasures));
 
     let title = getQueryVariableFromString("Title", "", encodedURLData);
     title = decodeURIComponent(title);

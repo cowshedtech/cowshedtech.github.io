@@ -31,7 +31,7 @@ export default {
 
   data() {
     return {
-      noteABC: this.track ? this.track.getTomState(this.tomIndex, this.noteIndex, "ABC") : constant_ABC_OFF,
+      noteABC: editor.track ? editor.track.getInstrumentState(this.tomIndex == 0 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex) : constant_ABC_OFF,      
       constants: {
         TOM_OFF: constant_ABC_OFF        
       },
@@ -44,7 +44,7 @@ export default {
   watch: { 
     track: {
       handler(newVal, oldVal) { 
-        this.noteABC = this.track ? this.track.getTomState(this.tomIndex, this.noteIndex, "ABC") : constant_ABC_OFF;              
+        this.noteABC = this.track ? editor.track.getInstrumentState(this.tomIndex == 0 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex) : constant_ABC_OFF;
       },
       deep: true
     },    
@@ -54,7 +54,8 @@ export default {
     handleLeftClick(event) {
       let newMode = this.noteABC ? constant_ABC_OFF : this.abcOn
       if (this.midiPlayer && newMode === this.abcOn) this.midiPlayer.playSingleNote(this.midiNormal);                
-      editor.track.setTomState(this.tomIndex, this.noteIndex, newMode, true);      
+      editor.track.setInstrumentState(this.tomIndex == 0 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex, newMode);        
+
     },
     handleRightClick(event) {
       eventBus.$emit('close-all-menus');
@@ -67,13 +68,13 @@ export default {
       if (event.ctrlKey) action = "on";
       if (event.altKey) action = "off";  
       if (action)
-        editor.track.setTomState(this.tomIndex, this.noteIndex, action == "off" ? constant_ABC_OFF : this.abcOn, true);    
+        editor.track.setInstrumentState(this.tomIndex == 0 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex, action == "off" ? constant_ABC_OFF : this.abcOn);        
     },
     handleAction(action) {
       if (this.midiPlayer) {
         if (action === this.abcOn) this.midiPlayer.playSingleNote(this.midiNormal);                
       }    
-      editor.track.setTomState(this.tomIndex, this.noteIndex, action, true);  
+      editor.track.setInstrumentState(this.tomIndex == 0 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex, action);        
       this.isPopupOpen = false;
     }
   },

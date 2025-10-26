@@ -61,7 +61,7 @@ function Track() {
 		this.notes.set(Instruments.TOM1, Array(32).fill(constant_ABC_OFF));
 		this.notes.set(Instruments.TOM4, Array(32).fill(constant_ABC_OFF));
 
-		this.toms_array = [class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0)];
+		// this.toms_array = [class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0), class_empty_note_array.slice(0)];
 		this.title = "";
 		this.author = "";
 		this.comments = "";
@@ -190,6 +190,20 @@ function Track() {
 		this.setInstrumentStateNoNotify(Instruments.KICK, id, mode);				
 	}
 
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.setTom1StateNoNotify = function(id, mode, make_sound) {
+		this.setInstrumentStateNoNotify(Instruments.TOM1, id, mode)
+	}
+
+	/**
+     * Notifies all registered handlers of a change
+     */
+    root.setTom4StateNoNotify = function(id, mode, make_sound) {
+		this.setInstrumentStateNoNotify(Instruments.TOM4, id, mode)
+	}
+
 	/*
 	 *
 	 */
@@ -258,27 +272,6 @@ function Track() {
 	/*
 	 *
 	 */
-	// root.getKickState = function(id, returnType) {
-
-	// 	let abcState = this.kick_array[id] ? this.kick_array[id] : constant_ABC_OFF;
-	// 	let result = abcState;
-		
-	// 	if (returnType == "URL")
-	// 	{
-	// 		if (abcState === constant_ABC_KI_SandK) returnType = "X";
-	// 		if (abcState === constant_ABC_KI_Splash) returnType = "x";
-	// 		if (abcState === constant_ABC_KI_Normal) returnType = "o";        
-	// 	}
-	
-	// 	return result;        
-	// }
-	
-	
-
-
-	/*
-	 *
-	 */
 	root.getDefaultKickGroove = function() {
 		var retString = "";
 		var oneMeasureString = "|";
@@ -299,79 +292,7 @@ function Track() {
 	
 		return retString;
 	};
-
-	/*
-	 *
-	 */
-	root.getTomState = function(tomId, id, returnType) {
-		let abcState = this.toms_array[tomId-1][id] ? this.toms_array[tomId-1][id] : constant_ABC_OFF;
-		let result = abcState;
-
-		if (returnType == "URL")
-		{
-			if (abcState === constant_ABC_T1_Normal || constant_ABC_T4_Normal) returnType = "x";			
-		}
 	
-		return result;  
-
-
-		// if (tomOn) {
-		//     if (returnType == "ABC")
-		//         switch (tom_num) {
-		//             case 1:
-		//                 return constant_ABC_T1_Normal; // normal
-		//                 break;
-		//             case 4:
-		//                 return constant_ABC_T4_Normal; // normal
-		//                 break;
-		//             default:
-		//                 console.log("bad switch in get_tom_state. bad tom num:" + tom_num);
-		//                 break;
-		//         }
-		//     else if (returnType == "URL")
-		//         return "x"; // normal
-		// }
-
-		// if (returnType == "ABC")
-		//     return false; // off (rest)
-		// else if (returnType == "URL")
-		//     return "-"; // off (rest)
-
-
-
-
-
-	}
-
-	/**
-     * Notifies all registered handlers of a change
-     */
-    root.setTomState = function(tomId, id, mode, make_sound) {
-		this.toms_array[tomId-1][id] = mode;			
-		
-		window.eventBus.$emit('track-updated');
-	}
-
-	/**
-     * Notifies all registered handlers of a change
-     */
-    root.setTomStateNoNotify = function(tomId, id, mode, make_sound) {
-		this.toms_array[tomId-1][id] = mode;					
-	}
-
-	/**
-     * Notifies all registered handlers of a change
-     */
-    root.setTom1StateNoNotify = function(id, mode, make_sound) {
-		this.setTomState(0, id, mode)
-	}
-
-	/**
-     * Notifies all registered handlers of a change
-     */
-    root.setTom4StateNoNotify = function(id, mode, make_sound) {
-		this.setTomState(3, id, mode)
-	}
 
 	/**
      * Notifies all registered handlers of a change
@@ -446,7 +367,7 @@ function Track() {
 		this.numberOfMeasures = 1;
 		this.sticking_array = Array(this.notesPerMeasure).fill(false).slice(0);
 		this.setInstrumentNotes(Instruments.STICKING, Array(this.notesPerMeasure).fill(constant_ABC_STICK_OFF))
-		this.setInstrumentNotes(Instruments.HIGH_HAT, Array(this.notesPerMeasure).fill(constant_ABC_STICK_OFF))
+		this.setInstrumentNotes(Instruments.HIGH_HAT, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		this.setInstrumentNotes(Instruments.SNARE, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		this.setInstrumentNotes(Instruments.KICK, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		this.setInstrumentNotes(Instruments.TOM1, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
