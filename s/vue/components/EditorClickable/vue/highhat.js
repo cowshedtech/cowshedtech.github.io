@@ -25,14 +25,29 @@ export default {
     }
   },
 
-  watch: { 
-    track: {
-      handler(newVal, oldVal) { 
-        this.noteABC = editor.track ? editor.track.getInstrumentState(Instruments.HIGH_HAT, this.noteIndex) : constant_ABC_OFF;              
-      },
-      deep: true
-    },    
+  // watch: { 
+  //   track: {
+  //     handler(newVal, oldVal) { 
+  //       this.noteABC = editor.track ? editor.track.getInstrumentState(Instruments.HIGH_HAT, this.noteIndex) : constant_ABC_OFF;              
+  //     },
+  //     deep: true
+  //   },    
+  // },
+
+  mounted() {
+    this.removeHandler = eventBus.$on('track-updated', () => {
+        this.noteABC = constant_ABC_OFF;
+        if (editor.track && (this.noteIndex || this.noteIndex == 0)) {
+          if (editor.track.getInstrumentState(Instruments.HIGH_HAT, this.noteIndex)) {
+            this.noteABC = editor.track.getInstrumentState(Instruments.HIGH_HAT, this.noteIndex)
+          }
+        }
+    });	
   },
+
+  // beforeUnmount() {
+  //     if (this.removeHandler) this.removeHandler() 
+  // },
   
   computed: {
     noteConfig() {

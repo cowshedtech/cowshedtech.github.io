@@ -21,9 +21,9 @@ export default {
 		})
   },
 
-  beforeUnmount() {
-    eventBus.$off('track-updated');
-  },
+  // beforeUnmount() {
+  //   eventBus.$off('track-updated');
+  // },
 
   methods: {
     handleCloseMeasure() {

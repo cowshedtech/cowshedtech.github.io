@@ -11,17 +11,15 @@ export default {
   },
 
   mounted() {
-    this.removeHandler = editorClickable?.addChangeHandler(() => {
-      this.track = deepCopy(editor.track)            
-    })
+    eventBus.$on('track-updated', () => {
+      if (editor.track) {
+        this.track = deepCopy(editor.track)            
+      }
+    });	
 
    eventBus.$on('options-updated', () => {
       this.options = deepCopy(options)      
     });
-  },
-
-  beforeUnmount() {
-      if (this.removeHandler) this.removeHandler() 
   },
 
   components: {

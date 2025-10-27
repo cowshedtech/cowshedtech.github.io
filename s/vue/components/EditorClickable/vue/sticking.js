@@ -34,9 +34,9 @@ export default {
     });	
   },
 
-  beforeUnmount() {
-      if (this.removeHandler) this.removeHandler() 
-  },
+  // beforeUnmount() {
+  //     if (this.removeHandler) this.removeHandler() 
+  // },
 
   methods: {
     handleLeftClick(event) {

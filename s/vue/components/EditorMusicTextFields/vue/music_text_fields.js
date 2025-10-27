@@ -49,9 +49,9 @@ export default {
     });
   },
 
-  beforeUnmount() {
-      eventBus.$off('track-updated');
-  },
+  // beforeUnmount() {
+  //     eventBus.$off('track-updated');
+  // },
 
   template: `
     <div id="sheetMusicTextFields" class="fullWidthEle grooveDB_hidden">
