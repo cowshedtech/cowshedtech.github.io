@@ -67,16 +67,16 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
         // if (options.isStickingVisible())
         //     Sticking_Array[array_index] = editor.track.getStickingState(i + startIndexForClickableUI, "ABC");
 
-        HH_Array[array_index] = editor.track.getInstrumentState(Instruments.HIGH_HAT, i + startIndexForClickableUI);
+        HH_Array[array_index] = editor.track.getInstrumentNote(Instruments.HIGH_HAT, i + startIndexForClickableUI);
 
         if (options.areTomsVisible()) {
-            Toms_Array[0][array_index] = editor.track.getInstrumentState(Instruments.TOM1, i + startIndexForClickableUI, "ABC");
-            Toms_Array[3][array_index] = editor.track.getInstrumentState(Instruments.TOM4, i + startIndexForClickableUI, "ABC");
+            Toms_Array[0][array_index] = editor.track.getInstrumentNote(Instruments.TOM1, i + startIndexForClickableUI, "ABC");
+            Toms_Array[3][array_index] = editor.track.getInstrumentNote(Instruments.TOM4, i + startIndexForClickableUI, "ABC");
 
         }
 
-        Snare_Array[array_index] = editor.track.getInstrumentState(Instruments.SNARE, i + startIndexForClickableUI);
-        Kick_Array[array_index] = editor.track.getInstrumentState(Instruments.KICK, i + startIndexForClickableUI);       
+        Snare_Array[array_index] = editor.track.getInstrumentNote(Instruments.SNARE, i + startIndexForClickableUI);
+        Kick_Array[array_index] = editor.track.getInstrumentNote(Instruments.KICK, i + startIndexForClickableUI);       
 
     }
 
@@ -126,19 +126,26 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
 //
 function setNotesFromURLData(drumType, noteString, numberOfMeasures) {
     var setFunction;
+    var instrument;
 
     if (drumType == "Stickings") {
         setFunction = editor.track.setStickingStateNoNotify;
+        instrument = Instruments.STICKING
     } else if (drumType == "H") {
         setFunction = editor.track.setHighHatStateNoNotify;
+        instrument = Instruments.HIGH_HAT
     } else if (drumType == "T1") {
         setFunction = editor.track.setTom1StateNoNotify;
+        instrument = Instruments.TOM1
     } else if (drumType == "T4") {
         setFunction = editor.track.setTom4StateNoNotify;
+        instrument = Instruments.TOM4
     } else if (drumType == "S") {
         setFunction = editor.track.setSnareStateNoNotify;
+        instrument = Instruments.SNARE
     } else if (drumType == "K") {
         setFunction = editor.track.setKickStateNoNotify;
+        instrument = Instruments.KICK
     }
 
     // decode the %7C url encoding types

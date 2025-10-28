@@ -37,7 +37,7 @@ export default {
                     } else if (action == "all_on") {
                         newMode = this.midiNormal
                     }
-                    editor.track.setInstrumentStateNoNotify(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, i, newMode)
+                    editor.track.setInstrumentNoteNoNotify(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, i, newMode)
                 }
         
                 editor.track.notify();

@@ -18,7 +18,7 @@ export default {
 
   data() {
     return {
-      noteABC: editor.track ? editor.track.getInstrumentState(Instruments.HIGH_HAT, this.noteIndex) : constant_ABC_OFF,
+      noteABC: editor.track ? editor.track.getInstrumentNote(Instruments.HIGH_HAT, this.noteIndex) : constant_ABC_OFF,
       isPopupOpen: false,
       menuX: 0,
       menuY: 0,
@@ -28,7 +28,7 @@ export default {
   // watch: { 
   //   track: {
   //     handler(newVal, oldVal) { 
-  //       this.noteABC = editor.track ? editor.track.getInstrumentState(Instruments.HIGH_HAT, this.noteIndex) : constant_ABC_OFF;              
+  //       this.noteABC = editor.track ? editor.track.getInstrumentNote(Instruments.HIGH_HAT, this.noteIndex) : constant_ABC_OFF;              
   //     },
   //     deep: true
   //   },    
@@ -38,8 +38,8 @@ export default {
     this.removeHandler = eventBus.$on('track-updated', () => {
         this.noteABC = constant_ABC_OFF;
         if (editor.track && (this.noteIndex || this.noteIndex == 0)) {
-          if (editor.track.getInstrumentState(Instruments.HIGH_HAT, this.noteIndex)) {
-            this.noteABC = editor.track.getInstrumentState(Instruments.HIGH_HAT, this.noteIndex)
+          if (editor.track.getInstrumentNote(Instruments.HIGH_HAT, this.noteIndex)) {
+            this.noteABC = editor.track.getInstrumentNote(Instruments.HIGH_HAT, this.noteIndex)
           }
         }
     });	
@@ -83,7 +83,7 @@ export default {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_HH_Normal
         if (this.midiPlayer && newMode === constant_ABC_HH_Normal) this.midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_NORMAL);                
-        editor.track.setInstrumentState(Instruments.HIGH_HAT, this.noteIndex, newMode);  
+        editor.track.setInstrumentNote(Instruments.HIGH_HAT, this.noteIndex, newMode);  
     },
     handleRightClick(event) {
         eventBus.$emit('close-all-menus');
@@ -96,14 +96,14 @@ export default {
         if (event.ctrlKey) action = "on";
         if (event.altKey) action = "off";  
         if (action)
-          editor.track.setInstrumentState(Instruments.HIGH_HAT, this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_HH_Normal);          
+          editor.track.setInstrumentNote(Instruments.HIGH_HAT, this.noteIndex, action == "off" ? constant_ABC_OFF : constant_ABC_HH_Normal);          
     },
     handleAction(action) {
       if (this.midiPlayer) {
         let note = this.noteConfig[action]?.midiNote;        
         if (note) this.midiPlayer.playSingleNote(note);                
       }      
-      editor.track.setInstrumentState(Instruments.HIGH_HAT, this.noteIndex, action);  
+      editor.track.setInstrumentNote(Instruments.HIGH_HAT, this.noteIndex, action);  
       this.isPopupOpen = false;
     },
   },

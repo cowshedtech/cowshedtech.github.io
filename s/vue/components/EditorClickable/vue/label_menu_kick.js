@@ -25,7 +25,7 @@ export default {
 					let newState = constant_ABC_OFF;
 
 					var numNotesPerCount = editor.track.timeDivision / editor.track.noteValue
-					var currentState = 	editor.track.getInstrumentState(Instruments.KICK, this.noteIndex);
+					var currentState = 	editor.track.getInstrumentNote(Instruments.KICK, this.noteIndex);
 					var kickIsOn = false;
 					if (currentState == constant_ABC_KI_SandK || currentState == constant_ABC_KI_Normal)
 						kickIsOn = true;

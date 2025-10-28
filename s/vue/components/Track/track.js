@@ -87,25 +87,22 @@ function Track() {
 	/*
 	 *
 	 */
-	root.getInstrumentState = function(instrument, id) {
+	root.getInstrumentNote = function(instrument, id) {
 	
-		let result = null;
-		let instrumentNotes = this.notes 
-		if (instrumentNotes && instrumentNotes instanceof Map) {
-			let notes = instrumentNotes.get(instrument);
-			result = notes[id];				
-		}
-		else {
-			console.log(`here`)
-		}
-		return result;    
+		const instrumentNotes = this.notes;
+		if (!(instrumentNotes && instrumentNotes instanceof Map)) return constant_ABC_OFF;
+		const notes = instrumentNotes.get(instrument);
+		return (Array.isArray(notes) && id >= 0 && id < notes.length) ? notes[id] : constant_ABC_OFF;    
 	}
 
 	/*
 	 *
 	 */
 	root.getInstrumentNotes = function(instrument) {
-		return this.notes.get(instrument);
+		const instrumentNotes = this.notes;
+		if (!(instrumentNotes && instrumentNotes instanceof Map)) return null;
+		const notes = instrumentNotes.get(instrument);
+		return notes;
 	}
 
 	/*
@@ -118,7 +115,7 @@ function Track() {
 	/*
 	 *
 	 */
-	root.setInstrumentState = function(instrument, id, new_state) {
+	root.setInstrumentNote = function(instrument, id, new_state) {
 		this.notes.get(instrument)[id] = new_state;		
 		this.notify();
 	}
@@ -126,7 +123,7 @@ function Track() {
 	/*
 	 *
 	 */
-	root.setInstrumentStateNoNotify = function(instrument, id, new_state) {
+	root.setInstrumentNoteNoNotify = function(instrument, id, new_state) {
 		this.notes.get(instrument)[id] = new_state;
 	}
 
@@ -168,42 +165,42 @@ function Track() {
      * Notifies all registered handlers of a change
      */
     root.setStickingStateNoNotify = function(id, new_state) {
-		this.setInstrumentStateNoNotify(Instruments.STICKING, id, new_state);		
+		this.setInstrumentNoteNoNotify(Instruments.STICKING, id, new_state);		
 	}
 
 	/**
      * Notifies all registered handlers of a change
      */
     root.setHighHatStateNoNotify = function(id, mode) {
-		this.setInstrumentStateNoNotify(Instruments.HIGH_HAT, id, mode);		
+		this.setInstrumentNoteNoNotify(Instruments.HIGH_HAT, id, mode);		
 	}
 
 	/*
 	 *
 	 */
 	root.setSnareStateNoNotify = function(id, mode, make_sound) {
-		this.setInstrumentStateNoNotify(Instruments.SNARE, id, mode);				
+		this.setInstrumentNoteNoNotify(Instruments.SNARE, id, mode);				
 	}
 	
 	/*
 	 *
 	 */
 	root.setKickStateNoNotify = function(id, mode, make_sound) {
-		this.setInstrumentStateNoNotify(Instruments.KICK, id, mode);				
+		this.setInstrumentNoteNoNotify(Instruments.KICK, id, mode);				
 	}
 
 	/**
      * Notifies all registered handlers of a change
      */
     root.setTom1StateNoNotify = function(id, mode, make_sound) {
-		this.setInstrumentStateNoNotify(Instruments.TOM1, id, mode)
+		this.setInstrumentNoteNoNotify(Instruments.TOM1, id, mode)
 	}
 
 	/**
      * Notifies all registered handlers of a change
      */
     root.setTom4StateNoNotify = function(id, mode, make_sound) {
-		this.setInstrumentStateNoNotify(Instruments.TOM4, id, mode)
+		this.setInstrumentNoteNoNotify(Instruments.TOM4, id, mode)
 	}
 
 	/*

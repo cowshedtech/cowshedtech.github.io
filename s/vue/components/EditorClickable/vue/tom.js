@@ -31,7 +31,7 @@ export default {
 
   data() {
     return {
-      noteABC: editor.track ? editor.track.getInstrumentState(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex) : constant_ABC_OFF,      
+      noteABC: editor.track ? editor.track.getInstrumentNote(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex) : constant_ABC_OFF,      
       constants: {
         TOM_OFF: constant_ABC_OFF        
       },
@@ -44,7 +44,7 @@ export default {
   watch: { 
     track: {
       handler(newVal, oldVal) { 
-        this.noteABC = this.track ? editor.track.getInstrumentState(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex) : constant_ABC_OFF;
+        this.noteABC = this.track ? editor.track.getInstrumentNote(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex) : constant_ABC_OFF;
       },
       deep: true
     },    
@@ -54,7 +54,7 @@ export default {
     handleLeftClick(event) {
       let newMode = this.noteABC ? constant_ABC_OFF : this.abcOn
       if (this.midiPlayer && newMode === this.abcOn) this.midiPlayer.playSingleNote(this.midiNormal);                
-      editor.track.setInstrumentState(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex, newMode);        
+      editor.track.setInstrumentNote(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex, newMode);        
 
     },
     handleRightClick(event) {
@@ -68,13 +68,13 @@ export default {
       if (event.ctrlKey) action = "on";
       if (event.altKey) action = "off";  
       if (action)
-        editor.track.setInstrumentState(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex, action == "off" ? constant_ABC_OFF : this.abcOn);        
+        editor.track.setInstrumentNote(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex, action == "off" ? constant_ABC_OFF : this.abcOn);        
     },
     handleAction(action) {
       if (this.midiPlayer) {
         if (action === this.abcOn) this.midiPlayer.playSingleNote(this.midiNormal);                
       }    
-      editor.track.setInstrumentState(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex, action);        
+      editor.track.setInstrumentNote(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.noteIndex, action);        
       this.isPopupOpen = false;
     }
   },
