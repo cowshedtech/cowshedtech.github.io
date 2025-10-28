@@ -33,7 +33,7 @@ export default {
 					} else if (action == "all_on_ghost") {
 						newMode = constant_ABC_SN_Ghost;            
 					}        
-					editor.track.setSnareStateNoNotify(i, newMode)
+					editor.track.InstrumentNoteNoNotify(Instruments.SNARE, i, newMode)
 				}
 				editor.track.notify();
 			}

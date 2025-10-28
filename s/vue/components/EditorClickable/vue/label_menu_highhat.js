@@ -31,7 +31,7 @@ export default {
 					} else if (action == "all_on") {
 						newMode = constant_ABC_HH_Normal;
 					}
-					editor.track.setHighHatStateNoNotify(i, newMode);
+					editor.track.setInstrumentNoteNoNotify(Instruments.HIGH_HAT, i, newMode);
 				}
 				editor.track.notify();
 			}

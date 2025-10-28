@@ -39,7 +39,7 @@ export default {
 					} else if (action == "all_on") {
 						newState = constant_ABC_KI_Normal;
 					}
-					editor.track.setKickStateNoNotify(i, newState);       
+					editor.track.setInstrumentNoteNoNotify(Instruments.KICK, i, newState);       
 				}
 
 				editor.track.notify();

@@ -168,41 +168,6 @@ function Track() {
 		this.setInstrumentNoteNoNotify(Instruments.STICKING, id, new_state);		
 	}
 
-	/**
-     * Notifies all registered handlers of a change
-     */
-    root.setHighHatStateNoNotify = function(id, mode) {
-		this.setInstrumentNoteNoNotify(Instruments.HIGH_HAT, id, mode);		
-	}
-
-	/*
-	 *
-	 */
-	root.setSnareStateNoNotify = function(id, mode, make_sound) {
-		this.setInstrumentNoteNoNotify(Instruments.SNARE, id, mode);				
-	}
-	
-	/*
-	 *
-	 */
-	root.setKickStateNoNotify = function(id, mode, make_sound) {
-		this.setInstrumentNoteNoNotify(Instruments.KICK, id, mode);				
-	}
-
-	/**
-     * Notifies all registered handlers of a change
-     */
-    root.setTom1StateNoNotify = function(id, mode, make_sound) {
-		this.setInstrumentNoteNoNotify(Instruments.TOM1, id, mode)
-	}
-
-	/**
-     * Notifies all registered handlers of a change
-     */
-    root.setTom4StateNoNotify = function(id, mode, make_sound) {
-		this.setInstrumentNoteNoNotify(Instruments.TOM4, id, mode)
-	}
-
 	/*
 	 *
 	 */
