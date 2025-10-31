@@ -84,6 +84,14 @@ function Track() {
 		return calc_notes_per_measure(root.timeDivision, root.numBeats, root.noteValue)
 	};
 
+	
+	/*
+	 *
+	 */
+	root.getInstruments = function() {	
+		return this.notes.keys()	
+	}
+
 	/*
 	 *
 	 */
@@ -324,17 +332,14 @@ function Track() {
      * Notifies all registered handlers of a change
      */
     root.clearAllNotes = function() {
-		this.repeatedMeasures.clear();
 		this.numberOfMeasures = 1;
-		this.sticking_array = Array(this.notesPerMeasure).fill(false).slice(0);
-		this.setInstrumentNotes(Instruments.STICKING, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.setInstrumentNotes(Instruments.HIGH_HAT, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.setInstrumentNotes(Instruments.SNARE, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.setInstrumentNotes(Instruments.KICK, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.setInstrumentNotes(Instruments.TOM1, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.setInstrumentNotes(Instruments.TOM4, Array(this.notesPerMeasure).fill(constant_ABC_OFF))		
-				
-		// 
+		this.repeatedMeasures.clear();
+
+		const instruments = this.getInstruments();
+		for (const instrument of instruments) {
+			this.setInstrumentNotes(instrument, Array(this.notesPerMeasure).fill(constant_ABC_OFF));
+		}
+		
 		this.notify();
 	}
 
@@ -353,13 +358,14 @@ function Track() {
 	 * @requires editor.track - Track object containing score state
 	 */
 	root.addMeasure = function(measureNum) {
+		
 		var insertIndex = (measureNum) * editor.track.notesPerMeasure
-		this.insertInstrumentNotes(Instruments.STICKING, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.insertInstrumentNotes(Instruments.HIGH_HAT, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.insertInstrumentNotes(Instruments.SNARE, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.insertInstrumentNotes(Instruments.KICK, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.insertInstrumentNotes(Instruments.TOM1, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
-		this.insertInstrumentNotes(Instruments.TOM4, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		const instruments = this.getInstruments();
+		
+		for (const instrument of instruments) {
+			this.insertInstrumentNotes(instrument, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
+		}
+
 		editor.track.numberOfMeasures++;
 
 		// We need to move all the repeated measuresafter this measure up 1 
@@ -375,13 +381,13 @@ function Track() {
 
 		const measureStart = (measureNum - 1) * this.notesPerMeasure;
 		const measureEnd = measureStart + this.notesPerMeasure;
-		this.insertInstrumentNotes(Instruments.STICKING, measureEnd, this.getInstrumentNotesSlice(Instruments.STICKING, measureStart, measureEnd))
-		this.insertInstrumentNotes(Instruments.HIGH_HAT, measureEnd, this.getInstrumentNotesSlice(Instruments.HIGH_HAT, measureStart, measureEnd));			
-		this.insertInstrumentNotes(Instruments.SNARE, measureEnd, this.getInstrumentNotesSlice(Instruments.SNARE, measureStart, measureEnd));			
-		this.insertInstrumentNotes(Instruments.KICK, measureEnd, this.getInstrumentNotesSlice(Instruments.KICK, measureStart, measureEnd));			
-		this.insertInstrumentNotes(Instruments.TOM1, measureEnd, this.getInstrumentNotesSlice(Instruments.TOM1, measureStart, measureEnd));			
-		this.insertInstrumentNotes(Instruments.TOM4, measureEnd, this.getInstrumentNotesSlice(Instruments.TOM4, measureStart, measureEnd));			
-		
+
+		const instruments = this.getInstruments();
+		for (const instrument of instruments) {
+			const notes = this.getInstrumentNotesSlice(instrument, measureStart, measureEnd)
+			this.insertInstrumentNotes(instrument, measureEnd, notes)
+		}
+
 		// Update measure count and repeated measures
 		this.numberOfMeasures++;
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
@@ -395,14 +401,12 @@ function Track() {
      */
     root.deleteMeasure = function(measureNum) {
 		const measureStart = (measureNum - 1) * this.notesPerMeasure;
-		
-		this.deleteInstrumentNotes(Instruments.STICKING, measureStart, this.notesPerMeasure)
-		this.deleteInstrumentNotes(Instruments.HIGH_HAT, measureStart, this.notesPerMeasure)
-		this.deleteInstrumentNotes(Instruments.SNARE, measureStart, this.notesPerMeasure)
-		this.deleteInstrumentNotes(Instruments.KICK, measureStart, this.notesPerMeasure)
-		this.deleteInstrumentNotes(Instruments.TOM1, measureStart, this.notesPerMeasure)
-		this.deleteInstrumentNotes(Instruments.TOM4, measureStart, this.notesPerMeasure)
 
+		const instruments = this.getInstruments();
+		for (const instrument of instruments) {
+			this.deleteInstrumentNotes(instrument, measureStart, this.notesPerMeasure)
+		}
+		
 		this.repeatedMeasures.delete(measureNum - 1);
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
 		this.numberOfMeasures--;
