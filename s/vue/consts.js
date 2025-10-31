@@ -10,7 +10,6 @@ var constant_ABC_STICK_R = '"R"x';
 var constant_ABC_STICK_L = '"L"x';
 var constant_ABC_STICK_BOTH = '"R/L"x';
 var constant_ABC_STICK_COUNT = '"count"x';
-var constant_ABC_STICK_OFF = '""x';
 var constant_ABC_HH_Ride = "^A'";
 var constant_ABC_HH_Ride_Bell = "^B'";
 var constant_ABC_HH_Cow_Bell = "^D'";

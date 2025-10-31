@@ -54,7 +54,7 @@ function Track() {
 		this.numBeats = 4;  // TimeSigTop: Top part of Time Signture 3/4, 4/4, 5/4, 6/8, etc...
 		this.noteValue = 4; // TimeSigBottom: Bottom part of Time Sig   4 = quarter notes, 8 = 8th notes, 16ths, etc..
 		this.notes = new Map();
-		this.notes.set(Instruments.STICKING, Array(32).fill(constant_ABC_STICK_OFF));
+		this.notes.set(Instruments.STICKING, Array(32).fill(constant_ABC_OFF));
 		this.notes.set(Instruments.HIGH_HAT, Array(32).fill(constant_ABC_OFF));
 		this.notes.set(Instruments.SNARE, Array(32).fill(constant_ABC_OFF));
 		this.notes.set(Instruments.KICK, Array(32).fill(constant_ABC_OFF));
@@ -327,7 +327,7 @@ function Track() {
 		this.repeatedMeasures.clear();
 		this.numberOfMeasures = 1;
 		this.sticking_array = Array(this.notesPerMeasure).fill(false).slice(0);
-		this.setInstrumentNotes(Instruments.STICKING, Array(this.notesPerMeasure).fill(constant_ABC_STICK_OFF))
+		this.setInstrumentNotes(Instruments.STICKING, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		this.setInstrumentNotes(Instruments.HIGH_HAT, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		this.setInstrumentNotes(Instruments.SNARE, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		this.setInstrumentNotes(Instruments.KICK, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
@@ -354,7 +354,7 @@ function Track() {
 	 */
 	root.addMeasure = function(measureNum) {
 		var insertIndex = (measureNum) * editor.track.notesPerMeasure
-		this.insertInstrumentNotes(Instruments.STICKING, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_STICK_OFF))
+		this.insertInstrumentNotes(Instruments.STICKING, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		this.insertInstrumentNotes(Instruments.HIGH_HAT, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		this.insertInstrumentNotes(Instruments.SNARE, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		this.insertInstrumentNotes(Instruments.KICK, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))

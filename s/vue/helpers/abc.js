@@ -160,7 +160,6 @@ const abcNotationToTablaturePerNote = (drumType, abcChar) => {
 		[constant_ABC_SN_Flam]: 'f',
 		[constant_ABC_SN_Drag]: 'd',
 		[constant_ABC_KI_Splash]: 'x',
-		[constant_ABC_STICK_OFF]: '-',
 		[constant_ABC_OFF]: '-'
 	};
 

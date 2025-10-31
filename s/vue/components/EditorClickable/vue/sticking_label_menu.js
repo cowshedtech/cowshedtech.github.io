@@ -29,10 +29,10 @@ export default {
 				} 
 				
 				for (var i = startIndex; i < endIndex; i++) {
-					let newState = constant_ABC_STICK_OFF;					
+					let newState = constant_ABC_OFF;					
 					switch (action) {
 						case "all_off":
-							newState = constant_ABC_STICK_OFF;
+							newState = constant_ABC_OFF;
 							break;
 						case "all_right":
 							newState = constant_ABC_STICK_R;

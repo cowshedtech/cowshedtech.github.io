@@ -12,20 +12,20 @@ export default {
 
   data() {
     return {
-      noteABC: this.track && this.noteIndex || this.noteIndex == 0 ? this.track.getInstrumentNote(Instruments.STICKING, this.noteIndex) : constant_ABC_STICK_OFF,
+      noteABC: this.track && this.noteIndex || this.noteIndex == 0 ? this.track.getInstrumentNote(Instruments.STICKING, this.noteIndex) : constant_ABC_OFF,
       constants: {
         STICK_R: constant_ABC_STICK_R,
         STICK_L: constant_ABC_STICK_L,
         STICK_BOTH: constant_ABC_STICK_BOTH,
         STICK_COUNT: constant_ABC_STICK_COUNT,
-        STICK_OFF: constant_ABC_STICK_OFF
+        STICK_OFF: constant_ABC_OFF
       }
     }
   },
 
   mounted() {
     this.removeHandler = eventBus.$on('track-updated', () => {
-        this.noteABC = constant_ABC_STICK_OFF;
+        this.noteABC = constant_ABC_OFF;
         if (editor.track && (this.noteIndex || this.noteIndex == 0)) {
           if (editor.track.getInstrumentNote(Instruments.STICKING, this.noteIndex)) {
             this.noteABC = editor.track.getInstrumentNote(Instruments.STICKING, this.noteIndex)
@@ -43,7 +43,7 @@ export default {
         var new_state = false;
         var sticking_state = this.noteABC;
       
-        if (!sticking_state || sticking_state == constant_ABC_STICK_OFF) {
+        if (!sticking_state || sticking_state == constant_ABC_OFF) {
             new_state = constant_ABC_STICK_R;
         } else if (sticking_state == constant_ABC_STICK_R) {
             new_state = constant_ABC_STICK_L;
@@ -52,7 +52,7 @@ export default {
         } else if (sticking_state == constant_ABC_STICK_BOTH) {
             new_state = constant_ABC_STICK_COUNT;
         } else {
-            new_state = constant_ABC_STICK_OFF;
+            new_state = constant_ABC_OFF;
         }
         this.noteABC = new_state;
         editor.track.setInstrumentNote(Instruments.STICKING, this.noteIndex, new_state);        
