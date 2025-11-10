@@ -581,7 +581,7 @@ function Track() {
      */
 	root.appendTrack = function(track) {
 
-		this.sticking_array.push(...track.sticking_array)
+		// this.sticking_array.push(...track.sticking_array)
 
 		this.appendInstrumentNotes(Instruments.STICKING, track.getInstrumentNotes(Instruments.STICKING));	
 		this.appendInstrumentNotes(Instruments.HIGH_HAT, track.getInstrumentNotes(Instruments.HIGH_HAT));
