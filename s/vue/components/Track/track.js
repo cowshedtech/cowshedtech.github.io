@@ -473,12 +473,12 @@ function Track() {
 			// metronome.resetOptionsMenuOffsetClick();
 		}
 
-		this.setInstrumentNotes(Instruments.STICKING, this.adjustNotesForNewDivision(this.sticking_array))
+		this.setInstrumentNotes(Instruments.STICKING, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.STICKING)))
 		this.setInstrumentNotes(Instruments.HIGH_HAT, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.HIGH_HAT)))
 		this.setInstrumentNotes(Instruments.SNARE, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.SNARE)))
 		this.setInstrumentNotes(Instruments.KICK, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.KICK)))
 		this.setInstrumentNotes(Instruments.TOM1, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM1)))
-		this.setInstrumentNotes(Instruments.TOM3, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM3)))
+		this.setInstrumentNotes(Instruments.TOM4, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM4)))
 			
 		this.notify();
 	};
