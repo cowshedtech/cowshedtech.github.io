@@ -581,15 +581,10 @@ function Track() {
      */
 	root.appendTrack = function(track) {
 
-		// this.sticking_array.push(...track.sticking_array)
+		for (const instrument of this.getInstruments()) {
+			this.appendInstrumentNotes(instrument, track.getInstrumentNotes(instrument));	
+		}
 
-		this.appendInstrumentNotes(Instruments.STICKING, track.getInstrumentNotes(Instruments.STICKING));	
-		this.appendInstrumentNotes(Instruments.HIGH_HAT, track.getInstrumentNotes(Instruments.HIGH_HAT));
-		this.appendInstrumentNotes(Instruments.SNARE, track.getInstrumentNotes(Instruments.SNARE));
-		this.appendInstrumentNotes(Instruments.KICK, track.getInstrumentNotes(Instruments.KICK));
-		this.appendInstrumentNotes(Instruments.TOM1, track.getInstrumentNotes(Instruments.TOM1));
-		this.appendInstrumentNotes(Instruments.TOM4, track.getInstrumentNotes(Instruments.TOM4));
-		
 		for (let measureIndex of track.repeatedMeasures.keys()) {
 			this.repeatedMeasures.set(this.numberOfMeasures + measureIndex, track.repeatedMeasures.get(measureIndex))
 		}
