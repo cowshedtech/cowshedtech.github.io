@@ -26,22 +26,33 @@ export default {
 	},
 
 	methods: {
-		handleClick(action) {
-            if (action !== "cancel") {
-                var startIndex = editor.track.notesPerMeasure * (this.measureIndex - 1);
-                for (var i = startIndex; i - startIndex < editor.track.notesPerMeasure; i++) {
-                    let newMode = constant_ABC_OFF;
-        
-                    if (action == "all_off") {
-                        newMode = constant_ABC_OFF
-                    } else if (action == "all_on") {
-                        newMode = this.midiNormal
-                    }
-                    editor.track.setInstrumentNoteNoNotify(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, i, newMode)
+		handleClick(scope, action) {
+			if (action === "cancel") {
+				this.$emit('close');
+				return;
+			}
+
+			const track = editor.track;
+			const notesPerMeasure = track.notesPerMeasure;
+			const startIndex = scope === 'measure'
+				? notesPerMeasure * (this.measureIndex - 1)
+				: 0;
+			const endIndex = scope === 'measure'
+				? startIndex + notesPerMeasure
+				: notesPerMeasure * track.numberOfMeasures;
+
+			for (let i = startIndex; i < endIndex; i++) {
+                let newMode = constant_ABC_OFF;
+    
+                if (action == "off") {
+                    newMode = constant_ABC_OFF
+                } else if (action == "on") {
+                    newMode = this.midiNormal
                 }
-        
-                editor.track.notify();
+                editor.track.setInstrumentNoteNoNotify(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, i, newMode)
             }
+    
+            editor.track.notify();
         
             // if (action == "mute") {
             //     muteInstrument(instrument, measureForNoteLabelClick, true);
@@ -55,9 +66,11 @@ export default {
 	template: `
 	<div class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
 		<ul :id="'tom' + tomIndex + 'LabelContextMenu'" class="list">
-			<li @click.stop.prevent="handleClick('all_of')">Measure off</li>
-			<li @click.stop.prevent="handleClick('all_on')">Measure on</li>
+			<li @click.stop.prevent="handleClick('measure','off')">Measure off</li>
+			<li @click.stop.prevent="handleClick('measure','on')">Measure on</li>
 			<li id='mute_tom1_menu_item' @click.stop.prevent="handleClick('mute')">Measure muted</li>
+            <li @click.stop.prevent="handleClick('all','off')">All off</li>
+			<li @click.stop.prevent="handleClick('all','on')">All on</li>
 			<li @click.stop.prevent="handleClick('cancel')">Cancel</li>
 		</ul>
 	</div>
