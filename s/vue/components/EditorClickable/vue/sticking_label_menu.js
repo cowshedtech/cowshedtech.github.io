@@ -18,47 +18,65 @@ export default {
 
 	methods: {
 		handleClick(scope, action) {
-			if (action !== "cancel") {
+			// Fast path: cancel just closes the menu
+			if (action === "cancel") {
+				this.$emit('close');
+				return;
+			}
 
-				// Determine start and end of loop based on action on single measure or all notes
-				var startIndex = 0;
-				var endIndex = editor.track.notesPerMeasure * editor.track.numberOfMeasures
-				if (scope === 'measure') {
-					startIndex = editor.track.notesPerMeasure * (this.measureIndex - 1);
-					endIndex = startIndex + editor.track.notesPerMeasure;
-				} 
-				
-				for (var i = startIndex; i < endIndex; i++) {
-					let newState = constant_ABC_OFF;					
-					switch (action) {
-						case "off":
-								newState = constant_ABC_OFF;
-							break;
-						case "right":						
-							newState = constant_ABC_STICK_R;
-							break;
-						case "left":						
-							newState = constant_ABC_STICK_L;
-							break;
-						case "alternate":
-							newState = (i % 2 === 0) ? constant_ABC_STICK_R : constant_ABC_STICK_L;						
-							break;	
-						case "reverse":
-							const note = editor.track.getInstrumentNote(Instruments.STICKING, i);	
-							if (note === constant_ABC_STICK_R) {
-								newState = constant_ABC_STICK_L;
-							} else if (note === constant_ABC_STICK_L) {
-								newState = constant_ABC_STICK_R;
-							}
-							break;							
-						case "count":
-							newState = constant_ABC_STICK_COUNT;
-							break;					
-					}
-					editor.track.setInstrumentNoteNoNotify(Instruments.STICKING, i, newState);											
+			// Cache track and computed bounds
+			const track = editor.track;
+			const notesPerMeasure = track.notesPerMeasure;
+			const startIndex = scope === 'measure'
+				? notesPerMeasure * (this.measureIndex - 1)
+				: 0;
+			const endIndex = scope === 'measure'
+				? startIndex + notesPerMeasure
+				: notesPerMeasure * track.numberOfMeasures;
+			
+			// Bind setter once to avoid repeated property lookups
+			const setNoteNoNotify = track.setInstrumentNoteNoNotify.bind(track, Instruments.STICKING);
+			
+			// Simple action lookup to avoid switch overhead in the loop
+			const simpleActions = {
+				off: constant_ABC_OFF,
+				right: constant_ABC_STICK_R,
+				left: constant_ABC_STICK_L,
+				count: constant_ABC_STICK_COUNT,
+			};
+			
+			if (simpleActions[action] !== undefined) {
+				const value = simpleActions[action];
+				for (let i = startIndex; i < endIndex; i++) {
+					setNoteNoNotify(i, value);
 				}
-				editor.track.notify();
-			}			
+				track.notify();
+				this.$emit('close');
+				return;
+			}
+			
+			if (action === 'alternate') {
+				for (let i = startIndex; i < endIndex; i++) {
+					const value = (i % 2 === 0) ? constant_ABC_STICK_R : constant_ABC_STICK_L;
+					setNoteNoNotify(i, value);
+				}
+				track.notify();
+				this.$emit('close');
+				return;
+			}
+			
+			if (action === 'reverse') {
+				for (let i = startIndex; i < endIndex; i++) {
+					const note = track.getInstrumentNote(Instruments.STICKING, i);
+					const value = note === constant_ABC_STICK_R
+						? constant_ABC_STICK_L
+						: (note === constant_ABC_STICK_L ? constant_ABC_STICK_R : note);
+					setNoteNoNotify(i, value);
+				}
+				track.notify();
+				this.$emit('close');
+				return;
+			}
 		
 			this.$emit('close')
 		}
