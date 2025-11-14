@@ -33,38 +33,6 @@ function testArrayOfArraysForEquality(array_of_arrays, test_index, test_value) {
 	return array_of_arrays.every(array => array[test_index] === test_value);
 }
 
-//
-//
-// function to return 1,e,&,a or 2,3,4,5,6, etc...
-function figure_out_sticking_count_for_index(index, notes_per_measure, sub_division, time_sig_bottom) {
-
-	// figure out the count state by looking at the id and the subdivision
-	var note_index = index % notes_per_measure;
-	var new_state = 0;
-	var implied_sub_division = sub_division * (4 / time_sig_bottom);
-
-	if (implied_sub_division === 4) {
-		new_state = note_index + 1;   // 1,2,3,4,5, etc.
-	} else if (implied_sub_division === 8) {
-		new_state = (note_index % 2 === 0) ? Math.floor(note_index / 2) + 1 : "&";
-	} else if (implied_sub_division === 12) {
-		new_state = (note_index % 3 === 0) ? Math.floor(note_index / 3) + 1 : (note_index % 3 === 1 ? "&" : "a");
-	} else if (implied_sub_division === 24) {
-		new_state = (note_index % 3 === 0) ? Math.floor(note_index / 6) + 1 : (note_index % 3 === 1 ? "&" : "a");
-	} else if (implied_sub_division === 48) {
-		new_state = (note_index % 3 === 0) ? Math.floor(note_index / 12) + 1 : (note_index % 3 === 1 ? "&" : "a");
-	} else {
-		var whole_note_interval = implied_sub_division / 4;
-		if (note_index % 4 === 0) {
-			new_state = Math.floor(note_index / whole_note_interval) + 1;  // 1,1,2,2,3,3,4,4,5,5, etc.
-		} else {
-			new_state = (note_index % 4 === 1) ? "e" : (note_index % 4 === 2 ? "&" : "a");
-		}
-	}
-
-	return new_state;
-};
-
 
 // converts the symbol for a sticking count to an actual count based on the time signature
 function convert_sticking_counts_to_actual_counts(sticking_array, time_division, timeSigTop, timeSigBottom) {

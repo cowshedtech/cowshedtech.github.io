@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       noteABC: this.track && this.noteIndex || this.noteIndex == 0 ? this.track.getInstrumentNote(Instruments.STICKING, this.noteIndex) : constant_ABC_OFF,
+      noteCountState: (this.track && (this.noteIndex || this.noteIndex == 0)) ? this.figureOutStickingCountForNote(this.track, this.noteIndex) : '',
       constants: {
         STICK_R: constant_ABC_STICK_R,
         STICK_L: constant_ABC_STICK_L,
@@ -29,16 +30,46 @@ export default {
         if (editor.track && (this.noteIndex || this.noteIndex == 0)) {
           if (editor.track.getInstrumentNote(Instruments.STICKING, this.noteIndex)) {
             this.noteABC = editor.track.getInstrumentNote(Instruments.STICKING, this.noteIndex)
+            this.noteCountState = this.figureOutStickingCountForNote(this.noteIndex);
           }
-        }
+        }        
     });	
   },
 
-  // beforeUnmount() {
-  //     if (this.removeHandler) this.removeHandler() 
-  // },
-
   methods: {
+    figureOutStickingCountForNote(index) {
+
+      let notes_per_measure = editor.track.notesPerMeasure;
+      let sub_division = editor.track.timeDivision;
+      let time_sig_bottom = editor.track.noteValue;
+      // let index = this.noteIndex;
+
+      // figure out the count state by looking at the id and the subdivision
+      var note_index = index % notes_per_measure;
+      var new_state = 0;
+      var implied_sub_division = sub_division * (4 / time_sig_bottom);
+
+      if (implied_sub_division === 4) {
+        new_state = note_index + 1;   // 1,2,3,4,5, etc.
+      } else if (implied_sub_division === 8) {
+        new_state = (note_index % 2 === 0) ? Math.floor(note_index / 2) + 1 : "&";
+      } else if (implied_sub_division === 12) {
+        new_state = (note_index % 3 === 0) ? Math.floor(note_index / 3) + 1 : (note_index % 3 === 1 ? "&" : "a");
+      } else if (implied_sub_division === 24) {
+        new_state = (note_index % 3 === 0) ? Math.floor(note_index / 6) + 1 : (note_index % 3 === 1 ? "&" : "a");
+      } else if (implied_sub_division === 48) {
+        new_state = (note_index % 3 === 0) ? Math.floor(note_index / 12) + 1 : (note_index % 3 === 1 ? "&" : "a");
+      } else {
+        var whole_note_interval = implied_sub_division / 4;
+        if (note_index % 4 === 0) {
+          new_state = Math.floor(note_index / whole_note_interval) + 1;  // 1,1,2,2,3,3,4,4,5,5, etc.
+        } else {
+          new_state = (note_index % 4 === 1) ? "e" : (note_index % 4 === 2 ? "&" : "a");
+        }
+      }
+
+      return new_state;
+    },
     handleLeftClick(event) {
         var new_state = false;
         var sticking_state = this.noteABC;
@@ -56,6 +87,7 @@ export default {
         }
         this.noteABC = new_state;
         editor.track.setInstrumentNote(Instruments.STICKING, this.noteIndex, new_state);        
+        this.noteCountState = this.figureOutStickingCountForNote(this.noteIndex);        
     },
     handleRightClick(event) {
         // noteRightClick(event, 'sticking', this.noteIndex)
@@ -71,7 +103,7 @@ export default {
         <div v-if="noteABC === constants.STICK_R" class="sticking_right note_part" style="color:rgb(36, 132, 192)" :id="'sticking_right' + noteIndex" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R</div>
         <div v-if="noteABC === constants.STICK_L" class="sticking_left note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_left' + noteIndex" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">L</div>
         <div v-if="noteABC === constants.STICK_BOTH" class="sticking_both note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_both' + noteIndex" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">R/L</div>
-        <div v-if="noteABC === constants.STICK_COUNT" class="sticking_count note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_count' + noteIndex" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">C</div>
+        <div v-if="noteABC === constants.STICK_COUNT" class="sticking_count note_part" style="color:rgb(36, 132, 192)"  :id="'sticking_count' + noteIndex" @click.stop.prevent="handleLeftClick" @contextmenu.prevent="handleRightClick" @mouseenter="handleMouseEnter">{{ noteCountState }}</div>
     </div>
   `,
 }
