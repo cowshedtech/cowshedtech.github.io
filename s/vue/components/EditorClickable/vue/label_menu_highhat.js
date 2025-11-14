@@ -32,7 +32,6 @@ export default {
 				? startIndex + notesPerMeasure
 				: notesPerMeasure * track.numberOfMeasures;
 
-			// var startIndex = editor.track.notesPerMeasure * (this.measureIndex - 1);
 			for (let i = startIndex; i < endIndex; i++) {
 				let newMode = constant_ABC_OFF;
 				if (action == "off") {
