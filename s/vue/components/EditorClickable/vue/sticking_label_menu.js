@@ -50,7 +50,7 @@ export default {
 							newState = constant_ABC_STICK_COUNT;
 							break;					
 					}
-					editor.track.setStickingStateNoNotify(i, newState);											
+					editor.track.setInstrumentNoteNoNotify(Instruments.STICKING, i, newState);											
 				}
 				editor.track.notify();
 			}			

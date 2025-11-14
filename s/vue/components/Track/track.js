@@ -96,7 +96,6 @@ function Track() {
 	 *
 	 */
 	root.getInstrumentNote = function(instrument, id) {
-	
 		const instrumentNotes = this.notes;
 		if (!(instrumentNotes && instrumentNotes instanceof Map)) return constant_ABC_OFF;
 		const notes = instrumentNotes.get(instrument);
@@ -168,30 +167,6 @@ function Track() {
 		existingNotes.splice(start, count);
 		this.notes.set(instrument, existingNotes);
 	}
-
-	/**
-     * Notifies all registered handlers of a change
-     */
-    root.setStickingStateNoNotify = function(id, new_state) {
-		this.setInstrumentNoteNoNotify(Instruments.STICKING, id, new_state);		
-	}
-
-	/*
-	 *
-	 */
-	// root.stickingsReverseRL = function() {
-	// 	for (var i = 0; i < this.numberOfMeasures * this.notesPerMeasure; i++) {
-	// 		var cur_state = this.getStickingState(i, "URL");
-	// 		if (cur_state === "R") {
-	// 			this.setStickingState(i, "left", false, this.notesPerMeasure, this.timeDivision, this.noteValue);
-	// 		} else if (cur_state === "L") {
-	// 			this.setStickingState(i, "right", false, this.notesPerMeasure, this.timeDivision, this.noteValue);
-	// 		}
-	// 	}		
-	// }
-
-	
-
 
 	/*
 	 *
@@ -360,8 +335,8 @@ function Track() {
 	root.addMeasure = function(measureNum) {
 		
 		var insertIndex = (measureNum) * editor.track.notesPerMeasure
-		const instruments = this.getInstruments();
 		
+		const instruments = this.getInstruments();
 		for (const instrument of instruments) {
 			this.insertInstrumentNotes(instrument, insertIndex, Array(this.notesPerMeasure).fill(constant_ABC_OFF))
 		}
@@ -473,12 +448,17 @@ function Track() {
 			// metronome.resetOptionsMenuOffsetClick();
 		}
 
-		this.setInstrumentNotes(Instruments.STICKING, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.STICKING)))
-		this.setInstrumentNotes(Instruments.HIGH_HAT, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.HIGH_HAT)))
-		this.setInstrumentNotes(Instruments.SNARE, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.SNARE)))
-		this.setInstrumentNotes(Instruments.KICK, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.KICK)))
-		this.setInstrumentNotes(Instruments.TOM1, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM1)))
-		this.setInstrumentNotes(Instruments.TOM4, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM4)))
+		const instruments = this.getInstruments();
+		for (const instrument of instruments) {
+			this.setInstrumentNotes(instrument, this.adjustNotesForNewDivision(this.getInstrumentNotes(instrument)))
+		}
+
+		// this.setInstrumentNotes(Instruments.STICKING, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.STICKING)))
+		// this.setInstrumentNotes(Instruments.HIGH_HAT, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.HIGH_HAT)))
+		// this.setInstrumentNotes(Instruments.SNARE, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.SNARE)))
+		// this.setInstrumentNotes(Instruments.KICK, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.KICK)))
+		// this.setInstrumentNotes(Instruments.TOM1, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM1)))
+		// this.setInstrumentNotes(Instruments.TOM4, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM4)))
 			
 		this.notify();
 	};
