@@ -17,13 +17,13 @@ export default {
 	},
 
 	methods: {
-		handleClick(action) {
+		handleClick(scope, action) {
 			if (action !== "cancel") {
 
 				// Determine start and end of loop based on action on single measure or all notes
 				var startIndex = 0;
 				var endIndex = editor.track.notesPerMeasure * editor.track.numberOfMeasures
-				if (action !== 'all_alternate') {
+				if (scope === 'measure') {
 					startIndex = editor.track.notesPerMeasure * (this.measureIndex - 1);
 					endIndex = startIndex + editor.track.notesPerMeasure;
 				} 
@@ -31,22 +31,27 @@ export default {
 				for (var i = startIndex; i < endIndex; i++) {
 					let newState = constant_ABC_OFF;					
 					switch (action) {
-						case "all_off":
-							newState = constant_ABC_OFF;
+						case "off":
+								newState = constant_ABC_OFF;
 							break;
-						case "all_right":
+						case "right":						
 							newState = constant_ABC_STICK_R;
 							break;
-						case "all_left":
+						case "left":						
 							newState = constant_ABC_STICK_L;
 							break;
 						case "alternate":
 							newState = (i % 2 === 0) ? constant_ABC_STICK_R : constant_ABC_STICK_L;						
-							break;
-						case "all_alternate":
-							newState = (i % 2 === 0) ? constant_ABC_STICK_R : constant_ABC_STICK_L;						
 							break;	
-						case "all_count":
+						case "reverse":
+							const note = editor.track.getInstrumentNote(Instruments.STICKING, i);	
+							if (note === constant_ABC_STICK_R) {
+								newState = constant_ABC_STICK_L;
+							} else if (note === constant_ABC_STICK_L) {
+								newState = constant_ABC_STICK_R;
+							}
+							break;							
+						case "count":
 							newState = constant_ABC_STICK_COUNT;
 							break;					
 					}
@@ -55,11 +60,6 @@ export default {
 				editor.track.notify();
 			}			
 		
-			// if (action == "mute") {
-			//     muteInstrument(instrument, measureForNoteLabelClick, true);
-			//     return false;
-			// }
-
 			this.$emit('close')
 		}
 	},
@@ -67,13 +67,19 @@ export default {
 	template: `
 	<div class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="stickingsLabelContextMenu" class="list">
-			<li @click='handleClick("all_off")'>Measure <b>Off</b></li>
-			<li @click='handleClick("alternate")'>Measure <b>R</b>/<b>L</b></li>
-			<li @click='handleClick("all_right")'>Measure <b>R</b>s</li>
-			<li @click='handleClick("all_left")'>Measure <b>L</b>s</li>
-			<li @click='handleClick("all_count")'>Measure <b>C</b>ounts</li>
-			<li @click='handleClick("all_alternate")'>All <b>R</b>/<b>L</b></li>
-			<li @click='handleClick("cancel")'>Cancel</li>
+			<li @click='handleClick("measure", "off")'>Measure <b>Off</b></li>
+			<li @click='handleClick("measure", "alternate")'>Measure <b>R</b>/<b>L</b></li>
+			<li @click='handleClick("measure", "right")'>Measure <b>R</b>s</li>
+			<li @click='handleClick("measure", "left")'>Measure <b>L</b>s</li>
+			<li @click='handleClick("measure", "count")'>Measure <b>C</b>ounts</li>
+			<li @click='handleClick("measure", "reverse")'>Measure <b>R</b>everse</li>
+			<li @click='handleClick("all", "off")'>All <b>Off</b></li>
+			<li @click='handleClick("all", "alternate")'>All <b>R</b>/<b>L</b></li>
+			<li @click='handleClick("all", "right")'>All <b>R</b>s</li>
+			<li @click='handleClick("all", "left")'>All <b>L</b>s</li>
+			<li @click='handleClick("all", "count")'>All <b>C</b>ounts</li>
+			<li @click='handleClick("all", "reverse")'>All <b>R</b>everse</li>
+			<li @click='handleClick("all", "cancel")'>Cancel</li>
 		</ul>
 	</div>
 	`
