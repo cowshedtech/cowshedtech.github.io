@@ -419,8 +419,7 @@ function Track() {
 
 		var isOldDivisionTriplets = isTripletDivision(this.timeDivision);
 		var isNewDivisionTriplets = isTripletDivision(newDivision);
-		// var new_notes_per_measure = calc_notes_per_measure((isNewDivisionTriplets ? 48 : 32), this.numBeats, this.noteValue);
-
+		
 		// check for incompatible odd time signature division   9/8 and 1/4notes for instance or 9/16 and 1/8notes
 		if ((newDivision * this.numBeats / this.noteValue) % 1 != 0) {
 			alert("1/" + newDivision + " notes are disabled in " + this.numBeats + "/" + this.noteValue + " time.  This combination would result in a half note.");
@@ -453,13 +452,6 @@ function Track() {
 			this.setInstrumentNotes(instrument, this.adjustNotesForNewDivision(this.getInstrumentNotes(instrument)))
 		}
 
-		// this.setInstrumentNotes(Instruments.STICKING, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.STICKING)))
-		// this.setInstrumentNotes(Instruments.HIGH_HAT, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.HIGH_HAT)))
-		// this.setInstrumentNotes(Instruments.SNARE, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.SNARE)))
-		// this.setInstrumentNotes(Instruments.KICK, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.KICK)))
-		// this.setInstrumentNotes(Instruments.TOM1, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM1)))
-		// this.setInstrumentNotes(Instruments.TOM4, this.adjustNotesForNewDivision(this.getInstrumentNotes(Instruments.TOM4)))
-			
 		this.notify();
 	};
 
