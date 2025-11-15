@@ -39,7 +39,7 @@ export default {
 
         handleTimeSigClick(event) {
             this.toggleMenu();
-            this.menuX = event.clientX - 90;
+            this.menuX = event.clientX;
             this.menuY = event.clientY;
         },
 
