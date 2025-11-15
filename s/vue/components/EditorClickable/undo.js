@@ -64,6 +64,10 @@ function addItemToUndoOrRedoStack(newURL, ourStack, noClear) {
         return false; // no change, so don't push
     }
 
+    if (newURL == redoStack[redoStack.length - 1]) {
+        return false;
+    }
+
     ourStack.push(newURL);
     while (ourStack.length > undoStackMaxSize)
         ourStack.shift();
