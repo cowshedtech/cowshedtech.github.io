@@ -65,7 +65,7 @@ export default {
 
 	template: `
 	<div class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
-		<ul :id="'tom' + tomIndex + 'LabelContextMenu'" class="list">
+		<ul :id="'tom' + tomIndex + 'LabelContextMenu'" class="list" :style="{ top: y + 'px', left: x + 'px' }">
 			<li @click.stop.prevent="handleClick('measure','off')">Measure off</li>
 			<li @click.stop.prevent="handleClick('measure','on')">Measure on</li>
 			<li id='mute_tom1_menu_item' @click.stop.prevent="handleClick('mute')">Measure muted</li>

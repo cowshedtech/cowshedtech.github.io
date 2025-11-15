@@ -66,7 +66,7 @@ export default {
 
   template: `
 	<div class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
-		<ul id="kickLabelContextMenu" class="list">
+    <ul id="kickLabelContextMenu" class="list" :style="{ top: y + 'px', left: x + 'px' }">
 			<li @click='handleClick("measure", "off")'>Measure off</li>
 			<li @click='handleClick("measure", "on")'>Measure on</li>
 			<li @click='handleClick("measure", "hh_foot_nums_on")'>Measure hi-hat foot #'s on</li>

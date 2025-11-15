@@ -84,7 +84,7 @@ export default {
 
 	template: `
 	<div class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
-		<ul id="stickingsLabelContextMenu" class="list">
+		<ul id="stickingsLabelContextMenu" class="list" :style="{ top: y + 'px', left: x + 'px' }">
 			<li @click='handleClick("measure", "off")'>Measure <b>Off</b></li>
 			<li @click='handleClick("measure", "alternate")'>Measure <b>R</b>/<b>L</b></li>
 			<li @click='handleClick("measure", "right")'>Measure <b>R</b>s</li>

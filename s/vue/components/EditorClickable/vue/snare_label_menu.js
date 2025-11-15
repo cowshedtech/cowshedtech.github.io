@@ -60,7 +60,7 @@ export default {
 
 	template: `
 	<div class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block" :style="{ top: y + 'px', left: x + 'px' }">
-		<ul id="snareLabelContextMenu" class="list">
+		<ul id="snareLabelContextMenu" class="list" :style="{ top: y + 'px', left: x + 'px' }">
 			<li @click='handleClick("measure","off")'>Measure off</li>
 			<li @click='handleClick("measure","on")'>Measure accented</li>
 			<li @click='handleClick("measure","on_normal")'>Measure normal</li>

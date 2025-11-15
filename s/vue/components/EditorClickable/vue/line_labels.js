@@ -1,7 +1,7 @@
-import HighHatLabelMenu from "./label_menu_highhat.js"
-import KickLabelMenu from "./label_menu_kick.js"
-import SnareLabelMenu from "./label_menu_snare.js"
-import TomLabelMenu from "./label_menu_tom.js"
+import HighHatLabelMenu from "./highhat_label_menu.js"
+import KickLabelMenu from "./kick_label_menu.js"
+import SnareLabelMenu from "./snare_label_menu.js"
+import TomLabelMenu from "./tom_label_menu.js"
 
 
 export default {
@@ -110,7 +110,7 @@ export default {
     },
 
     handleClick(event, instrument) {
-      this.menuX = event.clientX - 90;
+      this.menuX = event.clientX;
       this.menuY = event.clientY;
       this.toggleMenu(instrument);      
     }
