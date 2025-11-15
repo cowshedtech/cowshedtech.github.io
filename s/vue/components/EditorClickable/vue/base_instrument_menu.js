@@ -37,7 +37,7 @@ export default {
 		style="position: absolute; z-index: 9999; display: block" 
 		:style="{ top: y + 'px', left: x + 'px' }" 
 		class="noteContextMenuNew" >
-		  	<ul :id="element" class="list">
+		  	<ul :id="element" class="list" :style="{ top: y + 'px', left: x + 'px' }">
 				<MenuItem
 				v-for="instrumentMode in instrumentModes"
 				:key="instrumentMode.newState"
