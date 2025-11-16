@@ -39,7 +39,7 @@ export default {
       
       const { x, y } = this.getAdjustedPosition()
       return {
-        position: 'absolute',
+        position: 'fixed',
         zIndex: 9999,
         display: 'block',
         top: `${y}px`,

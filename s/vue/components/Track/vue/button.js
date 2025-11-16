@@ -25,7 +25,7 @@ export default {
         },
 
         handleClick(event) {
-            this.menuX = event.clientX - 63;
+            this.menuX = event.clientX;
             this.menuY = event.clientY;
             this.toggleMenu();            
         },

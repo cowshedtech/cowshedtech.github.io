@@ -22,6 +22,9 @@ export default {
       this.menuX = event.clientX;
       this.menuY = event.clientY;
       this.isPopupOpen = !this.isPopupOpen
+    },
+    closeMenu() {
+      this.isPopupOpen = false;
     }    
   },
 

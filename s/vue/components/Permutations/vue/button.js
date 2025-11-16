@@ -45,8 +45,11 @@ export default {
         handleClick(event) {
             if (!this.isEnabled) return
             this.toggleMenu();
-            this.menuX = event.client;
+            this.menuX = event.clientX;
             this.menuY = event.clientY;
+        },
+        closeMenu() {
+            this.isPopupOpen = false;
         }
     },
 
