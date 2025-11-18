@@ -162,46 +162,6 @@
 			eventBus: window.eventBus
 		}).mount('#vue-app')
 	</script>
-	
-	<!-- Deployment info footer (populated only on deployed envs) -->
-	<div id="deployFooter" style="font-size: 11px; color: #6e90a9; text-align: center; padding: 10px 0;"></div>
-	
-	<!-- Populate deployment info footer from ../deploy-info.json if available -->
-	<script>
-		(function () {
-			const el = document.getElementById('deployFooter');
-			if (!el) return;
-			const url = '../deploy-info.json';
-			fetch(url, { cache: 'no-store' })
-				.then(res => {
-					if (!res.ok) throw new Error('No deploy info');
-					return res.json();
-				})
-				.then(info => {
-					try {
-						const shortSha = (info.commit || '').substring(0, 7);
-						const deployedAt = info.deployedAt ? new Date(info.deployedAt).toLocaleString() : '';
-						const parts = [
-							info.branch ? `branch: ${info.branch}` : null,
-							shortSha ? `commit: ${shortSha}` : null,
-							deployedAt ? `deployed: ${deployedAt}` : null,
-							info.environment ? `env: ${info.environment}` : null,
-							info.actor ? `by: ${info.actor}` : null
-						].filter(Boolean);
-						if (parts.length) {
-							el.textContent = `Deployment · ${parts.join(' · ')}`;
-						}
-					} catch (e) {
-						// no-op
-					}
-				})
-				.catch(() => {
-					// hide footer if not deployed
-					el.style.display = 'none';
-				});
-		})();
-	</script>
-	
     </body>
 </html>
 
