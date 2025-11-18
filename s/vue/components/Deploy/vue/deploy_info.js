@@ -8,8 +8,15 @@ export default {
   computed: {
     text() {
       if (!this.info) return ''
+      const env = this.info.environment || ''
       const shortSha = (this.info.commit || '').substring(0, 7)
       const deployedAt = this.info.deployedAt ? new Date(this.info.deployedAt).toLocaleString() : ''
+      
+      // For main environment, show only the deployedAt date/time
+      if (env === 'main') {
+        return 'Updated ' + deployedAt || ''
+      }
+      
       const parts = [
         this.info.branch ? `branch: ${this.info.branch}` : null,
         shortSha ? `commit: ${shortSha}` : null,
