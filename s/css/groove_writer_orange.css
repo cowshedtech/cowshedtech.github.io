@@ -1189,6 +1189,18 @@
 		margin-right: 20px;
 		color: var(--highlight-color);
 	}
+	#deployInfoFooter {
+		z-index: 999;
+		position: fixed;
+		bottom: 3px;
+		/* align with left edge of main content area (72px) plus small padding */
+		left: 75px;
+		color: var(--highlight-color);
+		font-size: 11px;
+		padding: 2px 6px;
+		background-color: rgba(50, 126, 173, 0.15);
+		border-radius: 3px;
+	}
 	.totalTimeNum {
 		color: #EEE;
 	}
