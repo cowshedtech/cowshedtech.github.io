@@ -17,7 +17,7 @@ export default {
         this.info.environment ? `env: ${this.info.environment}` : null,
         this.info.actor ? `by: ${this.info.actor}` : null
       ].filter(Boolean)
-      return parts.length ? `Deployment · ${parts.join(' · ')}` : ''
+      return parts.length ? `Updated · ${parts.join(' · ')}` : ''
     }
   },
   mounted() {
