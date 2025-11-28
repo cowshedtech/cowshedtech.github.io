@@ -241,7 +241,7 @@ class MIDIPlayer {
             MIDI.Player.ctx.resume();
             this.resetStartTime();
             this.#lastUpdateTime = 0;
-            window.eventBus.$emit(EventTypes.LOAD_MIDI, { isPlaying: true });
+            window.eventBus.$emit(EventTypes.LOAD_MIDI, { playStarting: true, isPlaying: true });
             MIDI.Player.loop(this.#shouldRepeat); // set the loop parameter
             MIDI.Player.start();
         }
