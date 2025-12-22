@@ -51,6 +51,7 @@ function Track() {
 		this.timeDivision = 16;
 		this.numberOfMeasures = 1;
 		this.repeatedMeasures = new Map();
+		this.mutedMeasures = new Map(); // Map<measureIndex:number, Set<instrument:string>>
 		this.numBeats = 4;  // TimeSigTop: Top part of Time Signture 3/4, 4/4, 5/4, 6/8, etc...
 		this.noteValue = 4; // TimeSigBottom: Bottom part of Time Sig   4 = quarter notes, 8 = 8th notes, 16ths, etc..
 		this.notes = new Map();
@@ -309,6 +310,7 @@ function Track() {
     root.clearAllNotes = function() {
 		this.numberOfMeasures = 1;
 		this.repeatedMeasures.clear();
+		this.mutedMeasures.clear();
 
 		const instruments = this.getInstruments();
 		for (const instrument of instruments) {
@@ -345,6 +347,8 @@ function Track() {
 
 		// We need to move all the repeated measuresafter this measure up 1 
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
+		// Also shift any muted measure mappings after this measure
+		this.shiftMutedMeasuresAfterIndex(measureNum - 1, 1);
 		
 		this.notify();
 	};
@@ -367,6 +371,12 @@ function Track() {
 		this.numberOfMeasures++;
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 		this.repeatedMeasures.set(measureNum, this.repeatedMeasures.get(measureNum - 1) || 1);
+		// Shift muted measures and copy the source muted set to the newly duplicated measure
+		this.shiftMutedMeasuresAfterIndex(measureNum - 1, 1);
+		const srcMuted = this.mutedMeasures.get(measureNum - 1);
+		if (srcMuted && srcMuted.size > 0) {
+			this.mutedMeasures.set(measureNum, new Set(srcMuted));
+		}
 					
 		this.notify();
 	};
@@ -384,6 +394,9 @@ function Track() {
 		
 		this.repeatedMeasures.delete(measureNum - 1);
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, -1);
+		// Remove and shift muted measures accordingly
+		this.mutedMeasures.delete(measureNum - 1);
+		this.shiftMutedMeasuresAfterIndex(measureNum - 1, -1);
 		this.numberOfMeasures--;
 
 		this.notify();
@@ -508,6 +521,83 @@ function Track() {
 	}
 
 	/**
+	 * Shifts the muted measures map entries after a given index.
+	 * Mirrors shiftRepeatedMeasuresAfterIndex behavior for muting state.
+	 *
+	 * @param {number} measureIndex - Index of the measure to start shifting from (0-based)
+	 * @param {number} direction - 1 to shift right (after insert), -1 to shift left (after delete)
+	 */
+	root.shiftMutedMeasuresAfterIndex = function(measureIndex, direction) {
+		const sortedEntries = [...this.mutedMeasures.entries()].sort((a, b) => a[0] - b[0]);
+		for (let i = sortedEntries.length - 1; i >= 0; i--) {
+			const [key, value] = sortedEntries[i];
+			if (key > measureIndex) {
+				this.mutedMeasures.set(key + direction, value);
+				this.mutedMeasures.delete(key);
+			}
+		}
+	}
+
+	/**
+	 * Returns true if the given instrument is muted in the specified measure (1-based).
+	 */
+	root.isInstrumentMutedInMeasure = function(measureNum, instrument) {
+		const idx = measureNum - 1;
+		const mutedSet = this.mutedMeasures.get(idx);
+		return !!(mutedSet && mutedSet.has(instrument));
+	}
+
+	/**
+	 * Returns a Set of muted instruments for a given measure (1-based).
+	 * Always returns a Set (possibly empty).
+	 */
+	root.getMutedInstrumentsForMeasure = function(measureNum) {
+		const idx = measureNum - 1;
+		const mutedSet = this.mutedMeasures.get(idx);
+		return mutedSet ? new Set(mutedSet) : new Set();
+	}
+
+	/**
+	 * Mutes an instrument for the given measure (1-based).
+	 */
+	root.muteInstrumentForMeasure = function(measureNum, instrument) {
+		const idx = measureNum - 1;
+		let mutedSet = this.mutedMeasures.get(idx);
+		if (!mutedSet) {
+			mutedSet = new Set();
+			this.mutedMeasures.set(idx, mutedSet);
+		}
+		mutedSet.add(instrument);
+		this.notify();
+	}
+
+	/**
+	 * Unmutes an instrument for the given measure (1-based).
+	 */
+	root.unmuteInstrumentForMeasure = function(measureNum, instrument) {
+		const idx = measureNum - 1;
+		const mutedSet = this.mutedMeasures.get(idx);
+		if (mutedSet) {
+			mutedSet.delete(instrument);
+			if (mutedSet.size === 0) {
+				this.mutedMeasures.delete(idx);
+			}
+			this.notify();
+		}
+	}
+
+	/**
+	 * Toggles mute for an instrument at a measure (1-based).
+	 */
+	root.toggleMuteInstrumentForMeasure = function(measureNum, instrument) {
+		if (this.isInstrumentMutedInMeasure(measureNum, instrument)) {
+			this.unmuteInstrumentForMeasure(measureNum, instrument);
+		} else {
+			this.muteInstrumentForMeasure(measureNum, instrument);
+		}
+	}
+
+	/**
      * 
      */
 	root.noteGroupingSize = function() {
@@ -559,6 +649,11 @@ function Track() {
 
 		for (let measureIndex of track.repeatedMeasures.keys()) {
 			this.repeatedMeasures.set(this.numberOfMeasures + measureIndex, track.repeatedMeasures.get(measureIndex))
+		}
+
+		// Merge muted measures from appended track, offsetting indexes
+		for (let [measureIndex, mutedSet] of track.mutedMeasures.entries()) {
+			this.mutedMeasures.set(this.numberOfMeasures + measureIndex, new Set(mutedSet));
 		}
 
 		this.numberOfMeasures = this.numberOfMeasures + track.numberOfMeasures;
