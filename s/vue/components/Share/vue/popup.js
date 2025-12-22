@@ -74,12 +74,7 @@ export default {
 		 *
 		*/
 		handleCopyClick(event) {
-			event.preventDefault();
-
-			var copyText = document.getElementById("fullURLPopupTextField");
-			copyText.select();
-			copyText.setSelectionRange(0, 99999);	 // hack fix for mobile
-			document.execCommand("copy");
+			navigator.clipboard.writeText(this.url);
 		},
 
 
