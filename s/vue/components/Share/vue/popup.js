@@ -53,11 +53,11 @@ export default {
 		 *
 		*/
 		handleShortUrlChange() {
-			if (!this.isShortURL) {
+			if (this.isShortURL) {
 				this.url = this.shortURL;
 				this.isEmbedCode = false;
 			}
-			if (this.isShortURL) this.url = this.longURL;
+			if (!this.isShortURL) this.url = this.longURL;
 		},
 
 
@@ -65,8 +65,8 @@ export default {
 		 *
 		*/
 		handleEmbedUrlChange() {
-			if (!this.isEmbedCode) this.getEmbedURL();
-			if (this.isEmbedCode) this.url = this.longURL;
+			if (this.isEmbedCode) this.getEmbedURL();
+			if (!this.isEmbedCode) this.url = this.longURL;
 		},
 
 
@@ -135,7 +135,7 @@ export default {
 						type="checkbox" 
 						id="shortenerCheckbox"
 						v-model="isShortURL"
-						@click.stop.prevent="handleShortUrlChange"
+						@change.stop="handleShortUrlChange"
 					>Short URL
 				</label>
 			</span>
@@ -145,7 +145,7 @@ export default {
 						type="checkbox" 
 						id="embedCodeCheckbox"
 						v-model="isEmbedCode"
-						@click.stop.prevent="handleEmbedUrlChange"
+						@change.stop="handleEmbedUrlChange"
 					>Embed Code
 				</label>
 			</span>
