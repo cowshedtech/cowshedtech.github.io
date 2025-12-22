@@ -68,7 +68,7 @@ export default {
         <Tom :track="track" :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" :abcOn="abcOn" :midiPlayer="midiPlayer" :midiNormal="midiNormal"/>
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
-      <MuteButton :instrument="'tom' + tomIndex" :measureIndex="measureIndex"></MuteButton>
+      <MuteButton :instrument="'Tom' + tomIndex" :measureIndex="measureIndex"></MuteButton>
     </div>    
   `
 }

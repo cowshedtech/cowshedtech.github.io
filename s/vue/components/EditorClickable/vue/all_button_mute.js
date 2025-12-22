@@ -1,26 +1,63 @@
 export default {
   
   props: {
+    track: {
+      type: Object,
+      required: false
+    },
     instrument: {
-        type: String,
-        required: true
-      },
-      measureIndex: {
+      type: String,
+      required: true
+    },
+    measureIndex: {
       type: Number,
       required: true
     }
   },
 
+  data() {
+    return {
+      // Increment to trigger recomputation of computed props on 'track-updated'
+      refreshCounter: 0,
+      removeHandler: null
+    }
+  },
+
+  computed: {
+    isVisible() {
+      // establish reactive dependency
+      void this.refreshCounter;
+      return editor.track.isInstrumentMutedInMeasure(this.instrument, this.measureIndex);
+    },
+    visibilityStyle() {
+      // Override CSS default (display:none) when visible
+      return {
+        display: this.isVisible ? 'inline-block' : 'none'
+      };
+    }
+  },
+
   methods: {
     handleClick(event) {
-        muteInstrument(this.instrument, this.measureIndex, false)
+        editor.track.toggleMuteInstrumentForMeasure(this.instrument, this.measureIndex);
     }
+  },
+
+  mounted() {
+    this.removeHandler = eventBus.$on('track-updated', () => {
+      this.refreshCounter++;
+    });
+  },
+
+  beforeUnmount() {
+    if (this.removeHandler) this.removeHandler();
   },
 
   template: `
     <div 
         :id="'unmute' + instrument + 'Button' + measureIndex" 
         :class="'unmute' + instrument.charAt(0).toUpperCase() + instrument.slice(1) + 'Button'"
+        :style="visibilityStyle"
         @click.stop.prevent="handleClick">
       <span class="fa-stack unmuteHHStack">
         <i class="fa fa-ban fa-stack-2x" style="color:red"></i>

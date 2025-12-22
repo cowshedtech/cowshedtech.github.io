@@ -32,6 +32,13 @@ export default {
 				return;
 			}
 
+            if (action === "mute") {
+				editor.track.muteInstrumentForMeasure(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.measureIndex);
+				editor.track.notify();						
+				this.$emit('close');
+				return;
+			}
+
 			const track = editor.track;
 			const notesPerMeasure = track.notesPerMeasure;
 			const startIndex = scope === 'measure'
@@ -54,11 +61,6 @@ export default {
     
             editor.track.notify();
         
-            // if (action == "mute") {
-            //     muteInstrument(instrument, measureForNoteLabelClick, true);
-            //     return false;
-            // }
-
             this.$emit('close')
         }
     },
@@ -68,7 +70,7 @@ export default {
 		<ul :id="'tom' + tomIndex + 'LabelContextMenu'" class="list" :style="{ top: y + 'px', left: x + 'px' }">
 			<li @click.stop.prevent="handleClick('measure','off')">Measure off</li>
 			<li @click.stop.prevent="handleClick('measure','on')">Measure on</li>
-			<li id='mute_tom1_menu_item' @click.stop.prevent="handleClick('mute')">Measure muted</li>
+			<li @click.stop.prevent="handleClick('measure','mute')">Measure muted</li>
             <li @click.stop.prevent="handleClick('all','off')">All off</li>
 			<li @click.stop.prevent="handleClick('all','on')">All on</li>
 			<li @click.stop.prevent="handleClick('cancel')">Cancel</li>

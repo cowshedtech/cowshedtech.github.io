@@ -541,7 +541,7 @@ function Track() {
 	/**
 	 * Returns true if the given instrument is muted in the specified measure (1-based).
 	 */
-	root.isInstrumentMutedInMeasure = function(measureNum, instrument) {
+	root.isInstrumentMutedInMeasure = function(instrument, measureNum) {
 		const idx = measureNum - 1;
 		const mutedSet = this.mutedMeasures.get(idx);
 		return !!(mutedSet && mutedSet.has(instrument));
@@ -560,7 +560,7 @@ function Track() {
 	/**
 	 * Mutes an instrument for the given measure (1-based).
 	 */
-	root.muteInstrumentForMeasure = function(measureNum, instrument) {
+	root.muteInstrumentForMeasure = function(instrument, measureNum) {
 		const idx = measureNum - 1;
 		let mutedSet = this.mutedMeasures.get(idx);
 		if (!mutedSet) {
@@ -574,7 +574,7 @@ function Track() {
 	/**
 	 * Unmutes an instrument for the given measure (1-based).
 	 */
-	root.unmuteInstrumentForMeasure = function(measureNum, instrument) {
+	root.unmuteInstrumentForMeasure = function(instrument, measureNum) {
 		const idx = measureNum - 1;
 		const mutedSet = this.mutedMeasures.get(idx);
 		if (mutedSet) {
@@ -589,11 +589,11 @@ function Track() {
 	/**
 	 * Toggles mute for an instrument at a measure (1-based).
 	 */
-	root.toggleMuteInstrumentForMeasure = function(measureNum, instrument) {
-		if (this.isInstrumentMutedInMeasure(measureNum, instrument)) {
-			this.unmuteInstrumentForMeasure(measureNum, instrument);
+	root.toggleMuteInstrumentForMeasure = function(instrument, measureNum) {
+		if (this.isInstrumentMutedInMeasure(instrument, measureNum)) {
+			this.unmuteInstrumentForMeasure(instrument, measureNum);
 		} else {
-			this.muteInstrumentForMeasure(measureNum, instrument);
+			this.muteInstrumentForMeasure(instrument, measureNum);
 		}
 	}
 

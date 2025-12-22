@@ -46,7 +46,7 @@ export default {
         <Snare :track="track" :noteIndex="startNoteIndex + (i - 1)" :midiPlayer="midiPlayer"/>
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
-      <MuteButton instrument="snare" :measureIndex="measureIndex"></MuteButton>
+      <MuteButton instrument="Snare" :measureIndex="measureIndex"></MuteButton>
     </div>
     <SnareMenu />    
   `

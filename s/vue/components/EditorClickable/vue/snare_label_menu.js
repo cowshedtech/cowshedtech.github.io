@@ -24,6 +24,13 @@ export default {
 				return;
 			}
 
+			if (action === "mute") {
+				editor.track.muteInstrumentForMeasure(Instruments.SNARE, this.measureIndex);
+				editor.track.notify();						
+				this.$emit('close');
+				return;
+			}
+
 			const track = editor.track;
 			const notesPerMeasure = track.notesPerMeasure;
 			const startIndex = scope === 'measure'
@@ -49,11 +56,6 @@ export default {
 			}
 			editor.track.notify();
 			
-			// if (action == "mute") {
-			// 	muteInstrument(instrument, measureForNoteLabelClick, true);
-			// 	return false;
-			// }
-			
 			this.$emit('close')
 		}
 	},
@@ -65,12 +67,12 @@ export default {
 			<li @click='handleClick("measure","on")'>Measure accented</li>
 			<li @click='handleClick("measure","on_normal")'>Measure normal</li>
 			<li @click='handleClick("measure","on_ghost")'>Measure ghosts</li>
-			<li id='mute_snare_menu_item' @click='handleClick("mute")'>Measure muted</li>
+			<li @click='handleClick("measure","mute")'>Measure muted</li>
 			<li @click='handleClick("all","off")'>All off</li>
 			<li @click='handleClick("all","on")'>All accented</li>
 			<li @click='handleClick("all","on_normal")'>All normal</li>
 			<li @click='handleClick("all","on_ghost")'>All ghosts</li>
-			<li @click='handleClick("cancel")'>Cancel</li>
+			<li @click='handleClick("all","cancel")'>Cancel</li>
 		</ul>
 	</div>
 `

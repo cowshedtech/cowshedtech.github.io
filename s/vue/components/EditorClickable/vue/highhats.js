@@ -45,7 +45,7 @@ export default {
         <HighHat :track="track" :noteIndex="startNoteIndex + (i - 1)" :midiPlayer="midiPlayer"/>
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
-      <MuteButton instrument="hh" :measureIndex="measureIndex"></MuteButton>
+      <MuteButton instrument="HighHat" :measureIndex="measureIndex"></MuteButton>
     </div>  
   `
 }

@@ -46,7 +46,7 @@ export default {
         <Kick :track="track" :noteIndex="startNoteIndex + (i - 1)" :midiPlayer="midiPlayer"/>
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
-      <MuteButton instrument="kick" :measureIndex="measureIndex"></MuteButton>
+      <MuteButton instrument="Kick" :measureIndex="measureIndex"></MuteButton>
     </div>
     <KickMenu />    
   `

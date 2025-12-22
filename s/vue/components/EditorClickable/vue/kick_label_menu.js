@@ -18,12 +18,20 @@ export default {
 
 	methods: {
 		handleClick(scope, action) {
+			const track = editor.track;
+			
 			if (action === "cancel") {
 				this.$emit('close');
 				return;
 			}
 
-			const track = editor.track;
+			if (action === "mute") {
+				editor.track.muteInstrumentForMeasure(Instruments.KICK, this.measureIndex);
+				editor.track.notify();						
+				this.$emit('close');
+				return;
+			}
+		
 			const notesPerMeasure = track.notesPerMeasure;
 			const startIndex = scope === 'measure'
 				? notesPerMeasure * (this.measureIndex - 1)
@@ -55,11 +63,6 @@ export default {
 
 			editor.track.notify();
 						
-			// if (action == "mute") {
-			// 	muteInstrument(instrument, measureForNoteLabelClick, true);
-			// 	return false;
-			// }
-		
 			this.$emit('close')
 		}
 	},
@@ -71,12 +74,12 @@ export default {
 			<li @click='handleClick("measure", "on")'>Measure on</li>
 			<li @click='handleClick("measure", "hh_foot_nums_on")'>Measure hi-hat foot #'s on</li>
 			<li @click='handleClick("measure", "hh_foot_ands_on")'>Measure hi-hat foot &'s on</li>
-			<li id='mute_kick_menu_item' @click='handleClick("mute")'>Measure muted</li>
+			<li @click='handleClick("measure", "mute")'>Measure muted</li>
 			<li @click='handleClick("all", "off")'>All off</li>
 			<li @click='handleClick("all", "on")'>All on</li>
 			<li @click='handleClick("all", "hh_foot_nums_on")'>All hi-hat foot #'s on</li>
 			<li @click='handleClick("all", "hh_foot_ands_on")'>All hi-hat foot &'s on</li>
-			<li id='mute_kick_menu_item' @click='handleClick("mute")'>All muted</li>
+			<li @click='handleClick("all", "mute")'>All muted</li>
 			<li @click='handleClick("cancel")'>Cancel</li>
 		</ul>
 	</div>
