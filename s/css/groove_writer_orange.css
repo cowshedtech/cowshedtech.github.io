@@ -951,12 +951,13 @@
 		font-size: 14px;
 	}
 	#fullURLPopup {
-		position:absolute; left:300px; top:250px; z-index:999;
+		position:fixed; left:300px; top:250px; z-index:999;
 		background-color: #FFF;
 		width: 400px;
 		padding: 10px;
 		border: solid 2px #999;
 		border-radius: 5px;
+		overflow: visible;
 	}
 	#metronomeAutoSpeedupConfiguration {
 		position:absolute; left:300px; top:250px; z-index:999;
@@ -1097,6 +1098,15 @@
 	.sharer-0 label {
 		background: var(--highlight-color) !important;
 		color: #FFF !important;
+	}
+	/* Ensure share-button menu icons are not clipped in the popup */
+	#fullURLPopup share-button .sb-social {
+		overflow: visible;
+		z-index: 10000;
+	}
+	#fullURLPopup share-button .sb-social ul li {
+		height: 28px;
+		padding: 14px 0 16px;
 	}
 	.metronomeAutoSpeedupInputRow {
 		vertical-align: text-bottom;

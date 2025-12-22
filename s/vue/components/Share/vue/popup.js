@@ -18,7 +18,9 @@ export default {
 			shortURL: "",
 			url: "",
 			isShortURL: false,
-			isEmbedCode: false
+			isEmbedCode: false,
+			popupLeft: 300,
+			popupTop: 250
 		}
 	},
 
@@ -26,6 +28,14 @@ export default {
 		isOpen: {
 			type: Boolean,
 			default: false
+		},
+		left: {
+			type: Number,
+			default: null
+		},
+		top: {
+			type: Number,
+			default: null
 		}
 	},
 
@@ -36,6 +46,9 @@ export default {
 			this.longURL = editor?.get_FullURLForPage() || "";
 			this.url = this.longURL;
 			this.getShortURL();
+			// position popup based on provided props, falling back to defaults
+			this.popupLeft = (this.left ?? 300);
+			this.popupTop = (this.top ?? 250);
 		}
 	},
 
@@ -118,7 +131,7 @@ export default {
 
 	template: `
 	<!-- this is used by the share/save button, and is hidden by default -->
-	<div id="fullURLPopup" v-if="isOpen">
+	<div id="fullURLPopup" v-if="isOpen" :style="{ left: popupLeft + 'px', top: popupTop + 'px' }">
 	    <span id="fullURLPopupCloseButton" @click="close();"><i class="fa fa-lg fa-times-circle"></i></span>
 		<div id="fullURLPopupTitle">Share Your Groove</div>
 		<div id="fullURLPopupSubTitle">Use this URL to share or save this groove</div>

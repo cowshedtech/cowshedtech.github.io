@@ -10,7 +10,9 @@ export default {
 
   data() {
     return {
-      isPopupOpen: false
+      isPopupOpen: false,
+      popupLeft: 300,
+      popupTop: 250
     }
   },
 
@@ -28,6 +30,11 @@ export default {
      * @param {MouseEvent} event - The click event
      */
     handleClick(event) {
+      // position near the click (viewport coords, matches fixed-position popup)
+      if (event && typeof event.clientX === 'number' && typeof event.clientY === 'number') {
+        this.popupLeft = event.clientX;
+        this.popupTop = event.clientY;
+      }
       this.toggleMenu();
     }
   },
@@ -41,7 +48,7 @@ export default {
     >
       <i class="fa fa-share fa-2x"></i>      
     </BottomNavigationButton>
-    <Menu :is-open="isPopupOpen" @close-clicked="closeMenu"></Menu>
+    <Menu :is-open="isPopupOpen" :left="popupLeft" :top="popupTop" @close-clicked="closeMenu"></Menu>
   `
 }
 

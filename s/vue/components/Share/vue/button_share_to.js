@@ -10,16 +10,7 @@ export default {
 		}
 	},
 
-  watch: {
-		gsurl() {
-			console.log(`here`)
-		}
-	},
-
   mounted() {
-
-    // TODO FIX
-    console.log(this.gsurl)
 
     var parent = this;
 
@@ -33,41 +24,29 @@ export default {
       networks: {
         facebook: {
           before: function () {
-            // this.url = document.getElementById("fullURLPopupTextField").value;
-            this.url = parent.url
+            this.url = parent.gsurl
             this.description = "Check out this groove.";
           },
-          //app_id : "839699029418014"    // staging id
-          // app_id : "1499163983742002"   // MLDC id, lou created
           appId: "445510575651140",   // MLDC id, brad created
           loadSdk: true
         },
-        googlePlus: {
-          enabled: false
-        },
         twitter: {
           before: function () {
-            // this.url = encodeURIComponent(document.getElementById("fullURLPopupTextField").value);
-            // this.description = "Check out this groove:  " + document.getElementById("fullURLPopupTextField").value;
-            this.url = parent.url
-            this.description = "Check out this groove:  " + url;            
+            this.url = parent.gsurl
+            this.description = "Check out this groove";
           }
         },
         reddit: {
           before: function () {
-            // this.url = document.getElementById("fullURLPopupTextField").value;
-            // this.title = "Check out this groove: " + document.getElementById("fullURLPopupTextField").value;
-            this.url = parent.url            
-            this.title = "Check out this groove: " + url;
+            this.url = parent.gsurl
+            this.description = "Check out this groove";
           }
         },
+        googlePlus: {
+          enabled: false
+        },
         email: {
-          before: function () {
-            // this.url = document.getElementById("fullURLPopupTextField").value;
-            // this.description = "Check out this groove. %0A%0A " + encodeURIComponent(document.getElementById("fullURLPopupTextField").value);
-            this.url = parent.url
-            this.description = "Check out this groove. %0A%0A " + url;
-          }
+          enabled: false
         },
         pinterest: {
           enabled: false
@@ -82,6 +61,5 @@ export default {
     })
   },
 
-  props: { },
   template: ``
 }
