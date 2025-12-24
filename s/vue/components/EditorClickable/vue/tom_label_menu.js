@@ -56,14 +56,7 @@ export default {
 				return;
 			}
 
-            if (action === "mute") {
-				editor.track.muteInstrumentForMeasure(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.measureIndex);
-				editor.track.notify();						
-				this.$emit('close');
-				return;
-			}
-
-			if (scope === 'measure' && action === "mute") {
+            if (scope === 'measure' && action === "mute") {
 				editor.track.muteInstrumentForMeasure(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.measureIndex);				
 			}
 
