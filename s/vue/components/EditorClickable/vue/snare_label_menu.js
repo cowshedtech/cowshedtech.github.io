@@ -27,31 +27,53 @@ export default {
 	computed: {
 		isMeasureMuted() {
 			void this.refreshCounter;
-			return editor.track.isInstrumentMutedInMeasure(this.measureIndex, Instruments.SNARE);
+			return editor.track.isInstrumentMutedInMeasure(Instruments.SNARE, this.measureIndex);
+		},
+		isInstrumentMuted() {
+			void this.refreshCounter;
+			return editor.track.isInstrumentMuted(Instruments.SNARE);
+		},
+		isInstrumentMutedEverywhere() {
+			void this.refreshCounter;
+			return editor.track.isInstrumentMutedEverywhere(Instruments.SNARE);
 		}
 	},
 
 	methods: {
 		handleClick(scope, action) {
+			const track = editor.track;
+			
 			if (action === "cancel") {
 				this.$emit('close');
 				return;
 			}
 
-			if (action === "mute") {
-				editor.track.muteInstrumentForMeasure(Instruments.SNARE, this.measureIndex);
+			if (scope === 'measure' && action === "mute") {
+				editor.track.muteInstrumentForMeasure(Instruments.SNARE, this.measureIndex);				
+			}
+
+			if (scope === 'measure' && action === "unmute") {
+				editor.track.unmuteInstrumentForMeasure(Instruments.SNARE, this.measureIndex);				
+			}
+
+			if (scope === 'all' && action === "mute") {
+				for (let i = 1; i <= track.numberOfMeasures; i++) {
+					editor.track.muteInstrumentForMeasure(Instruments.SNARE, i);				
+				}								
+			}
+
+			if (scope === 'all' && action === "unmute") {
+				for (let i = 1; i <= track.numberOfMeasures; i++) {
+					editor.track.unmuteInstrumentForMeasure(Instruments.SNARE, i);				
+				}								
+			}
+
+			if (action === "unmute" || action === "mute") {
 				editor.track.notify();						
 				this.$emit('close');
 				return;
-			}
-			if (action === "unmute") {
-				editor.track.unmuteInstrumentForMeasure(Instruments.SNARE, this.measureIndex);
-				editor.track.notify();
-				this.$emit('close');
-				return;
-			}
+			}		
 
-			const track = editor.track;
 			const notesPerMeasure = track.notesPerMeasure;
 			const startIndex = scope === 'measure'
 				? notesPerMeasure * (this.measureIndex - 1)
@@ -97,12 +119,14 @@ export default {
 			<li @click='handleClick("measure","on")'>Measure accented</li>
 			<li @click='handleClick("measure","on_normal")'>Measure normal</li>
 			<li @click='handleClick("measure","on_ghost")'>Measure ghosts</li>
-			<li v-if="!isMeasureMuted" @click='handleClick("measure","mute")'>Measure muted</li>
-			<li v-else @click='handleClick("measure","unmute")'>Measure unmuted</li>
+			<li v-if="!isMeasureMuted" @click='handleClick("measure", "mute")'>Measure muted</li>
+			<li v-else @click='handleClick("measure", "unmute")'>Measure unmuted</li>
 			<li @click='handleClick("all","off")'>All off</li>
 			<li @click='handleClick("all","on")'>All accented</li>
 			<li @click='handleClick("all","on_normal")'>All normal</li>
 			<li @click='handleClick("all","on_ghost")'>All ghosts</li>
+			<li v-if="!isInstrumentMutedEverywhere" @click='handleClick("all", "mute")'>All muted</li>
+			<li v-if="isInstrumentMuted" @click='handleClick("all", "unmute")'>All unmuted</li>
 			<li @click='handleClick("all","cancel")'>Cancel</li>
 		</ul>
 	</div>

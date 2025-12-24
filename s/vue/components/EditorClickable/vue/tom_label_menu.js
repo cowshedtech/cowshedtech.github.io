@@ -25,8 +25,32 @@ export default {
         }
 	},
 
+	data() {
+		return {
+			refreshCounter: 0,
+			removeHandler: null
+		}
+	},
+
+	computed: {
+		isMeasureMuted() {
+			void this.refreshCounter;
+			return editor.track.isInstrumentMutedInMeasure(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.measureIndex);
+		},
+		isInstrumentMuted() {
+			void this.refreshCounter;
+			return editor.track.isInstrumentMuted(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4);
+		},
+		isInstrumentMutedEverywhere() {
+			void this.refreshCounter;
+			return editor.track.isInstrumentMutedEverywhere(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4);
+		}	
+	},
+
 	methods: {
 		handleClick(scope, action) {
+			const track = editor.track;
+			
 			if (action === "cancel") {
 				this.$emit('close');
 				return;
@@ -39,7 +63,26 @@ export default {
 				return;
 			}
 
-			const track = editor.track;
+			if (scope === 'measure' && action === "mute") {
+				editor.track.muteInstrumentForMeasure(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.measureIndex);				
+			}
+
+			if (scope === 'measure' && action === "unmute") {
+				editor.track.unmuteInstrumentForMeasure(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.measureIndex);				
+			}
+
+			if (scope === 'all' && action === "mute") {
+				for (let i = 1; i <= track.numberOfMeasures; i++) {
+					editor.track.muteInstrumentForMeasure(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, i);				
+				}								
+			}
+
+			if (scope === 'all' && action === "unmute") {
+				for (let i = 1; i <= track.numberOfMeasures; i++) {
+					editor.track.unmuteInstrumentForMeasure(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, i);				
+				}								
+			}
+
 			const notesPerMeasure = track.notesPerMeasure;
 			const startIndex = scope === 'measure'
 				? notesPerMeasure * (this.measureIndex - 1)
@@ -65,14 +108,28 @@ export default {
         }
     },
 
+	mounted() {
+		this.removeHandler = (window.eventBus || eventBus).$on('track-updated', () => {
+			this.refreshCounter++;
+			this.$forceUpdate();
+		});
+	},
+
+	beforeUnmount() {
+		if (this.removeHandler) this.removeHandler();
+	},
+
 	template: `
 	<div class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
 		<ul :id="'tom' + tomIndex + 'LabelContextMenu'" class="list" :style="{ top: y + 'px', left: x + 'px' }">
 			<li @click.stop.prevent="handleClick('measure','off')">Measure off</li>
 			<li @click.stop.prevent="handleClick('measure','on')">Measure on</li>
-			<li @click.stop.prevent="handleClick('measure','mute')">Measure muted</li>
+			<li v-if="!isMeasureMuted" @click='handleClick("measure", "mute")'>Measure muted</li>
+			<li v-else @click='handleClick("measure", "unmute")'>Measure unmuted</li>
             <li @click.stop.prevent="handleClick('all','off')">All off</li>
 			<li @click.stop.prevent="handleClick('all','on')">All on</li>
+			<li v-if="!isInstrumentMutedEverywhere" @click='handleClick("all", "mute")'>All muted</li>
+			<li v-if="isInstrumentMuted" @click='handleClick("all", "unmute")'>All unmuted</li>
 			<li @click.stop.prevent="handleClick('cancel')">Cancel</li>
 		</ul>
 	</div>
