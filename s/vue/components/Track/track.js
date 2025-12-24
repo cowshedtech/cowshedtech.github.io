@@ -548,6 +548,38 @@ function Track() {
 	}
 
 	/**
+	 * Returns true if the given instrument is muted in any measure.
+	 */
+	root.isInstrumentMuted = function(instrument) {
+		for (const mutedSet of this.mutedMeasures.values()) {
+			if (mutedSet && mutedSet.has(instrument)) return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns true if the given instrument is unmuted in every measure.
+	 */
+	root.isInstrumentUnmutedEverywhere = function(instrument) {
+		for (let i = 0; i < this.numberOfMeasures; i++) {
+			const mutedSet = this.mutedMeasures.get(i);
+			if (mutedSet && mutedSet.has(instrument)) return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Returns true if the given instrument is muted in every measure.
+	 */
+	root.isInstrumentMutedEverywhere = function(instrument) {
+		for (let i = 0; i < this.numberOfMeasures; i++) {
+			const mutedSet = this.mutedMeasures.get(i);
+			if (!(mutedSet && mutedSet.has(instrument))) return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Returns a Set of muted instruments for a given measure (1-based).
 	 * Always returns a Set (possibly empty).
 	 */

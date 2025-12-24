@@ -17,6 +17,20 @@ export default {
 		}
 	},
 
+	data() {
+		return {
+			refreshCounter: 0,
+			removeHandler: null
+		}
+	},
+
+	computed: {
+		isMeasureMuted() {
+			void this.refreshCounter;
+			return editor.track.isInstrumentMutedInMeasure(this.measureIndex, Instruments.SNARE);
+		}
+	},
+
 	methods: {
 		handleClick(scope, action) {
 			if (action === "cancel") {
@@ -27,6 +41,12 @@ export default {
 			if (action === "mute") {
 				editor.track.muteInstrumentForMeasure(Instruments.SNARE, this.measureIndex);
 				editor.track.notify();						
+				this.$emit('close');
+				return;
+			}
+			if (action === "unmute") {
+				editor.track.unmuteInstrumentForMeasure(Instruments.SNARE, this.measureIndex);
+				editor.track.notify();
 				this.$emit('close');
 				return;
 			}
@@ -60,6 +80,16 @@ export default {
 		}
 	},
 
+	mounted() {
+		this.removeHandler = eventBus.$on('track-updated', () => {
+			this.refreshCounter++;
+		});
+	},
+
+	beforeUnmount() {
+		if (this.removeHandler) this.removeHandler();
+	},
+
 	template: `
 	<div class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block" :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="snareLabelContextMenu" class="list" :style="{ top: y + 'px', left: x + 'px' }">
@@ -67,7 +97,8 @@ export default {
 			<li @click='handleClick("measure","on")'>Measure accented</li>
 			<li @click='handleClick("measure","on_normal")'>Measure normal</li>
 			<li @click='handleClick("measure","on_ghost")'>Measure ghosts</li>
-			<li @click='handleClick("measure","mute")'>Measure muted</li>
+			<li v-if="!isMeasureMuted" @click='handleClick("measure","mute")'>Measure muted</li>
+			<li v-else @click='handleClick("measure","unmute")'>Measure unmuted</li>
 			<li @click='handleClick("all","off")'>All off</li>
 			<li @click='handleClick("all","on")'>All accented</li>
 			<li @click='handleClick("all","on_normal")'>All normal</li>
