@@ -459,7 +459,7 @@ function createMidiUrlFromClickableUI(MIDI_type) {
 
     // just the first measure
     var num_notes = get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
-    muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
+    muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 1);
 
     var midiFile = new Midi.File();
     var midiTrack = new Midi.Track();
