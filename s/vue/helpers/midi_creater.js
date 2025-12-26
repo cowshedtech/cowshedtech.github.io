@@ -538,7 +538,7 @@ function createMidiUrlFromClickableUI(MIDI_type) {
 
                 // get another measure
                 get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, editor.track.notesPerMeasure * i);
-                muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, i);
+                muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, i+1);
 
                 let repeat = editor.track.repeatedMeasures.has(i) ? editor.track.repeatedMeasures.get(i) : 1;
                 for (let i = 0; i < repeat; i++) {
