@@ -45,19 +45,7 @@ function muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Ar
     if (editor.track.isInstrumentMutedInMeasure(Instruments.TOM4, measureIndex))
         fill_array_with_value_false(Toms_Array[3], Toms_Array[3].length);
     if (editor.track.isInstrumentMutedInMeasure(Instruments.KICK, measureIndex))
-        fill_array_with_value_false(Kick_Array, Kick_Array.length);
-
-    // if (isInstrumentMuted("hh", measureIndex + 1))
-    //     fill_array_with_value_false(HH_Array, HH_Array.length);
-    // if (isInstrumentMuted("snare", measureIndex + 1))
-    //     fill_array_with_value_false(Snare_Array, Snare_Array.length);
-    // if (isInstrumentMuted("kick", measureIndex + 1))
-    //     fill_array_with_value_false(Kick_Array, Kick_Array.length);
-
-    // for (var i = 0; i < Toms_Array.length; i++) {
-    //     if (isInstrumentMuted("tom" + (i + 1), measureIndex + 1))
-    //         fill_array_with_value_false(Toms_Array[i], Toms_Array[i].length);
-    // }
+        fill_array_with_value_false(Kick_Array, Kick_Array.length);    
 }
 
 
