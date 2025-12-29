@@ -1,37 +1,5 @@
 // Javascript for the Groove Scribe HTML application
 
-/**
- * Checks if a specific instrument is muted for a given measure
- * @param {string} instrument - The instrument name (e.g., 'HH', 'Snare')
- * @param {number} measure - The measure number
- * @returns {boolean} True if the instrument is muted, false otherwise
- */
-function isInstrumentMuted(instrument, measure) {
-    const buttonId = `unmute${instrument}Button${measure}`;
-    const button = document.getElementById(buttonId);
-    
-    return button?.style.display === "inline-block" ?? false;
-}
-
-
-//
-//
-//
-function muteInstrument(instrument, measure, muteElseUnmute) {
-    // find unmuteHHButton1  or unmuteSnareButton2
-    var buttonName = "unmute" + instrument + "Button" + measure
-    var button = document.getElementById(buttonName);
-    if (muteElseUnmute)
-        button.style.display = "inline-block";
-    else
-        button.style.display = "none";
-
-        midiPlayer.noteHasChanged();
-}
-
-
-
-
 // each of the instruments can be muted.   Check the UI and zero out the array if the instrument is marked as muted
 // for a particular measure
 function muteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, measureIndex) {
