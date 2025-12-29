@@ -1,3 +1,8 @@
+/*
+* This code is used to inject Mixpanel token via cloudflare working
+* It enables us to set mixpanel tokens as runtime config
+*/
+
 export async function onRequest(context) {
     // Get the original response
     const response = await context.next();
