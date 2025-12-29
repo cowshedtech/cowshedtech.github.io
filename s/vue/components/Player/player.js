@@ -93,7 +93,7 @@ class MIDIPlayer {
      * 
      */
     _getSoundFontLocation() {
-        return getGrooveUtilsBaseLocation() + "../soundfont/";
+        return getGrooveUtilsBaseLocation() + "../js/thirdparty/soundfont/";
     };
     
 
