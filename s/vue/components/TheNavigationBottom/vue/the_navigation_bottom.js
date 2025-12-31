@@ -4,7 +4,7 @@ import DownloadButton from '../../Download/vue/button.js'
 import ShareButton from '../../Share/vue/button.js'
 import StickingsButton from '../../Options/vue/stickings_button.js'
 import TomsButton from '../../Options/vue/toms_button.js'
-import ClearButton from '../../Clear/vue/button.js'
+import ClearButton from '../../EditorClear/vue/button.js'
 
 export default {
   components: {
