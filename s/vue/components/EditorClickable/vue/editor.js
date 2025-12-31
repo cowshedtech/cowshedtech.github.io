@@ -1,5 +1,6 @@
 import ContextMenus from './context_menus.js'
 import Measure from './measure.js'
+import TextFields from './text_fields.js'
 
 export default {
   data() {
@@ -23,10 +24,11 @@ export default {
   },
 
   components: {
-    ContextMenus, Measure
+    ContextMenus, Measure, TextFields
   },
 
   template: `
+    <TextFields></TextFields>
     <div id="musicalInput" class="fullWidthEle">
       <div id="measureContainer">
         <template v-for="i in track.numberOfMeasures" :key="i">

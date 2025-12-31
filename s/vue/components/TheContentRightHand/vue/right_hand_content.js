@@ -5,8 +5,7 @@ import GrooveDBMetaData from '../../DisplayMetadata/vue/groovedb_metadata.js'
 import GrooveDBDisplay from '../../DisplayABC/vue/grovedb_display.js'
 import TotalPlayTime from '../../Player/vue/totals_display.js'
 import DeployInfo from '../../Deploy/vue/deploy_info.js'
-import MeasureContainer from '../../EditorClickable/vue/editor.js'
-import MusicTextFields from '../../EditorMusicTextFields/vue/music_text_fields.js'
+import Editor from '../../EditorClickable/vue/editor.js'
 import Warnings from '../../DisplayWarnings/vue/warnings.js'
 import SheetMusic from '../../DisplaySheetMusic/vue/display.js'
 import PermutationOptions from '../../Permutations/vue/options.js'
@@ -17,7 +16,7 @@ export default {
   },
   
   components: {
-    Editable, BottomNavigation,HiddenDiscription,GrooveDBMetaData,GrooveDBDisplay, TotalPlayTime, DeployInfo, MeasureContainer, MusicTextFields, Warnings, SheetMusic, PermutationOptions
+    Editable, BottomNavigation,HiddenDiscription,GrooveDBMetaData,GrooveDBDisplay, TotalPlayTime, DeployInfo, Editor, Warnings, SheetMusic, PermutationOptions
   },
   
   template: `  
@@ -30,10 +29,7 @@ export default {
         <Warnings></Warnings>
 
         <Editable>
-          <MusicTextFields></MusicTextFields>
-        </Editable>  
-        <Editable>
-          <MeasureContainer></MeasureContainer>	
+          <Editor></Editor>	
         </Editable>  
         <BottomNavigation></BottomNavigation>
       
