@@ -7,6 +7,7 @@
 	if (global.GSLoader) return; // don't reinit
 
 	var loadedSet = {};
+	var cachedRootSrc = null;
 
 	function normalizeUrl(filename, baseRoot) {
 		if (filename && filename[0] === "." && baseRoot) {
@@ -45,11 +46,13 @@
 	}
 
 	function getLocalScriptRoot() {
+		if (cachedRootSrc) return cachedRootSrc;
 		var scripts = document.getElementsByTagName("script");
 		var index = scripts.length - 1;
 		var myScript = scripts[index];
 		var lastSlash = myScript.src.lastIndexOf("/");
-		return myScript.src.slice(0, lastSlash + 1);
+		cachedRootSrc = myScript.src.slice(0, lastSlash + 1);
+		return cachedRootSrc;
 	}
 
 	global.GSLoader = {

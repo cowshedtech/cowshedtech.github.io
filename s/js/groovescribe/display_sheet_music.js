@@ -43,19 +43,8 @@ if (typeof(GrooveDisplay) === "undefined") {
 
 		var root = GrooveDisplay;
 
-		root.getLocalScriptRoot = (function () {
-			var scripts = document.getElementsByTagName('script');
-			var index = scripts.length - 1;
-			var myScript = scripts[index];
-			var lastSlash = myScript.src.lastIndexOf("/");
-			myScript.rootSrc = myScript.src.slice(0, lastSlash + 1);
-			return function () {
-				return myScript.rootSrc;
-			};
-		})();
-
 		// Cache base root to avoid repeated DOM inspection
-		var baseRoot = root.getLocalScriptRoot();
+		var baseRoot = window.GSLoader.getLocalScriptRoot();
 
 		//	<!--   midi.js package for sound   -->
 		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/AudioDetect.js", "js", baseRoot);
