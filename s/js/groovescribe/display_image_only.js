@@ -1,0 +1,195 @@
+// groove_display.js
+// utility functions to support displaying a groove on a page
+//
+// Javascript for the Groove Scribe HTML application
+// Groove Scribe is for drummers and helps create sheet music with an easy to use WYSIWYG groove editor.
+//
+// Author: Lou Montulli
+// Original Creation date: Feb 2015.
+//
+//  Copyright 2015-2020 Lou Montulli, Mike Johnston
+//
+//  This file is part of Project Groove Scribe.
+//
+//  Groove Scribe is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  Groove Scribe is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with Groove Scribe.  If not, see <http://www.gnu.org/licenses/>.
+
+/*jshint multistr: true */
+/*jslint browser:true devel:true */
+/*jslint evil: true */
+/*global GrooveUtils, GrooveDisplay */
+
+// GrooveDisplay class.   The only one in this file.
+// singleton
+if (typeof(GrooveDisplay) === "undefined") {
+
+	var GrooveDisplay = {};
+
+	(function () {
+		"use strict";
+
+		var root = GrooveDisplay;
+
+		// list of files already added
+		root.filesadded = "";
+
+		root.getLocalScriptRoot = (function () {
+			var scripts = document.getElementsByTagName('script');
+			var index = scripts.length - 1;
+			var myScript = scripts[index];
+			var lastSlash = myScript.src.lastIndexOf("/");
+			myScript.rootSrc = myScript.src.slice(0, lastSlash + 1);
+			return function () {
+				return myScript.rootSrc;
+			};
+		})();
+
+		root.checkloadjscssfile = function (filename, filetype) {
+			if (root.filesadded.indexOf("[" + filename + "]") == -1) {
+				root.loadjscssfile(filename, filetype);
+				root.filesadded += "[" + filename + "]"; //List of files added in the form "[filename1],[filename2],etc"
+			} else {
+				console.log("file already added!" + filename);
+			}
+		};
+
+		root.loadjscssfile = function (filename, filetype) {
+			if (filename[0] == ".") { // relative pathname
+				filename = root.getLocalScriptRoot() + filename;
+			}
+
+			if (root.filesadded.indexOf("[" + filename + "]") != -1)
+				return; // file already added
+
+			var fileref;
+			if (filetype == "js") { //if filename is a external JavaScript file
+				fileref = document.createElement('script');
+				fileref.setAttribute("type", "text/javascript");
+				fileref.setAttribute("src", filename);
+			} else if (filetype == "css") { //if filename is an external CSS file
+				fileref = document.createElement("link");
+				fileref.setAttribute("rel", "stylesheet");
+				fileref.setAttribute("type", "text/css");
+				fileref.setAttribute("href", filename);
+			}
+			if (typeof fileref != "undefined")
+				document.getElementsByTagName("head")[0].appendChild(fileref);
+		};
+
+		root.loadjsmap = function (map) {
+			var scriptref;
+			scriptref = document.createElement('script');
+			scriptref.setAttribute("type", "importmap");
+			// map should be a plain object; we serialize to JSON for script body
+			scriptref.textContent = JSON.stringify(map);
+			document.getElementsByTagName("head")[0].appendChild(scriptref);
+		};
+
+		//	<!--   midi.js package for sound   -->
+		root.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/AudioDetect.js", "js");
+		root.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/LoadPlugin.js", "js");
+		root.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/Plugin.js", "js");
+		root.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/Player.js", "js");
+		root.loadjscssfile("../thirdparty/MIDI.js/inc/DOMLoader.XMLHttp.js", "js");
+		
+		//	<!-- jasmid package midi package required by midi.js above -->
+		root.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/stream.js", "js");
+		root.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/midifile.js", "js");
+		root.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/replayer.js", "js");
+		
+		// <!-- extras -->
+		root.loadjscssfile("../thirdparty/MIDI.js/inc/Base64.js", "js");
+		root.loadjscssfile("../thirdparty/MIDI.js/inc/base64binary.js", "js");
+		
+		// //	<!-- jsmidgen -->
+		root.loadjscssfile("../thirdparty/jsmidgen.js", "js");
+		
+		//	<!-- script to render ABC to an SVG image -->
+		root.loadjscssfile("../thirdparty/abc2svg-1.js", "js");
+
+		//	<!--   our custom JS  -->
+		root.loadjscssfile("../../vue/groove_writer.js", "js");		
+		// root.loadjscssfile("../../vue/music_image_only.js", "js");		
+		root.loadjscssfile("../../vue/components/DisplaySheetMusic/sheetmusic.js", "js");		
+
+		root.loadjscssfile("../../vue/components/Track/track.js", "js");		
+
+		root.loadjscssfile("../../vue/consts.js", "js");		
+		root.loadjscssfile("../../vue/components/Player/image.js", "js");		
+		root.loadjscssfile("../../vue/components/SignatureTime/time_signature.js", "js");		
+		
+		root.loadjscssfile("../../vue/helpers/utils.js", "js");		
+		root.loadjscssfile("../../vue/components/Permutations/permutations.js", "js");		
+
+		root.loadjscssfile("../../vue/components/Options/options.js", "js");
+
+		root.loadjscssfile("../../vue/helpers/query.js", "js");
+		root.loadjscssfile("../../vue/helpers/url.js", "js");
+
+		root.loadjscssfile("../../vue/components/Player/player.js", "js");
+		root.loadjscssfile("../../vue/helpers/midi_creater.js", "js");
+		root.loadjscssfile("../../vue/components/Metronome/metronome.js", "js");
+
+		root.loadjscssfile("../../vue/components/EditorClickable/instruments/kick.js", "js");
+		root.loadjscssfile("../../vue/components/EditorClickable/editorclickable.js", "js");
+
+		root.loadjscssfile("../../vue/components/Share/groovescribe.js", "js");
+		root.loadjscssfile("../../vue/helpers/abc.js", "js");		
+		root.loadjscssfile("../../vue/components/DisplayMetadata/groovedb.js", "js");
+		root.loadjscssfile("../../vue/helpers/svg.js", "js");
+		root.loadjscssfile("../../vue/helpers/eventBus.js", "js");
+
+		//
+		// Dynamically mount a Vue app (similar to index_musicimageonly2.html).
+		// elementId: target element id to mount into (default: 'vue-app')
+		// mainModulePath: path to Vue entry module, relative to the document (default: './vue/music_image_only.js')
+		//
+		root.MountVueAppToElement = function (elementId, mainModulePath) {
+			var mountId = elementId || 'vue-app';
+			var modulePath = mainModulePath || './vue/music_image_only.js';
+			
+			// Ensure import map is present (safe to call multiple times)
+			if (!root.__importMapInstalled) {
+				root.loadjsmap({
+					"imports": {
+						"vue": "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.js"
+					}
+				});
+				root.__importMapInstalled = true;
+			}
+			
+			var mod = document.createElement('script');
+			mod.setAttribute('type', 'module');
+			mod.textContent = [
+				"import { createApp } from 'vue';",
+				"import Main from '" + modulePath + "';",
+				"createApp(Main, {",
+				"  midiPlayer: window.midiPlayer,",
+				"  eventBus: window.eventBus",
+				"}).mount('#" + mountId + "');"
+			].join("\n");
+			document.getElementsByTagName("head")[0].appendChild(mod);
+		};
+
+		root.AddGrooveDisplayToPage = function (elementId) {
+			window.addEventListener("load", function () {
+				var myGrooveWriter = new GrooveWriter();
+				myGrooveWriter.runsOnPageLoad();
+				console.log('hello')
+				// Mount the Vue app into #vue-app using the music_image_only entry by default
+				root.MountVueAppToElement(elementId, './vue/music_image_only.js');
+			}, false);
+		};		
+		
+	})(); // end of class GrooveDisplay
+} // end if

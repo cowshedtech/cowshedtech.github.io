@@ -87,30 +87,30 @@ if (typeof(GrooveDisplay) === "undefined") {
 		};
 
 		//	<!--   midi.js package for sound   -->
-		root.loadjscssfile("../../js/thirdparty/MIDI.js/js/MIDI/AudioDetect.js", "js");
-		root.loadjscssfile("../../js/thirdparty/MIDI.js/js/MIDI/LoadPlugin.js", "js");
-		root.loadjscssfile("../../js/thirdparty/MIDI.js/js/MIDI/Plugin.js", "js");
-		root.loadjscssfile("../../js/thirdparty/MIDI.js/js/MIDI/Player.js", "js");
-		root.loadjscssfile("../../js/thirdparty/MIDI.js/inc/DOMLoader.XMLHttp.js", "js");
+		root.loadjscssfile("./js/thirdparty/MIDI.js/js/MIDI/AudioDetect.js", "js");
+		root.loadjscssfile("./js/thirdparty/MIDI.js/js/MIDI/LoadPlugin.js", "js");
+		root.loadjscssfile("./js/thirdparty/MIDI.js/js/MIDI/Plugin.js", "js");
+		root.loadjscssfile("./js/thirdparty/MIDI.js/js/MIDI/Player.js", "js");
+		root.loadjscssfile("./js/thirdparty/MIDI.js/inc/DOMLoader.XMLHttp.js", "js");
 		//	<!-- jasmid package midi package required by midi.js above -->
-		root.loadjscssfile("../../js/thirdparty/MIDI.js/inc/jasmid/stream.js", "js");
-		root.loadjscssfile("../../js/thirdparty/MIDI.js/inc/jasmid/midifile.js", "js");
-		root.loadjscssfile("../../js/thirdparty/MIDI.js/inc/jasmid/replayer.js", "js");
+		root.loadjscssfile("./js/thirdparty/MIDI.js/inc/jasmid/stream.js", "js");
+		root.loadjscssfile("./js/thirdparty/MIDI.js/inc/jasmid/midifile.js", "js");
+		root.loadjscssfile("./js/thirdparty/MIDI.js/inc/jasmid/replayer.js", "js");
 		//	<!-- extras -->
-		root.loadjscssfile("../../js/thirdparty/MIDI.js/inc/Base64.js", "js");
-		root.loadjscssfile("../../js/thirdparty/MIDI.js/inc/base64binary.js", "js");
+		root.loadjscssfile("./js/thirdparty/MIDI.js/inc/Base64.js", "js");
+		root.loadjscssfile("./js/thirdparty/MIDI.js/inc/base64binary.js", "js");
 		//	<!-- jsmidgen -->
-		root.loadjscssfile("../thirdparty/jsmidgen.js", "js");
+		root.loadjscssfile("./js/thirdparty/jsmidgen.js", "js");
 		//	<!-- script to render ABC to an SVG image -->
-		root.loadjscssfile("../thirdparty/abc2svg-1.js", "js");
+		root.loadjscssfile("./js/thirdparty/abc2svg-1.js", "js");
 
 		//	<!--   our custom JS  -->
-		root.loadjscssfile("./groove_utils.js", "js");
+		// root.loadjscssfile("./groove_utils.js", "js");
 
 		// stylesheet
 		root.loadjscssfile("https://fonts.googleapis.com/css?family=Lato:400,700,300", "css");
-		root.loadjscssfile("../../font-awesome/4.7.0/css/font-awesome.min.css", "css");
-		root.loadjscssfile("../../css/groove_display.css", "css");
+		root.loadjscssfile("./font-awesome/4.7.0/css/font-awesome.min.css", "css");
+		root.loadjscssfile("./css/groove_display.css", "css");
 
 		root.GrooveDisplayUniqueCounter = 1;
 

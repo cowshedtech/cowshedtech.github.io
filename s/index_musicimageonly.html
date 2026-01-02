@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+    <head>
+		<title>Groove Scribe Image</title>
+		<style>
+			body {
+				padding: 0px;
+				margin: 0px;
+				width: 1200px;
+				height: 600px;
+			}
+			.svgTarget svg {
+				width: 100% !important;
+				height: 265px !important;
+				vertical-align: bottom;
+			}
+			#imgContainer {
+				width: 1200px;
+				height: 501px;
+			}
+		</style>
+		<script src="./vue/standalone/display_image_only.js"></script>
+
+		<!-- script to render ABC to an SVG image -->
+		<script type="text/javascript" src="./js/thirdparty/abc2svg-1.js"></script>
+
+		<!-- GS Data Structure -->
+		<script src="./vue/components/Track/track.js"></script>		
+		
+		<!-- Utils -->
+		<script src="./vue/consts.js"></script>
+		<script src="./vue/components/Player/image.js"></script>		
+		<script src="./vue/components/SignatureTime/time_signature.js"></script>
+		<script src="./vue/helpers/utils.js"></script>						
+		<script src="./vue/components/Permutations/permutations.js"></script>				
+
+		<!-- Controls -->
+		<script src="./vue/components/Options/options.js"></script>		
+
+		<!-- Browser -->
+		<script src="./vue/helpers/query.js"></script>
+		<script src="./vue/helpers/url.js"></script>			
+		
+		<!-- Editor -->
+		<script src="./vue/groove_writer.js"></script>
+		<script src="./vue/components/EditorClickable/undo.js"></script>				
+		
+		<!-- Player -->
+		<script src="./vue/components/Player/player.js"></script>
+		<script src="./vue/helpers/midi_creater.js"></script>		
+		<script src="./vue/components/Metronome/metronome.js"></script>
+
+		<!-- Instruments -->
+		<script src="./vue/components/EditorClickable/instruments/all.js"></script>
+		<script src="./vue/components/EditorClickable/instruments/kick.js"></script>
+		<script src="./vue/components/EditorClickable/editorclickable.js"></script>
+		
+		<!-- Sheet Music -->
+		<script src="./vue/components/DisplaySheetMusic/sheetmusic.js"></script>
+
+		<!-- Export -->
+		<script src="./vue/components/Share/groovescribe.js"></script>		
+		<script src="./vue/helpers/abc.js"></script>		
+		<script src="./vue/components/DisplayMetadata/groovedb.js"></script>		
+		<script src="./vue/helpers/svg.js"></script>
+
+		<script src="./vue/helpers/eventBus.js"></script>
+
+		<!-- Dynamically change up css -->
+		<script type="text/javascript">
+			var myGrooveWriter = new GrooveWriter();			
+		</script>
+		
+		<!-- Script for vue framework -->
+		<script type="importmap">
+			{
+				"imports": {
+				"vue": "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.js"
+				}
+			}
+		</script>
+
+    </head>
+    <body>
+
+	<!-- Init GrooveScribe  -->		
+	<img src="../images/GScribe_Logo_on_white.svg" width="360" height="125">
+	<div id="GrooveWriter">    
+		<div id="vue-app"></div>    
+		
+		<script>
+			window.addEventListener('load', () => {
+				'use strict';
+				myGrooveWriter.runsOnPageLoad();
+			});
+		</script>
+	</div>
+
+	<!-- Mount our vue app -->
+	<script type="module">
+		import { createApp } from 'vue'
+		import Main from './vue/music_image_only.js'	  
+		createApp(Main, {
+			midiPlayer: window.midiPlayer,
+			eventBus: window.eventBus
+		}).mount('#vue-app')
+	</script>
+    </body>
+</html>
+
+
+
+
+
