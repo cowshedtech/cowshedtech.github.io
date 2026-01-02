@@ -40,9 +40,6 @@ if (typeof(GrooveDisplay) === "undefined") {
 
 		var root = GrooveDisplay;
 
-		// list of files already added
-		root.filesadded = "";
-
 		root.getLocalScriptRoot = (function () {
 			var scripts = document.getElementsByTagName('script');
 			var index = scripts.length - 1;
@@ -53,11 +50,6 @@ if (typeof(GrooveDisplay) === "undefined") {
 				return myScript.rootSrc;
 			};
 		})();
-
-		// Prefer shared GSLoader if present; otherwise fallback to local tracking
-		root.checkloadjscssfile = function (filename, filetype) {
-			window.GSLoader.checkloadjscssfile(filename, filetype, root.getLocalScriptRoot());			
-		};
 
 		//	<!--   midi.js package for sound   -->
 		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/AudioDetect.js", "js", root.getLocalScriptRoot());
@@ -83,7 +75,6 @@ if (typeof(GrooveDisplay) === "undefined") {
 
 		//	<!--   our custom JS  -->
 		window.GSLoader.loadjscssfile("../../vue/groove_writer.js", "js", root.getLocalScriptRoot());		
-		// window.GSLoader.loadjscssfile("../../vue/music_image_only.js", "js", root.getLocalScriptRoot());		
 		window.GSLoader.loadjscssfile("../../vue/components/DisplaySheetMusic/sheetmusic.js", "js", root.getLocalScriptRoot());		
 
 		window.GSLoader.loadjscssfile("../../vue/components/Track/track.js", "js", root.getLocalScriptRoot());		
@@ -115,12 +106,10 @@ if (typeof(GrooveDisplay) === "undefined") {
 
 		//
 		// Dynamically mount a Vue app (similar to index_musicimageonly2.html).
-		// elementId: target element id to mount into (default: 'vue-app')
-		// mainModulePath: path to Vue entry module, relative to the document (default: './vue/music_image_only.js')
 		//
 		root.MountVueAppToElement = function (elementId, mainModulePath) {
 			var mountId = elementId || 'vue-app';
-			var modulePath = mainModulePath || './vue/music_image_only.js';
+			var modulePath = mainModulePath || '../vue/music_image_only.js';
 			
 			// Ensure import map is present (safe to call multiple times)
 			if (!root.__importMapInstalled) {
@@ -149,7 +138,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 			window.addEventListener("load", function () {
 				var myGrooveWriter = new GrooveWriter();
 				myGrooveWriter.runsOnPageLoad();
-				root.MountVueAppToElement(elementId, './vue/music_image_only.js');
+				root.MountVueAppToElement(elementId, '../vue/music_image_only.js');
 			}, false);
 		};		
 		

@@ -37,13 +37,6 @@
 		}
 	}
 
-	function checkloadjscssfile(filename, filetype, baseRoot) {
-		filename = normalizeUrl(filename, baseRoot);
-		if (!loadedSet["[" + filename + "]"]) {
-			loadjscssfile(filename, filetype, baseRoot);
-		}
-	}
-
 	function loadjsmap(map) {
 		var scriptref = document.createElement("script");
 		scriptref.setAttribute("type", "importmap");
@@ -61,7 +54,6 @@
 
 	global.GSLoader = {
 		loadjscssfile: loadjscssfile,
-		checkloadjscssfile: checkloadjscssfile,
 		loadjsmap: loadjsmap,
 		getLocalScriptRoot: getLocalScriptRoot
 	};
