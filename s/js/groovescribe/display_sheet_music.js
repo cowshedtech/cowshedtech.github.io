@@ -54,100 +54,64 @@ if (typeof(GrooveDisplay) === "undefined") {
 			};
 		})();
 
+		// Prefer shared GSLoader if present; otherwise fallback to local tracking
 		root.checkloadjscssfile = function (filename, filetype) {
-			if (root.filesadded.indexOf("[" + filename + "]") == -1) {
-				root.loadjscssfile(filename, filetype);
-				root.filesadded += "[" + filename + "]"; //List of files added in the form "[filename1],[filename2],etc"
-			} else {
-				console.log("file already added!" + filename);
-			}
-		};
-
-		root.loadjscssfile = function (filename, filetype) {
-			if (filename[0] == ".") { // relative pathname
-				filename = root.getLocalScriptRoot() + filename;
-			}
-
-			if (root.filesadded.indexOf("[" + filename + "]") != -1)
-				return; // file already added
-
-			var fileref;
-			if (filetype == "js") { //if filename is a external JavaScript file
-				fileref = document.createElement('script');
-				fileref.setAttribute("type", "text/javascript");
-				fileref.setAttribute("src", filename);
-			} else if (filetype == "css") { //if filename is an external CSS file
-				fileref = document.createElement("link");
-				fileref.setAttribute("rel", "stylesheet");
-				fileref.setAttribute("type", "text/css");
-				fileref.setAttribute("href", filename);
-			}
-			if (typeof fileref != "undefined")
-				document.getElementsByTagName("head")[0].appendChild(fileref);
-		};
-
-		root.loadjsmap = function (map) {
-			var scriptref;
-			scriptref = document.createElement('script');
-			scriptref.setAttribute("type", "importmap");
-			// map should be a plain object; we serialize to JSON for script body
-			scriptref.textContent = JSON.stringify(map);
-			document.getElementsByTagName("head")[0].appendChild(scriptref);
+			window.GSLoader.checkloadjscssfile(filename, filetype, root.getLocalScriptRoot());			
 		};
 
 		//	<!--   midi.js package for sound   -->
-		root.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/AudioDetect.js", "js");
-		root.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/LoadPlugin.js", "js");
-		root.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/Plugin.js", "js");
-		root.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/Player.js", "js");
-		root.loadjscssfile("../thirdparty/MIDI.js/inc/DOMLoader.XMLHttp.js", "js");
+		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/AudioDetect.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/LoadPlugin.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/Plugin.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/Player.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/DOMLoader.XMLHttp.js", "js", root.getLocalScriptRoot());
 		
 		//	<!-- jasmid package midi package required by midi.js above -->
-		root.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/stream.js", "js");
-		root.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/midifile.js", "js");
-		root.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/replayer.js", "js");
+		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/stream.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/midifile.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/replayer.js", "js", root.getLocalScriptRoot());
 		
 		// <!-- extras -->
-		root.loadjscssfile("../thirdparty/MIDI.js/inc/Base64.js", "js");
-		root.loadjscssfile("../thirdparty/MIDI.js/inc/base64binary.js", "js");
+		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/Base64.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/base64binary.js", "js", root.getLocalScriptRoot());
 		
 		// //	<!-- jsmidgen -->
-		root.loadjscssfile("../thirdparty/jsmidgen.js", "js");
+		window.GSLoader.loadjscssfile("../thirdparty/jsmidgen.js", "js", root.getLocalScriptRoot());
 		
 		//	<!-- script to render ABC to an SVG image -->
-		root.loadjscssfile("../thirdparty/abc2svg-1.js", "js");
+		window.GSLoader.loadjscssfile("../thirdparty/abc2svg-1.js", "js", root.getLocalScriptRoot());
 
 		//	<!--   our custom JS  -->
-		root.loadjscssfile("../../vue/groove_writer.js", "js");		
-		// root.loadjscssfile("../../vue/music_image_only.js", "js");		
-		root.loadjscssfile("../../vue/components/DisplaySheetMusic/sheetmusic.js", "js");		
+		window.GSLoader.loadjscssfile("../../vue/groove_writer.js", "js", root.getLocalScriptRoot());		
+		// window.GSLoader.loadjscssfile("../../vue/music_image_only.js", "js", root.getLocalScriptRoot());		
+		window.GSLoader.loadjscssfile("../../vue/components/DisplaySheetMusic/sheetmusic.js", "js", root.getLocalScriptRoot());		
 
-		root.loadjscssfile("../../vue/components/Track/track.js", "js");		
+		window.GSLoader.loadjscssfile("../../vue/components/Track/track.js", "js", root.getLocalScriptRoot());		
 
-		root.loadjscssfile("../../vue/consts.js", "js");		
-		root.loadjscssfile("../../vue/components/Player/image.js", "js");		
-		root.loadjscssfile("../../vue/components/SignatureTime/time_signature.js", "js");		
+		window.GSLoader.loadjscssfile("../../vue/consts.js", "js", root.getLocalScriptRoot());		
+		window.GSLoader.loadjscssfile("../../vue/components/Player/image.js", "js", root.getLocalScriptRoot());		
+		window.GSLoader.loadjscssfile("../../vue/components/SignatureTime/time_signature.js", "js", root.getLocalScriptRoot());		
 		
-		root.loadjscssfile("../../vue/helpers/utils.js", "js");		
-		root.loadjscssfile("../../vue/components/Permutations/permutations.js", "js");		
+		window.GSLoader.loadjscssfile("../../vue/helpers/utils.js", "js", root.getLocalScriptRoot());		
+		window.GSLoader.loadjscssfile("../../vue/components/Permutations/permutations.js", "js", root.getLocalScriptRoot());		
 
-		root.loadjscssfile("../../vue/components/Options/options.js", "js");
+		window.GSLoader.loadjscssfile("../../vue/components/Options/options.js", "js", root.getLocalScriptRoot());
 
-		root.loadjscssfile("../../vue/helpers/query.js", "js");
-		root.loadjscssfile("../../vue/helpers/url.js", "js");
+		window.GSLoader.loadjscssfile("../../vue/helpers/query.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../../vue/helpers/url.js", "js", root.getLocalScriptRoot());
 
-		root.loadjscssfile("../../vue/components/Player/player.js", "js");
-		root.loadjscssfile("../../vue/helpers/midi_creater.js", "js");
-		root.loadjscssfile("../../vue/components/Metronome/metronome.js", "js");
+		window.GSLoader.loadjscssfile("../../vue/components/Player/player.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../../vue/helpers/midi_creater.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../../vue/components/Metronome/metronome.js", "js", root.getLocalScriptRoot());
 
-		root.loadjscssfile("../../vue/components/EditorClickable/instruments/kick.js", "js");
-		root.loadjscssfile("../../vue/components/EditorClickable/editorclickable.js", "js");
+		window.GSLoader.loadjscssfile("../../vue/components/EditorClickable/instruments/kick.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../../vue/components/EditorClickable/editorclickable.js", "js", root.getLocalScriptRoot());
 
-		root.loadjscssfile("../../vue/components/Share/groovescribe.js", "js");
-		root.loadjscssfile("../../vue/helpers/abc.js", "js");		
-		root.loadjscssfile("../../vue/components/DisplayMetadata/groovedb.js", "js");
-		root.loadjscssfile("../../vue/helpers/svg.js", "js");
-		root.loadjscssfile("../../vue/helpers/eventBus.js", "js");
+		window.GSLoader.loadjscssfile("../../vue/components/Share/groovescribe.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../../vue/helpers/abc.js", "js", root.getLocalScriptRoot());		
+		window.GSLoader.loadjscssfile("../../vue/components/DisplayMetadata/groovedb.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../../vue/helpers/svg.js", "js", root.getLocalScriptRoot());
+		window.GSLoader.loadjscssfile("../../vue/helpers/eventBus.js", "js", root.getLocalScriptRoot());
 
 		//
 		// Dynamically mount a Vue app (similar to index_musicimageonly2.html).
@@ -160,7 +124,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 			
 			// Ensure import map is present (safe to call multiple times)
 			if (!root.__importMapInstalled) {
-				root.loadjsmap({
+				window.GSLoader.loadjsmap({
 					"imports": {
 						"vue": "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.js"
 					}
@@ -185,8 +149,6 @@ if (typeof(GrooveDisplay) === "undefined") {
 			window.addEventListener("load", function () {
 				var myGrooveWriter = new GrooveWriter();
 				myGrooveWriter.runsOnPageLoad();
-				console.log('hello')
-				// Mount the Vue app into #vue-app using the music_image_only entry by default
 				root.MountVueAppToElement(elementId, './vue/music_image_only.js');
 			}, false);
 		};		
