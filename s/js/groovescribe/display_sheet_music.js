@@ -29,6 +29,9 @@
 /*jslint evil: true */
 /*global GrooveUtils, GrooveDisplay */
 
+// Configuration constants
+const VUE_ESM_BROWSER_URL = "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.js";
+
 // GrooveDisplay class.   The only one in this file.
 // singleton
 if (typeof(GrooveDisplay) === "undefined") {
@@ -65,36 +68,28 @@ if (typeof(GrooveDisplay) === "undefined") {
 		window.GSLoader.loadjscssfile("../thirdparty/abc2svg-1.js", "js", baseRoot);
 
 		//	<!--   our custom JS  -->
-		window.GSLoader.loadjscssfile("../../vue/groove_writer.js", "js", baseRoot);		
-		window.GSLoader.loadjscssfile("../../vue/components/DisplaySheetMusic/sheetmusic.js", "js", baseRoot);		
-
-		window.GSLoader.loadjscssfile("../../vue/components/Track/track.js", "js", baseRoot);		
-
 		window.GSLoader.loadjscssfile("../../vue/consts.js", "js", baseRoot);		
-		window.GSLoader.loadjscssfile("../../vue/components/Player/image.js", "js", baseRoot);		
-		window.GSLoader.loadjscssfile("../../vue/components/SignatureTime/time_signature.js", "js", baseRoot);		
-		
-		window.GSLoader.loadjscssfile("../../vue/helpers/utils.js", "js", baseRoot);		
-		window.GSLoader.loadjscssfile("../../vue/components/Permutations/permutations.js", "js", baseRoot);		
-
-		window.GSLoader.loadjscssfile("../../vue/components/Options/options.js", "js", baseRoot);
-
+		window.GSLoader.loadjscssfile("../../vue/groove_writer.js", "js", baseRoot);	
+		window.GSLoader.loadjscssfile("../../vue/helpers/abc.js", "js", baseRoot);			
+		window.GSLoader.loadjscssfile("../../vue/helpers/midi_creater.js", "js", baseRoot);
+		window.GSLoader.loadjscssfile("../../vue/helpers/eventBus.js", "js", baseRoot);
 		window.GSLoader.loadjscssfile("../../vue/helpers/query.js", "js", baseRoot);
 		window.GSLoader.loadjscssfile("../../vue/helpers/url.js", "js", baseRoot);
-
+		window.GSLoader.loadjscssfile("../../vue/helpers/utils.js", "js", baseRoot);		
+		window.GSLoader.loadjscssfile("../../vue/helpers/svg.js", "js", baseRoot);
+		window.GSLoader.loadjscssfile("../../vue/components/DisplaySheetMusic/sheetmusic.js", "js", baseRoot);		
+		window.GSLoader.loadjscssfile("../../vue/components/Track/track.js", "js", baseRoot);		
+		window.GSLoader.loadjscssfile("../../vue/components/Player/image.js", "js", baseRoot);		
+		window.GSLoader.loadjscssfile("../../vue/components/SignatureTime/time_signature.js", "js", baseRoot);				
+		window.GSLoader.loadjscssfile("../../vue/components/Permutations/permutations.js", "js", baseRoot);		
+		window.GSLoader.loadjscssfile("../../vue/components/Options/options.js", "js", baseRoot);
 		window.GSLoader.loadjscssfile("../../vue/components/Player/player.js", "js", baseRoot);
-		window.GSLoader.loadjscssfile("../../vue/helpers/midi_creater.js", "js", baseRoot);
 		window.GSLoader.loadjscssfile("../../vue/components/Metronome/metronome.js", "js", baseRoot);
-
 		window.GSLoader.loadjscssfile("../../vue/components/EditorClickable/instruments/kick.js", "js", baseRoot);
 		window.GSLoader.loadjscssfile("../../vue/components/EditorClickable/editorclickable.js", "js", baseRoot);
-
 		window.GSLoader.loadjscssfile("../../vue/components/Share/groovescribe.js", "js", baseRoot);
-		window.GSLoader.loadjscssfile("../../vue/helpers/abc.js", "js", baseRoot);		
 		window.GSLoader.loadjscssfile("../../vue/components/DisplayMetadata/groovedb.js", "js", baseRoot);
-		window.GSLoader.loadjscssfile("../../vue/helpers/svg.js", "js", baseRoot);
-		window.GSLoader.loadjscssfile("../../vue/helpers/eventBus.js", "js", baseRoot);
-
+		
 		//
 		// Dynamically mount a Vue app (similar to index_musicimageonly2.html).
 		//
@@ -106,7 +101,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 			if (!root.__importMapInstalled) {
 				window.GSLoader.loadjsmap({
 					"imports": {
-						"vue": "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.js"
+						"vue": VUE_ESM_BROWSER_URL
 					}
 				});
 				root.__importMapInstalled = true;
