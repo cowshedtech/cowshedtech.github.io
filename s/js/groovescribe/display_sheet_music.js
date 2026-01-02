@@ -58,18 +58,6 @@ if (typeof(GrooveDisplay) === "undefined") {
 		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/js/MIDI/Player.js", "js", root.getLocalScriptRoot());
 		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/DOMLoader.XMLHttp.js", "js", root.getLocalScriptRoot());
 		
-		//	<!-- jasmid package midi package required by midi.js above -->
-		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/stream.js", "js", root.getLocalScriptRoot());
-		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/midifile.js", "js", root.getLocalScriptRoot());
-		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/jasmid/replayer.js", "js", root.getLocalScriptRoot());
-		
-		// <!-- extras -->
-		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/Base64.js", "js", root.getLocalScriptRoot());
-		window.GSLoader.loadjscssfile("../thirdparty/MIDI.js/inc/base64binary.js", "js", root.getLocalScriptRoot());
-		
-		// //	<!-- jsmidgen -->
-		window.GSLoader.loadjscssfile("../thirdparty/jsmidgen.js", "js", root.getLocalScriptRoot());
-		
 		//	<!-- script to render ABC to an SVG image -->
 		window.GSLoader.loadjscssfile("../thirdparty/abc2svg-1.js", "js", root.getLocalScriptRoot());
 
