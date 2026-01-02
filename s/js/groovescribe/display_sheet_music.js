@@ -84,7 +84,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 		//
 		root.MountVueAppToElement = function (elementId, mainModulePath) {
 			var mountId = elementId || 'vue-app';
-			var modulePath = mainModulePath || '../vue/music_image_only.js';
+			var modulePath = mainModulePath || '../vue/standalone/main_sheet_music.js';
 			
 			// Ensure import map is present (safe to call multiple times)
 			if (!root.__importMapInstalled) {
@@ -113,7 +113,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 			window.addEventListener("load", function () {
 				var myGrooveWriter = new GrooveWriter();
 				myGrooveWriter.runsOnPageLoad();
-				root.MountVueAppToElement(elementId, '../vue/music_image_only.js');
+				root.MountVueAppToElement(elementId, '../vue/standalone/main_sheet_music.js');
 			}, false);
 		};		
 		

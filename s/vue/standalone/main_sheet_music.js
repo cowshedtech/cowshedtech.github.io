@@ -1,4 +1,4 @@
-import SheetMusic from './components/DisplaySheetMusic/vue/display.js'
+import SheetMusic from '../components/DisplaySheetMusic/vue/display.js'
 
 export default {
   components: {
@@ -9,3 +9,4 @@ export default {
     <SheetMusic></SheetMusic>
 	`
 }
+
