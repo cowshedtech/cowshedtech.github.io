@@ -222,6 +222,93 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     return track;
 };
 
+/**
+ * Decodes groove data and settings from a URL string and updates the provided objects
+ * 
+ * @param {string} encodedURLData - URL string containing encoded groove parameters
+ * @param {Object} track - Track object to update with groove data
+ * @param {Object} options - Display and behavior options to update
+ * @param {Object} midiPlayer - MIDI player instance to update
+ * @param {Object} metronome - Metronome settings to update
+ * @param {boolean} debugMode - Whether to enable debug mode
+ * @returns {Object} Updated track object with decoded groove data
+ */
+function getTrackFromUrlString(encodedURLData, track) {
+
+    var timeSigArray = parseTimeSigString(getQueryVariableFromString("TimeSig", "4/4", encodedURLData));
+    track.numBeats = timeSigArray[0];
+    track.noteValue = timeSigArray[1];
+
+    track.timeDivision = parseInt(getQueryVariableFromString("Div", 16, encodedURLData), 10);
+    track.notesPerMeasure = calc_notes_per_measure(track.timeDivision, track.numBeats, track.noteValue);
+
+    track.numberOfMeasures = parseInt(getQueryVariableFromString("Measures", 1, encodedURLData), 10);
+    if (track.numberOfMeasures < 1 || isNaN(track.numberOfMeasures))
+        track.numberOfMeasures = 1;
+    else if (track.numberOfMeasures > constant_MAX_MEASURES)
+        track.numberOfMeasures = constant_MAX_MEASURES;
+
+    let repeatedMeasures = getQueryVariableFromString("rMeasures", 1, encodedURLData);
+    if (repeatedMeasures && repeatedMeasures.length > 0) {
+        repeatedMeasures.split(",").forEach(element => {
+            let [key, value] = element.split('x');
+            track.repeatedMeasures.set(Number(key), Number(value));
+        });
+    }
+
+    var highhatString = getQueryVariableFromString("H", false, encodedURLData);
+    if (!highhatString) {
+        getQueryVariableFromString("HH", false, encodedURLData);
+        if (!highhatString) {
+            highhatString = track.getDefaultHHGroove();
+        }
+    }
+
+    var snareString = getQueryVariableFromString("S", false, encodedURLData);
+    if (!snareString) {
+        snareString = track.getDefaultSnareGroove(track.notesPerMeasure, track.numBeats, track.noteValue, track.numberOfMeasures);
+    }
+
+    var kickString = getQueryVariableFromString("K", false, encodedURLData);
+    if (!kickString) {
+        getQueryVariableFromString("B", false, encodedURLData);
+        if (!kickString) {
+            kickString = track.getDefaultKickGroove();
+        }
+    }
+
+    // Get the Toms
+   for (i = 0; i < 4; i++) {
+        // toms are named T1, T2, T3, T4
+        var Tom_string = getQueryVariableFromString("T" + (i + 1), false, encodedURLData);
+        if (!Tom_string) {
+            Tom_string = track.getEmptyGroove();            
+        } 
+        track.setInstrumentNotes(i == 0 ? Instruments.TOM1 : Instruments.TOM4, noteArraysFromURLData("T" + (i + 1), Tom_string, track.notesPerMeasure, track.numberOfMeasures));
+    }
+
+    track.setInstrumentNotes(Instruments.HIGH_HAT, noteArraysFromURLData("H", highhatString, track.notesPerMeasure, track.numberOfMeasures));
+    track.setInstrumentNotes(Instruments.SNARE, noteArraysFromURLData("S", snareString, track.notesPerMeasure, track.numberOfMeasures));
+    track.setInstrumentNotes(Instruments.KICK, noteArraysFromURLData("K", kickString, track.notesPerMeasure, track.numberOfMeasures));
+
+    let title = getQueryVariableFromString("Title", "", encodedURLData);
+    title = decodeURIComponent(title);
+    title = title.replace(/\+/g, " ");
+    track.setTitle(title);
+
+    let author = getQueryVariableFromString("Author", "", encodedURLData);
+    author = decodeURIComponent(author);
+    author = author.replace(/\+/g, " ");
+    track.setAuthor(author);
+
+    let comments = getQueryVariableFromString("Comments", "", encodedURLData);
+    comments = decodeURIComponent(comments);
+    comments = comments.replace(/\+/g, " ");
+    track.setComments(comments);
+
+    return track;
+};
+
 
 /**
  * Updates the browser's URL and page title to reflect the current groove state.

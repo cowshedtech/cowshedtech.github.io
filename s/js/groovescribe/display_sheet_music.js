@@ -32,6 +32,8 @@
 // Configuration constants
 const VUE_ESM_BROWSER_URL = "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.js";
 
+var sheetMusic;
+
 // GrooveDisplay class.   The only one in this file.
 // singleton
 if (typeof(GrooveDisplay) === "undefined") {
@@ -111,8 +113,13 @@ if (typeof(GrooveDisplay) === "undefined") {
 
 		root.AddGrooveDisplayToPage = function (elementId) {
 			window.addEventListener("load", function () {
-				var myGrooveWriter = new GrooveWriter();
-				myGrooveWriter.runsOnPageLoad();
+				var track = new Track();
+				sheetMusic = new SheetMusic();
+				var editor = new GrooveWriter();
+				editor.track = track;
+				getTrackFromUrlString(window.location.search, track);
+				sheetMusic.updateFromTrack(track);
+
 				root.MountVueAppToElement(elementId, '../vue/standalone/main_sheet_music.js');
 			}, false);
 		};		
