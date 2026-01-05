@@ -130,3 +130,8 @@ function usingTriplets() {
     if (isTripletDivision(editor.track.timeDivision)) return true;
     return false;
 }
+
+function usingTriplets_from_track(track) {
+    if (isTripletDivision(track.timeDivision)) return true;
+    return false;
+}

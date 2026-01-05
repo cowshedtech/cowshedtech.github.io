@@ -37,8 +37,8 @@ class SheetMusic {
             renderWidth = Math.floor(renderWidth * 0.8);  // reduce width by 20% (This actually makes the notes bigger, because we scale up everything to max width)
         }
 
-        var abc_source = generate_ABC(renderWidth);    
-        var svg_return = renderABCtoSVG(editor.track, abc_source);
+        var abc_source = generate_ABC_from_track(renderWidth, track);    
+        var svg_return = renderABCtoSVG(track, abc_source);
 
         // TODO
         // var diverr = document.getElementById("diverr");

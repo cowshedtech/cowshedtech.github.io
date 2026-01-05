@@ -31,8 +31,10 @@
 
 // Configuration constants
 const VUE_ESM_BROWSER_URL = "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.js";
+const MAIN_SHEET_MUSIC_MODULE_PATH = "../vue/standalone/main_sheet_music.js";
 
 var sheetMusic;
+var abcToSVGCallback;
 
 // GrooveDisplay class.   The only one in this file.
 // singleton
@@ -86,7 +88,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 		//
 		root.MountVueAppToElement = function (elementId, mainModulePath) {
 			var mountId = elementId || 'vue-app';
-			var modulePath = mainModulePath || '../vue/standalone/main_sheet_music.js';
+			var modulePath = mainModulePath || MAIN_SHEET_MUSIC_MODULE_PATH;
 			
 			// Ensure import map is present (safe to call multiple times)
 			if (!root.__importMapInstalled) {
@@ -115,12 +117,14 @@ if (typeof(GrooveDisplay) === "undefined") {
 			window.addEventListener("load", function () {
 				var track = new Track();
 				sheetMusic = new SheetMusic();
-				var editor = new GrooveWriter();
-				editor.track = track;
+				abcToSVGCallback = new SVGLibCallback(track);
+				// var editor = new GrooveWriter();
+				// editor.track = track;
 				getTrackFromUrlString(window.location.search, track);
 				sheetMusic.updateFromTrack(track);
+				
 
-				root.MountVueAppToElement(elementId, '../vue/standalone/main_sheet_music.js');
+				root.MountVueAppToElement(elementId, MAIN_SHEET_MUSIC_MODULE_PATH);
 			}, false);
 		};		
 		

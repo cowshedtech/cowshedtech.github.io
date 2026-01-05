@@ -50,6 +50,36 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
     return num_notes;
 }
 
+
+function get32NoteArrayFromClickableUI_from_track(track, Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, startIndexForClickableUI) {
+
+    var scaler = getNoteScaler(track.notesPerMeasure, track.numBeats, track.noteValue); // fill proportionally
+
+    // fill in the arrays from the clickable UI
+    for (var i = 0; i < track.notesPerMeasure; i++) {
+        var array_index = (i) * scaler;
+
+        // only grab the stickings if they are visible
+        // if (options.isStickingVisible())
+        //     Sticking_Array[array_index] = track.getStickingState(i + startIndexForClickableUI, "ABC");
+
+        HH_Array[array_index] = track.getInstrumentNote(Instruments.HIGH_HAT, i + startIndexForClickableUI);
+
+        // if (options.areTomsVisible()) {
+            Toms_Array[0][array_index] = track.getInstrumentNote(Instruments.TOM1, i + startIndexForClickableUI, "ABC");
+            Toms_Array[3][array_index] = track.getInstrumentNote(Instruments.TOM4, i + startIndexForClickableUI, "ABC");
+
+        // }
+
+        Snare_Array[array_index] = track.getInstrumentNote(Instruments.SNARE, i + startIndexForClickableUI);
+        Kick_Array[array_index] = track.getInstrumentNote(Instruments.KICK, i + startIndexForClickableUI);       
+
+    }
+
+    var num_notes = Snare_Array.length;
+    return num_notes;
+}
+
 /*
 	 * midi_output_type:  "general_MIDI" or "Custom"
 	 * num_notes: number of notes in the arrays  (currently expecting 32 notes per measure)

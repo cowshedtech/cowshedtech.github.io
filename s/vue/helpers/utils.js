@@ -106,6 +106,15 @@ function get_empty_note_array_in_32nds() {
 	return get_empty_note_array(num_notes);
 }
 
+function get_empty_note_array_in_32nds_from_track(track) {
+	var notes_per_4_beats = 32;
+	if (usingTriplets_from_track(track))
+		notes_per_4_beats = 48;
+	var num_notes = (track.numBeats * notes_per_4_beats) / track.noteValue;
+
+	return get_empty_note_array(num_notes);
+}
+
 /**
      * Format milliseconds into a duration string
      * @param {number} ms - Milliseconds
