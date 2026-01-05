@@ -18,6 +18,10 @@ export default {
     eventBus: {
       type: Object,
       required: true
+    },
+    track: {
+      type: Object,
+      required: false
     }
   },
 
@@ -70,6 +74,6 @@ export default {
       </TopNavigation>		      
       <MidiPlayer></MidiPlayer>
     </div>			
-    <RightHandContent></RightHandContent>		    
+    <RightHandContent :track="track"></RightHandContent>		    
 	`
 }

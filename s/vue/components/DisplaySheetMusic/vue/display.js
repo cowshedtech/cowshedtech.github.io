@@ -16,7 +16,7 @@ export default {
       deep: true,
       immediate: true,
       handler(v) {
-         this.refreshSVG(v);                  
+         if (v) this.refreshSVG(v);                  
       }
     }
   },

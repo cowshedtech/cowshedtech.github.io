@@ -11,23 +11,6 @@ class SheetMusic {
      * Update our sheet music 
      * @param {string} abc_source - The abc notation for our track
      */    
-    update(track, abc_source) {
-        
-        var svg_return = renderABCtoSVG(editor.track, abc_source);
-
-        var diverr = document.getElementById("diverr");
-        diverr.innerHTML = svg_return.error_html;        
-        
-        // this.setSVG()    
-        this.#svg = svg_return.svg;
-        this.#track = track;
-        window.eventBus.$emit('sheet-music-updated');
-    };
-
-    /**
-     * Update our sheet music 
-     * @param {string} abc_source - The abc notation for our track
-     */    
     updateFromTrack(track) {
         
         var renderWidth = 600;

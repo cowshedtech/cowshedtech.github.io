@@ -11,6 +11,12 @@ import SheetMusic from '../../DisplaySheetMusic/vue/display.js'
 import PermutationOptions from '../../Permutations/vue/options.js'
 
 export default {
+  props: {
+    track: {
+      type: Object,
+      required: false
+    }
+  },
   data() {
     return {}
   },
@@ -22,7 +28,7 @@ export default {
   template: `  
     <div id="RightHandContent">
       <PermutationOptions></PermutationOptions>
-      <SheetMusic></SheetMusic>
+      <SheetMusic :track="track"></SheetMusic>
 
       <div class="nonPrintable">
 
