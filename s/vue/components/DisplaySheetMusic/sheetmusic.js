@@ -44,7 +44,6 @@ class SheetMusic {
         // var diverr = document.getElementById("diverr");
         // diverr.innerHTML = svg_return.error_html;        
         
-        // this.setSVG()    
         this.#svg = svg_return.svg;
         this.#track = track;
         window.eventBus.$emit('sheet-music-updated');

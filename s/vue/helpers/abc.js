@@ -1174,132 +1174,42 @@ function generate_ABC(renderWidth) {
 
 
 function generate_ABC_from_track(renderWidth, track) {
-	var Sticking_Array = get_empty_note_array_in_32nds_from_track(track);
-	var HH_Array = get_empty_note_array_in_32nds_from_track(track);
-	var Snare_Array = get_empty_note_array_in_32nds_from_track(track);
-	var Kick_Array = get_empty_note_array_in_32nds_from_track(track);
-	var Toms_Array = [get_empty_note_array_in_32nds_from_track(track), get_empty_note_array_in_32nds_from_track(track), get_empty_note_array_in_32nds_from_track(track), get_empty_note_array_in_32nds_from_track(track)];
-	var numSections = get_numSectionsFor_permutation_array();
-	var i,
-		new_snare_array,
-		post_abc,
-		num_sections;
-	var num_notes = get32NoteArrayFromClickableUI_from_track(track, Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, 0);
+	var fullABC = "";
+	var numberOfMeasuresPerLine = 2;
+	if (track.notesPerMeasure >= 32) numberOfMeasuresPerLine = 1; // Only put one measure per line for 32nd notes and above because of width issues
+	track.noteMappingArray = [];
 
 	// abc header boilerplate
-	// var tuneTitle = document.getElementById("tuneTitle").value;
-	// var tuneAuthor = document.getElementById("tuneAuthor").value;
-	// var tuneComments = document.getElementById("tuneComments").value;
-	// var showLegend = document.getElementById("showLegend").checked;
 	var tuneTitle = track.getTitle();
 	var tuneAuthor = track.getAuthor();
 	var tuneComments = track.getComments();
 	// var showLegend = options.showLegend;
-	var showLegend = true
-
-	var fullABC = "";
-
+	var showLegend = false
 	var class_permutation_type = 'none';
-	switch (class_permutation_type) {
-		case "kick_16ths": // use the hh & snare from the user
-			numSections = get_numSectionsFor_permutation_array();
+	
+	fullABC = get_top_ABC_BoilerPlate(class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets_from_track(track), true, track.numBeats, track.noteValue, renderWidth, track.trackID);
+	
+	var addon_abc;
+	
+	for (let i = 0; i < track.numberOfMeasures; i++) {
 
-			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, track.numBeats, track.noteValue, renderWidth, track.trackID);
-			track.noteMappingArray = [];
+		var Sticking_Array = get_empty_note_array_in_32nds_from_track(track);
+		var HH_Array = get_empty_note_array_in_32nds_from_track(track);
+		var Snare_Array = get_empty_note_array_in_32nds_from_track(track);
+		var Kick_Array = get_empty_note_array_in_32nds_from_track(track);
+		var Toms_Array = [get_empty_note_array_in_32nds_from_track(track), get_empty_note_array_in_32nds_from_track(track), get_empty_note_array_in_32nds_from_track(track), get_empty_note_array_in_32nds_from_track(track)];
+		var num_notes = get32NoteArrayFromTrack(track, Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, track.notesPerMeasure * i);
 
-			// compute sections with different kick patterns
-			for (i = 0; i < numSections; i++) {
-				if (shouldDisplayPermutationForSection(i)) {
-					var new_kick_array;
+		if ((i + 1) == track.numberOfMeasures) {
+			addon_abc = "|\n";  // last measure			
+		} else if (((i + 1) % numberOfMeasuresPerLine) === 0) {
+			addon_abc = "\n";  // new line measure
+		} else {
+			addon_abc = "\\\n";  // continuation measure			
+		}
 
-					if (document.getElementById("PermuationOptionsSkipSomeFirstNotes") && document.getElementById("PermuationOptionsSkipSomeFirstNotes").checked)
-						new_kick_array = get_kick16th_permutation_array_minus_some(i);
-					else
-						new_kick_array = get_kick16th_permutation_array(i);
-
-					// grab hi-hat foots from existing kick array and merge it in.
-					Kick_Array = filter_kick_array_for_permutation(Kick_Array);
-					new_kick_array = merge_kick_arrays(new_kick_array, Kick_Array);
-
-					post_abc = get_permutation_post_ABC(i, usingTriplets());
-
-					fullABC += get_permutation_pre_ABC(i,  usingTriplets());
-					fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, new_kick_array, Toms_Array, post_abc, num_notes, track.timeDivision, num_notes, true, track.numBeats, track.noteValue);
-					track.noteMappingArray = track.noteMappingArray.concat(editorClickable.create_noteMappingArray_for_highlighting(HH_Array, Snare_Array, new_kick_array, Toms_Array, num_notes));
-				}
-			}
-			break;
-
-		case "snare_16ths": // use the hh & kick from the user
-			numSections = get_numSectionsFor_permutation_array();
-
-			fullABC = get_top_ABC_BoilerPlate(editor.class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets(), false, track.numBeats, track.noteValue, renderWidth, track.trackID);
-			track.noteMappingArray = [];
-
-			//compute 16 sections with different snare patterns
-			for (i = 0; i < numSections; i++) {
-				if (shouldDisplayPermutationForSection(i)) {
-
-					if (document.getElementById("PermuationOptionsAccentGridDiddled") && document.getElementById("PermuationOptionsAccentGridDiddled").checked)
-						new_snare_array = get_snare_accent_with_diddle_permutation_array(i);
-					else if (document.getElementById("PermuationOptionsAccentGrid") && document.getElementById("PermuationOptionsAccentGrid").checked)
-						new_snare_array = get_snare_accent_permutation_array(i);
-					else
-						new_snare_array = get_snare_permutation_array(i);
-
-					post_abc = get_permutation_post_ABC(i, usingTriplets());
-
-					fullABC += get_permutation_post_ABC(i, usingTriplets());
-					fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, new_snare_array, Kick_Array, Toms_Array, post_abc, num_notes, track.timeDivision, num_notes, true, track.numBeats, track.noteValue);
-					track.noteMappingArray = track.noteMappingArray.concat(editorClickable.create_noteMappingArray_for_highlighting(HH_Array, new_snare_array, Kick_Array, Toms_Array, num_notes));
-				}
-			}
-			break;
-
-		case "none":
-		/* falls through */
-		default:
-			fullABC = get_top_ABC_BoilerPlate(class_permutation_type != "none", tuneTitle, tuneAuthor, tuneComments, showLegend, usingTriplets_from_track(track), true, track.numBeats, track.noteValue, renderWidth, track.trackID);
-			track.noteMappingArray = [];
-
-			var numberOfMeasuresPerLine = 2;
-			var addon_abc;
-			
-			if (track.notesPerMeasure >= 32) {
-				// Only put one measure per line for 32nd notes and above because of width issues
-				numberOfMeasuresPerLine = 1;
-			}
-
-			for (i = 0; i < track.numberOfMeasures; i++) {
-
-				// we already go the array states above, don't get it again.
-				if (i > 0) {
-					// reset arrays
-					Sticking_Array = get_empty_note_array_in_32nds_from_track(track);
-					HH_Array = get_empty_note_array_in_32nds_from_track(track);
-					Snare_Array = get_empty_note_array_in_32nds_from_track(track);
-					Kick_Array = get_empty_note_array_in_32nds_from_track(track);
-
-					get32NoteArrayFromClickableUI_from_track(track, Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, track.notesPerMeasure * i);
-				}
-
-				if ((i + 1) == track.numberOfMeasures) {
-					// last measure
-					addon_abc = "|\n";
-				} else if (((i + 1) % numberOfMeasuresPerLine) === 0) {
-					// new line measure
-					addon_abc = "\n";
-				} else {
-					// continuation measure
-					addon_abc = "\\\n";
-				}
-				fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, addon_abc, num_notes, track.timeDivision, num_notes, true, track.numBeats, track.noteValue);
-				track.noteMappingArray = track.noteMappingArray.concat(create_noteMappingArray_for_highlighting(HH_Array, Snare_Array, Kick_Array, Toms_Array, num_notes));
-				track.numberOfMeasures = track.numberOfMeasures;
-				// track.repeatedMeasures = editor.class_repeated_measures;
-			}
-
-			break;
+		fullABC += create_ABC_from_snare_HH_kick_arrays(Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, addon_abc, num_notes, track.timeDivision, num_notes, true, track.numBeats, track.noteValue);
+		track.noteMappingArray = track.noteMappingArray.concat(create_noteMappingArray_for_highlighting(HH_Array, Snare_Array, Kick_Array, Toms_Array, num_notes));		
 	}
 
 	return fullABC;

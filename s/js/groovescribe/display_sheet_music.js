@@ -118,8 +118,6 @@ if (typeof(GrooveDisplay) === "undefined") {
 				var track = new Track();
 				sheetMusic = new SheetMusic();
 				abcToSVGCallback = new SVGLibCallback(track);
-				// var editor = new GrooveWriter();
-				// editor.track = track;
 				getTrackFromUrlString(window.location.search, track);
 				sheetMusic.updateFromTrack(track);
 				

@@ -51,7 +51,7 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
 }
 
 
-function get32NoteArrayFromClickableUI_from_track(track, Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, startIndexForClickableUI) {
+function get32NoteArrayFromTrack(track, Sticking_Array, HH_Array, Snare_Array, Kick_Array, Toms_Array, startIndexForClickableUI) {
 
     var scaler = getNoteScaler(track.notesPerMeasure, track.numBeats, track.noteValue); // fill proportionally
 
@@ -59,21 +59,13 @@ function get32NoteArrayFromClickableUI_from_track(track, Sticking_Array, HH_Arra
     for (var i = 0; i < track.notesPerMeasure; i++) {
         var array_index = (i) * scaler;
 
-        // only grab the stickings if they are visible
-        // if (options.isStickingVisible())
-        //     Sticking_Array[array_index] = track.getStickingState(i + startIndexForClickableUI, "ABC");
-
+        //TODO
+        // Sticking_Array[array_index] = track.getStickingState(i + startIndexForClickableUI, "ABC");
         HH_Array[array_index] = track.getInstrumentNote(Instruments.HIGH_HAT, i + startIndexForClickableUI);
-
-        // if (options.areTomsVisible()) {
-            Toms_Array[0][array_index] = track.getInstrumentNote(Instruments.TOM1, i + startIndexForClickableUI, "ABC");
-            Toms_Array[3][array_index] = track.getInstrumentNote(Instruments.TOM4, i + startIndexForClickableUI, "ABC");
-
-        // }
-
+        Toms_Array[0][array_index] = track.getInstrumentNote(Instruments.TOM1, i + startIndexForClickableUI, "ABC");
+        Toms_Array[3][array_index] = track.getInstrumentNote(Instruments.TOM4, i + startIndexForClickableUI, "ABC");
         Snare_Array[array_index] = track.getInstrumentNote(Instruments.SNARE, i + startIndexForClickableUI);
         Kick_Array[array_index] = track.getInstrumentNote(Instruments.KICK, i + startIndexForClickableUI);       
-
     }
 
     var num_notes = Snare_Array.length;
