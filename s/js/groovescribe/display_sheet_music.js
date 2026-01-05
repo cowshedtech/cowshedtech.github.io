@@ -106,8 +106,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 				"import { createApp } from 'vue';",
 				"import Main from '" + modulePath + "';",
 				"createApp(Main, {",
-				"  midiPlayer: window.midiPlayer,",
-				"  eventBus: window.eventBus",
+				"  track: window.GrooveDisplay.__initialTrack,",				
 				"}).mount('#" + mountId + "');"
 			].join("\n");
 			document.getElementsByTagName("head")[0].appendChild(mod);
@@ -119,9 +118,8 @@ if (typeof(GrooveDisplay) === "undefined") {
 				sheetMusic = new SheetMusic();
 				abcToSVGCallback = new SVGLibCallback(track);
 				getTrackFromUrlString(window.location.search, track);
-				sheetMusic.updateFromTrack(track);
+				root.__initialTrack = track;
 				
-
 				root.MountVueAppToElement(elementId, MAIN_SHEET_MUSIC_MODULE_PATH);
 			}, false);
 		};		
