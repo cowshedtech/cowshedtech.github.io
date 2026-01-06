@@ -1,15 +1,17 @@
 export default {
     data() {
         return {
-            isViewMode : options ? options.isViewMode() : true, 
-            isDBAuthoring : options ? options.grooveDBAuthoring : true
+            isViewMode : this.options ? this.options.isViewMode() : true, 
+            isDBAuthoring : this.options ? this.options.grooveDBAuthoring : true
         }
     },
 
+    inject: ['options'],
+
     mounted() {
         this.removeHandler = eventBus.$on('options-updated', () => {
-            this.isDBAuthoring = options.grooveDBAuthoring;
-            this.isViewMode = options.isViewMode();                 
+            this.isDBAuthoring = this.options.grooveDBAuthoring;
+            this.isViewMode = this.options.isViewMode();                 
         });	
     },
 
@@ -19,8 +21,8 @@ export default {
 
     methods: {
         handleViewEditClick(event) {
-            let newMode = !options.isViewMode();
-            options.setViewMode(newMode);
+            let newMode = !this.options.isViewMode();
+            this.options.setViewMode(newMode);
         },        
     },
 

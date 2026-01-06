@@ -5,9 +5,11 @@ export default {
         BottomNavigationButton
     },
 
+    inject: ['options'],
+
     methods: {
         handleClick(event) {
-            options.setStickingVisible(!options.isStickingVisible())             
+            this.options.setStickingVisible(!this.options.isStickingVisible())             
         }
     },
 

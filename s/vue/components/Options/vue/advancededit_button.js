@@ -1,13 +1,15 @@
 export default {
     data() {
         return {
-            isAdvancedEdit : options ? options.isAdvancedEdit() : false,            
+            isAdvancedEdit : this.options ? this.options.isAdvancedEdit() : false,            
         }
     },
 
+    inject: ['options'],
+
     mounted() {
         this.removeHandler = eventBus.$on('options-updated', () => {
-            this.isAdvancedEdit = options.isAdvancedEdit()
+            this.isAdvancedEdit = this.options.isAdvancedEdit()
         });	
     },
 
@@ -17,8 +19,8 @@ export default {
 
     methods: {
         handleAdvancedClick() {
-            let newMode = !options.isAdvancedEdit();
-            options.setAdvancedEdit(newMode);            
+            let newMode = !this.options.isAdvancedEdit();
+            this.options.setAdvancedEdit(newMode);            
         },
     },
 

@@ -2,20 +2,22 @@ export default {
 	
 	data() {
 		return {
-			highlight: options ? options.isHighlightOn() : false
+			highlight: this.options ? this.options.isHighlightOn() : false
 		}
 	},
 	
+	inject: ['options'],
+	
 	methods: {
 		handleToggleHighlight() {
-			let higlightOn = options.isHighlightOn();
-			options.setHighlightOn(!higlightOn)
+			let higlightOn = this.options.isHighlightOn();
+			this.options.setHighlightOn(!higlightOn)
 		},
 	},
 
 	mounted() {
 		this.removeHandler = eventBus.$on('options-updated', () => {
-			this.highlight = options.isHighlightOn()
+			this.highlight = this.options.isHighlightOn()
 		});		
 	},
 
