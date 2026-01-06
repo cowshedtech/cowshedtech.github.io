@@ -40,25 +40,24 @@ export default {
     }
   },
 
+  mounted() {
+    this.tomsVisible = this.options.tomsVisible;    
+  },
+
   watch: { 
     track: {
       handler(newVal, oldVal) { 
         this.startNoteIndex = (this.measureIndex - 1) * this.track.notesPerMeasure;        
       },
       deep: true
+    },
+    'options.tomsVisible': function(newVal) {
+      if (typeof newVal === 'boolean') {
+        this.tomsVisible = newVal;        
+      }
     }
   },
 
-  mounted() {
-    this.removeHandler = eventBus.$on('options-updated', () => {
-      this.tomsVisible = this.options.areTomsVisible()
-    });
-  },
-
-  beforeUnmount() {
-    if (this.removeHandler) this.removeHandler() 
-  },
-  
   components: {
     Tom, NoteSpacer, MuteButton
   },

@@ -24,10 +24,6 @@ export default {
   },
   
   props: {
-    options: {
-      type: Object,
-      required: false
-    }, 
     midiPlayer: {
       type: Object,
       required: false
