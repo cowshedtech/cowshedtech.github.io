@@ -32,10 +32,10 @@ export default {
     },
     showLegend: {
       get() {
-        return options?.isShowLegend() || false
+        return options?.showLegend || false
       },
       set(value) {
-        options.setShowLegend(value)
+        options.showLegend = value
       }
     }
   },

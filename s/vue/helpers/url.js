@@ -42,7 +42,7 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
     if (options && options.debugMode) fullURL += "Debug=1&";
     if (options && options.viewMode) fullURL += "Mode=view&";
     if (options && options.grooveDBAuthoring) fullURL += "GDB_Author=1&";
-    if (options && !options.isHighlightOn()) fullURL += "&Highlight=OFF";
+    if (options && !options.highlightOn) fullURL += "&Highlight=OFF";
 
     fullURL += 'TimeSig=' + track.numBeats + '/' + track.noteValue;
     fullURL += "&Div=" + track.timeDivision;
@@ -73,14 +73,14 @@ function getUrlStringFromGrooveData(track, options, midiPlayer, metronome, url_d
     fullURL += HH + Snare + Kick;
 
     // only add if we need them.  // they are long and ugly. :)
-    if (options.areTomsVisible()) {
+    if (options.tomsVisible) {
         var Tom1 = "&T1=|" + tabLineFromAbcNoteArray('T1', track.getInstrumentNotes(Instruments.TOM1), true, true, total_notes, track.notesPerMeasure);
         var Tom4 = "&T4=|" + tabLineFromAbcNoteArray('T4', track.getInstrumentNotes(Instruments.TOM4), true, true, total_notes, track.notesPerMeasure);
         fullURL += Tom1 + Tom4;
     }
 
     // only add if we need them.  // they are long and ugly. :)
-    if (options.isStickingVisible()) {
+    if (options.stickingsVisible) {
         //var Stickings = "&Stickings=|" + tabLineFromAbcNoteArray('stickings', track.sticking_array, true, true, total_notes, track.notesPerMeasure);
 
         let notes = track.getInstrumentNotes(Instruments.STICKING)
@@ -114,17 +114,17 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     var stickingsString = getQueryVariableFromString("Stickings", false, encodedURLData);
     if (!stickingsString) {
         stickingsString = track.getEmptyGroove();
-        options.setStickingVisible(false);
+        options.stickingsVisible = false;
     } else {
-        options.setStickingVisible(true);
+        options.stickingsVisible = true;
     }
 
     let highlight = getQueryVariableFromString("Highlight", "ON", encodedURLData);
     if (highlight && highlight.length > 0) {
         if (highlight.toUpperCase() == "OFF") {
-            options.setHighlightOn(false)
+            options.highlightOn = false;
         } else {
-            options.setHighlightOn(true)
+            options.highlightOn = true;
         }
     }
 
@@ -173,14 +173,14 @@ function getGrooveDataFromUrlString(encodedURLData, track, options, midiPlayer, 
     }
 
     // Get the Toms
-    options.setTomsVisible(false);
+    options.tomsVisible = false;
     for (i = 0; i < 4; i++) {
         // toms are named T1, T2, T3, T4
         var Tom_string = getQueryVariableFromString("T" + (i + 1), false, encodedURLData);
         if (!Tom_string) {
             Tom_string = track.getEmptyGroove();            
         } else {
-            options.setTomsVisible(true);
+            options.tomsVisible = true;
         }
 
         /// the toms array index starts at zero (0) the first one is T1

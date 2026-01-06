@@ -7,7 +7,7 @@ export default {
   data() {
     return {
       startNoteIndex: this.track ? (this.measureIndex - 1) * this.track.notesPerMeasure : 0,
-      tomsVisible: this.options.areTomsVisible()
+      tomsVisible: this.options.tomsVisible
     }
   },
   

@@ -35,7 +35,7 @@ function get32NoteArrayFromClickableUI(Sticking_Array, HH_Array, Snare_Array, Ki
 
         HH_Array[array_index] = editor.track.getInstrumentNote(Instruments.HIGH_HAT, i + startIndexForClickableUI);
 
-        if (options.areTomsVisible()) {
+        if (options.tomsVisible) {
             Toms_Array[0][array_index] = editor.track.getInstrumentNote(Instruments.TOM1, i + startIndexForClickableUI, "ABC");
             Toms_Array[3][array_index] = editor.track.getInstrumentNote(Instruments.TOM4, i + startIndexForClickableUI, "ABC");
 

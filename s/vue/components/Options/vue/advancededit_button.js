@@ -10,7 +10,7 @@ export default {
     methods: {
         handleAdvancedClick() {
             let newMode = !this.options.advancedEditIsOn;
-            this.options.setAdvancedEdit(newMode);            
+            this.options.advancedEditIsOn = newMode;            
         },
     },
 
