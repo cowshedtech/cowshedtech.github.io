@@ -5,10 +5,12 @@ export default {
     BottomNavigationButton
   },
 
+  inject: ['options'],
+
   methods: {
     toggleToms() {
-        options.setTomsVisible(!options.areTomsVisible());
-    },    
+      this.options.setTomsVisible(!this.options.areTomsVisible())
+    }
   },
 
   template: `

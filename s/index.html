@@ -147,11 +147,13 @@
 	<script type="module">
 		import { createApp } from 'vue'
 		import Main from './vue/main.js'	  
-		createApp(Main, {
+		const app = createApp(Main, {
 			midiPlayer: window.midiPlayer,
 			eventBus: window.eventBus,
 			track: (window.editor && window.editor.track) ? window.editor.track : null
-		}).mount('#vue-app')
+		});
+		app.provide('options', window.options);
+		app.mount('#vue-app')
 	</script>
     </body>
 </html>
