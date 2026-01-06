@@ -5,6 +5,9 @@ export default {
       required: false
     }
   },
+
+  inject: ['options'],
+
   data() {
     return {
       svg: sheetMusic ? sheetMusic.getSVG() : 0
@@ -18,9 +21,14 @@ export default {
       handler(v) {
          if (v) this.refreshSVG(v);                  
       }
+    },
+    'options.highlightOn': function(newVal) {
+      if (typeof newVal === 'boolean') {
+        if (!newVal) sheetMusic.clearHighlight();        
+      }
     }
   },
-  
+
   methods: {
     refreshSVG(v) {
       var renderWidth = 600;

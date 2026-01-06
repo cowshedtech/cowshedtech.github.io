@@ -78,7 +78,7 @@ function GrooveWriter() {
 				sheetMusic.clearHighlight();
 				editorClickable.clearHighlight();
 			}
-			sheetMusic.updateFromTrack(editor.track);
+			//sheetMusic.updateFromTrack(editor.track);
 			updateCurrentURL();
 		});
 		
@@ -116,7 +116,7 @@ function GrooveWriter() {
 		})
 
 		eventBus.$on(EventTypes.PLAY_PROGRESS, (data) => {
-			if (data?.percentComplete && options.isHighlightOn()) {
+			if (data?.percentComplete && options.highlightOn) {
 				sheetMusic.highlightNote(data.percentComplete)			
 				editorClickable.hilight_note(null, data?.percentComplete, root.class_permutation_type, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures, root.track.notesPerMeasure, root.track.repeatedMeasures, usingTriplets());
 			} 
