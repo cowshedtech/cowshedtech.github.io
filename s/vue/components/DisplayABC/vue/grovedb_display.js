@@ -1,19 +1,16 @@
 export default {
   data() {
     return {
-        isDebugMode : options ? options.debugMode : false,
         browserInfo : getBrowserInfo()
     }
   },
 
-  mounted() {
-    this.removeHandler = eventBus.$on('options-updated', () => {
-      this.isDebugMode = options.debugMode;             
-    });
-  },
+  inject: ['options'],
 
-  beforeUnmount() {
-    if (this.removeHandler) this.removeHandler() 
+  computed: {
+    isDebugMode() {
+      return !!this.options.debugMode;
+    }
   },  
 
   template: `

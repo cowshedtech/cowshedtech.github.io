@@ -1,18 +1,10 @@
 export default {
-    data() {
-        return {
-            isViewMode : options ? options.isViewMode() : true            
-        }
-    },
-    
-    mounted() {
-        this.removeHandler = eventBus.$on('options-updated', () => {
-            this.isViewMode = options.isViewMode();     
-        });
-    },
+    inject: ['options'],
 
-    beforeUnmount() {
-        if (this.removeHandler) this.removeHandler() 
+    computed: {
+        isViewMode() {
+            return !!this.options.viewMode;
+        }
     },
 
     template: `

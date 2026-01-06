@@ -6,13 +6,15 @@ export default {
 
   data() {
     return {
-      stickingVisible: options.isStickingVisible(),
+      stickingVisible: this.options ? this.options.stickingsVisible : false,
       startNoteIndex: this.track ? (this.measureIndex - 1) * this.track.notesPerMeasure : 0,
       isPopupOpen: false,
       menuX: 0,
       menuY: 0,
     }
   },
+
+  inject: ['options'],
 
   props: {
     track: {
@@ -38,14 +40,12 @@ export default {
     NoteSpacer, Sticking, StickingLabelMenu
   },
 
-  mounted() {
-    this.removeHandler = eventBus.$on('options-updated', () => {
-      this.stickingVisible = options.isStickingVisible();      
-    });
-  },
-
-  beforeUnmount() {
-    if (this.removeHandler) this.removeHandler() 
+  watch: {
+    'options.stickingsVisible': function(newVal) {
+      if (typeof newVal === 'boolean') {
+        this.stickingVisible = newVal;
+      }
+    }
   },
 
   methods: {

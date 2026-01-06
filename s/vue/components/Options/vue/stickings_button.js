@@ -9,7 +9,7 @@ export default {
 
     methods: {
         handleClick(event) {
-            this.options.setStickingVisible(!this.options.isStickingVisible())             
+            this.options.stickingsVisible = !this.options.stickingsVisible
         }
     },
 
