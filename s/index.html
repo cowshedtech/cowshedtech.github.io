@@ -145,13 +145,16 @@
 
 	<!-- Mount our vue app -->
 	<script type="module">
-		import { createApp } from 'vue'
+		import { createApp, reactive } from 'vue'
 		import Main from './vue/main.js'	  
 		const app = createApp(Main, {
 			midiPlayer: window.midiPlayer,
 			eventBus: window.eventBus,
 			track: (window.editor && window.editor.track) ? window.editor.track : null
 		});
+		// Wrap Options in a reactive proxy and replace the global reference
+		// so both injected and global usages trigger reactivity.
+		window.options = reactive(window.options);
 		app.provide('options', window.options);
 		app.mount('#vue-app')
 	</script>

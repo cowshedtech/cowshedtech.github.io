@@ -7,9 +7,11 @@ export default {
   data() {
     return {
       startNoteIndex: this.track ? (this.measureIndex - 1) * this.track.notesPerMeasure : 0,
-      tomsVisible: options.areTomsVisible()
+      tomsVisible: this.options.areTomsVisible()
     }
   },
+  
+  inject: ['options'],
   
   props: {
     track: {
@@ -49,7 +51,7 @@ export default {
 
   mounted() {
     this.removeHandler = eventBus.$on('options-updated', () => {
-      this.tomsVisible = options.areTomsVisible()
+      this.tomsVisible = this.options.areTomsVisible()
     });
   },
 

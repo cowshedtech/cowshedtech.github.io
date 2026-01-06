@@ -9,7 +9,7 @@ export default {
 
   methods: {
     toggleToms() {
-      this.options.setTomsVisible(!this.options.areTomsVisible())
+      this.options.tomsVisible = !this.options.tomsVisible
     }
   },
 

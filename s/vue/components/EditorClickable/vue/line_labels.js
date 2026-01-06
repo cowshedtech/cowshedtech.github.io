@@ -29,11 +29,9 @@ export default {
     }
   },
 
+  inject: ['options'],
+
   props: {
-    options: {
-      type: Object,
-      required: false
-    }, 
     measureIndex: {
       type: Number,
       required: true
@@ -45,19 +43,21 @@ export default {
   },
 
   mounted() {
-    this.tomsVisible = options.areTomsVisible();
-    this.labels.find(l => l.instrument === 'tom1').visible = this.tomsVisible;
-    this.labels.find(l => l.instrument === 'tom4').visible = this.tomsVisible;
-    
-    this.removeHandler = eventBus.$on('options-updated', () => {
-			this.tomsVisible = options.areTomsVisible();
-      this.labels.find(l => l.instrument === 'tom1').visible = this.tomsVisible;
-      this.labels.find(l => l.instrument === 'tom4').visible = this.tomsVisible;
-		});
+    this.labels.find(l => l.instrument === 'tom1').visible = this.options.tomsVisible;
+    this.labels.find(l => l.instrument === 'tom4').visible = this.options.tomsVisible;
   },
 
   beforeUnmount() {
-    if (this.removeHandler) this.removeHandler() 
+  },
+
+  watch: {
+    'options.tomsVisible': function(newVal) {
+      if (typeof newVal === 'boolean') {
+        this.tomsVisible = newVal;
+        this.labels.find(l => l.instrument === 'tom1').visible = newVal;
+        this.labels.find(l => l.instrument === 'tom4').visible = newVal;
+      }
+    }
   },
 
   methods: {

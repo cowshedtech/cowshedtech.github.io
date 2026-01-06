@@ -10,16 +10,16 @@
  */
 class Options {
     /** @type {boolean} Whether advanced editing features are enabled */
-    #advancedEditIsOn;
+    advancedEditIsOn = false;
 
     /** @type {boolean} Whether note highlighting is enabled */
-    #highlightOn;
+    highlightOn = true;
 
     /** @type {boolean} Whether tom drums are visible in the editor */
-    #tomsVisible = false;
+    tomsVisible = false;
 
     /** @type {boolean} Whether sticking notations are shown */
-    #stickingsVisible = false;
+    stickingsVisible = false;
 
     /** @type {boolean} Whether the legend is displayed */
     showLegend = false;
@@ -43,7 +43,7 @@ class Options {
      * @returns {boolean} The current frequency
      */
     isHighlightOn() {
-        return this.#highlightOn;
+        return this.highlightOn;
     }
 
     /**
@@ -51,7 +51,7 @@ class Options {
      * @param {boolean} isOn - is highlighting on
      */
     setHighlightOn(isOn) {
-        this.#highlightOn = isOn;
+        this.highlightOn = isOn;
         window.eventBus.$emit('options-updated');
     }
 
@@ -60,7 +60,7 @@ class Options {
      * @returns {boolean} true if sticking visible
      */
     isStickingVisible() {
-        return this.#stickingsVisible;
+        return this.stickingsVisible;
     }
 
     /**
@@ -68,7 +68,7 @@ class Options {
      * @param {boolean} isVisible - is sticking visible
      */
     setStickingVisible(isVisible) {
-        this.#stickingsVisible = isVisible;
+        this.stickingsVisible = isVisible;
         window.eventBus.$emit('options-updated');
     }
 
@@ -77,7 +77,7 @@ class Options {
      * @returns {boolean} true if toms visible
      */
     areTomsVisible() {
-        return this.#tomsVisible;
+        return this.tomsVisible;
     }
 
     /**
@@ -85,7 +85,7 @@ class Options {
      * @param {boolean} isVisible - is toms visible
      */
     setTomsVisible(isVisible) {
-        this.#tomsVisible = isVisible;
+        this.tomsVisible = isVisible;
         window.eventBus.$emit('options-updated');
     }
 
@@ -128,7 +128,7 @@ class Options {
      * @returns {boolean} true if show legend
      */
     isAdvancedEdit() {
-        return this.#advancedEditIsOn;
+        return this.advancedEditIsOn;
     }
 
     /**
@@ -136,7 +136,7 @@ class Options {
      * @param {boolean} advancedEdit - is avanced edit
      */
     setAdvancedEdit(advancedEdit) {
-        this.#advancedEditIsOn = advancedEdit;
+        this.advancedEditIsOn = advancedEdit;
         window.eventBus.$emit('options-updated');
     }
 }

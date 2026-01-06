@@ -61,7 +61,7 @@ export default {
         <Stickings :track="track" :measureIndex="measureIndex" />
         <span class="notes-row-container">
           <span>
-            <LineLabels :options="options" :measureIndex="measureIndex" />
+            <LineLabels :measureIndex="measureIndex" />
             <div class="music-line-container">
               <div class="notes-container">
                 <StaffLines />
