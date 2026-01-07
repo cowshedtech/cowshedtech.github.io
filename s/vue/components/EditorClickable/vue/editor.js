@@ -11,6 +11,8 @@ export default {
     }
   },
 
+  inject: ['options'],
+
   mounted() {
     eventBus.$on('track-updated', () => {
       if (editor.track) {
@@ -21,6 +23,14 @@ export default {
    eventBus.$on('options-updated', () => {
       this.options = deepCopy(options)      
     });
+  },
+
+  watch: {
+     'options.highlightOn': function(newVal) {
+      if (typeof newVal === 'boolean') {
+        if (!newVal) editorClickable.clearHighlight();        
+      }
+    }
   },
 
   components: {

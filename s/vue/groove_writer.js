@@ -74,11 +74,6 @@ function GrooveWriter() {
 		sheetMusic.updateFromTrack(root.track);
 
 		eventBus.$on('options-updated', () => {
-			if (!options.isHighlightOn()) {
-				sheetMusic.clearHighlight();
-				editorClickable.clearHighlight();
-			}
-			//sheetMusic.updateFromTrack(editor.track);
 			updateCurrentURL();
 		});
 		
