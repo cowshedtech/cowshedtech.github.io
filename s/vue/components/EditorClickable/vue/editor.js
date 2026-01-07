@@ -18,11 +18,7 @@ export default {
       if (editor.track) {
         this.track = deepCopy(editor.track)            
       }
-    });	
-
-   eventBus.$on('options-updated', () => {
-      this.options = deepCopy(options)      
-    });
+    });	   
   },
 
   watch: {

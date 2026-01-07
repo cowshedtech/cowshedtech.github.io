@@ -36,5 +36,22 @@ class Options {
     /**
      * Initializes a new Options instance with default settings
      */
-    constructor() {}    
+    constructor() {
+        try {
+            const debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
+            if (!Number.isNaN(debugMode) && debugMode !== 0) {
+                this.debugMode = true;
+            }
+        } catch (e) {
+            // ignore if helper not yet loaded; later URL parsing will set this too
+        }
+        try {
+            const grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
+            if (!Number.isNaN(grooveDBAuthoring) && grooveDBAuthoring !== 0) {
+                this.grooveDBAuthoring = true;
+            }
+        } catch (e) {
+            // ignore if helper not yet loaded
+        }
+    }
 }

@@ -56,12 +56,7 @@ function GrooveWriter() {
 	// private vars in the scope of the class
 	root.class_permutation_type = "none";
 	
-	// set debugMode immediately so we can use it in index.html
-	let debugMode = parseInt(getQueryVariableFromURL("Debug", "0"), 10);
-	if (debugMode !== 0) options.debugMode = true;
-
-	let grooveDBAuthoring = parseInt(getQueryVariableFromURL("GDB_Author", "0"), 10);
-	if (grooveDBAuthoring !== 0) options.grooveDBAuthoring = true;
+	// options flags (debug, authoring) are initialized in Options constructor
 
 	/*
 	 * This function initializes the data for the groove Scribe web page
@@ -72,10 +67,6 @@ function GrooveWriter() {
 		getGrooveDataFromUrlString(window.location.search, root.track, options, midiPlayer, metronome, options.debugMode);
 		editorClickable.update(root.track);
 		sheetMusic.updateFromTrack(root.track);
-
-		eventBus.$on('options-updated', () => {
-			updateCurrentURL();
-		});
 		
 		eventBus.$on('track-updated', () => {
 			updateCurrentURL(); 

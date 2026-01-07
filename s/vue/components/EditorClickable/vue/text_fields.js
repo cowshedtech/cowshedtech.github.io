@@ -43,15 +43,8 @@ export default {
   mounted() {
     eventBus.$on('track-updated', () => {
 			this.track = deepCopy(editor.track)            
-		})
-    eventBus.$on('options-updated', () => {
-      this.isDBAuthoring = options.grooveDBAuthoring;           
-    });
+		})    
   },
-
-  // beforeUnmount() {
-  //     eventBus.$off('track-updated');
-  // },
 
   template: `
     <div id="sheetMusicTextFields" class="fullWidthEle grooveDB_hidden">

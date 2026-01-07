@@ -3,6 +3,7 @@ import TimeSignature from './components/SignatureTime/vue/picker.js'
 import LeftNavigation from './components/TheNavigationLeft/vue/navigation.js'
 import TopNavigation from './components/TheNavigationTop/vue/top_navigation.js'
 import MidiPlayer from './components/Player/vue/controls.js'
+import UrlSync from './components/UrlSync/vue/url_sync.js'
 
 const KEYS = {
   Z: 'Z',
@@ -62,7 +63,7 @@ export default {
   },
   
   components: {
-    LeftNavigation, RightHandContent, TimeSignature, TopNavigation, MidiPlayer
+    LeftNavigation, RightHandContent, TimeSignature, TopNavigation, MidiPlayer, UrlSync
   },
   
   template: `
@@ -74,6 +75,7 @@ export default {
       </TopNavigation>		      
       <MidiPlayer></MidiPlayer>
     </div>			
-    <RightHandContent :track="track"></RightHandContent>		    
+    <RightHandContent :track="track"></RightHandContent>
+    <UrlSync></UrlSync>		    
 	`
 }
