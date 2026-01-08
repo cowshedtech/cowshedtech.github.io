@@ -19,15 +19,13 @@ export default {
         type: String,
         required: true
     },
-    midiPlayer: {
-      type: Object,
-      required: false
-    },
     midiNormal: {
       type: Number,
       required: true
     }
   },
+
+  inject: ['midiPlayer'],
 
   data() {
     return {

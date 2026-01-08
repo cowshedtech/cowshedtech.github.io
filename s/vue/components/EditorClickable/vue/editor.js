@@ -6,12 +6,11 @@ export default {
   data() {
     return {
       track: editor.track ? editor.track : null,
-      midiPlayer: midiPlayer ? midiPlayer : null,
       options: options ? options : null,      
     }
   },
 
-  inject: ['options'],
+  inject: ['options', 'midiPlayer'],
 
   mounted() {
     eventBus.$on('track-updated', () => {
@@ -38,7 +37,7 @@ export default {
     <div id="musicalInput" class="fullWidthEle">
       <div id="measureContainer">
         <template v-for="i in track.numberOfMeasures" :key="i">
-          <Measure :options="options" :midiPlayer="midiPlayer" :track="track" :measureIndex="i"></Measure>
+          <Measure :options="options" :track="track" :measureIndex="i"></Measure>
         </template>
       </div>
       <ContextMenus></ContextMenus>

@@ -9,12 +9,10 @@ export default {
     noteIndex: {
       type: Number,
       required: true
-    },
-    midiPlayer: {
-      type: Object,
-      required: false
     }
   },
+
+  inject: ['midiPlayer'],
 
   data() {
     return {

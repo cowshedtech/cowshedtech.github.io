@@ -33,10 +33,6 @@ export default {
     midiNormal: {
       type: Number,
       required: true
-    },
-    midiPlayer: {
-      type: Object,
-      required: false
     }
   },
 
@@ -66,7 +62,7 @@ export default {
     <div class="toms-container" id="tom1-container" :style="{ visibility: tomsVisible ? 'visible' : 'hidden' }">
       <div class="opening_note_space"></div>
       <template v-for="i in track.notesPerMeasure" :key="i">
-        <Tom :track="track" :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" :abcOn="abcOn" :midiPlayer="midiPlayer" :midiNormal="midiNormal"/>
+        <Tom :track="track" :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" :abcOn="abcOn" :midiNormal="midiNormal"/>
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton :instrument="'Tom' + tomIndex" :measureIndex="measureIndex"></MuteButton>

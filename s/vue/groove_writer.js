@@ -49,7 +49,13 @@ function GrooveWriter() {
 	metronome = new Metronome();
 	sheetMusic = new SheetMusic();
 	root.track = new Track();
-	midiPlayer = new MIDIPlayer(root.track.trackID);
+	// Prefer an existing instance (for DI/per-app ownership), otherwise create one
+	if (window.midiPlayer) {
+		midiPlayer = window.midiPlayer;
+	} else {
+		midiPlayer = new MIDIPlayer(root.track.trackID);
+		window.midiPlayer = midiPlayer;
+	}
 	abcToSVGCallback = new SVGLibCallback(root.track);
 	var changeCallbackTimeout = null;	
 

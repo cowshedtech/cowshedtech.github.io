@@ -24,10 +24,6 @@ export default {
   },
   
   props: {
-    midiPlayer: {
-      type: Object,
-      required: false
-    }, 
     track: {
       type: Object,
       required: true
@@ -37,6 +33,8 @@ export default {
       required: true
     },    
   },
+
+  inject: ['midiPlayer'],
 
   watch: { 
     track: {
@@ -62,11 +60,11 @@ export default {
               <div class="notes-container">
                 <StaffLines />
                 <Highlights :track="track" :measureIndex="measureIndex" />
-                <HighHats :track="track" :measureIndex="measureIndex" :midiPlayer="midiPlayer"/>
-                <Toms :options="options" :track="track" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" :midiPlayer="midiPlayer" :midiNormal="constants.TOM1_MIDI_NORMAL"/>                
-                <Snares :track="track" :measureIndex="measureIndex" :midiPlayer="midiPlayer"/>
-                <Toms :options="options" :track="track" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" :midiPlayer="midiPlayer" :midiNormal="constants.TOM4_MIDI_NORMAL"/>                
-                <Kick :track="track" :measureIndex="measureIndex" :midiPlayer="midiPlayer"/>                
+                <HighHats :track="track" :measureIndex="measureIndex" />
+                <Toms :options="options" :track="track" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" :midiNormal="constants.TOM1_MIDI_NORMAL"/>                
+                <Snares :track="track" :measureIndex="measureIndex" />
+                <Toms :options="options" :track="track" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" :midiNormal="constants.TOM4_MIDI_NORMAL"/>                
+                <Kick :track="track" :measureIndex="measureIndex" />                
               </div>
             </div>
           </span>

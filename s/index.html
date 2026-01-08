@@ -156,6 +156,8 @@
 		// so both injected and global usages trigger reactivity.
 		window.options = reactive(window.options);
 		app.provide('options', window.options);
+		// Provide midiPlayer via DI (currently sourced from GrooveWriter global)
+		app.provide('midiPlayer', window.midiPlayer);
 		app.mount('#vue-app')
 	</script>
     </body>

@@ -10,12 +10,10 @@ export default {
     noteIndex: {
       type: Number,
       required: true
-    },
-    midiPlayer: {
-      type: Object,
-      required: false
     }
   },
+
+  inject: ['midiPlayer'],
 
   data() {
     return {
@@ -63,11 +61,11 @@ export default {
     handleAction(action) {
       editor.track.setInstrumentNote(Instruments.KICK, this.noteIndex, action);           
       if (this.midiPlayer) {
-        if (action === constant_ABC_KI_Normal) midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
-        if (action === constant_ABC_KI_Splash) midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
+        if (action === constant_ABC_KI_Normal) this.midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
+        if (action === constant_ABC_KI_Splash) this.midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
         if (action === constant_ABC_KI_SandK) {
-          midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
-          midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
+          this.midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);
+          this.midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
         }              
       }  
       this.isPopupOpen = false;
