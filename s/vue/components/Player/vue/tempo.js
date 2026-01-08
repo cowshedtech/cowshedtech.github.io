@@ -1,21 +1,23 @@
 export default {
     
+    inject: ['midiPlayer'],
+    
     data() {
         return {
-            containerIndex: midiPlayer?.containerIndex || 1,
+            containerIndex: this.midiPlayer?.containerIndex || 1,
             touchClass: '',
-            tempo: midiPlayer ? midiPlayer.getTempo() : 80
+            tempo: this.midiPlayer ? this.midiPlayer.getTempo() : 80
         }
     },
     
     methods: {
         update() {
-            if (!midiPlayer) return
-            this.tempo = midiPlayer ? midiPlayer.getTempo() : 80
+            if (!this.midiPlayer) return
+            this.tempo = this.midiPlayer ? this.midiPlayer.getTempo() : 80
             this.updateRangeSlider('tempoInput' + this.containerIndex, this.tempo)
         },
         handleTempoChange(event) {
-            midiPlayer.setTempo(event.target.value)
+            this.midiPlayer.setTempo(event.target.value)
         },
         updateRangeSlider(sliderID, value) {
 
@@ -44,8 +46,8 @@ export default {
     },
     
     mounted() {
-        if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
-            this.containerIndex = midiPlayer.containerIndex
+        if (this.midiPlayer && this.containerIndex !== this.midiPlayer.containerIndex) {
+            this.containerIndex = this.midiPlayer.containerIndex
         }
         eventBus.$on(EventTypes.PARAMETERS_UPDATE, () => {
             this.update()

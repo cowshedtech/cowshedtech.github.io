@@ -12,10 +12,6 @@ const KEYS = {
 
 export default {
   props: {
-    midiPlayer: {
-      type: Object,
-      required: true
-    },
     eventBus: {
       type: Object,
       required: true
@@ -70,7 +66,6 @@ export default {
     <div class="nonPrintable">
 			<LeftNavigation></LeftNavigation>
       <TopNavigation
-        :midiPlayer="midiPlayer"
         :eventBus="eventBus">
       </TopNavigation>		      
       <MidiPlayer></MidiPlayer>

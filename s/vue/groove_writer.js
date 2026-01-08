@@ -69,6 +69,11 @@ function GrooveWriter() {
 	 */	
 	root.runsOnPageLoad = function () {
 
+		// Ensure we use the per-app midiPlayer instance if one was created during app bootstrap
+		if (window.midiPlayer) {
+			midiPlayer = window.midiPlayer;
+		}
+
 		// load the groove from URL data
 		getGrooveDataFromUrlString(window.location.search, root.track, options, midiPlayer, metronome, options.debugMode);
 		editorClickable.update(root.track);

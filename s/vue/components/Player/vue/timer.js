@@ -1,16 +1,17 @@
 export default {
+  inject: ['midiPlayer'],
   data() {
     return {
-      containerIndex: midiPlayer?.containerIndex || 1,
+      containerIndex: this.midiPlayer?.containerIndex || 1,
       playTime: '0:00',      
     }
   },
   
   methods: {
     updateStats() {
-      if (!midiPlayer) return
+      if (!this.midiPlayer) return
       
-      const playTimeThisPlay = midiPlayer.getPlayTimeThisPlay();
+      const playTimeThisPlay = this.midiPlayer.getPlayTimeThisPlay();
       const minutes = playTimeThisPlay.getUTCMinutes();
       const seconds = playTimeThisPlay.getSeconds();
       this.playTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
@@ -18,8 +19,8 @@ export default {
   },
   
   mounted() {
-    if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
-      this.containerIndex = midiPlayer.containerIndex
+    if (this.midiPlayer && this.containerIndex !== this.midiPlayer.containerIndex) {
+      this.containerIndex = this.midiPlayer.containerIndex
     }
     eventBus.$on(EventTypes.PLAY_PROGRESS, () => {
 			this.updateStats()

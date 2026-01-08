@@ -11,15 +11,13 @@ import OptionsSpeedMenu from './menu_speed.js'
 
 export default {
   props: {
-    midiPlayer: {
-        type: Object,
-        required: true
-    },
     eventBus: {
         type: Object,
         required: true
     }
 	},
+
+  inject: ['midiPlayer'],
   
   data() {
     /** @type {{ options: MetronomeOption[] }} */

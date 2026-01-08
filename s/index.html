@@ -146,9 +146,12 @@
 	<!-- Mount our vue app -->
 	<script type="module">
 		import { createApp, reactive } from 'vue'
-		import Main from './vue/main.js'	  
+		import Main from './vue/main.js'
+		// Create a per-app MIDIPlayer using the editor's track
+		const midiPlayer = new MIDIPlayer(window.editor.track.trackID);
+		window.midiPlayer = midiPlayer;
 		const app = createApp(Main, {
-			midiPlayer: window.midiPlayer,
+			midiPlayer,
 			eventBus: window.eventBus,
 			track: (window.editor && window.editor.track) ? window.editor.track : null
 		});
@@ -156,8 +159,7 @@
 		// so both injected and global usages trigger reactivity.
 		window.options = reactive(window.options);
 		app.provide('options', window.options);
-		// Provide midiPlayer via DI (currently sourced from GrooveWriter global)
-		app.provide('midiPlayer', window.midiPlayer);
+		app.provide('midiPlayer', midiPlayer);
 		app.mount('#vue-app')
 	</script>
     </body>

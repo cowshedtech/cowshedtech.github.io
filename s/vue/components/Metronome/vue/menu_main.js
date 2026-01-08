@@ -3,10 +3,6 @@ import OptionsMenu from './menu_options.js'
 
 export default {
     props: {
-        midiPlayer: {
-            type: Object,
-            required: true
-        },
         eventBus: {
             type: Object,
             required: true
@@ -87,7 +83,6 @@ export default {
             :y="menuY" 
             @close="closeMenu">
             <OptionsMenu
-                :midiPlayer="midiPlayer"
                 :eventBus="eventBus"
             >
             </OptionsMenu>

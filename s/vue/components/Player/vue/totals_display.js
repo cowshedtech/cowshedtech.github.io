@@ -1,4 +1,5 @@
 export default {
+  inject: ['midiPlayer'],
   data() {
     /** @type {{ stats: PlayerStats }} */
     return {
@@ -16,13 +17,13 @@ export default {
       }
     },
     updateStats() {
-      if (!midiPlayer) return
+      if (!this.midiPlayer) return
 
-      const playTimeTotal = midiPlayer.getPlayTimeTotal() || 0
+      const playTimeTotal = this.midiPlayer.getPlayTimeTotal() || 0
       this.stats = {
         formattedTime: formatDuration(playTimeTotal),
-        notes: midiPlayer.totalNotes || 0,
-        repeats: midiPlayer.totalRepeats || 0,
+        notes: this.midiPlayer.totalNotes || 0,
+        repeats: this.midiPlayer.totalRepeats || 0,
         playTimeTotal
       }
     }

@@ -8,21 +8,23 @@ const IGNORED_ELEMENTS = new Set(['INPUT', 'TEXTAREA']);
 
 export default {
   
+  inject: ['midiPlayer'],
+  
   data() {
     return {
-      containerIndex: midiPlayer?.containerIndex || 1,
+      containerIndex: this.midiPlayer?.containerIndex || 1,
       state: ''
     }
   },
   
   methods: {
     updateState() {
-      if (!midiPlayer) return
-      this.state = midiPlayer.getState();
+      if (!this.midiPlayer) return
+      this.state = this.midiPlayer.getState();
     },
     
     togglePlayPause() {
-      midiPlayer.startOrStop();
+      this.midiPlayer.startOrStop();
     },
     
     isValidTarget(event) {
@@ -33,14 +35,14 @@ export default {
     handleKeyDown(event) {
       switch (event.code) {
         case KEYS.PLAY:
-          midiPlayer.startOrPause();
+          this.midiPlayer.startOrPause();
           return false;
         case KEYS.STOP:
-          midiPlayer.stop();
+          this.midiPlayer.stop();
           return false;
         case KEYS.SPACEBAR:
           if (this.isValidTarget(event)) {
-            midiPlayer.startOrStop();
+            this.midiPlayer.startOrStop();
             return false;
           }
           break;
@@ -51,8 +53,8 @@ export default {
   },
   
   mounted() {
-    if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
-      this.containerIndex = midiPlayer.containerIndex
+    if (this.midiPlayer && this.containerIndex !== this.midiPlayer.containerIndex) {
+      this.containerIndex = this.midiPlayer.containerIndex
     }
 
     eventBus.$on(EventTypes.PLAY_STATE, () => {

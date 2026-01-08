@@ -1,23 +1,25 @@
 export default {
 
+    inject: ['midiPlayer'],
+
     data() {
         return {
-            containerIndex: midiPlayer?.containerIndex || 1,
+            containerIndex: this.midiPlayer?.containerIndex || 1,
             touchClass: '',
-            swing: midiPlayer ? midiPlayer.getSwing() : 0,
-            enabled: midiPlayer ? midiPlayer.isSwingEnabled() : true,            
+            swing: this.midiPlayer ? this.midiPlayer.getSwing() : 0,
+            enabled: this.midiPlayer ? this.midiPlayer.isSwingEnabled() : true,            
         }
     },
     
     methods: {
         update() {
-            if (!midiPlayer) return
-            this.swing = midiPlayer ? midiPlayer.getSwing() : 0
-            this.enabled = midiPlayer ? midiPlayer.isSwingEnabled() : true
+            if (!this.midiPlayer) return
+            this.swing = this.midiPlayer ? this.midiPlayer.getSwing() : 0
+            this.enabled = this.midiPlayer ? this.midiPlayer.isSwingEnabled() : true
             this.updateRangeSlider('swingInput' + this.containerIndex, this.swing)
         },
         handleSwingChange(event) {
-            midiPlayer.setSwing(event.target.value)
+            this.midiPlayer.setSwing(event.target.value)
         },
         updateRangeSlider(sliderID, value) {
 
@@ -46,8 +48,8 @@ export default {
     },
 
     mounted() {
-        if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
-            this.containerIndex = midiPlayer.containerIndex
+        if (this.midiPlayer && this.containerIndex !== this.midiPlayer.containerIndex) {
+            this.containerIndex = this.midiPlayer.containerIndex
         }
         eventBus.$on(EventTypes.PARAMETERS_UPDATE, () => {
             this.update()

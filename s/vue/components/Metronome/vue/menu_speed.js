@@ -9,15 +9,13 @@
 
 export default {
 	props: {
-		midiPlayer: {
-			type: Object,
-			required: true
-		},
 		eventBus: {
 			type: Object,
 			required: true
 		}
 	},
+
+	inject: ['midiPlayer'],
 
 	data() {
 		return {
