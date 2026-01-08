@@ -147,9 +147,11 @@
 	<script type="module">
 		import { createApp, reactive } from 'vue'
 		import Main from './vue/main.js'
+		
 		// Create a per-app MIDIPlayer using the editor's track
 		const midiPlayer = new MIDIPlayer(window.editor.track.trackID);
 		window.midiPlayer = midiPlayer;
+
 		const app = createApp(Main, {
 			midiPlayer,
 			eventBus: window.eventBus,
@@ -160,6 +162,9 @@
 		window.options = reactive(window.options);
 		app.provide('options', window.options);
 		app.provide('midiPlayer', midiPlayer);
+		window.track = reactive(window.editor.track);
+		app.provide('track', window.track);
+
 		app.mount('#vue-app')
 	</script>
     </body>

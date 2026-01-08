@@ -1,12 +1,5 @@
 export default {
-  props: {
-    track: {
-      type: Object,
-      required: false
-    }
-  },
-
-  inject: ['options'],
+  inject: ['options', 'track'],
 
   data() {
     return {
@@ -19,7 +12,7 @@ export default {
       deep: true,
       immediate: true,
       handler(v) {
-         if (v) this.refreshSVG(v);                  
+        if (v) this.refreshSVG(v);
       }
     },
     'options.highlightOn': function(newVal) {

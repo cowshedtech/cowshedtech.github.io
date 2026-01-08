@@ -28,7 +28,7 @@ export default {
   template: `  
     <div id="RightHandContent">
       <PermutationOptions></PermutationOptions>
-      <SheetMusic :track="track"></SheetMusic>
+      <SheetMusic></SheetMusic>
 
       <div class="nonPrintable">
 
