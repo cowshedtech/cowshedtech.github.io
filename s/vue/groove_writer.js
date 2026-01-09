@@ -80,7 +80,6 @@ function GrooveWriter() {
 		//sheetMusic.updateFromTrack(root.track);
 		
 		eventBus.$on('track-updated', () => {
-			updateCurrentURL(); 
 			midiPlayer.noteHasChanged();
 			editorClickable.update(editor.track);
 		})

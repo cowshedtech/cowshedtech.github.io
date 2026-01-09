@@ -1,5 +1,5 @@
 export default {
-  inject: ['options'],
+  inject: ['options', 'track'],
 
   methods: {
     syncURL() {
@@ -10,6 +10,7 @@ export default {
   },
 
   watch: {
+    'track.version': function() { this.syncURL() },
     'options.debugMode': function() { this.syncURL() },
     'options.viewMode': function() { this.syncURL() },
     'options.highlightOn': function() { this.syncURL() },
