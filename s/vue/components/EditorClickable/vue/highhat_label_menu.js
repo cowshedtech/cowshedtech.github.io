@@ -99,18 +99,7 @@ export default {
 			this.$emit('close')
 		}
 	},
-
-	mounted() {
-		this.removeHandler = (window.eventBus || eventBus).$on('track-updated', () => {
-			this.refreshCounter++;
-			this.$forceUpdate();
-		});
-	},
-
-	beforeUnmount() {
-		if (this.removeHandler) this.removeHandler();
-	},
-
+	
   template: `
 	<div class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">
 		<ul id="hhLabelContextMenu" class="list" :style="{ top: y + 'px', left: x + 'px' }">

@@ -13,18 +13,9 @@ export default {
 
   inject: ['midiPlayer', 'track'],
 
-  data() {
-    return {
-      // Increment to trigger recomputation of computed props on 'track-updated'
-      refreshCounter: 0,
-      removeHandler: null
-    }
-  },
-
   computed: {
     isVisible() {
-      // establish reactive dependency
-      void this.refreshCounter;
+      this.track && this.track.version;
       return this.track.isInstrumentMutedInMeasure(this.instrument, this.measureIndex);
     },
     visibilityStyle() {
@@ -39,16 +30,6 @@ export default {
     handleClick(event) {
         this.track.toggleMuteInstrumentForMeasure(this.instrument, this.measureIndex);
     }
-  },
-
-  mounted() {
-    this.removeHandler = eventBus.$on('track-updated', () => {
-      this.refreshCounter++;
-    });
-  },
-
-  beforeUnmount() {
-    if (this.removeHandler) this.removeHandler();
   },
 
   template: `

@@ -40,12 +40,6 @@ export default {
     }
   },
 
-  mounted() {
-    eventBus.$on('track-updated', () => {
-			this.track = deepCopy(editor.track)            
-		})    
-  },
-
   template: `
     <div id="sheetMusicTextFields" class="fullWidthEle grooveDB_hidden">
       <span class="sheetMusicTextField">

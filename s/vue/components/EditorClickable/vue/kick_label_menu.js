@@ -16,31 +16,26 @@ export default {
 		}
 	},
 
-	data() {
-		return {
-			refreshCounter: 0,
-			removeHandler: null
-		}
-	},
+	inject: ['track'],
 
 	computed: {
 		isMeasureMuted() {
-			void this.refreshCounter;
-			return editor.track.isInstrumentMutedInMeasure(Instruments.KICK, this.measureIndex);
+			this.track && this.track.version;
+			return this.track.isInstrumentMutedInMeasure(Instruments.KICK, this.measureIndex);
 		},
 		isInstrumentMuted() {
-			void this.refreshCounter;
-			return editor.track.isInstrumentMuted(Instruments.KICK);
+			this.track && this.track.version;
+			return this.track.isInstrumentMuted(Instruments.KICK);
 		},
 		isInstrumentMutedEverywhere() {
-			void this.refreshCounter;
-			return editor.track.isInstrumentMutedEverywhere(Instruments.KICK);
+			this.track && this.track.version;
+			return this.track.isInstrumentMutedEverywhere(Instruments.KICK);
 		}	
 	},
 
 	methods: {
 		handleClick(scope, action) {
-			const track = editor.track;
+			const track = this.track;
 			
 			if (action === "cancel") {
 				this.$emit('close');
@@ -48,27 +43,27 @@ export default {
 			}
 
 			if (scope === 'measure' && action === "mute") {
-				editor.track.muteInstrumentForMeasure(Instruments.KICK, this.measureIndex);				
+				this.track.muteInstrumentForMeasure(Instruments.KICK, this.measureIndex);				
 			}
 
 			if (scope === 'measure' && action === "unmute") {
-				editor.track.unmuteInstrumentForMeasure(Instruments.KICK, this.measureIndex);				
+				this.track.unmuteInstrumentForMeasure(Instruments.KICK, this.measureIndex);				
 			}
 
 			if (scope === 'all' && action === "mute") {
 				for (let i = 1; i <= track.numberOfMeasures; i++) {
-					editor.track.muteInstrumentForMeasure(Instruments.KICK, i);				
+					this.track.muteInstrumentForMeasure(Instruments.KICK, i);				
 				}								
 			}
 
 			if (scope === 'all' && action === "unmute") {
 				for (let i = 1; i <= track.numberOfMeasures; i++) {
-					editor.track.unmuteInstrumentForMeasure(Instruments.KICK, i);				
+					this.track.unmuteInstrumentForMeasure(Instruments.KICK, i);				
 				}								
 			}
 
 			if (action === "unmute" || action === "mute") {
-				editor.track.notify();						
+				this.track.notify();						
 				this.$emit('close');
 				return;
 			}
@@ -84,8 +79,8 @@ export default {
 			for (let i = startIndex; i < endIndex; i++) {
 				let newState = constant_ABC_OFF;
 
-				var numNotesPerCount = editor.track.timeDivision / editor.track.noteValue
-				var currentState = 	editor.track.getInstrumentNote(Instruments.KICK, this.noteIndex);
+				var numNotesPerCount = this.track.timeDivision / this.track.noteValue
+				var currentState = 	this.track.getInstrumentNote(Instruments.KICK, this.noteIndex);
 				var kickIsOn = false;
 				if (currentState == constant_ABC_KI_SandK || currentState == constant_ABC_KI_Normal)
 					kickIsOn = true;
@@ -99,10 +94,10 @@ export default {
 				} else if (action == "on") {
 					newState = constant_ABC_KI_Normal;
 				}
-				editor.track.setInstrumentNoteNoNotify(Instruments.KICK, i, newState);       
+				this.track.setInstrumentNoteNoNotify(Instruments.KICK, i, newState);       
 			}
 
-			editor.track.notify();
+			this.track.notify();
 						
 			this.$emit('close')
 		}
