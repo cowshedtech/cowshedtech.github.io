@@ -81,7 +81,6 @@ function GrooveWriter() {
 		
 		eventBus.$on('track-updated', () => {
 			updateCurrentURL(); 
-			// SheetMusic component updates via reactive prop now
 			midiPlayer.noteHasChanged();
 			editorClickable.update(editor.track);
 		})
