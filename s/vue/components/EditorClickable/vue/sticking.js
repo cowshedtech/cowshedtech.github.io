@@ -1,19 +1,15 @@
 export default {
   props: {
-    track: {
-      type: Object,
-      required: true
-    },
     noteIndex: {
       type: Number,
       required: true
     }
   },
 
+  inject: ['track'],
+
   data() {
     return {
-      noteABC: this.track && this.noteIndex || this.noteIndex == 0 ? this.track.getInstrumentNote(Instruments.STICKING, this.noteIndex) : constant_ABC_OFF,
-      noteCountState: (this.track && (this.noteIndex || this.noteIndex == 0)) ? this.figureOutStickingCountForNote() : '',
       constants: {
         STICK_R: constant_ABC_STICK_R,
         STICK_L: constant_ABC_STICK_L,
@@ -24,24 +20,23 @@ export default {
     }
   },
 
-  mounted() {
-    this.removeHandler = eventBus.$on('track-updated', () => {
-        this.noteABC = constant_ABC_OFF;
-        if (editor.track && (this.noteIndex || this.noteIndex == 0)) {
-          if (editor.track.getInstrumentNote(Instruments.STICKING, this.noteIndex)) {
-            this.noteABC = editor.track.getInstrumentNote(Instruments.STICKING, this.noteIndex)
-            this.noteCountState = this.figureOutStickingCountForNote();
-          }
-        }        
-    });	
+  computed: {
+    noteABC() {
+      this.track && this.track.version;
+      return this.track ? this.track.getInstrumentNote(Instruments.STICKING, this.noteIndex) : constant_ABC_OFF;
+    },
+    noteCountState() {
+      this.track && this.track.version;
+      return (this.noteIndex || this.noteIndex == 0) ? this.figureOutStickingCountForNote() : ''
+    }
   },
 
   methods: {
     figureOutStickingCountForNote(index2) {
 
-      let notes_per_measure = editor.track.notesPerMeasure;
-      let sub_division = editor.track.timeDivision;
-      let time_sig_bottom = editor.track.noteValue;
+      let notes_per_measure = this.track.notesPerMeasure;
+      let sub_division = this.track.timeDivision;
+      let time_sig_bottom = this.track.noteValue;
       let index = this.noteIndex;
 
       // figure out the count state by looking at the id and the subdivision
@@ -85,9 +80,7 @@ export default {
         } else {
             new_state = constant_ABC_OFF;
         }
-        this.noteABC = new_state;
-        editor.track.setInstrumentNote(Instruments.STICKING, this.noteIndex, new_state);        
-        this.noteCountState = this.figureOutStickingCountForNote();        
+        this.track.setInstrumentNote(Instruments.STICKING, this.noteIndex, new_state);                
     },
     handleRightClick(event) {
         // noteRightClick(event, 'sticking', this.noteIndex)

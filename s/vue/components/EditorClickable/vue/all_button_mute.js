@@ -1,10 +1,6 @@
 export default {
   
   props: {
-    track: {
-      type: Object,
-      required: false
-    },
     instrument: {
       type: String,
       required: true
@@ -14,6 +10,8 @@ export default {
       required: true
     }
   },
+
+  inject: ['midiPlayer', 'track'],
 
   data() {
     return {
@@ -27,7 +25,7 @@ export default {
     isVisible() {
       // establish reactive dependency
       void this.refreshCounter;
-      return editor.track.isInstrumentMutedInMeasure(this.instrument, this.measureIndex);
+      return this.track.isInstrumentMutedInMeasure(this.instrument, this.measureIndex);
     },
     visibilityStyle() {
       // Override CSS default (display:none) when visible
@@ -39,7 +37,7 @@ export default {
 
   methods: {
     handleClick(event) {
-        editor.track.toggleMuteInstrumentForMeasure(this.instrument, this.measureIndex);
+        this.track.toggleMuteInstrumentForMeasure(this.instrument, this.measureIndex);
     }
   },
 

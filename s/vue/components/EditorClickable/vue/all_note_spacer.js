@@ -1,35 +1,28 @@
 export default {
   props: {
-    track: {
-      type: Object,
-      required: true
-    },
     noteIndex: {
       type: Number,
       required: true
     }
   },
 
+  inject: ['midiPlayer', 'track'],
+
+
   data() {
     return {
-      trackData: editor.track ? editor.track : null,
-      groupSize: editor.track ? editor.track.noteGroupingSize() : 4
+      groupSize: this.track ? this.track.noteGroupingSize() : 4
     }
   },
 
-  watch: { 
-    track: {
-      handler(newVal, oldVal) { 
-        this.trackData = newVal;
-        const { notesPerMeasure, numBeats, noteValue } = editor.track;
-        this.groupSize = editor.track.noteGroupingSize();
-        this.$forceUpdate(); 
-      },
-      deep: true
-    },    
+  computed: {
+    groupSize() {
+      this.track && this.track.version;
+      return this.track.noteGroupingSize();
+    }
   },
 
   template: `
-    <div v-if="noteIndex % groupSize === 0 && noteIndex < trackData.notesPerMeasure" class="space_between_note_groups"></div>
+    <div v-if="noteIndex % groupSize === 0 && noteIndex < this.track.notesPerMeasure" class="space_between_note_groups"></div>
   `,
 }

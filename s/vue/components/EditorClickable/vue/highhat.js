@@ -12,7 +12,6 @@ export default {
 
   data() {
     return {
-      // noteABC: this.track ? this.track.getInstrumentNote(Instruments.HIGH_HAT, this.noteIndex) : constant_ABC_OFF,
       isPopupOpen: false,
       menuX: 0,
       menuY: 0,

@@ -14,26 +14,13 @@ export default {
     }
   },
 
-  inject: ['options'],
+  inject: ['options','track'],
 
   props: {
-    track: {
-      type: Object,
-      required: true
-    },
     measureIndex: {
       type: Number,
       required: true
     }
-  },
-
-  watch: { 
-    track: {
-      handler(newVal, oldVal) { 
-        this.startNoteIndex = (this.measureIndex - 1) * this.track.notesPerMeasure;        
-      },
-      deep: true
-    },    
   },
 
   components: {
@@ -81,8 +68,8 @@ export default {
                 <div class="stickings-container" :style="{ display: stickingVisible ? 'block' : 'none' }">
                     <div class="opening_note_space"></div>
                     <template v-for="i in track.notesPerMeasure" :key="i">
-                        <Sticking :track="track" :noteIndex="startNoteIndex + (i - 1)"  />
-                        <NoteSpacer :track="track" :noteIndex="i" />
+                        <Sticking :noteIndex="startNoteIndex + (i - 1)"  />
+                        <NoteSpacer :noteIndex="i" />
                     </template>
                 </div>   
             </div>

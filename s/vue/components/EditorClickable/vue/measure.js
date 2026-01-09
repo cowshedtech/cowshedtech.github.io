@@ -31,15 +31,6 @@ export default {
 
   inject: ['midiPlayer', 'track'],
 
-  // watch: { 
-  //   track: {
-  //     handler(newVal, oldVal) { 
-  //       this.trackData = newVal;                
-  //     },
-  //     deep: true
-  //   }    
-  // },
-
   components: {
     MeasureButtonAddStart, MeasureControls, Stickings, LineLabels, HighHats, Toms, Snares, Kick, Highlights, StaffLines
   },
@@ -47,18 +38,18 @@ export default {
   template: `    
       <MeasureButtonAddStart :measureIndex="measureIndex" />
       <div class="staff-container" id="staff-container1">
-        <Stickings :track="track" :measureIndex="measureIndex" />
+        <Stickings :measureIndex="measureIndex" />
         <span class="notes-row-container">
           <span>
             <LineLabels :measureIndex="measureIndex" />
             <div class="music-line-container">
               <div class="notes-container">
                 <StaffLines />
-                <Highlights :track="track" :measureIndex="measureIndex" />
-                <HighHats :track="track" :measureIndex="measureIndex" />
-                <Toms :options="options" :track="track" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" :midiNormal="constants.TOM1_MIDI_NORMAL"/>                
-                <Snares :track="track" :measureIndex="measureIndex" />
-                <Toms :options="options" :track="track" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" :midiNormal="constants.TOM4_MIDI_NORMAL"/>                
+                <Highlights :measureIndex="measureIndex" />
+                <HighHats :measureIndex="measureIndex" />
+                <Toms :options="options" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" :midiNormal="constants.TOM1_MIDI_NORMAL"/>                
+                <Snares :measureIndex="measureIndex" />
+                <Toms :options="options" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" :midiNormal="constants.TOM4_MIDI_NORMAL"/>                
                 <Kick :measureIndex="measureIndex" />                
               </div>
             </div>

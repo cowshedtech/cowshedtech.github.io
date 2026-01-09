@@ -22,15 +22,13 @@ function buildHighlights(track, measureIndex) {
 
 export default {
     props: {
-        track: {
-            type: Object,
-            required: true
-        },
         measureIndex: {
             type: Number,
             required: true
         }
     },
+
+    inject: ['track'],
 
     data() {
         return {

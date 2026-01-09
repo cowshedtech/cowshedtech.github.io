@@ -53,7 +53,7 @@ export default {
       <div class="opening_note_space"></div>
       <template v-for="i in track.notesPerMeasure" :key="i">
         <Tom :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" :abcOn="abcOn" :midiNormal="midiNormal"/>
-        <NoteSpacer :track="track" :noteIndex="i" />
+        <NoteSpacer :noteIndex="i" />
       </template>
       <MuteButton :instrument="'Tom' + tomIndex" :measureIndex="measureIndex"></MuteButton>
     </div>    
