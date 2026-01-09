@@ -17,26 +17,21 @@ export default {
 		}
 	},
 
-	data() {
-		return {
-			refreshCounter: 0,
-			removeHandler: null
-		}
-	},
+	inject: ['track'],
 
 	computed: {
 		isMeasureMuted() {
-			void this.refreshCounter;
-			return editor.track.isInstrumentMutedInMeasure(Instruments.SNARE, this.measureIndex);
+			this.track && this.track.version;
+			return this.track.isInstrumentMutedInMeasure(Instruments.SNARE, this.measureIndex);
 		},
 		isInstrumentMuted() {
-			void this.refreshCounter;
-			return editor.track.isInstrumentMuted(Instruments.SNARE);
+			this.track && this.track.version;
+			return this.track.isInstrumentMuted(Instruments.SNARE);
 		},
 		isInstrumentMutedEverywhere() {
-			void this.refreshCounter;
-			return editor.track.isInstrumentMutedEverywhere(Instruments.SNARE);
-		}
+			this.track && this.track.version;
+			return this.track.isInstrumentMutedEverywhere(Instruments.SNARE);
+		}	
 	},
 
 	methods: {
@@ -100,16 +95,6 @@ export default {
 			
 			this.$emit('close')
 		}
-	},
-
-	mounted() {
-		this.removeHandler = eventBus.$on('track-updated', () => {
-			this.refreshCounter++;
-		});
-	},
-
-	beforeUnmount() {
-		if (this.removeHandler) this.removeHandler();
 	},
 
 	template: `

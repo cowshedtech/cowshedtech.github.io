@@ -76,8 +76,7 @@ function GrooveWriter() {
 
 		// load the groove from URL data
 		getGrooveDataFromUrlString(window.location.search, root.track, options, midiPlayer, metronome, options.debugMode);
-		editorClickable.update(root.track);
-		//sheetMusic.updateFromTrack(root.track);
+		editorClickable.update(root.track);		
 		
 		eventBus.$on('track-updated', () => {
 			midiPlayer.noteHasChanged();

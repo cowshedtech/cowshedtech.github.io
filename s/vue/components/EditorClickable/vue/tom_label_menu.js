@@ -32,18 +32,20 @@ export default {
 		}
 	},
 
+	inject: ['track'],
+
 	computed: {
 		isMeasureMuted() {
-			void this.refreshCounter;
-			return editor.track.isInstrumentMutedInMeasure(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.measureIndex);
+			this.track && this.track.version;
+			return this.track.isInstrumentMutedInMeasure(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4, this.measureIndex);
 		},
 		isInstrumentMuted() {
-			void this.refreshCounter;
-			return editor.track.isInstrumentMuted(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4);
+			this.track && this.track.version;
+			return this.track.isInstrumentMuted(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4);
 		},
 		isInstrumentMutedEverywhere() {
-			void this.refreshCounter;
-			return editor.track.isInstrumentMutedEverywhere(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4);
+			this.track && this.track.version;
+			return this.track.isInstrumentMutedEverywhere(this.tomIndex == 1 ? Instruments.TOM1 : Instruments.TOM4);
 		}	
 	},
 
@@ -100,17 +102,6 @@ export default {
             this.$emit('close')
         }
     },
-
-	mounted() {
-		this.removeHandler = (window.eventBus || eventBus).$on('track-updated', () => {
-			this.refreshCounter++;
-			this.$forceUpdate();
-		});
-	},
-
-	beforeUnmount() {
-		if (this.removeHandler) this.removeHandler();
-	},
 
 	template: `
 	<div class="noteContextMenuNew" v-if="isOpen" style="position: absolute; z-index: 9999; display: block"  :style="{ top: y + 'px', left: x + 'px' }">

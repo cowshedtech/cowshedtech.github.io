@@ -72,13 +72,6 @@ function Track() {
 
 	root.track = root.trackNew();
 
-	/**
-     * Notifies all registered handlers of a change
-     */
-    root.notify = function() {
-		window.eventBus.$emit('track-updated');
-	}
-
 	/*
 	 *
 	 */
@@ -266,7 +259,6 @@ function Track() {
      */
     root.setTitle = function(title) {
 		this.title = title;
-		this.notify();
 	}
 
 	/**
@@ -280,8 +272,7 @@ function Track() {
      * Notifies all registered handlers of a change
      */
     root.setAuthor = function(author) {
-		this.author = author;
-		this.notify();		
+		this.author = author;			
 	}
 
 	/**
@@ -295,8 +286,7 @@ function Track() {
      * Notifies all registered handlers of a change
      */
     root.setComments = function(comments) {
-		this.comments = comments;
-		this.notify();		
+		this.comments = comments;	
 	}
 
 	/**
@@ -317,9 +307,7 @@ function Track() {
 		const instruments = this.getInstruments();
 		for (const instrument of instruments) {
 			this.setInstrumentNotes(instrument, Array(this.notesPerMeasure).fill(constant_ABC_OFF));
-		}
-		
-		this.notify();
+		}				
 	}
 
 	/**
@@ -350,9 +338,7 @@ function Track() {
 		// We need to move all the repeated measuresafter this measure up 1 
 		this.shiftRepeatedMeasuresAfterIndex(measureNum - 1, 1);
 		// Also shift any muted measure mappings after this measure
-		this.shiftMutedMeasuresAfterIndex(measureNum - 1, 1);
-		
-		this.notify();
+		this.shiftMutedMeasuresAfterIndex(measureNum - 1, 1);				
 	};
 
 	/**
@@ -378,9 +364,7 @@ function Track() {
 		const srcMuted = this.mutedMeasures.get(measureNum - 1);
 		if (srcMuted && srcMuted.size > 0) {
 			this.mutedMeasures.set(measureNum, new Set(srcMuted));
-		}
-					
-		this.notify();
+		}							
 	};
 
 	/**
@@ -399,9 +383,7 @@ function Track() {
 		// Remove and shift muted measures accordingly
 		this.mutedMeasures.delete(measureNum - 1);
 		this.shiftMutedMeasuresAfterIndex(measureNum - 1, -1);
-		this.numberOfMeasures--;
-
-		this.notify();
+		this.numberOfMeasures--;		
 	}
 
     /**
@@ -409,8 +391,7 @@ function Track() {
      */
     root.repeatMeasureInc = function(measureNum) {
 		const count = editor.track.repeatedMeasures.get(measureNum - 1) || 1;
-		editor.track.repeatedMeasures.set(measureNum - 1, count + 1);
-		this.notify();
+		editor.track.repeatedMeasures.set(measureNum - 1, count + 1);		
 	};
 	
 	/**
@@ -465,9 +446,7 @@ function Track() {
 		const instruments = this.getInstruments();
 		for (const instrument of instruments) {
 			this.setInstrumentNotes(instrument, this.adjustNotesForNewDivision(this.getInstrumentNotes(instrument)))
-		}
-
-		this.notify();
+		}		
 	};
 
 	/**
@@ -601,8 +580,7 @@ function Track() {
 			mutedSet = new Set();
 			this.mutedMeasures.set(idx, mutedSet);
 		}
-		mutedSet.add(instrument);
-		this.notify();
+		mutedSet.add(instrument);		
 	}
 
 	/**
@@ -615,8 +593,7 @@ function Track() {
 			mutedSet.delete(instrument);
 			if (mutedSet.size === 0) {
 				this.mutedMeasures.delete(idx);
-			}
-			this.notify();
+			}			
 		}
 	}
 
@@ -690,9 +667,7 @@ function Track() {
 			this.mutedMeasures.set(this.numberOfMeasures + measureIndex, new Set(mutedSet));
 		}
 
-		this.numberOfMeasures = this.numberOfMeasures + track.numberOfMeasures;
-			
-		this.notify();
+		this.numberOfMeasures = this.numberOfMeasures + track.numberOfMeasures;				
 	}
 	
 

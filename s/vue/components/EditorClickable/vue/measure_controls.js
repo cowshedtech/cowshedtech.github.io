@@ -9,21 +9,14 @@ export default {
     },
   },
 
-  data(props) {
-    return {
-      repeatCount: editor?.track?.repeatedMeasures.get(props.measureIndex - 1) || 1
+  inject: ['midiPlayer', 'track'],
+
+  computed: {
+    repeatCount() {
+      this.track && this.track.version;
+      return this.track ? (this.track.repeatedMeasures.get(this.measureIndex - 1) || 1) : 1
     }
   },
-
-  mounted() {
-    eventBus.$on('track-updated', () => {
-			this.repeatCount = editor?.track?.repeatedMeasures.get(this.measureIndex - 1) || 1
-		})
-  },
-
-  // beforeUnmount() {
-  //   eventBus.$off('track-updated');
-  // },
 
   methods: {
     handleCloseMeasure() {
@@ -63,12 +56,3 @@ export default {
         </div>    
    </div>`
 }
-
-
-
-
-// const addMeasureButton = document.getElementById("addMeasureButton");
-//     addMeasureButton?.scrollIntoView({ block: "start", behavior: "smooth" });
-
-
-
