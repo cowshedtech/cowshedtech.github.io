@@ -25,15 +25,6 @@ export default {
     }
   },
 
-  watch: {
-    'track.version': {
-      immediate: false,
-      handler() {
-        console.log('h')
-      }
-    }    
-  },
-
   computed: {
     noteABC() {
       // depend on version so in-place mutations trigger recompute

@@ -11,13 +11,9 @@ export default {
     }
   },
   
-  inject: ['options'],
+  inject: ['options', 'track'],
   
   props: {
-    track: {
-      type: Object,
-      required: true
-    },
     measureIndex: {
       type: Number,
       required: true
@@ -41,12 +37,6 @@ export default {
   },
 
   watch: { 
-    track: {
-      handler(newVal, oldVal) { 
-        this.startNoteIndex = (this.measureIndex - 1) * this.track.notesPerMeasure;        
-      },
-      deep: true
-    },
     'options.tomsVisible': function(newVal) {
       if (typeof newVal === 'boolean') {
         this.tomsVisible = newVal;        
@@ -62,7 +52,7 @@ export default {
     <div class="toms-container" id="tom1-container" :style="{ visibility: tomsVisible ? 'visible' : 'hidden' }">
       <div class="opening_note_space"></div>
       <template v-for="i in track.notesPerMeasure" :key="i">
-        <Tom :track="track" :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" :abcOn="abcOn" :midiNormal="midiNormal"/>
+        <Tom :noteIndex="startNoteIndex + (i - 1)" :tomIndex="tomIndex" :abcOn="abcOn" :midiNormal="midiNormal"/>
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton :instrument="'Tom' + tomIndex" :measureIndex="measureIndex"></MuteButton>

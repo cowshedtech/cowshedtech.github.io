@@ -5,11 +5,9 @@ import SnareMenu from './snare_menu.js'
 
 export default {
   
+  inject: ['track'],
+
   props: {
-    track: {
-      type: Object,
-      required: true
-    },
     measureIndex: {
       type: Number,
       required: true
@@ -39,7 +37,7 @@ export default {
     <div class="snare-container">
       <div class="opening_note_space"></div>
       <template v-for="i in track.notesPerMeasure" :key="i">
-        <Snare :track="track" :noteIndex="startNoteIndex + (i - 1)"/>
+        <Snare :noteIndex="startNoteIndex + (i - 1)"/>
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton instrument="Snare" :measureIndex="measureIndex"></MuteButton>

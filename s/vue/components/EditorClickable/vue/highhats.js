@@ -5,17 +5,13 @@ import NoteSpacer from './all_note_spacer.js'
 export default {
   
   props: {
-    track: {
-      type: Object,
-      required: true
-    },
     measureIndex: {
       type: Number,
       required: true
     }
   },
 
-  inject: ['midiPlayer'],
+  inject: ['midiPlayer', 'track'],
 
   data() {
     return {
@@ -40,7 +36,7 @@ export default {
     <div class="hi-hat-container">
       <div class="opening_note_space"></div>
       <template v-for="i in track.notesPerMeasure" :key="i">
-        <HighHat :track="track" :noteIndex="startNoteIndex + (i - 1)"/>
+        <HighHat :noteIndex="startNoteIndex + (i - 1)"/>
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton instrument="HighHat" :measureIndex="measureIndex"></MuteButton>
