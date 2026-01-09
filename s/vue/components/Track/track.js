@@ -50,6 +50,7 @@ function Track() {
 		this.notesPerMeasure = 16;
 		this.timeDivision = 16;
 		this.numberOfMeasures = 1;
+		this.version = 0;
 		this.repeatedMeasures = new Map();
 		this.mutedMeasures = new Map(); // Map<measureIndex:number, Set<instrument:string>>
 		this.numBeats = 4;  // TimeSigTop: Top part of Time Signture 3/4, 4/4, 5/4, 6/8, etc...
@@ -125,6 +126,7 @@ function Track() {
 	 */
 	root.setInstrumentNote = function(instrument, id, new_state) {
 		this.notes.get(instrument)[id] = new_state;		
+		this.version = (typeof this.version === "number" ? this.version + 1 : 1);
 		this.notify();
 	}
 

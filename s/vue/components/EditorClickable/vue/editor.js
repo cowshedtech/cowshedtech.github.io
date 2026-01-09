@@ -3,22 +3,7 @@ import Measure from './measure.js'
 import TextFields from './text_fields.js'
 
 export default {
-  data() {
-    return {
-      track: editor.track ? editor.track : null,
-      options: options ? options : null,      
-    }
-  },
-
-  inject: ['options', 'midiPlayer'],
-
-  mounted() {
-    eventBus.$on('track-updated', () => {
-      if (editor.track) {
-        this.track = deepCopy(editor.track)            
-      }
-    });	   
-  },
+  inject: ['options', 'midiPlayer', 'track'],
 
   watch: {
      'options.highlightOn': function(newVal) {
@@ -37,7 +22,7 @@ export default {
     <div id="musicalInput" class="fullWidthEle">
       <div id="measureContainer">
         <template v-for="i in track.numberOfMeasures" :key="i">
-          <Measure :options="options" :track="track" :measureIndex="i"></Measure>
+          <Measure :measureIndex="i"></Measure>
         </template>
       </div>
       <ContextMenus></ContextMenus>

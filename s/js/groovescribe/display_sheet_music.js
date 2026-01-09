@@ -103,11 +103,11 @@ if (typeof(GrooveDisplay) === "undefined") {
 			var mod = document.createElement('script');
 			mod.setAttribute('type', 'module');
 			mod.textContent = [
-				"import { createApp } from 'vue';",
+				"import { createApp, reactive } from 'vue';",
 				"import Main from '" + modulePath + "';",
-				"createApp(Main, {",
-				"  track: window.GrooveDisplay.__initialTrack,",				
-				"}).mount('#" + mountId + "');"
+				"const reactiveTrack = reactive(window.GrooveDisplay.__initialTrack);",
+				"window.GrooveDisplay.__initialTrack = reactiveTrack;",
+				"createApp(Main, { track: reactiveTrack }).mount('#" + mountId + "');"
 			].join("\n");
 			document.getElementsByTagName("head")[0].appendChild(mod);
 		};

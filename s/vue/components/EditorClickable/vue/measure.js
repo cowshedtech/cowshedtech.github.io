@@ -13,7 +13,6 @@ import StaffLines from './staff_line.js'
 export default {
   data() {
     return {
-      trackData: editor.track ? editor.track : null,
       constants: {
         TOM1_ON: constant_ABC_T1_Normal,
         TOM1_MIDI_NORMAL: constant_OUR_MIDI_TOM1_NORMAL,
@@ -24,26 +23,22 @@ export default {
   },
   
   props: {
-    track: {
-      type: Object,
-      required: true
-    },
     measureIndex: {
       type: Number,
       required: true
     },    
   },
 
-  inject: ['midiPlayer'],
+  inject: ['midiPlayer', 'track'],
 
-  watch: { 
-    track: {
-      handler(newVal, oldVal) { 
-        this.trackData = newVal;                
-      },
-      deep: true
-    }    
-  },
+  // watch: { 
+  //   track: {
+  //     handler(newVal, oldVal) { 
+  //       this.trackData = newVal;                
+  //     },
+  //     deep: true
+  //   }    
+  // },
 
   components: {
     MeasureButtonAddStart, MeasureControls, Stickings, LineLabels, HighHats, Toms, Snares, Kick, Highlights, StaffLines
@@ -64,7 +59,7 @@ export default {
                 <Toms :options="options" :track="track" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" :midiNormal="constants.TOM1_MIDI_NORMAL"/>                
                 <Snares :track="track" :measureIndex="measureIndex" />
                 <Toms :options="options" :track="track" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" :midiNormal="constants.TOM4_MIDI_NORMAL"/>                
-                <Kick :track="track" :measureIndex="measureIndex" />                
+                <Kick :measureIndex="measureIndex" />                
               </div>
             </div>
           </span>

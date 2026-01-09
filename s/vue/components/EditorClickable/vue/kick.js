@@ -3,21 +3,16 @@ import Menu from "./kick_menu.js"
 
 export default {
   props: {
-    track: {
-      type: Object,
-      required: true
-    },
     noteIndex: {
       type: Number,
       required: true
     }
   },
 
-  inject: ['midiPlayer'],
+  inject: ['midiPlayer', 'track'],
 
   data() {
     return {
-      noteABC: editor.track ? editor.track.getInstrumentNote(Instruments.KICK, this.noteIndex) : constant_ABC_OFF,
       constants: {
         KICK_OFF: constant_ABC_OFF,
         KICK_NORMAL: constant_ABC_KI_Normal,
@@ -30,20 +25,29 @@ export default {
     }
   },
 
-  watch: { 
-    track: {
-      handler(newVal, oldVal) { 
-        this.noteABC = editor.track ? editor.track.getInstrumentNote(Instruments.KICK, this.noteIndex) : constant_ABC_OFF;              
-      },
-      deep: true
-    },    
+  watch: {
+    'track.version': {
+      immediate: false,
+      handler() {
+        console.log('h')
+      }
+    }    
+  },
+
+  computed: {
+    noteABC() {
+      // depend on version so in-place mutations trigger recompute
+      // eslint-disable-next-line no-unused-expressions
+      this.track && this.track.version;
+      return this.track ? this.track.getInstrumentNote(Instruments.KICK, this.noteIndex) : constant_ABC_OFF;
+    }
   },
   
   methods: {
     handleLeftClick(event) {
         let newMode = this.noteABC ? constant_ABC_OFF : constant_ABC_KI_Normal
         if (this.midiPlayer && newMode === constant_ABC_KI_Normal) this.midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);                
-        editor.track.setInstrumentNote(Instruments.KICK, this.noteIndex, newMode);           
+        this.track.setInstrumentNote(Instruments.KICK, this.noteIndex, newMode);           
     },
     handleRightClick(event) {
       eventBus.$emit('close-all-menus');
@@ -56,10 +60,10 @@ export default {
       if (event.ctrlKey) action = "on";
       if (event.altKey) action = "off";  
       if (action) 
-        editor.track.setInstrumentNote(Instruments.KICK, this.noteIndex,  action == "off" ? constant_ABC_OFF : constant_ABC_KI_Normal);           
+        this.track.setInstrumentNote(Instruments.KICK, this.noteIndex,  action == "off" ? constant_ABC_OFF : constant_ABC_KI_Normal);           
     },
     handleAction(action) {
-      editor.track.setInstrumentNote(Instruments.KICK, this.noteIndex, action);           
+      this.track.setInstrumentNote(Instruments.KICK, this.noteIndex, action);           
       if (this.midiPlayer) {
         if (action === constant_ABC_KI_Normal) this.midiPlayer.playSingleNote(constant_OUR_MIDI_KICK_NORMAL);
         if (action === constant_ABC_KI_Splash) this.midiPlayer.playSingleNote(constant_OUR_MIDI_HIHAT_FOOT);

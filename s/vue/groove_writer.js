@@ -77,11 +77,11 @@ function GrooveWriter() {
 		// load the groove from URL data
 		getGrooveDataFromUrlString(window.location.search, root.track, options, midiPlayer, metronome, options.debugMode);
 		editorClickable.update(root.track);
-		sheetMusic.updateFromTrack(root.track);
+		//sheetMusic.updateFromTrack(root.track);
 		
 		eventBus.$on('track-updated', () => {
 			updateCurrentURL(); 
-			sheetMusic.updateFromTrack(editor.track);
+			// SheetMusic component updates via reactive prop now
 			midiPlayer.noteHasChanged();
 			editorClickable.update(editor.track);
 		})

@@ -6,17 +6,13 @@ import KickMenu from './kick_menu.js'
 export default {
   
   props: {
-    track: {
-      type: Object,
-      required: true
-    },
     measureIndex: {
       type: Number,
       required: true
     }
   },
 
-  inject: ['midiPlayer'],
+  inject: ['midiPlayer', 'track'],
 
   data() {
     return {
@@ -41,7 +37,7 @@ export default {
     <div class="kick-container">
       <div class="opening_note_space"></div>
       <template v-for="i in track.notesPerMeasure" :key="i">
-        <Kick :track="track" :noteIndex="startNoteIndex + (i - 1)"/>
+        <Kick :noteIndex="startNoteIndex + (i - 1)"/>
         <NoteSpacer :track="track" :noteIndex="i" />
       </template>
       <MuteButton instrument="Kick" :measureIndex="measureIndex"></MuteButton>

@@ -8,11 +8,11 @@ export default {
   },
   
   watch: {
-    track: {
-      deep: true,
+    // Render when the version counter changes (avoids deep-watch loops)
+    'track.version': {
       immediate: true,
-      handler(v) {
-        if (v) this.refreshSVG(v);
+      handler() {
+        if (this.track) this.refreshSVG(this.track);
       }
     },
     'options.highlightOn': function(newVal) {

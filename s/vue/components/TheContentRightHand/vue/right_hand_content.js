@@ -11,16 +11,6 @@ import SheetMusic from '../../DisplaySheetMusic/vue/display.js'
 import PermutationOptions from '../../Permutations/vue/options.js'
 
 export default {
-  props: {
-    track: {
-      type: Object,
-      required: false
-    }
-  },
-  data() {
-    return {}
-  },
-  
   components: {
     Editable, BottomNavigation,HiddenDiscription,GrooveDBMetaData,GrooveDBDisplay, TotalPlayTime, DeployInfo, Editor, Warnings, SheetMusic, PermutationOptions
   },
