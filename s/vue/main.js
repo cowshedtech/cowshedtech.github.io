@@ -21,6 +21,19 @@ export default {
       required: false
     }
   },
+  
+  inject: ['midiPlayer'],
+
+  watch: {
+    'track.version': function() {
+      if (this.midiPlayer && typeof this.midiPlayer.noteHasChanged === 'function') {
+        this.midiPlayer.noteHasChanged();
+      }
+      if (window.editorClickable && typeof window.editorClickable.update === 'function') {
+        window.editorClickable.update(this.track);
+      }
+    }
+  },
 
   mounted() {
     document.addEventListener('keydown', this.handleKeyDown);   

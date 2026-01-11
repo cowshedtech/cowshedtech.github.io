@@ -78,11 +78,6 @@ function GrooveWriter() {
 		getGrooveDataFromUrlString(window.location.search, root.track, options, midiPlayer, metronome, options.debugMode);
 		editorClickable.update(root.track);		
 		
-		eventBus.$on('track-updated', () => {
-			midiPlayer.noteHasChanged();
-			editorClickable.update(editor.track);
-		})
-		
 		eventBus.$on('metronome-updated', () => {
 			if (midiPlayer) midiPlayer.noteHasChanged();
 			updateCurrentURL();      
