@@ -1,40 +1,41 @@
 export default {
+	inject: ['metronome', 'track', 'metronomeState'],
 	data() {
 		return {
 			menuItems: [
 				{ 	id: '1', 
 					label: 'Start on 1', 
-				 	isChecked: metronome?.getOffsetClickStart() === '1',
+				 	isChecked: this.metronome?.getOffsetClickStart() === '1',
 					isVisible: true
 				},
 				{ 	id: 'E', 
 					label: 'Start on E', 
-					isChecked: metronome?.getOffsetClickStart() === 'E',
-					isVisible: !editor?.track?.isTripletDivision()
+					isChecked: this.metronome?.getOffsetClickStart() === 'E',
+					isVisible: !this.track?.isTripletDivision()
 				},
 				{ 	id: 'TI', 
 					label: 'Start on &', 
-					isChecked: metronome?.getOffsetClickStart() === 'TI',
-					isVisible: editor?.track?.isTripletDivision()
+					isChecked: this.metronome?.getOffsetClickStart() === 'TI',
+					isVisible: this.track?.isTripletDivision()
 				},
 				{ 	id: 'AND', 
 					label: 'Start on &', 
-					isChecked: metronome?.getOffsetClickStart() === 'AND', 
-					isVisible: !editor?.track?.isTripletDivision()
+					isChecked: this.metronome?.getOffsetClickStart() === 'AND', 
+					isVisible: !this.track?.isTripletDivision()
 				},
 				{ 	id: 'A', 
 					label: 'Start on A', 
-					isChecked: metronome?.getOffsetClickStart() === 'A',
-					isVisible: !editor?.track?.isTripletDivision()
+					isChecked: this.metronome?.getOffsetClickStart() === 'A',
+					isVisible: !this.track?.isTripletDivision()
 				},
 				{ 	id: 'TA', 
 					label: 'Start on &', 
-					isChecked: metronome?.getOffsetClickStart() === 'TA',
-					isVisible: editor?.track?.isTripletDivision()
+					isChecked: this.metronome?.getOffsetClickStart() === 'TA',
+					isVisible: this.track?.isTripletDivision()
 				},
 				{ 	id: 'ROTATE', 
 					label: 'Rotate through', 
-					isChecked: metronome?.getOffsetClickStart() === 'ROTATE',
+					isChecked: this.metronome?.getOffsetClickStart() === 'ROTATE',
 					isVisible: true
 				}
 			]
@@ -43,33 +44,35 @@ export default {
 
 	methods: {
 		handleOffsetClick(position) {
-			metronome?.setOffsetClickStart(position)
+			this.metronome?.setOffsetClickStart(position)
 			this.$emit('close')
 		}
 	},
 
-	mounted() {
-		eventBus.$on('metronome-updated', () => {
+	watch: {
+		'metronomeState.version': function() {
 			if (!this.menuItems) return;
-			
 			this.menuItems.forEach((item, index) => {
 				if (!item) return;
-				
-				// Update checked state
-				item.isChecked = metronome?.getOffsetClickStart() === item.id;
-				
-				// Update visibility for specific items
+				item.isChecked = this.metronome?.getOffsetClickStart() === item.id;
 				if (index === 1 || index === 3 || index === 4) {
-					item.isVisible = !editor?.track?.isTripletDivision();
+					item.isVisible = !this.track?.isTripletDivision();
 				} else if (index === 2 || index === 5) {
-					item.isVisible = editor?.track?.isTripletDivision();
+					item.isVisible = this.track?.isTripletDivision();
 				}
 			});
-		})
-	},
-	
-	beforeUnmount() {
-		eventBus.$off('metronome-updated');
+		},
+		'track.version': function() {
+			if (!this.menuItems) return;
+			this.menuItems.forEach((item, index) => {
+				if (!item) return;
+				if (index === 1 || index === 3 || index === 4) {
+					item.isVisible = !this.track?.isTripletDivision();
+				} else if (index === 2 || index === 5) {
+					item.isVisible = this.track?.isTripletDivision();
+				}
+			});
+		}
 	},
 
 	template: `

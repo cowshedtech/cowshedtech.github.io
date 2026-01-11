@@ -2,13 +2,14 @@
 
 class Metronome {
 
-    #frequency = 0;
-    #solo = false;
-    #offsetClickStart = "1";
-    #offsetClickStartRotation = 0;
+    frequency = 0;
+    solo = false;
+    offsetClickStart = "1";
+    offsetClickStartRotation = 0;
     
-    #countInActive = false;
-    #countInIsPlaying = false;
+    countInActive = false;
+    countInIsPlaying = false;
+    version = 0;
 	
     constructor(containerIndex) { }
 
@@ -17,7 +18,7 @@ class Metronome {
      * @returns {number} The current frequency
      */
     getFrequency() {
-        return this.#frequency;
+        return this.frequency;
     }
 
     /**
@@ -25,7 +26,11 @@ class Metronome {
      * @param {number} newFrequency - The new frequency to set
      */
     setFrequency(newFrequency) {
-        this.#frequency = newFrequency;
+        this.frequency = newFrequency;
+        this.version = (typeof this.version === 'number' ? this.version + 1 : 1);
+        if (window.metronomeState && typeof window.metronomeState === 'object') {
+            window.metronomeState.version = (window.metronomeState.version || 0) + 1;
+        }
         window.eventBus.$emit('metronome-updated');
     }
 
@@ -34,17 +39,21 @@ class Metronome {
      * 
      */    
     getSolo() {
-        return this.#solo;
+        return this.solo;
     };
     
     /**
      * 
      */    
     setSolo(trueElseFalse) {
-        this.#solo = trueElseFalse;
-        if (this.#solo && this.getFrequency() === 0)
+        this.solo = trueElseFalse;
+        if (this.solo && this.getFrequency() === 0)
             this.setFrequency(4);
 
+        this.version = (typeof this.version === 'number' ? this.version + 1 : 1);
+        if (window.metronomeState && typeof window.metronomeState === 'object') {
+            window.metronomeState.version = (window.metronomeState.version || 0) + 1;
+        }
         window.eventBus.$emit('metronome-updated');
     };
 
@@ -53,7 +62,7 @@ class Metronome {
      * @returns {number} The current frequency
      */
     getCountInActive() {
-        return this.#countInActive;
+        return this.countInActive;
     }
 
     /**
@@ -61,7 +70,11 @@ class Metronome {
      * @param {number} newFrequency - The new frequency to set
      */
     setCountInActive(active) {
-        this.#countInActive = active;
+        this.countInActive = active;
+        this.version = (typeof this.version === 'number' ? this.version + 1 : 1);
+        if (window.metronomeState && typeof window.metronomeState === 'object') {
+            window.metronomeState.version = (window.metronomeState.version || 0) + 1;
+        }
         window.eventBus.$emit('metronome-updated');
     }
 
@@ -70,7 +83,7 @@ class Metronome {
      * @returns {number} The current frequency
      */
     isCountInPlaying() {
-        return this.#countInIsPlaying;
+        return this.countInIsPlaying;
     }
 
     /**
@@ -78,7 +91,7 @@ class Metronome {
      * @param {number} newFrequency - The new frequency to set
      */
     setCountInIsPlaying(active) {
-        this.#countInIsPlaying = active;
+        this.countInIsPlaying = active;
     }
 
     /**
@@ -86,7 +99,7 @@ class Metronome {
      * @returns {string} The current offset click start value
      */    
     getOffsetClickStart() {
-        return this.#offsetClickStart;
+        return this.offsetClickStart;
     };
     
     /**
@@ -94,7 +107,7 @@ class Metronome {
      * @returns {boolean} True if the offset click start is set to rotate, false otherwise
      */    
     getOffsetClickStartIsRotating() {
-        return this.#offsetClickStart === 'ROTATE';
+        return this.offsetClickStart === 'ROTATE';
     };
     
     /**
@@ -102,7 +115,11 @@ class Metronome {
      * @param {string} value - The new offset click start value
      */    
     setOffsetClickStart(value) {
-        this.#offsetClickStart = value;
+        this.offsetClickStart = value;
+        this.version = (typeof this.version === 'number' ? this.version + 1 : 1);
+        if (window.metronomeState && typeof window.metronomeState === 'object') {
+            window.metronomeState.version = (window.metronomeState.version || 0) + 1;
+        }
         window.eventBus.$emit('metronome-updated');
     };
 
@@ -113,7 +130,7 @@ class Metronome {
      */    
     advanceOptionsOffsetClickStartRotation(isTriplets) {
         if (this.getOffsetClickStartIsRotating()) {
-            this.#offsetClickStartRotation++;
+            this.offsetClickStartRotation++;
             return true;
         } else {
             return false;
@@ -126,12 +143,12 @@ class Metronome {
     getOptionsOffsetClickStartRotation(isTriplets) {
         if (this.getOffsetClickStartIsRotating()) {
             // constrain the rotation
-            if (isTriplets && this.#offsetClickStartRotation > 2)
-                this.#offsetClickStartRotation = 0;
-            else if (this.#offsetClickStartRotation > 3)
-                this.#offsetClickStartRotation = 0;
+            if (isTriplets && this.offsetClickStartRotation > 2)
+                this.offsetClickStartRotation = 0;
+            else if (this.offsetClickStartRotation > 3)
+                this.offsetClickStartRotation = 0;
     
-            switch (this.#offsetClickStartRotation) {
+            switch (this.offsetClickStartRotation) {
                 case 0:
                     return '1';
                 case 1:
@@ -157,7 +174,7 @@ class Metronome {
      */    
     resetOptionsOffsetClickStartRotation(value) {
         // start with last in the rotation so the next rotation brings it to '1'
-        return this.#offsetClickStartRotation = 0;
+        return this.offsetClickStartRotation = 0;
     };
 
     //

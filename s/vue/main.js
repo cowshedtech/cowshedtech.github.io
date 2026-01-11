@@ -22,7 +22,7 @@ export default {
     }
   },
   
-  inject: ['midiPlayer'],
+  inject: ['midiPlayer', 'metronome', 'metronomeState'],
 
   watch: {
     'track.version': function() {
@@ -31,6 +31,15 @@ export default {
       }
       if (window.editorClickable && typeof window.editorClickable.update === 'function') {
         window.editorClickable.update(this.track);
+      }
+    }
+    ,
+    'metronomeState.version': function() {
+      if (this.midiPlayer && typeof this.midiPlayer.noteHasChanged === 'function') {
+        this.midiPlayer.noteHasChanged();
+      }
+      if (typeof updateCurrentURL === 'function') {
+        updateCurrentURL();
       }
     }
   },

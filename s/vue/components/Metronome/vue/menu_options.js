@@ -17,7 +17,7 @@ export default {
     }
 	},
 
-  inject: ['midiPlayer'],
+  inject: ['midiPlayer', 'metronome', 'metronomeState'],
   
   data() {
     /** @type {{ options: MetronomeOption[] }} */
@@ -27,8 +27,8 @@ export default {
           id: 'Solo',
           title: 'Just hear the metronome.',
           label: 'Solo',
-          handler: (checked) => metronome.setSolo(checked),
-          checked: metronome ? metronome.getSolo() : false
+          handler: (checked) => this.metronome.setSolo(checked),
+          checked: this.metronome ? this.metronome.getSolo() : false
         },
         {
           id: 'SpeedUp',
@@ -41,8 +41,8 @@ export default {
           id: 'CountIn',
           title: 'One measure of metronome count in at the start',
           label: 'Count it in',
-          handler: (checked) => metronome.setCountInActive(checked),
-          checked: metronome ? metronome.getCountInActive() : false
+          handler: (checked) => this.metronome.setCountInActive(checked),
+          checked: this.metronome ? this.metronome.getCountInActive() : false
         },
         {
           id: 'OffTheOne',
@@ -83,6 +83,7 @@ export default {
       this.menuY = event.clientY;
       this.isSpeedPopupOpen = !this.isSpeedPopupOpen;
       this.midiPlayer.setAutoSpeedUpActive(!this.midiPlayer.isAutoSpeedUpActive()),          
+      (this.options[1].checked = this.midiPlayer.isAutoSpeedUpActive()),
       this.$emit('close')
     },
 
@@ -115,16 +116,14 @@ export default {
     }
   },
 
-  mounted() {
-    this.eventBus.$on('metronome-updated', () => {
-			this.options[0].checked = metronome ? metronome.getSolo() : false
-      this.options[1].checked = this.midiPlayer ? this.midiPlayer.isAutoSpeedUpActive() : false
-      this.options[2].checked = metronome ? metronome.getCountInActive() : false
-		})
-  },
-
-  beforeUnmount() {
-    this.eventBus.$off('metronome-updated');
+  mounted() {},
+  beforeUnmount() {},
+  
+  watch: {
+    'metronomeState.version': function() {
+      this.options[0].checked = this.metronome ? this.metronome.getSolo() : false
+      this.options[2].checked = this.metronome ? this.metronome.getCountInActive() : false
+    }
   },
 
   components: {

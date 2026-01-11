@@ -8,10 +8,11 @@ export default {
             required: true
         }
     },
+    
+    inject: ['metronome', 'metronomeState'],
 
     data() {
         return {
-            freq: metronome ? metronome.getFrequency() : 0,
             isPopupOpen: false,
             menuX: 0,
             menuY: 0,
@@ -19,6 +20,11 @@ export default {
     },
 
     computed: {
+        freq() {
+            // depend on reactive state to trigger re-compute
+            this.metronomeState && this.metronomeState.version;
+            return this.metronome ? this.metronome.getFrequency() : 0;
+        },
         buttonClasses() {
             return (value) => [
                 'metronomeButton',
@@ -29,7 +35,7 @@ export default {
 
     methods: {
         setFrequency(value) {
-            metronome.setFrequency(value)
+            this.metronome.setFrequency(value)
         },
         handleOptions(event) {
             this.menuX = event.clientX;
@@ -46,15 +52,8 @@ export default {
         },
     },
 
-    mounted() {
-        this.eventBus.$on('metronome-updated', () => {
-			this.freq = metronome.getFrequency()
-		})        
-    },
-    
-    beforeUnmount() {
-        this.eventBus.$off('metronome-updated');
-    },
+    mounted() {},
+    beforeUnmount() {},
 
     components: {
         ContextMenu, OptionsMenu

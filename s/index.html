@@ -143,8 +143,8 @@
 	</div>
 
 	<!-- Mount our vue app -->
-	<script type="module">
-		import { createApp, reactive } from 'vue'
+		<script type="module">
+		import { createApp, reactive, markRaw } from 'vue'
 		import Main from './vue/main.js'
 		
 		// Defer until window load so GrooveWriter has initialized globals
@@ -165,6 +165,15 @@
 			// so both injected and global usages trigger reactivity.
 			if (window.options) window.options = reactive(window.options);
 			if (window.options) app.provide('options', window.options);
+			// Provide Metronome as a raw class instance plus a reactive state for reactivity
+			if (window.metronome) {
+				const rawMetronome = markRaw(window.metronome);
+				const metronomeState = reactive({ version: rawMetronome.version || 0 });
+				window.metronome = rawMetronome;
+				window.metronomeState = metronomeState;
+				app.provide('metronome', rawMetronome);
+				app.provide('metronomeState', metronomeState);
+			}
 			app.provide('midiPlayer', midiPlayer);
 			app.provide('track', reactiveTrack);
 
