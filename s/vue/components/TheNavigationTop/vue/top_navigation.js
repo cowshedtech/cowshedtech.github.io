@@ -3,10 +3,6 @@ import RightNavigation from '../../TheNavigationTop/vue/top_right_navigation.js'
 
 export default {
     props: {
-        midiPlayer: {
-            type: Object,
-            required: true
-        },
         eventBus: {
             type: Object,
             required: true
@@ -25,7 +21,6 @@ export default {
         <span id="upperLeft">
             <span id="metronomeContainer">
                 <MetronomeNavigation
-                    :midiPlayer="midiPlayer"
                     :eventBus="eventBus">
                 </MetronomeNavigation>                
             </span>

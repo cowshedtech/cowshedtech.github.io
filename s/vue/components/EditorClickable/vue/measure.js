@@ -28,8 +28,7 @@ export default {
       required: true
     },    
   },
-
-  inject: ['midiPlayer', 'track'],
+  inject: ['midiPlayer', 'track', 'options'],
 
   components: {
     MeasureButtonAddStart, MeasureControls, Stickings, LineLabels, HighHats, Toms, Snares, Kick, Highlights, StaffLines
@@ -47,9 +46,9 @@ export default {
                 <StaffLines />
                 <Highlights :measureIndex="measureIndex" />
                 <HighHats :measureIndex="measureIndex" />
-                <Toms :options="options" :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" :midiNormal="constants.TOM1_MIDI_NORMAL"/>                
+                <Toms :measureIndex="measureIndex" :tomIndex="1" :abcOn="constants.TOM1_ON" :midiNormal="constants.TOM1_MIDI_NORMAL"/>                
                 <Snares :measureIndex="measureIndex" />
-                <Toms :options="options" :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" :midiNormal="constants.TOM4_MIDI_NORMAL"/>                
+                <Toms :measureIndex="measureIndex" :tomIndex="4" :abcOn="constants.TOM4_ON" :midiNormal="constants.TOM4_MIDI_NORMAL"/>                
                 <Kick :measureIndex="measureIndex" />                
               </div>
             </div>

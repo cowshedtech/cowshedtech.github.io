@@ -4,7 +4,14 @@ export default {
     computed: {
         isAdvancedEdit() {
             return !!this.options.advancedEditIsOn;
-        }
+        },
+        isTouchDevice() {
+            try {
+                return typeof isTouchDevice === 'function' ? isTouchDevice() : false;
+            } catch (e) {
+                return false;
+            }
+        },
     },
 
     methods: {

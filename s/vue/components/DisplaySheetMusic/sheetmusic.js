@@ -5,7 +5,9 @@ class SheetMusic {
     #highlightedNoteIndex
 
 
-    constructor() { }
+    constructor() { 
+        this.#highlightedNoteIndex = -1;
+    }
 
     /**
      * Update our sheet music 
@@ -62,7 +64,7 @@ class SheetMusic {
      */
     highlightNote(percentComplete) {
 
-        if (this.#track.noteMappingArray === null) return
+        if (!this.#track || !Array.isArray(this.#track.noteMappingArray) || this.#track.noteMappingArray.length === 0) return
             
         // How many measures do we have when we include repeats
         let totalMeasures = this.#track.numberOfMeasures + Array.from(this.#track.repeatedMeasures.values()).reduce((sum, repeats) => sum + (repeats - 1), 0);

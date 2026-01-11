@@ -8,13 +8,6 @@ export default {
 
   inject: ['midiPlayer', 'track'],
 
-
-  data() {
-    return {
-      groupSize: this.track ? this.track.noteGroupingSize() : 4
-    }
-  },
-
   computed: {
     groupSize() {
       this.track && this.track.version;

@@ -30,7 +30,7 @@
 /*global GrooveUtils, GrooveDisplay */
 
 // Configuration constants
-const VUE_ESM_BROWSER_URL = "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.js";
+const VUE_ESM_BROWSER_URL = "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.prod.js";
 const MAIN_SHEET_MUSIC_MODULE_PATH = "../vue/standalone/main_sheet_music.js";
 
 var sheetMusic;

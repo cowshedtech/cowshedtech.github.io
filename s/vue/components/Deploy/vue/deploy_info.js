@@ -28,6 +28,12 @@ export default {
     }
   },
   mounted() {
+    // Skip fetching in local dev to avoid 404 noise
+    const isLocal =
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1'
+    if (isLocal) return
+
     const url = '../deploy-info.json'
     fetch(url, { cache: 'no-store' })
       .then(res => {

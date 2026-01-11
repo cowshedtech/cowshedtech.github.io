@@ -83,7 +83,6 @@
 		<script src="./vue/components/Metronome/metronome.js"></script>
 
 		<!-- Instruments -->
-		<script src="./vue/components/EditorClickable/instruments/all.js"></script>
 		<script src="./vue/components/EditorClickable/instruments/kick.js"></script>
 		<script src="./vue/components/EditorClickable/editorclickable.js"></script>
 		
@@ -113,7 +112,7 @@
 		<script type="importmap">
 			{
 				"imports": {
-				"vue": "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.js"
+				"vue": "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.prod.js"
 				}
 			}
 		</script>
@@ -159,7 +158,6 @@
 			window.editor.track = reactiveTrack;
 
 			const app = createApp(Main, {
-				midiPlayer,
 				eventBus: window.eventBus,
 				track: reactiveTrack
 			});
