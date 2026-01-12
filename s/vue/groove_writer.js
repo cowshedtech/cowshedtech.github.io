@@ -78,8 +78,6 @@ function GrooveWriter() {
 		getGrooveDataFromUrlString(window.location.search, root.track, options, midiPlayer, metronome, options.debugMode);
 		editorClickable.update(root.track);		
 		
-		// Metronome changes are now reactive via Vue injection and watched in Main
-	
 		// If the midiplayer changes then update all the dependent components		
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();		
 		eventBus.$on(EventTypes.PARAMETERS_UPDATE, () => {
