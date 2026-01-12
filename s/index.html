@@ -73,8 +73,7 @@
 		<script src="./vue/helpers/query.js"></script>
 		<script src="./vue/helpers/url.js"></script>			
 		
-		<!-- Editor -->
-		<script src="./vue/groove_writer.js"></script>
+		<!-- Editor (legacy class removed; globals initialized below) -->
 		<script src="./vue/components/EditorClickable/undo.js"></script>				
 		
 		<!-- Player -->
@@ -97,9 +96,29 @@
 
 		<script src="./vue/helpers/eventBus.js"></script>
 
-		<!-- Dynamically change up css -->
+		<!-- Initialize globals and dynamically change up css -->
 		<script type="text/javascript">
-			var myGrooveWriter = new GrooveWriter();
+			// Initialize core globals (formerly via GrooveWriter constructor)
+			window.editor = { class_permutation_type: "none" };
+			window.editorClickable = new EditorClickable();
+			window.options = window.options || new Options();
+			window.metronome = new Metronome();
+			window.sheetMusic = new SheetMusic();
+			window.editor.track = new Track();
+			window.abcToSVGCallback = new SVGLibCallback(window.editor.track);
+
+			// Back-compat lightweight object for legacy calls
+			window.myGrooveWriter = {
+				updateFromURL: function(encodedURLData) {
+					if (typeof window.updateFromURL === 'function') window.updateFromURL(encodedURLData);
+				},
+				get_FullURLForPage: function(url_destination) {
+					return (typeof window.get_FullURLForPage === 'function')
+						? window.get_FullURLForPage(url_destination)
+						: window.location.href;
+				}
+			};
+
 			if (options.grooveDBAuthoring) {
 				document.write('<link rel="stylesheet" type="text/css" href="css/grooveDB_authoring.css">');
 			}
@@ -134,12 +153,7 @@
 	<div id="GrooveWriter">    
 		<div id="vue-app"></div>    
 		
-		<script>
-			window.addEventListener('load', () => {
-				'use strict';
-				myGrooveWriter.runsOnPageLoad();
-			});
-		</script>
+		<script></script>
 	</div>
 
 	<!-- Mount our vue app -->
@@ -220,6 +234,15 @@
 			// Backwards-compatibility shims
 			if (window.editor) window.editor.get_FullURLForPage = window.get_FullURLForPage;
 			if (window.myGrooveWriter) window.myGrooveWriter.get_FullURLForPage = window.get_FullURLForPage;
+
+			// Initialize MIDI callbacks and load initial groove reactively (moved from GrooveWriter)
+			if (window.midiPlayer) {
+				window.midiPlayer.eventCallbacks = new midiEventCallbackClass();
+			}
+			window.updateFromURL(window.location.search);
+			if (window.midiPlayer && typeof window.midiPlayer.initialise === 'function') {
+				window.midiPlayer.initialise();
+			}
 
 			app.mount('#vue-app');
 		});
