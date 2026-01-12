@@ -79,18 +79,7 @@ function GrooveWriter() {
 		editorClickable.update(root.track);		
 		
 		// If the midiplayer changes then update all the dependent components		
-		midiPlayer.eventCallbacks = new midiEventCallbackClass();		
-		eventBus.$on(EventTypes.PARAMETERS_UPDATE, () => {
-			// if there is a timeout running clear it
-			if (this.changeCallbackTimeout != null)
-				window.clearTimeout(this.changeCallbackTimeout);
-
-			// set a new timeout
-			this.changeCallbackTimeout = window.setTimeout(function () {
-				this.changeCallbackTimeout = null
-				updateCurrentURL();
-			}, 300);
-		})
+		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 
 		eventBus.$on(EventTypes.PLAY_STATE, () => {
 			if (midiPlayer.getState() == PlayerState.STOPPED) {

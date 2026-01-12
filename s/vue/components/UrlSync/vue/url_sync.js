@@ -1,12 +1,24 @@
 export default {
   inject: ['options', 'track'],
+  
+  data() {
+    return {
+      _debounceHandle: null
+    };
+  },
 
   methods: {
     syncURL() {
-      if (typeof updateCurrentURL === 'function') {
-        updateCurrentURL();
+      if (this._debounceHandle != null) {
+        clearTimeout(this._debounceHandle);
       }
-    }
+      this._debounceHandle = setTimeout(() => {
+        this._debounceHandle = null;
+        if (typeof updateCurrentURL === 'function') {
+          updateCurrentURL();
+        }
+      }, 300);
+    },
   },
 
   watch: {
@@ -17,6 +29,9 @@ export default {
     'options.tomsVisible': function() { this.syncURL() },
     'options.stickingsVisible': function() { this.syncURL() },
     'options.grooveDBAuthoring': function() { this.syncURL() },
+    // React to player settings mirrored on options
+    'options.tempo': function() { this.syncURL() },
+    'options.swing': function() { this.syncURL() },
   },
 
   // Render nothing visible; this component only manages side-effects.

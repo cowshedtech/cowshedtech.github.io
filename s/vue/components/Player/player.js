@@ -344,6 +344,10 @@ class MIDIPlayer {
 
         this.#swing = swingAmount
 		this.noteHasChanged();
+        // Mirror onto reactive options for URL syncing without events
+        try {
+            if (window.options) window.options.swing = this.#swing;
+        } catch (e) { /* empty */ }
         window.eventBus.$emit(EventTypes.PARAMETERS_UPDATE, { swingAmount });
 	};
 
@@ -366,6 +370,10 @@ class MIDIPlayer {
 		if (newTempo < 19 && newTempo > 281) return;
 
         this.#tempo = newTempo;
+        // Mirror onto reactive options for URL syncing without events
+        try {
+            if (window.options) window.options.tempo = this.#tempo;
+        } catch (e) { /* empty */ }
         window.eventBus.$emit(EventTypes.PARAMETERS_UPDATE, { newTempo });
         this.noteHasChanged();        
 	};
