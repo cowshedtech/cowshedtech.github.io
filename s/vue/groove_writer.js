@@ -81,39 +81,9 @@ function GrooveWriter() {
 		// If the midiplayer changes then update all the dependent components		
 		midiPlayer.eventCallbacks = new midiEventCallbackClass();
 
-		eventBus.$on(EventTypes.PLAY_STATE, () => {
-			if (midiPlayer.getState() == PlayerState.STOPPED) {
-				sheetMusic.stop();
-				editorClickable.stop();
-			}
-		})
+		
 
-		eventBus.$on(EventTypes.PLAY_PROGRESS, (data) => {
-			if (data?.percentComplete && options.highlightOn) {
-				sheetMusic.highlightNote(data.percentComplete)			
-				editorClickable.hilight_note(null, data?.percentComplete, root.class_permutation_type, root.track.numBeats, root.track.noteValue, root.track.numberOfMeasures, root.track.notesPerMeasure, root.track.repeatedMeasures, usingTriplets());
-			} 
-		})
-
-		eventBus.$on(EventTypes.LOAD_MIDI, (data) => {
-			var midiURL;
-
-			if (data?.playStarting && metronome.getCountInActive()) {
-				midiURL = buildMIDICountInTrack(root.track.numBeats, root.track.noteValue, midiPlayer.getTempo());
-				midiPlayer.noteHasChanged();
-				metronome.setCountInIsPlaying(true);
-
-			} else {
-				if (metronome.countInIsPlaying) {
-					// we saved the state above so that we could reset the Offset click start, otherwise it starts on the 'e'
-					metronome.setCountInIsPlaying(false);
-					metronome.resetOptionsOffsetClickStartRotation();
-				}
-				midiURL = createMidiUrlFromClickableUI("our_MIDI");
-				midiPlayer.resetNoteHasChanged();
-			}
-			midiPlayer.loadFromURL(midiURL, midiPlayer.getTempo());
-		})
+		
 
 		
 		midiPlayer.initialise();
@@ -139,18 +109,9 @@ function GrooveWriter() {
 	// get a really long URL that encodes all of the notes and the rest of the state of the page.
 	// this will allow us to bookmark or reference a groove and handle undo/redo.
 	//
-	root.get_FullURLForPage= function (url_destination) {
-		// var track = grooveDataFromClickableUI()
-		return getUrlStringFromGrooveData(editor.track, options, midiPlayer, metronome, url_destination)
-	}
+	
 	
 
-	root.updateFromURL = function (encodedURLData) {
-
-		var track = getGrooveDataFromUrlString(encodedURLData, root.track, options, midiPlayer, metronome, options.debugMode);
-		editorClickable.update(editor.track);
-
-		root.changeDivisionWithNotes(track.timeDivision);			
-	}
+	
 
 } // end of class

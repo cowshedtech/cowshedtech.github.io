@@ -176,6 +176,50 @@
 			}
 			app.provide('midiPlayer', midiPlayer);
 			app.provide('track', reactiveTrack);
+			
+			// Global URL updater (replaces GrooveWriter.updateFromURL)
+			window.updateFromURL = function(encodedURLData) {
+				try {
+					const track = getGrooveDataFromUrlString(
+						encodedURLData,
+						window.editor.track,
+						window.options,
+						window.midiPlayer,
+						window.metronome,
+						window.options && window.options.debugMode
+					);
+					if (window.editorClickable && typeof window.editorClickable.update === 'function') {
+						window.editorClickable.update(window.editor.track);
+					}
+					// Relayout using existing Track API (mirrors usage elsewhere)
+					if (window.editor && window.editor.track && typeof window.editor.track.changeDivision === 'function') {
+						window.editor.track.changeDivision(window.editor.track.timeDivision);
+					}
+				} catch (e) {
+					// no-op
+				}
+			};
+			// Backwards-compatibility shims
+			if (window.editor) window.editor.updateFromURL = window.updateFromURL;
+			if (window.myGrooveWriter) window.myGrooveWriter.updateFromURL = window.updateFromURL;
+
+			// Global URL generator (replaces GrooveWriter.get_FullURLForPage)
+			window.get_FullURLForPage = function(url_destination) {
+				try {
+					return getUrlStringFromGrooveData(
+						window.editor.track,
+						window.options,
+						window.midiPlayer,
+						window.metronome,
+						url_destination
+					);
+				} catch (e) {
+					return window.location.href;
+				}
+			};
+			// Backwards-compatibility shims
+			if (window.editor) window.editor.get_FullURLForPage = window.get_FullURLForPage;
+			if (window.myGrooveWriter) window.myGrooveWriter.get_FullURLForPage = window.get_FullURLForPage;
 
 			app.mount('#vue-app');
 		});
