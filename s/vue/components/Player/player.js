@@ -467,6 +467,7 @@ class MIDIPlayer {
     callback(data) {
         var percentComplete = (data.now / data.end);
         
+        
         if (this.#lastMidiTimeUpdate && this.#lastMidiTimeUpdate < (data.now + 800)) {
             this.#lastMidiTimeUpdate = data.now;
         }
