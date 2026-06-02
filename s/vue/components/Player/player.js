@@ -23,6 +23,10 @@ const EventTypes = {
     LOAD_MIDI: 'loadMidi'
 };
 
+if (typeof window !== 'undefined') {
+    window.EventTypes = EventTypes;
+}
+
 /**
  * Lazily load the MIDI.js soundfont/plugin the first time audio is actually needed
  * (first play OR first note-click preview) rather than eagerly on page load. This keeps

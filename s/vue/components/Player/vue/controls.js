@@ -2,6 +2,7 @@ import PlayButton from './play_button.js'
 import Timer from './timer.js'
 import Tempo from './tempo.js'
 import Swing from './swing.js'
+import { addInlineMetronomeSVG } from '../../../helpers/metronome-inline-svg.js'
 
 const KEYS = {
   ARROW_DOWN: 'ArrowDown',

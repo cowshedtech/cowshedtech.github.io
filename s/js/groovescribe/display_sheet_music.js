@@ -190,12 +190,11 @@ if (typeof(GrooveDisplay) === "undefined") {
 		// The instance id is baked into the module text so there's no window.track
 		// race when several displays mount around the same time.
 		//
-		root.MountVueAppToElement = function (elementId, inst, mainModulePath) {
+		function mountVueAppLegacy(elementId, inst, mainModulePath) {
 			var mountId = elementId || 'vue-app';
 			var rel = mainModulePath || MAIN_SHEET_MUSIC_MODULE_PATH;
 			var moduleUrl = /^https?:\/\//i.test(rel) ? rel : new URL(rel, window.GSLoader.getLocalScriptRoot()).href;
-			
-			// Ensure import map is present (safe to call multiple times)
+
 			if (!root.__importMapInstalled) {
 				window.GSLoader.loadjsmap({
 					"imports": {
@@ -204,7 +203,7 @@ if (typeof(GrooveDisplay) === "undefined") {
 				});
 				root.__importMapInstalled = true;
 			}
-			
+
 			var mod = document.createElement('script');
 			mod.setAttribute('type', 'module');
 			mod.textContent = [
@@ -215,10 +214,47 @@ if (typeof(GrooveDisplay) === "undefined") {
 				"inst.track = reactiveTrack;",
 				"inst.editor.track = reactiveTrack;",
 				"window.GrooveDisplay.activateInstance(inst);",
-				"const app = createApp(Main, { track: reactiveTrack, instanceId: " + inst.id + " });",				
+				"const app = createApp(Main, { track: reactiveTrack, instanceId: " + inst.id + " });",
 				"app.mount('#" + mountId + "');"
 			].join("\n");
 			document.getElementsByTagName("head")[0].appendChild(mod);
+		}
+
+		function loadBuiltVueEntry(entryKey) {
+			root.__builtVueEntryPromises = root.__builtVueEntryPromises || {};
+			if (root.__builtVueEntryPromises[entryKey]) {
+				return root.__builtVueEntryPromises[entryKey];
+			}
+			var assetsUrl = new URL("../dist/assets.json", window.GSLoader.getLocalScriptRoot()).href;
+			root.__builtVueEntryPromises[entryKey] = fetch(assetsUrl)
+				.then(function (response) {
+					if (!response.ok) throw new Error("assets.json missing");
+					return response.json();
+				})
+				.then(function (assets) {
+					var chunk = assets[entryKey];
+					if (!chunk) throw new Error("unknown entry " + entryKey);
+					return import(new URL("../dist/" + chunk, window.GSLoader.getLocalScriptRoot()).href);
+				});
+			return root.__builtVueEntryPromises[entryKey];
+		}
+
+		root.MountVueAppToElement = function (elementId, inst, mainModulePath) {
+			var mountId = elementId || 'vue-app';
+			var rel = mainModulePath || MAIN_SHEET_MUSIC_MODULE_PATH;
+			var entryKey = (rel === MAIN_GROOVE_DISPLAY_MODULE_PATH) ? "groove-display" : "sheet-music";
+
+			loadBuiltVueEntry(entryKey)
+				.then(function () {
+					if (entryKey === "groove-display") {
+						window.mountGrooveDisplayApp(mountId, inst);
+					} else {
+						window.mountSheetMusicApp(mountId, inst);
+					}
+				})
+				.catch(function () {
+					mountVueAppLegacy(elementId, inst, mainModulePath);
+				});
 		};
 
 		function grooveDisplayDepsReady(needPlayer) {

@@ -28,7 +28,7 @@
 
 var trackID = 0;
 
-const Instruments = {
+var Instruments = {
     STICKING: 'Sticking',
     HIGH_HAT: 'HighHat',
     SNARE: 'Snare',

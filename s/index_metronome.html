@@ -23,15 +23,6 @@
 		<script defer src="./vue/components/Metronome/metronome.js"></script>
 		<script defer src="./vue/helpers/eventBus.js"></script>
 
-		<!-- Script for vue framework -->
-		<script type="importmap">
-			{
-				"imports": {
-				"vue": "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.prod.js"
-				}
-			}
-		</script>
-
     </head>
     <body>
 
@@ -39,12 +30,20 @@
 			<div id="vue-app"></div>
 		</div>
 
-		<!-- Mount our vue app -->
+		<!-- VITE_METRONOME_ENTRY -->
+		<script type="importmap">
+			{
+				"imports": {
+				"vue": "https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.prod.js"
+				}
+			}
+		</script>
 		<script type="module">
 			import { createApp } from 'vue'
 			import Main from './vue/standalone/main_metronome.js'
 			createApp(Main).mount('#vue-app')
 		</script>
+		<!-- /VITE_METRONOME_ENTRY -->
 
     </body>
 </html>

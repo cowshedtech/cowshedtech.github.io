@@ -22,6 +22,11 @@ jobs:
       - name: Install Wrangler
         run: npm install -g wrangler
 
+      - name: Install dependencies and build Vue bundles
+        run: |
+          npm ci
+          npm run build:deploy
+
       - name: Generate deployment info
         run: |
           echo '{
