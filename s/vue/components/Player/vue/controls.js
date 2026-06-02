@@ -11,16 +11,20 @@ const KEYS = {
 };
 
 export default {
+  inject: {
+    midiPlayer: { default: () => (typeof window !== 'undefined' ? window.midiPlayer : null) }
+  },
+
   data() {
     return {
-      containerIndex: midiPlayer?.containerIndex || 1,
+      containerIndex: this.midiPlayer?.containerIndex || 1,
       expandable: false
     }
   },
   
   mounted() {
-    if (midiPlayer && this.containerIndex !== midiPlayer.containerIndex) {
-      this.containerIndex = midiPlayer.containerIndex
+    if (this.midiPlayer && this.containerIndex !== this.midiPlayer.containerIndex) {
+      this.containerIndex = this.midiPlayer.containerIndex
     }
 
     document.addEventListener('keydown', this.handleKeyDown);   
@@ -36,7 +40,7 @@ export default {
   
   methods: {
     handleFullScreen() {
-        midiPlayer.loadFullScreenGrooveScribe();        
+        this.midiPlayer.loadFullScreenGrooveScribe();        
     },
 
     handleExpand() {
@@ -54,19 +58,28 @@ export default {
     },
     
     handleKeyDown(event) {
+      var player = this.midiPlayer;
+      if (!player) return true;
+
+      // When several groove displays share the page, a global key listener exists per
+      // player. Only let the one that is actually playing respond, so arrow keys don't
+      // shift every groove's tempo at once. The single-instance editor is unaffected.
+      var multipleInstances = (typeof window !== 'undefined' && window.GrooveDisplay && window.GrooveDisplay.__instanceCount > 1);
+      if (multipleInstances && player.getState && player.getState() !== 'Playing') return true;
+
       if (event.target.type == "range" || (event.target.tagName.toUpperCase() != "INPUT" && event.target.tagName.toUpperCase() != "TEXTAREA")) {       
         switch (event.code) {
           case KEYS.ARROW_DOWN:
-            midiPlayer.downTempo();
+            player.downTempo();
             return false;
           case KEYS.ARROW_LEFT:
-            midiPlayer.downTempo();
+            player.downTempo();
             return false;
           case KEYS.ARROW_UP:
-            midiPlayer.upTempo();
+            player.upTempo();
             return false;      
           case KEYS.ARROW_RIGHT:
-            midiPlayer.upTempo();
+            player.upTempo();
             return false;        
         }
       }

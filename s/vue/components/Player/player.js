@@ -241,7 +241,7 @@ class MIDIPlayer {
             MIDI.Player.ctx.resume();
             this.resetStartTime();
             this.#lastUpdateTime = 0;
-            window.eventBus.$emit(EventTypes.LOAD_MIDI, { playStarting: true, isPlaying: true });
+            window.eventBus.$emit(EventTypes.LOAD_MIDI, { playStarting: true, isPlaying: true, player: this });
             MIDI.Player.loop(this.#shouldRepeat); // set the loop parameter
             MIDI.Player.start();
         }
@@ -517,7 +517,7 @@ class MIDIPlayer {
                 // advanceOptionsOffsetClickStartRotation will return false if not rotating
                 if (metronome.advanceOptionsOffsetClickStartRotation() || this.doesMidiDataNeedRefresh()) {
                     MIDI.Player.stop();
-                    window.eventBus.$emit(EventTypes.LOAD_MIDI, { isPlaying: false });
+                    window.eventBus.$emit(EventTypes.LOAD_MIDI, { isPlaying: false, player: this });
                     MIDI.Player.start();                    
                 }                
             } else {
@@ -549,7 +549,7 @@ class MIDIPlayer {
             if (note_type) {
                 this.totalNotes++;
                 // TODO Fix this
-                window.eventBus.$emit(EventTypes.PLAY_PROGRESS, { percentComplete: percentComplete });
+                window.eventBus.$emit(EventTypes.PLAY_PROGRESS, { percentComplete: percentComplete, player: this });
                 // if (editor.oteCallback) {
                 // if (midiPlayer.root.noteCallback) {
                 //     midiPlayer.root.noteCallback(note_type);
