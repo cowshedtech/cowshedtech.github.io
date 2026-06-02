@@ -300,7 +300,68 @@ if (typeof(GrooveDisplay) === "undefined") {
 			} else {
 				window.addEventListener("load", kick, false);
 			}
-		};		
-		
+		};
+
+		// --- GrooveDB tab format -------------------------------------------------
+		// The GrooveDB stores grooves as separate drum-tab lines (hihatTab, snareAccentTab,
+		// snareOtherTab, kickTab, footOtherTab, optional tom1Tab/tom4Tab) at a fixed
+		// "notesPerTabMeasure" resolution, rather than the URL groove format. Convert such an
+		// object into the URL groove string that AddGrooveDisplayToPage understands.
+		//
+		// In the current pipeline notesPerMeasure = (Div / timeSigBottom) * timeSigTop, so we
+		// pick Div = notesPerTabMeasure * timeSigBottom / timeSigTop to preserve the tab's
+		// resolution exactly (32 for straight grooves, 24 for triplet grooves, etc.).
+		function grooveDBTabToUrlString(tab) {
+			var timeSig = parseTimeSigString(tab.timeSignature || "4/4");
+			var top = timeSig[0];
+			var bottom = timeSig[1];
+
+			var measures = (tab.measures && !isNaN(tab.measures)) ? tab.measures : 1;
+
+			var hihat = tab.hihatTab || "";
+			// Derive the tab resolution if it wasn't supplied.
+			var notesPerTabMeasure = (tab.notesPerTabMeasure && !isNaN(tab.notesPerTabMeasure))
+				? tab.notesPerTabMeasure
+				: Math.max(1, Math.round(hihat.length / measures));
+
+			var div = Math.round(notesPerTabMeasure * bottom / top);
+			if (!div || isNaN(div) || div < 1) div = notesPerTabMeasure || 16;
+
+			var snare = mergeDrumTabLines(tab.snareAccentTab || "", tab.snareOtherTab || "");
+			var kick = mergeDrumTabLines(tab.kickTab || "", tab.footOtherTab || "");
+
+			var url = 'Mode=view'
+				+ '&TimeSig=' + top + '/' + bottom
+				+ '&Div=' + div
+				+ '&Tempo=' + ((tab.tempo && !isNaN(tab.tempo)) ? tab.tempo : 80)
+				+ '&Measures=' + measures;
+
+			if (tab.swingPercent !== undefined && !isNaN(tab.swingPercent)) {
+				url += '&Swing=' + tab.swingPercent;
+			}
+
+			// Encode the tab lines so special characters (notably "+" for foot/splash, which
+			// URLSearchParams would otherwise turn into a space) survive query parsing.
+			url += '&H=|' + encodeURIComponent(hihat);
+			url += '&S=|' + encodeURIComponent(snare);
+			url += '&K=|' + encodeURIComponent(kick);
+			if (tab.tom1Tab !== undefined) url += '&T1=|' + encodeURIComponent(tab.tom1Tab);
+			if (tab.tom4Tab !== undefined) url += '&T4=|' + encodeURIComponent(tab.tom4Tab);
+
+			return url;
+		}
+
+		// Render a GrooveDB-tab groove into a specific element.
+		root.GrooveDBFormatPutGrooveInHTMLElement = function (elementId, grooveDBTabIn, showPlayer) {
+			root.AddGrooveDisplayToPage(elementId, grooveDBTabToUrlString(grooveDBTabIn), showPlayer !== false);
+		};
+
+		// Render a GrooveDB-tab groove inline at the call site (mirrors the legacy API used by
+		// grooveDBTest.html). A mount div is created in document order, so several grooves can be
+		// stacked down a page interleaved with their descriptive text.
+		root.GrooveDBFormatPutGrooveOnPage = function (grooveDBTabIn, showPlayer) {
+			root.AddGrooveDisplayToPage(null, grooveDBTabToUrlString(grooveDBTabIn), showPlayer !== false);
+		};
+
 	})(); // end of class GrooveDisplay
 } // end if
