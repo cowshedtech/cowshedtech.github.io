@@ -26,6 +26,8 @@
 			fileref = document.createElement("script");
 			fileref.setAttribute("type", "text/javascript");
 			fileref.setAttribute("src", filename);
+			// Preserve insertion order; default for dynamic scripts is async, which can race window.onload.
+			fileref.async = false;
 		} else if (filetype === "css") {
 			fileref = document.createElement("link");
 			fileref.setAttribute("rel", "stylesheet");

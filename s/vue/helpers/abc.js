@@ -1177,6 +1177,12 @@ function generate_ABC_from_track(renderWidth, track) {
 	var fullABC = "";
 	var numberOfMeasuresPerLine = 2;
 	if (track.notesPerMeasure >= 32) numberOfMeasuresPerLine = 1; // Only put one measure per line for 32nd notes and above because of width issues
+	// Embeds render at a fixed, narrow width (matching the standalone GrooveScribe display).
+	// At that width two measures get squeezed together, so lay out one measure per line.
+	// The full editor never sets this global, so its layout is unchanged.
+	if (typeof window !== "undefined" && typeof window.GROOVE_DISPLAY_RENDER_WIDTH === "number" && window.GROOVE_DISPLAY_RENDER_WIDTH > 0) {
+		numberOfMeasuresPerLine = 1;
+	}
 	track.noteMappingArray = [];
 
 	// abc header boilerplate

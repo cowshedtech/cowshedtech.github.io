@@ -43,6 +43,17 @@ class SheetMusic {
         return this.#svg;
     }
 
+    /**
+     * Attach the track that the currently displayed SVG was rendered from, so that
+     * note highlighting can map playback progress to the right abc note ids.
+     * The SVG itself is rendered in the Vue display component, so this intentionally
+     * does NOT re-render.
+     * @param {Object} track - The track the visible SVG was generated from
+     */
+    attachTrack(track) {
+        this.#track = track;
+    }
+
     stop() {
         this.clearHighlight()
     }
