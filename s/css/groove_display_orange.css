@@ -1,19 +1,49 @@
 :root {
+	/* ---- Brand / theme accents ---- */
 	--header-bg-color: #243640;
 	--header-bg-start-color: #2a404d;
 	--header-bg-end-color: #1c2b33;
-	--bpm-bg-color: #222222;
-	--side-bg-color: #393939;
-	--bottom-bg-color: #393939;
-	--side-highlight-bg-color: #2484C0;
-	--note-overlay-bg-color: #BDEBDD;
+	--highlight-color: #2484c0;
+	--highlight-color-on-white: #2484c0;
+	--accent-light: #68c2ff;
+	--accent-input: #66c0fe;
+	--accent-advanced: #009ffa;
+	--accent-dark-blue: #0071ad;
+	--accent-steel: #3b5166;
+	--btn-hover-border: #28597a;
+	--btn-active: #1b435e;
+	--btn-border: #0000bb;
+	--player-control-border: #000099;
+	--time-sig-color: #62c04c;
+	--warning-red: #cc0000;
+	--play-active-red: #dd4444;
+	--note-overlay-bg-color: #bdebdd;
 
-	--highlight-color: #2484C0;
-	--highlight-color-on-white: #2484C0;
+	/* ---- Tinted surfaces ---- */
+	--stickings-bg: #f7f1cf;
+	--url-field-bg: #ffe9b7;
+
+	/* ---- Neutrals ---- */
+	--white: #ffffff;
+	--black: #000000;
+	--charcoal: #393939;
+	--near-black: #010101;
+	--gray-222: #222222;
+	--gray-444: #444444;
+	--gray-555: #555555;
+	--gray-666: #666666;
+	--gray-777: #777777;
+	--gray-888: #888888;
+	--gray-999: #999999;
+	--gray-aaa: #aaaaaa;
+	--gray-cacaca: #cacaca;
+	--gray-ccc: #cccccc;
+	--gray-ddd: #dddddd;
+	--gray-eee: #eeeeee;
+	--gray-eef: #eeeeff;
 }
 
-
-	/* this is for debugging layout issues - puts a read border around everything */
+/* this is for debugging layout issues - puts a read border around everything */
 	/* body * { border: 1px solid red; }		 */
 	body {
 
@@ -40,7 +70,7 @@
 	}
 	.playerControl {
 		display: inline-block;
-		background-color: #222222;
+		background-color: var(--gray-222);
 		width: 100%;  /* expand to the surounding element */
 		font-family: 'Lato', sans-serif;
 		white-space: nowrap;
@@ -49,18 +79,16 @@
 		display: block;
 		width: calc(50% - 83px);
 		min-width: 500px;
-		border: 1px solid #009;
+		border: 1px solid var(--player-control-border);
 		padding-left: 0px;
 		margin: 0px 0px 0px 0px;
 	}
 	.playerControl.small {
 		width: 90px;
-		border: 1px solid #009;
+		border: 1px solid var(--player-control-border);
 		padding-left: 0px;
 	}
 	.playerControlsRow {
-		/display: flex;
-		/display: -webkit-flex;
 		padding-left: 6px;
 		height: 48px;
 		flex-flow: flex-start;
@@ -77,8 +105,8 @@
 		height: 40px;
 		cursor: pointer;
 		margin: 4px 0px 4px 0px;
-		border: 0px solid #000;
-		color: #cccccc;
+		border: 0px solid var(--black);
+		color: var(--gray-ccc);
 		font-size: 20px;
 		font-family: FontAwesome;
 		text-align: center;
@@ -89,37 +117,37 @@
 		flex: none;
 	}
 	.midiPlayImage, .midiRepeatImage {
-		background: #666666;
+		background: var(--gray-666);
 		margin: 4px 4px 4px 4px;
 
 	}
 	.midiPlayImage:hover, .midiRepeatImage:hover {
-		color: #ffffff;
-		background: #777777;
+		color: var(--white);
+		background: var(--gray-777);
 	}
 	.midiExpandImage {
 		font-size: 26px;
 		transition: all .6s ease-in-out;
 	}
 	.midiExpandImage.small:hover {
-		color: #68c2ff;
+		color: var(--accent-light);
 		transform: scale(1.4);
 	}
 	.midiExpandImage.large:hover {
-		color: #68c2ff;
+		color: var(--accent-light);
 		transform: scale(.8);
 	}
 	.midiPlayImage:before   {
-		color: #DD4444;
+		color: var(--play-active-red);
 	 	content: "\f05e";
 	}
 	.midiPlayImage.Stopped:before ,  .midiPlayImage.Paused:before   {
-	 	color: #FFF;
+	 	color: var(--white);
 		letter-spacing: -3px;
 		content: "\f04b";
 	}
 	.midiPlayImage.Playing:before  {
-		color: #FFF;
+		color: var(--white);
 		content: "\f04c";
 	}
 	.midiExpandImage.small:before   {
@@ -143,7 +171,6 @@
 			display: none;
 	}
 	.tempoRow, .swingRow {
-		/border: 1px solid red;
 		display: flex;
 		display: -webkit-flex;
 		height: 24px;
@@ -152,18 +179,17 @@
 		flex-wrap: nowrap;
 	}
 	.tempoInput, .swingInput {
-		background-color: 3f91e5;
 		vertical-align: top;
 		padding: 0px;
 		margin: 8px 10px 0px 0px;
-		color: #66c0fe;
+		color: var(--accent-input);
 		height: 8px;
 		width: 100%;
 		flex: 1;
 		-webkit-flex: 1;
 	}
 	.tempoSettings {
-		color: #FFF;
+		color: var(--white);
 	}
 	.tempoLabel, .swingLabel {
 		text-align: right;
@@ -171,14 +197,14 @@
 		vertical-align: top;
 		font-size: 16px;
 		width: 60px;
-		color: #999999;
+		color: var(--gray-999);
 		-webkit-flex: none;
 		flex: none;
 	}
 	.tempoTextField {
 		margin: 1px 6px 0 6px;
-		color: #999999;
-		background-color: #222;
+		color: var(--gray-999);
+		background-color: var(--gray-222);
 		border: none;
 		width: 30px;
 		text-align: center;
@@ -192,14 +218,14 @@
 		text-align: left;
 		padding-top: 0;
 		font-size: 16px;
-		color: #999999;
+		color: var(--gray-999);
 		padding-left: 8px;
 		width: 34px;
 		-webkit-flex: none;
 		flex: none;
 	}
 	.swingSettings {
-		color: #FFF;
+		color: var(--white);
 	}
 	.MIDIProgressRow {
 		display: none;
@@ -222,7 +248,7 @@
 	.MIDIPlayTime {
 		display: inline-block;
 		width: 130px;
-		color: #999999;
+		color: var(--gray-999);
 		font-size: 30px;
 		margin-left: 6px;
 		padding-top: 4px;
@@ -264,12 +290,12 @@
 		fill-opacity: 0.20;
 	}
 	#GrooveDB_MetaData , #debugDisplayArea {
-		background-color: #DDD;
+		background-color: var(--gray-ddd);
 	}
 
 input[type=range] {
   -webkit-appearance: none;
-  background: #888888;
+  background: var(--gray-888);
   border-radius: 8px;
 }
 
@@ -277,25 +303,25 @@ input[type=range] {
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
 	input[type=range] {
 		margin-top: 0px;
-		background: #222222;
+		background: var(--gray-222);
 		height: 24px;
 	}
 }
 @supports (-ms-accelerator:true) {
 	input[type=range] {
 		margin-top: 0px;
-		background: #222222;
+		background: var(--gray-222);
 		height: 24px;
 	}
 }
 
 input[type=range]:before {
   /* set this color for the runnable-track left of the thumb color */
-  color: #888888;
+  color: var(--gray-888);
 }
 input[type=range]:after {
   /* set this color for the runnable-track right of the thumb color */
-  color: #444444;
+  color: var(--gray-444);
 }
 input[type=range]:focus {
   outline: none;
@@ -304,16 +330,16 @@ input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
   height: 8px;
   cursor: pointer;
-  background: #444444;
+  background: var(--gray-444);
   border-radius: 6px;
-  border: 0px solid #010101;
+  border: 0px solid var(--near-black);
 }
 input[type=range]::-webkit-slider-thumb {
-  border: 1px solid #444444;
+  border: 1px solid var(--gray-444);
   height: 18px;
   width: 18px;
   border-radius: 20px;
-  background: #888888;
+  background: var(--gray-888);
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: -5px;
@@ -326,22 +352,22 @@ input[type=range].touch::-webkit-slider-thumb {
 }
 
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #666666;
+  background: var(--gray-666);
 }
 input[type=range]::-moz-range-track {
   width: 100%;
   height: 8.4px;
   cursor: pointer;
-  background: #444444;
+  background: var(--gray-444);
   border-radius: 6px;
-  border: 0px solid #010101;
+  border: 0px solid var(--near-black);
 }
 input[type=range]::-moz-range-thumb {
-  border: 1px solid #444444;
+  border: 1px solid var(--gray-444);
   height: 18px;
   width: 18px;
   border-radius: 20px;
-  background: #888888;
+  background: var(--gray-888);
   cursor: pointer;
 }
 input[type=range]::-ms-track {
@@ -353,29 +379,29 @@ input[type=range]::-ms-track {
   color: transparent;
 }
 input[type=range]::-ms-fill-lower {
-  background: #888888;
-  border: 0px solid #010101;
+  background: var(--gray-888);
+  border: 0px solid var(--near-black);
   border-radius: 2.6px;
 }
 input[type=range]::-ms-fill-upper {
-  background: #444444;
-  border: 0px solid #010101;
+  background: var(--gray-444);
+  border: 0px solid var(--near-black);
   border-radius: 6px;
 }
 input[type=range]::-ms-thumb {
-  border: 1px solid #444444;
+  border: 1px solid var(--gray-444);
   height: 16px;
   width: 16px;
   border-radius: 18px;
-  background: #888888;
+  background: var(--gray-888);
   cursor: pointer;
   margin-top: 0px;
 }
 input[type=range]:active::-moz-range-thumb {
-	background: #fff;
+	background: var(--white);
 }
 input[type=range]:active::-webkit-slider-thumb {
-	background: #fff;
+	background: var(--white);
 }
 @media print {
 	/* keep at bottom so it overrides the styles above */

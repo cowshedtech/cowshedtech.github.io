@@ -1,13 +1,8 @@
-	/* this is for debugging layout issues - puts a red border around everything */
-	/* body * { border: 1px solid red; }		 */
-	DEBUG {
-		border: 1px solid red;
-	}
 	body {
 		/* Use GrooveWriter instead of body for easy embedding */
 		margin: 0px;
 		height: 100vh;
-		background-color: #393939;
+		background-color: var(--charcoal);
 	}
 	#GrooveWriter {
 		/* tag surrounds entire app */
@@ -18,12 +13,10 @@
 		 * Usually set the height to 100vh - (the height of the top nav)
 		 */
 		position: relative;
-		background-color: #393939;
-		//background-color: #DDD;
+		background-color: var(--charcoal);
 		width: 100%;
 		min-width: 800px;
 		/* to embed, add your header height here.  Replace 0px with your header height */
-		//height: 100%;
 		font: 100%/normal 'Lato', Calibri, sans-serif;
 
 	}
@@ -45,44 +38,37 @@
 		width: 70px;
 		height: 100%;
 		position: fixed;
-		/position: absolute;
-		#top: 111px;
 		top: 0px;
 		left: 0px;
-		border-right: 2px solid #000;
-		background: #393939;
+		border-right: 2px solid var(--black);
+		background: var(--charcoal);
 		z-index: 999;
 	}
 	#TopNav {
 		position: fixed;
-		/position: relative;
-		#top: 111px;
 		top: 0px;
 		left: 0px;
 		z-index: 998;
 		width: calc(100% - 72px);
 		margin-left: 72px;
 		height: 48px;  /* total 48 */
-		border-bottom: 1px solid #000;
+		border-bottom: 1px solid var(--black);
 		background: var(--header-bg-color);
 		background: linear-gradient(to right, var(--header-bg-start-color), var(--header-bg-end-color));
 		display: block;
 	}
 	#midiPlayer {  /* more #midiPlayer css in groove_display.css */
-		background: #000;
+		background: var(--black);
 		width: calc(100% - 72px);
 		height: 48px;
 		position: fixed;
-		#top: 160px;
 		top: 49px;
-		/position: relative;
 		left: 72px;
 		z-index: 997;
-		border-bottom: 1px solid #000;
+		border-bottom: 1px solid var(--black);
 	}
 	#RightHandContent {
 		position: relative;
-		#top: 209px;
 		top: 98px;
 		left: 72px;
 		height: calc(100% - 98px);
@@ -122,18 +108,16 @@
 		font-weight: 500;
 		margin: 0px 5px 0px 10px;
 		text-align: center;
-		color: #EEF;
+		color: var(--gray-eef);
 	}
 	.metronomeButton, .rightButtons {
 		padding: 2px;
 		cursor: pointer;
 		display: inline-block;
-		/background: #0071ad;
-		color: #EEE;
-		border: 0px solid #00B;
+		color: var(--gray-eee);
+		border: 0px solid var(--btn-border);
 		text-align: center;
 		border-radius: 20px;
-		/width: 50px;
 		margin: 0px 1px;
 		height: 20px;
 		transition: all .1s ease-in-out;
@@ -142,7 +126,6 @@
 		margin: 0px 6px;
 	}
 	.metronomeButton:hover, .rightButtons:hover, .metronomeButton.selected:hover, .rightButtons.selected:hover, .rightButtons.buttonSelected:hover {
-		/color: #3b5166;
 		font-weight: 700;
 		transform: scale(1.05);
 	}
@@ -150,20 +133,19 @@
 		width: 75px;
 	}
 	.metronomeButton.buttonSelected, .metronomeButton.selected, .rightButtons.buttonSelected {  /* is a button and is selected */
-		color: #FFF;
+		color: var(--white);
 		font-weight: 700;
-		/background: #68c2ff;
 	}
 
 	#logoInSubdivision {
-		background-color: #000;
+		background-color: var(--black);
 	}
 	#logoInSubdivision img {
 		height: 40px;
 	}
 	.left-button {
 		display: block;
-		color: #999999;
+		color: var(--gray-999);
 		cursor: pointer;
 	}
 	.left-button-content {
@@ -172,7 +154,7 @@
 		font-size: 12px;
 		font-weight: bold;
 		height: 48px;
-		border-bottom: 1px solid #000;
+		border-bottom: 1px solid var(--black);
 		text-align: center;
 		vertical-align: middle;
 		display: -webkit-flex;
@@ -187,41 +169,41 @@
 		height: 48px;  /* Override from above */
 	}
 	#timeSigLabel {
-		color: #62C04C;
+		color: var(--time-sig-color);
 		font-size: 20px;
 		margin-bottom: -5px;
 	}
 	#timeSubLabel {
-		color: #62C04C;
+		color: var(--time-sig-color);
 		font-size: 12px;
 	}
 	.left-button.disabled, .left-button.disabled:hover {
-		color: #000;
-		background-color: #393939;
+		color: var(--black);
+		background-color: var(--charcoal);
 	}
 	.left-button.buttonSelected, .left-button.buttonSelected:hover {  /* is subdivision and is selected */
-		background: #2484C0;
-		color: #FFF;
+		background: var(--highlight-color);
+		color: var(--white);
 		cursor: auto;
 		transform: scale(1.1);
 	}
 	.myButton:hover, .left-button:hover {
-	   border-top-color: #28597a;
-	   background: #555555;
-	   color: #ccc;
+	   border-top-color: var(--btn-hover-border);
+	   background: var(--gray-555);
+	   color: var(--gray-ccc);
 	   transform: scale(1.05);
 	 }
 	.myButton:active, .left-button:active  {
-	   border-top-color: #1b435e;
-	   background: #1b435e;
+	   border-top-color: var(--btn-active);
+	   background: var(--btn-active);
     }
 	.buttonFraction {  /* The number above "triplet" in the .subdivision 1/4, 1/8, etc */
 		display: block;
 		font-size: 18px;
 	}
 	#advancedEditAnchor.buttonSelected {
-		background: #009ffa;
-		color: #FFF;
+		background: var(--accent-advanced);
+		color: var(--white);
 		font-size: 14px;
 	}
 	.buttonText {
@@ -233,8 +215,8 @@
 		height: 35px;
 		text-align: center;
 		padding-top: 13px;
-		border-bottom:1px solid #AAA;
-		background-color: #DDD;
+		border-bottom:1px solid var(--gray-aaa);
+		background-color: var(--gray-ddd);
 
 	}
 	#NotationLabel {
@@ -256,10 +238,10 @@
 	}
 	#musicalInput {
 		width: 100%;
-		background: #FFF;
+		background: var(--white);
 		overflow-x: auto;
 		overflow-y: hidden;
-		border-bottom: 1px solid #AAA;
+		border-bottom: 1px solid var(--gray-aaa);
 		text-align: center;
 		white-space: nowrap;
 		padding-top: 15px;
@@ -281,12 +263,10 @@
 		margin-right: auto;
 	}
 	.staff-container {
-		/margin-left: 2px;
-		/margin-top: 2px;
 		margin-right: -3px;
 		margin-bottom: 0px;
 		display: inline-block;
-		background: #FFFFFF;
+		background: var(--white);
 		text-align: left;
 		white-space: nowrap;
 	}
@@ -306,8 +286,8 @@
 	}
 	.stickings-label {
 		height: 25px;
-		background: #f7f1cf;
-		color: #000;
+		background: var(--stickings-bg);
+		color: var(--black);
 		padding-top: 9px;
 		padding-left: 1px;
 		font-size: 12px;
@@ -360,7 +340,6 @@
 	}
 	.music-line-container {
 		display: inline-block;
-		/top: 30px;
 		z-index: 3;
 		display: table-cell;
 	}
@@ -372,7 +351,7 @@
 	.stickings-container {
 		display: none;
 		height: 32px;
-		background: #f7f1cf;
+		background: var(--stickings-bg);
 		border: 1px solid transparent;
 		margin-top: 0px;
 		white-space:nowrap;
@@ -432,31 +411,31 @@
 		position: absolute; top: 42px;
 		width:100%;
 		height:0px;
-		border-top:3px solid #cacaca;
+		border-top:3px solid var(--gray-cacaca);
 	}
 	.staff-line-2{
 		position: absolute; top: 72px;
 		width:100%;
 		height:0px;
-		border-top:3px solid #cacaca;
+		border-top:3px solid var(--gray-cacaca);
 	}
 	.staff-line-3{
 		position: absolute; top: 103px;
 		width:100%;
 		height:0px;
-		border-top:3px solid #cacaca;
+		border-top:3px solid var(--gray-cacaca);
 	}
 	.staff-line-4{
 		position: absolute; top: 132px;
 		width:100%;
 		height:0px;
-		border-top:3px solid #cacaca;
+		border-top:3px solid var(--gray-cacaca);
 	}
 	.staff-line-5{
 		position: absolute; top: 163px;
 		width:100%;
 		height:0px;
-		border-top:3px solid #cacaca;
+		border-top:3px solid var(--gray-cacaca);
 	}
 	.sticking {
 		display: inline-block;
@@ -519,13 +498,13 @@
 	.sticking_right {
 		position: absolute; top: 0px; left: 6px;
 		font-size: 24px;
-		color: #CCCCCC;
+		color: var(--gray-ccc);
 		cursor: pointer;
 	}
 	.sticking_left {
 		position: absolute; top: 0px; left: 6px;
 		font-size: 24px;
-		color: #CCCCCC;
+		color: var(--gray-ccc);
 		cursor: pointer;
 	}
 	.sticking_both {
@@ -585,7 +564,7 @@
 	.hh_cross {
 		position: absolute; top: 15px; left: 5px;
 		font-size: 24px;
-		color: #CCCCCC;
+		color: var(--gray-ccc);
 		cursor: pointer;
 	}
 	.hh_open {
@@ -632,9 +611,9 @@
 		width:90%;
 		height:20px;
 		width: 20px;
-		background: #FFF;
+		background: var(--white);
 		border: 2px solid;
-		border-color: #999;
+		border-color: var(--gray-999);
 		border-radius: 30px;
 		cursor: pointer;
 	}
@@ -655,9 +634,9 @@
 		line-height: 20px;
 		height:22px;
 		width: 22px;
-		background: #FFF;
+		background: var(--white);
 		border: 2px solid;
-		border-color: #999;
+		border-color: var(--gray-999);
 		border-radius: 30px;
 		cursor: pointer;
 	}
@@ -696,8 +675,8 @@
 		position: absolute; top: 0px; left: 2px;
 		height: 22px;
 		width: 22px;
-		background: #FFF;
-		border: 2px solid #999;
+		background: var(--white);
+		border: 2px solid var(--gray-999);
 		border-radius: 40px 40px 40px 40px;
 		cursor: pointer;
 	}
@@ -754,21 +733,19 @@
 		color: var(--highlight-color-on-white);
 	}
 	.closeMeasureButton:hover, #addMeasureButton:hover, #addMeasureButtonStart:hover {
-		color: #000;
+		color: var(--black);
 	}
 	#permutationAnchor {
-		color: #555;
+		color: var(--gray-555);
 	}
 	#permutationAnchor.enabled {
-		color: #EEE;
+		color: var(--gray-eee);
 	}
 	#PermutationOptions.displayed {
 		padding: 3px 0px 0px 10px;
-		//margin-bottom: -20px;
-		background-color: #DDD;
+		background-color: var(--gray-ddd);
 	}
 	#PermutationOptionsHeader {
-		/margin-left: 22px;
 		font-size: 18px;
 		font-weight:bold;
 	}
@@ -778,23 +755,19 @@
 	}
 	.PermutationOptionGroup{
 		display: table-row;
-		border-bottom: 1px solid #999;
+		border-bottom: 1px solid var(--gray-999);
 	}
 	.PermutationOptionGroup:last-child{
-		border-bottom: 0px solid #999;
+		border-bottom: 0px solid var(--gray-999);
 	}
 	.PermutationOption{
 		height: 20px;
 		display: table-cell;
 		padding-right: 15px;
-		/border-top: 1px solid #999;
-		/border-bottom: 1px solid #999;
 	}
 	.PermutationSubOption{
 		display: table-cell;
 		padding-right: 15px;
-		/border-top: 1px solid #999;
-		/border-bottom: 1px solid #999;
 	}
 	#permutationType {
 		margin-top: 10px;
@@ -814,10 +787,10 @@
 		display: none;
 	}
 	#sheetMusicDiv {
-		background: #FFF;
+		background: var(--white);
 	}
 	.svgTarget {
-		background: #FFF;
+		background: var(--white);
 	}
 
 	/* override the normal 100% width that is in groove_display for editing */
@@ -829,14 +802,14 @@
 	}
 
 	#sheetMusicTextFields {
-		border-top: 1px solid #999;
+		border-top: 1px solid var(--gray-999);
 		padding: 8px 0px;
 		text-align: center;
 		display: -webkit-flex;
 		display: flex;
 		justify-content: space-around;
 		-webkit-justify-content: space-around;
-		background-color: #DDD;
+		background-color: var(--gray-ddd);
 	}
 	.sheetMusicTextField {
 		margin: 0px 10px;
@@ -873,18 +846,18 @@
 		z-index:999;
 		width:300px;
 		margin:0; padding:0px; list-style:none;
-		background: #eeeeee;
-		color: #000;
-		border: 1px solid #393939;
+		background: var(--gray-eee);
+		color: var(--black);
+		border: 1px solid var(--charcoal);
 		list-style:none;
 	}
 	.noteContextMenuNew>ul.list li {
 		padding:10px;
-		border-bottom: solid 1px #393939;
+		border-bottom: solid 1px var(--charcoal);
 		text-decoration: none;
 	}
 	.noteContextMenuNew>ul.list li:hover, ul.list a:hover {
-		background: #cccccc;
+		background: var(--gray-ccc);
 	}
 	.noteContextMenuNew>ul.list li:last-child {
 		border:none;
@@ -895,18 +868,18 @@
 		position:fixed; left:30px; top:-30px; z-index:999;
 		width:250px;
 		margin:0; padding:0px; list-style:none;
-		background: #eeeeee;
-		color: #000;
-		border: 1px solid #393939;
+		background: var(--gray-eee);
+		color: var(--black);
+		border: 1px solid var(--charcoal);
 		list-style:none;
 	}
 	.noteContextMenu>ul.list li {
 		padding:10px;
-		border-bottom: solid 1px #393939;
+		border-bottom: solid 1px var(--charcoal);
 		text-decoration: none;
 	}
 	.noteContextMenu>ul.list li:hover, ul.list a:hover {
-		background: #cccccc;
+		background: var(--gray-ccc);
 	}
 	.noteContextMenu>ul.list li:last-child {
 		border:none;
@@ -919,13 +892,13 @@
 		width: 300px;
 		height: 300px;
 		overflow: auto;
-		background: #eeeeee;
-		border: 1px solid #393939;
+		background: var(--gray-eee);
+		border: 1px solid var(--charcoal);
 	}
 	.grooveListUL {
 		margin:0; padding:0px; list-style:none;
-		background:#eeeeee;
-		color: #000;
+		background:var(--gray-eee);
+		color: var(--black);
 	}
 	.grooveListHeaderLI {
 		padding:15px;
@@ -936,10 +909,10 @@
 	.grooveListLI {
 		padding: 10px;
 		padding-left: 15px;
-		border-bottom: solid 1px #393939;
+		border-bottom: solid 1px var(--charcoal);
 	}
 	.grooveListLI:hover {
-		background: #cccccc;
+		background: var(--gray-ccc);
 	}
 	hr {
 		width: 795px;
@@ -952,29 +925,28 @@
 	}
 	#fullURLPopup {
 		position:fixed; left:300px; top:250px; z-index:999;
-		background-color: #FFF;
+		background-color: var(--white);
 		width: 400px;
 		padding: 10px;
-		border: solid 2px #999;
+		border: solid 2px var(--gray-999);
 		border-radius: 5px;
 		overflow: visible;
 	}
 	#metronomeAutoSpeedupConfiguration {
 		position:absolute; left:300px; top:250px; z-index:999;
-		background-color: #FFF;
+		background-color: var(--white);
 		width: 400px;
 		padding: 10px;
-		border: solid 2px #999;
+		border: solid 2px var(--gray-999);
 		border-radius: 5px;
 	}
 
 	#timeSigPopup {
-		/visibility: hidden;
 		position:absolute; left:300px; top:250px; z-index:999;
-		background-color: #FFF;
+		background-color: var(--white);
 		width: 400px;
 		padding: 10px;
-		border: solid 2px #999;
+		border: solid 2px var(--gray-999);
 		border-radius: 5px;
 	}
 	#timeSigPopup {
@@ -984,7 +956,7 @@
 		text-align: center;
 		margin-top: 8px;
 		margin-bottom: 30px;
-		color: #CC0000;
+		color: var(--warning-red);
 	}
 	#timeSigPopupTitle {
 		text-align: center;
@@ -997,8 +969,8 @@
 	#timeSigPopupTimeSigTop, #timeSigPopupTimeSigBottom {
 		font-size: 24px;
 		font-weight: 500;
-		color: #666;
-		background-color: #EEE;
+		color: var(--gray-666);
+		background-color: var(--gray-eee);
 		vertical-align: top;
 		padding-left: 20px;
 		width: 80px;
@@ -1010,8 +982,8 @@
 	#timeSigPopupCancel {
 		font-size: 16px;
 		font-weight: 500;
-		background: #FFF;
-		color: #CCC;
+		background: var(--white);
+		color: var(--gray-ccc);
 		border: 0px;
 		border-radius: 5px;
 		padding: 5px 10px;
@@ -1020,7 +992,7 @@
 		font-size: 16px;
 		font-weight: 500;
 		background: var(--highlight-color);
-		color: #FFF;
+		color: var(--white);
 		border: 0px;
 		border-radius: 5px;
 		padding: 5px 10px;
@@ -1035,7 +1007,7 @@
 		cursor: pointer;
 	}
 	#fullURLPopupCloseButton:hover {
-		color: #444;
+		color: var(--gray-444);
 	}
 	#fullURLPopupTitle {
 		font-size: 18px;
@@ -1073,7 +1045,7 @@
 	#fullURLPopupTextField {
 		width: 350px;
 		padding: 8px;
-		background: #ffe9b7;
+		background: var(--url-field-bg);
 		border: 0px;
 		border-radius: 5px;
 		text-align: center;
@@ -1082,7 +1054,7 @@
 		font-size: 16px;
 		font-family: Lato,sans-serif;
 		font-weight: 700;
-		color: #000;
+		color: var(--black);
 		border: 0px;
 		border-radius: 5px;
 		padding: 5px 10px;
@@ -1097,7 +1069,7 @@
 	}
 	.sharer-0 label {
 		background: var(--highlight-color) !important;
-		color: #FFF !important;
+		color: var(--white) !important;
 	}
 	/* Ensure share-button menu icons are not clipped in the popup */
 	#fullURLPopup share-button .sb-social {
@@ -1145,7 +1117,7 @@
 		font-size: 16px;
 		font-weight: 500;
 		background: var(--highlight-color);
-		color: #FFF;
+		color: var(--white);
 		border: 0px;
 		border-radius: 5px;
 		padding: 5px 10px;
@@ -1175,8 +1147,6 @@
 	#shareSaveButton {
 	}
 	.centeringSpace {
-		/margin-right: 5%;
-		/margin-left: 5%;
 	}
 	button {
 		cursor: pointer;
@@ -1184,11 +1154,11 @@
 
 
 	input[type=checkbox]:checked  + label {
-		color: #000;
+		color: var(--black);
 		cursor: pointer;
 	}
 	input[type=checkbox]:not(:checked) + label {
-		color: #888;
+		color: var(--gray-888);
 		cursor: pointer;
 	}
 	#totalPlayTime {
@@ -1209,7 +1179,7 @@
 		padding: 2px 6px;		
 	}
 	.totalTimeNum {
-		color: #EEE;
+		color: var(--gray-eee);
 	}
 	.myCheckbox {
 		display:none;
@@ -1232,10 +1202,10 @@
 		visibility: hidden;
 	}
 	#LegendLabel {
-		border: 1px solid #CCC;
+		border: 1px solid var(--gray-ccc);
 		padding: 3px 7px 5px 7px;
 		border-radius: 7px;
-		background: #CCC;
+		background: var(--gray-ccc);
 		margin-right: 8px;
 	}
 	#GrooveDB_source {
@@ -1244,9 +1214,9 @@
 	}
 	#bottomButtonRow {
 		padding: 20px 0px;
-		background: #393939;
+		background: var(--charcoal);
 		text-align: center;
-		color: #888888;
+		color: var(--gray-888);
 		display: -webkit-flex;
 		display: flex;
 		justify-content: space-around;
@@ -1258,7 +1228,7 @@
 	}
 	.pageBottomButton:hover {
 		cursor: pointer;
-		color: #FFF;
+		color: var(--white);
 	}
 	.bottomButtonIcon {
 		display:block;
