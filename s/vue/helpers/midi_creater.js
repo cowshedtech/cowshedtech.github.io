@@ -59,8 +59,7 @@ function get32NoteArrayFromTrack(track, Sticking_Array, HH_Array, Snare_Array, K
     for (var i = 0; i < track.notesPerMeasure; i++) {
         var array_index = (i) * scaler;
 
-        //TODO
-        // Sticking_Array[array_index] = track.getStickingState(i + startIndexForClickableUI, "ABC");
+        Sticking_Array[array_index] = track.getInstrumentNote(Instruments.STICKING, i + startIndexForClickableUI);
         HH_Array[array_index] = track.getInstrumentNote(Instruments.HIGH_HAT, i + startIndexForClickableUI);
         Toms_Array[0][array_index] = track.getInstrumentNote(Instruments.TOM1, i + startIndexForClickableUI, "ABC");
         Toms_Array[3][array_index] = track.getInstrumentNote(Instruments.TOM4, i + startIndexForClickableUI, "ABC");
