@@ -24,6 +24,14 @@ export async function onRequest(context) {
     const scriptToInject = `<script>window.MIXPANEL_TOKEN = "${token}";</script>`;
     html = html.replace('</head>', scriptToInject + '</head>');
 
+    // Cloudflare Pages auto-injects Web Analytics (beacon.min.js). On preview hosts it often
+    // POSTs to cloudflareinsights.com/cdn-cgi/rum and fails with CORS/404 console noise.
+    // We use Mixpanel for analytics; strip the beacon from HTML responses.
+    html = html.replace(
+      /<!-- Cloudflare Pages Analytics -->[\s\S]*?<!-- Cloudflare Pages Analytics -->/g,
+      ''
+    );
+
     // Return modified response
     return new Response(html, {
       headers: response.headers
