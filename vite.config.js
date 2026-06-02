@@ -27,6 +27,17 @@ function buildInjectMap() {
 export default defineConfig({
   root: sRoot,
   base: '/s/dist/',
+  // Components use inline `template:` strings (not .vue SFCs). The default Vue export is
+  // runtime-only and renders empty in production — match dev's CDN full build via esm-bundler.
+  resolve: {
+    alias: {
+      vue: path.resolve(__dirname, 'node_modules/vue/dist/vue.esm-bundler.js')
+    }
+  },
+  define: {
+    __VUE_OPTIONS_API__: true,
+    __VUE_PROD_DEVTOOLS__: false
+  },
   plugins: [
     {
       name: 'inject-legacy-globals',
