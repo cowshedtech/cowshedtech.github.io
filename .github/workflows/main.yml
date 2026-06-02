@@ -26,8 +26,13 @@ jobs:
         run: |
           npm ci
           npm run build:deploy
-          # Fail fast if the bundle was built without the Vue template compiler
-          grep -q 'compileToFunction' s/dist/assets/*.js || (echo 'Vue compiler missing from dist' && exit 1)
+          # Runtime-only Vue is ~62KB; with the template compiler the shared chunk is ~184KB
+          EVENT_BUS=$(ls s/dist/assets/event-bus-esm-*.js)
+          BYTES=$(wc -c < "$EVENT_BUS")
+          if [ "$BYTES" -lt 150000 ]; then
+            echo "Vue compiler likely missing from dist (event-bus chunk is only ${BYTES} bytes)"
+            exit 1
+          fi
 
       - name: Generate deployment info
         run: |
