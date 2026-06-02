@@ -1,7 +1,8 @@
 import { createApp, reactive } from 'vue';
 import Main from '../vue/main.js';
+import { onDocumentLoaded } from '../vue/helpers/on-document-loaded.js';
 
-window.addEventListener('load', () => {
+onDocumentLoaded(() => {
   const reactiveTrack = reactive(window.editor.track);
   window.editor.track = reactiveTrack;
 

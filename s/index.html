@@ -144,18 +144,19 @@
 		import { createApp, reactive, markRaw } from 'vue'
 		import Main from './vue/main.js'
 		
-		// Defer until window load for DOM stability; core globals are already initialised in main.js
-		window.addEventListener('load', () => {
-			// Create a single reactive Track and use it everywhere
+		// Defer until window load for DOM stability; core globals are already initialised in main.js.
+		// If load already fired (e.g. slow network), mount immediately.
+		function mountScribeApp() {
 			const reactiveTrack = reactive(window.editor.track);
 			window.editor.track = reactiveTrack;
-
 			const app = createApp(Main, {
 				eventBus: window.eventBus,
 				track: reactiveTrack
 			});
 			app.mount('#vue-app');
-		});
+		}
+		if (document.readyState === 'complete') mountScribeApp();
+		else window.addEventListener('load', mountScribeApp);
 		</script>
 	<!-- /VITE_SCRIBE_ENTRY -->
     </body>

@@ -5,6 +5,7 @@ import TopNavigation from './components/TheNavigationTop/vue/top_navigation.js'
 import MidiPlayer from './components/Player/vue/controls.js'
 import UrlSync from './components/UrlSync/vue/url_sync.js'
 import { reactive, markRaw, provide as vueProvide } from 'vue'
+import { onDocumentLoaded } from './helpers/on-document-loaded.js'
 
 // Initialize core globals (moved from index.html) so they're part of the Vue app bundle
 if (!window.editor) window.editor = { class_permutation_type: "none" };
@@ -91,8 +92,9 @@ if (!window.midiPlayer && typeof MIDIPlayer === 'function') {
 if (window.midiPlayer && typeof midiEventCallbackClass === 'function') {
   window.midiPlayer.eventCallbacks = new midiEventCallbackClass();
 }
-// Delay initial URL load and player init until window load (ensures AudioContext/user gesture readiness)
-window.addEventListener('load', () => {
+// Delay initial URL load and player init until window load (ensures AudioContext/user gesture readiness).
+// onDocumentLoaded also runs immediately if load already fired (Vite bundle may arrive late).
+onDocumentLoaded(() => {
   try { window.updateFromURL(window.location.search); } catch (e) { /* no-op */ }
   if (window.midiPlayer && typeof window.midiPlayer.initialise === 'function') {
     window.midiPlayer.initialise();
