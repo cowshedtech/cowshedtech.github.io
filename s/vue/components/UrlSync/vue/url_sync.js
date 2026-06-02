@@ -1,6 +1,6 @@
 export default {
   inject: ['options', 'track'],
-  
+
   data() {
     return {
       _debounceHandle: null
@@ -14,9 +14,9 @@ export default {
       }
       this._debounceHandle = setTimeout(() => {
         this._debounceHandle = null;
-        if (typeof updateCurrentURL === 'function') {
-          updateCurrentURL();
-        }
+      if (typeof updateCurrentURL === 'function') {
+        updateCurrentURL();
+      }
       }, 300);
     },
   },
