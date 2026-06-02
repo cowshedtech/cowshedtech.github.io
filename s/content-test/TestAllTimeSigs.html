@@ -2,12 +2,13 @@
 <html>
     <head>
 		<title>Test all 16th note combinations</title>
-		
-		<script src="../js/groovescribe/groove_display.js"></script>
-		
+
+		<script src="../js/groovescribe/dom_loader.js"></script>
+		<script src="../js/groovescribe/display_sheet_music.js"></script>
+
     </head>
     <body id='body' onload="onLoadScript();">
-	
+
 		<h2>Choose a subdivision
 			<select id='divisionSelect' onChange='onDivisionChange()'>
 				<option name='' value='4'>1/4 notes
@@ -16,86 +17,84 @@
 				<option name='' value='32'>32th notes
 			</select>
 		</h2>
+
+		<div id='gs-displays'></div>
+
 <script>
-	
-	window.GrooveDisplayUniqueCounter = 1;
 
 	function AddEveryTimeSig(division) {
-		// write out a hi-hat grove in every time signature for a given division
-	
-		top_time_sigs = [2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-		bottom_time_sigs = [4,8,16];
-		
+		// write out a hi-hat groove in every time signature for a given division
+
+		var top_time_sigs = [2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+		var bottom_time_sigs = [4,8,16];
+
+		var container = document.getElementById('gs-displays');
+		var counter = 0;
+
 		for(var top_sig_idx in top_time_sigs) {
-			top_sig = top_time_sigs[top_sig_idx];
-		
+			var top_sig = top_time_sigs[top_sig_idx];
+
 			for(var btm_sig_idx in bottom_time_sigs) {
-				btm_sig = bottom_time_sigs[btm_sig_idx];
-				
+				var btm_sig = bottom_time_sigs[btm_sig_idx];
+
 				if(btm_sig > division)
 					continue;
-			
+
 				// time sig
-				options = '?TimeSig=' + top_sig + '/' + btm_sig;
-				
+				var options = 'TimeSig=' + top_sig + '/' + btm_sig;
+
 				// title
 				options += '&Title=' + top_sig + '/' + btm_sig;
-				
+
 				// div
 				options += '&Div=' + division;
-				
+
 				// Tempo
 				options += '&Tempo=80';
-				
+
 				// Measures
 				options += '&Measures=1';
-				
+
 				// Kick
 				options += '&K=-';
-				
+
 				// Snare
 				options += '&S=-';
-		
+
 				// Hihat
-				num_notes = top_sig * (division/btm_sig)
-				hh_line = ''
+				var num_notes = top_sig * (division/btm_sig);
+				var hh_line = '';
 				for(var i=0; i < num_notes; i++)
-					hh_line += 'x'
-				options+= '&H=' + hh_line;	
-			
-				console.log(options)
-				
-				window.GrooveDisplayUniqueCounter++;
+					hh_line += 'x';
+				options += '&H=' + hh_line;
 
-				// add an html Element to hold the grooveDisplay
-				var HTMLElementID = 'GrooveDisplay' + window.GrooveDisplayUniqueCounter;
+				// add an html element to hold the grooveDisplay
+				counter++;
+				var HTMLElementID = 'GrooveDisplay_TimeSig_' + counter;
 				var GrooveDisplayElement = document.createElement("div");
-				GrooveDisplayElement.class = "GrooveDisplay";
+				GrooveDisplayElement.className = "GrooveDisplay";
 				GrooveDisplayElement.id = HTMLElementID;
-				document.getElementsByTagName("body")[0].appendChild(GrooveDisplayElement);
+				container.appendChild(GrooveDisplayElement);
 
-					GrooveDisplay.AddGrooveDisplayToElementId(HTMLElementID, options, false, false);
-					
-				window.GrooveDisplayUniqueCounter += 1;
+				GrooveDisplay.AddGrooveDisplayToPage(HTMLElementID, options, false);
 			}
 		}
 	}
 
 	function onLoadScript() {
 		AddEveryTimeSig(16);
-	}	
-	
+	}
+
 	function onDivisionChange() {
-		var divs = document.getElementsByTagName("div");
-		for(var i = 0; i < divs.length; i++){
-		   //do something to each div like
-		   divs[i].innerHTML = '';
-		}
-		element = document.getElementById('divisionSelect');
-		newDivision = element.options[element.selectedIndex].value;
+		// clear out any previously rendered displays
+		document.getElementById('gs-displays').innerHTML = '';
+
+		var element = document.getElementById('divisionSelect');
+		var newDivision = element.options[element.selectedIndex].value;
 		AddEveryTimeSig(newDivision);
 	}
-	
+
 </script>
 
 </body>
+</html>

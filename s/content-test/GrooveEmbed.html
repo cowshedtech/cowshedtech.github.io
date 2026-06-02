@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
-    <head>
-		<title>Embeded Groove</title>
-		
-		<script src="../js/groovescribe/groove_display.js"></script>
-		
-    </head>
-    <body>
-	<script>
-		GrooveDisplay.AddGrooveDisplayToPage(location.search, true, true);
-	</script>
-	
+	<head>
+		<title>Embedded Groove</title>
+
+		<script src="../js/groovescribe/dom_loader.js"></script>
+		<script src="../js/groovescribe/display_sheet_music.js"></script>
+
+	</head>
+	<body>
+		<div id="gs-display"></div>
+		<script>
+			GrooveDisplay.AddGrooveDisplayToPage('gs-display', null, true);
+		</script>
+	</body>
+</html>
