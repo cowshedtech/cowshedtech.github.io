@@ -22,13 +22,12 @@ jobs:
       - name: Install Wrangler
         run: npm install -g wrangler
 
-      # Vite bundles use inline `template:` strings; production build needs the Vue
-      # compiler (vite.config.js alias). Until that deploy is verified on preview, ship
-      # the unbundled import-map entry below (same as local dev).
-      # - name: Install dependencies and build Vue bundles
-      #   run: |
-      #     npm ci
-      #     npm run build:deploy
+      - name: Install dependencies and build Vue bundles
+        run: |
+          npm ci
+          npm run build:deploy
+          # Fail fast if the bundle was built without the Vue template compiler
+          grep -q 'compileToFunction' s/dist/assets/*.js || (echo 'Vue compiler missing from dist' && exit 1)
 
       - name: Generate deployment info
         run: |
