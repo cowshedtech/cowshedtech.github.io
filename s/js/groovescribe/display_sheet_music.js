@@ -126,18 +126,21 @@ if (typeof(GrooveDisplay) === "undefined") {
 		// Load the MIDI.js soundfont/plugin exactly once for the whole page, then run
 		// every queued callback (each player marks itself ready in its callback).
 		root.ensureMidiLoaded = function (cb) {
-			if (root.__midiLoaded) { if (cb) cb(); return; }
+			if (root.__midiLoaded || window.__grooveSoundfontLoaded) { root.__midiLoaded = true; if (cb) cb(); return; }
 			root.__midiLoadCallbacks = root.__midiLoadCallbacks || [];
 			if (cb) root.__midiLoadCallbacks.push(cb);
 			if (root.__midiLoading) return;
 			root.__midiLoading = true;
 			MIDI.loadPlugin({
 				soundfontUrl: getGrooveUtilsBaseLocation() + "../js/thirdparty/soundfont/",
+				targetFormat: "mp3", // mp3 is universally supported; lets us ship a single soundfont format
 				instruments: ["gunshot"],
 				callback: function () {
 					MIDI.programChange(9, 127); // "Gunshot" instrument (re-used for drums)
 					root.__midiLoaded = true;
 					root.__midiLoading = false;
+					// Share readiness with the player's lazy loader so neither path re-fetches.
+					window.__grooveSoundfontLoaded = true;
 					var cbs = root.__midiLoadCallbacks || [];
 					root.__midiLoadCallbacks = [];
 					for (var i = 0; i < cbs.length; i++) {

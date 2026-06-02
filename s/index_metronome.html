@@ -14,12 +14,14 @@
 		<link rel="stylesheet" type="text/css" href="css/groove_display_orange.css">
 		<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
 
-		<!-- Core data structures + globals the metronome UI depends on -->
-		<script src="./vue/consts.js"></script>
-		<script src="./vue/components/Track/track.js"></script>
-		<script src="./vue/components/Player/player.js"></script>
-		<script src="./vue/components/Metronome/metronome.js"></script>
-		<script src="./vue/helpers/eventBus.js"></script>
+		<!-- Core data structures + globals the metronome UI depends on.
+		     Deferred so they don't block parsing; defer keeps document order and runs them
+		     before the module script below (module scripts execute after defer classic scripts). -->
+		<script defer src="./vue/consts.js"></script>
+		<script defer src="./vue/components/Track/track.js"></script>
+		<script defer src="./vue/components/Player/player.js"></script>
+		<script defer src="./vue/components/Metronome/metronome.js"></script>
+		<script defer src="./vue/helpers/eventBus.js"></script>
 
 		<!-- Script for vue framework -->
 		<script type="importmap">

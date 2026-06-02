@@ -23,6 +23,44 @@ const EventTypes = {
     LOAD_MIDI: 'loadMidi'
 };
 
+/**
+ * Lazily load the MIDI.js soundfont/plugin the first time audio is actually needed
+ * (first play OR first note-click preview) rather than eagerly on page load. This keeps
+ * the ~200KB gunshot soundfont off the critical page-load path.
+ *
+ * Loading is triggered from within a user gesture (click/keypress), so creating the
+ * AudioContext here satisfies browser autoplay policies.
+ *
+ * A single page-wide flag/queue is used so multiple players (e.g. groove embeds) and the
+ * separate GrooveDisplay loader never fetch the soundfont more than once.
+ */
+function ensureGrooveSoundfontLoaded(soundfontUrl, callback) {
+    if (window.__grooveSoundfontLoaded) {
+        if (callback) callback();
+        return;
+    }
+    window.__grooveSoundfontCallbacks = window.__grooveSoundfontCallbacks || [];
+    if (callback) window.__grooveSoundfontCallbacks.push(callback);
+    if (window.__grooveSoundfontLoading) return;
+    window.__grooveSoundfontLoading = true;
+
+    MIDI.loadPlugin({
+        soundfontUrl: soundfontUrl,
+        targetFormat: "mp3", // mp3 is universally supported; lets us ship a single soundfont format
+        instruments: ["gunshot"],
+        callback: function () {
+            MIDI.programChange(9, 127); // use "Gunshot" instrument because I don't know how to create new ones
+            window.__grooveSoundfontLoaded = true;
+            window.__grooveSoundfontLoading = false;
+            var cbs = window.__grooveSoundfontCallbacks || [];
+            window.__grooveSoundfontCallbacks = [];
+            for (var i = 0; i < cbs.length; i++) {
+                try { cbs[i](); } catch (e) { /* no-op */ }
+            }
+        }
+    });
+}
+
 class MIDIPlayer {
     
     #initialised = false;
@@ -74,18 +112,10 @@ class MIDIPlayer {
         if (this.#initialised) return;            
         this.#initialised = true;        
 
-        let parent = this;
-
-        MIDI.loadPlugin({
-            soundfontUrl: this._getSoundFontLocation(),
-            instruments: ["gunshot"],
-            callback: function () {
-                MIDI.programChange(9, 127); // use "Gunshot" instrument because I don't know how to create new ones
-                
-                // Successfully loaded MIDI plugin so lets init our MIDI play button
-                parent.setState(PlayerState.STOPPED);
-            }
-        });
+        // The soundfont is now loaded lazily on the first audio interaction (see play()
+        // and playSingleNote()). Mark the player ready immediately so the play button is
+        // interactive without waiting for a network request on page load.
+        this.setState(PlayerState.STOPPED);
     };
     
 
@@ -219,6 +249,14 @@ class MIDIPlayer {
      * Play single specific note
      */    
     playSingleNote(note_val) {
+        // First note-click preview lazily loads the soundfont, then plays the note.
+        if (!window.__grooveSoundfontLoaded) {
+            const parent = this;
+            ensureGrooveSoundfontLoaded(this._getSoundFontLocation(), function () {
+                parent.playSingleNote(note_val);
+            });
+            return;
+        }
         if (MIDI.WebAudio) {
             MIDI.WebAudio.noteOn(9, note_val, constant_OUR_MIDI_VELOCITY_NORMAL, 0);
         } else if (MIDI.AudioTag) {
@@ -231,6 +269,16 @@ class MIDIPlayer {
      * Play 
      */    
     play() {
+        // First play lazily loads the soundfont (within this user gesture), then resumes
+        // playback once it's ready. MIDI.Player.ctx only exists after the plugin loads.
+        if (!window.__grooveSoundfontLoaded) {
+            const parent = this;
+            ensureGrooveSoundfontLoaded(this._getSoundFontLocation(), function () {
+                parent.play();
+            });
+            return;
+        }
+
         if (MIDI.Player.playing) return;
         
         if (this.getState() === PlayerState.PAUSED && false === this.doesMidiDataNeedRefresh()) {

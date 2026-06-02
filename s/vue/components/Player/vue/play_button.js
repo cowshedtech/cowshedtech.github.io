@@ -60,7 +60,12 @@ export default {
     eventBus.$on(EventTypes.PLAY_STATE, () => {
 			this.updateState()
 		})
-    
+
+    // Initialise from the player's current state. The player is marked ready (Stopped)
+    // on window 'load', which can fire before this button mounts and subscribes above,
+    // so without this the button would miss that event and render the disabled icon.
+    this.updateState()
+
     document.addEventListener('keydown', this.handleKeyDown);   
   },
   

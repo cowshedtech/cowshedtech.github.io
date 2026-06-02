@@ -31,6 +31,22 @@ jobs:
             "actor": "'${{ github.actor }}'"
           }' > deploy-info.json
 
+      - name: Prune non-production files before deploy
+        run: |
+          set -eux
+          # Test pages and the Cordova mobile wrapper are not served in production
+          rm -rf s/content-test
+          rm -rf s/cordova
+          # Soundfont conversion tooling + raw samples (~8MB), never fetched at runtime
+          rm -rf s/js/thirdparty/soundfont/NewDrumSamples
+          # acoustic_grand_piano soundfonts are unused; only "gunshot" is loaded
+          rm -f s/js/thirdparty/soundfont/acoustic_grand_piano-mp3.js
+          rm -f s/js/thirdparty/soundfont/acoustic_grand_piano-ogg.js
+          # We force targetFormat: "mp3" at load time, so the ogg soundfonts are never requested
+          rm -f s/js/thirdparty/soundfont/gunshot-ogg.js
+          # Editor/OS cruft
+          find . -name ".DS_Store" -delete
+
       - name: Authenticate with Cloudflare
         run: |
           echo "CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }}" >> $GITHUB_ENV

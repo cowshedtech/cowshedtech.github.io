@@ -59,13 +59,12 @@ export default {
       window.eventBus.$on('playProgress', this._onPlayProgress)
       window.eventBus.$on('loadMidi', this._onLoadMidi)
     }
-    // Load the soundfont / MIDI plugin once for the whole page, then mark this
-    // instance's player ready so its play button enables.
+    // Enable this instance's play button immediately. The soundfont/MIDI plugin is now
+    // loaded lazily on first play (see MIDIPlayer.play()), so multi-groove pages no longer
+    // download it on mount unless the user actually presses play.
     const player = this.inst ? this.inst.midiPlayer : window.midiPlayer
-    if (window.GrooveDisplay && typeof window.GrooveDisplay.ensureMidiLoaded === 'function') {
-      window.GrooveDisplay.ensureMidiLoaded(() => {
-        if (player && typeof player.setState === 'function') player.setState('Stopped')
-      })
+    if (player && typeof player.setState === 'function') {
+      player.setState('Stopped')
     } else if (player && typeof player.initialise === 'function') {
       player.initialise()
     }
