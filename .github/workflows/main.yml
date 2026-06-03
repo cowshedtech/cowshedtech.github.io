@@ -46,9 +46,8 @@ jobs:
       - name: Prune non-production files before deploy
         run: |
           set -eux
-          # Test pages and the Cordova mobile wrapper are not served in production
+          # Test pages are not served in production
           rm -rf s/content-test
-          rm -rf s/cordova
           # Soundfont conversion tooling + raw samples (~8MB), never fetched at runtime
           rm -rf s/js/thirdparty/soundfont/NewDrumSamples
           # acoustic_grand_piano soundfonts are unused; only "gunshot" is loaded
